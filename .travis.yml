@@ -24,7 +24,7 @@ before_deploy:
     - git config --global user.email ${GITHUB_EMAIL}
     - git config --global user.name ${GITHUB_USER}
     - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/sirian/js.git"
-    - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.yarnrc
+    - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc
 
 deploy:
     provider: script
