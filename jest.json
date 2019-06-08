@@ -1,9 +1,6 @@
 {
     "roots": [
-        "<rootDir>/packages/error/test",
-    ],
-    "snapshotSerializers": [
-        "jest-serializer-path"
+        "<rootDir>/packages/error/tests"
     ],
     "transform": {
         "^.+\\.ts$": "ts-jest"

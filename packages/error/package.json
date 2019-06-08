@@ -12,6 +12,8 @@
     ],
     "main": "build/index.js",
     "types": "build/index.d.ts",
+    "dependencies": {},
+    "devDependencies": {},
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",
@@ -22,53 +24,10 @@
         "lint:fix": "yarn tslint:fix",
         "tslint:lint": "tslint '{src,tests}/**/*'",
         "tslint:fix": "yarn tslint:lint --fix",
-        "test": "jest",
+        "test": "jest --config ../../jest.json",
         "test:watch": "jest --watch"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "yarn lint"
-        }
-    },
-    "release": {
-        "branch": "master",
-        "analyzeCommits": {
-            "releaseRules": [
-                {
-                    "type": "patch",
-                    "release": "patch"
-                },
-                {
-                    "type": "fix",
-                    "release": "patch"
-                },
-                {
-                    "type": "minor",
-                    "release": "minor"
-                },
-                {
-                    "type": "major",
-                    "release": "major"
-                }
-            ]
-        }
     },
     "publishConfig": {
         "access": "public"
-    },
-    "jest": {
-        "roots": [
-            "<rootDir>/tests"
-        ],
-        "transform": {
-            "^.+\\.ts$": "ts-jest"
-        },
-        "testRegex": "/test[^/]*\\.tsx?$",
-        "moduleFileExtensions": [
-            "ts",
-            "tsx",
-            "json",
-            "js"
-        ]
     }
 }

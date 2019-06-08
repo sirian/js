@@ -2,7 +2,8 @@
     "groups": {
         "default": {
             "packages": [
-                "packages/error/package.json"
+                "packages/error/package.json",
+                "packages/ts-extra-types/package.json"
             ]
         }
     }

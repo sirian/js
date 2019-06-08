@@ -1,0 +1,33 @@
+{
+    "name": "@sirian/ts-extra-types",
+    "description": "TypeScript extra types",
+    "version": "3.42.3",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+
+    "types": "build/index.d.ts",
+    "dependencies": {},
+    "devDependencies": {},
+    "scripts": {
+        "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
+        "clean": "yarn build:clean",
+        "build": "yarn build:clean && tsc",
+        "build:clean": "rimraf types",
+        "build:watch": "yarn build --watch",
+        "lint": "yarn tslint:lint",
+        "lint:fix": "yarn tslint:fix",
+        "tslint:lint": "tslint '{src,tests}/**/*'",
+        "tslint:fix": "yarn tslint:lint --fix",
+        "test": "tsc -p tsconfig.test.json",
+        "test:watch": "yarn test --watch"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}
