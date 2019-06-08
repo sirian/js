@@ -1,7 +1,7 @@
 {
     "name": "@sirian/common",
     "description": "",
-    "version": "4.38.5",
+    "version": "4.38.6",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -13,7 +13,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "dependencies": {
-        "@sirian/ts-extra-types": "^3.42.3"
+        "@sirian/ts-extra-types": "^3.42.5"
     },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
