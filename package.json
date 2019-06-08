@@ -23,17 +23,17 @@
         "typescript": "^3.5.1"
     },
     "scripts": {
-        "ci:build": "lerna run ci:build --stream --parallel",
-        "clean": "lerna run clean --stream --parallel",
-        "build": "lerna run build --stream --parallel",
-        "build:clean": "lerna run build:clean --stream --parallel",
-        "build:watch": "lerna run build:watch --stream --parallel",
-        "lint": "lerna run lint --stream --parallel",
-        "lint:fix": "lerna run lint:fix --stream --parallel",
-        "tslint:lint": "lerna run tslint:lint --stream --parallel",
-        "tslint:fix": "lerna run tslint:fix --stream --parallel",
-        "test": "lerna run test --stream --parallel",
-        "test:watch": "lerna run test:watch --stream --parallel"
+        "ci:build": "lerna run ci:build --parallel",
+        "clean": "lerna run clean --parallel",
+        "build": "lerna run build --parallel",
+        "build:clean": "lerna run build:clean --parallel",
+        "build:watch": "lerna run build:watch --parallel",
+        "lint": "lerna run lint --parallel",
+        "lint:fix": "lerna run lint:fix --parallel",
+        "tslint:lint": "lerna run tslint:lint --parallel",
+        "tslint:fix": "lerna run tslint:fix --parallel",
+        "test": "lerna run test --parallel",
+        "test:watch": "lerna run test:watch --parallel"
     },
     "husky": {
         "hooks": {

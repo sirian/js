@@ -1,5 +1,16 @@
 {
-  "npmClient": "yarn",
-  "useWorkspaces": true,
-  "version": "independent"
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "version": "independent",
+    "stream": true,
+    "command": {
+        "publish": {
+            "conventionalCommits": true,
+            "message": "chore(release): publish [skip-ci]"
+        }
+    },
+    "ignoreChanges": [
+        "packages/*/test/**",
+        "packages/*/test-server/**"
+    ]
 }
