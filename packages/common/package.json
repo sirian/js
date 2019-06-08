@@ -1,7 +1,7 @@
 {
-    "name": "@sirian/error",
+    "name": "@sirian/common",
     "description": "",
-    "version": "2.0.2",
+    "version": "4.38.5",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -10,10 +10,11 @@
     "files": [
         "build/"
     ],
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
-    "dependencies": {},
-    "devDependencies": {},
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "dependencies": {
+        "@sirian/ts-extra-types": "^3.42.3"
+    },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",

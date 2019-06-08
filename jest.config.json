@@ -1,6 +1,6 @@
 {
     "roots": [
-        "<rootDir>/packages/error/tests"
+        "<rootDir>/tests"
     ],
     "transform": {
         "^.+\\.ts$": "ts-jest"
