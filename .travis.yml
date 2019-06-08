@@ -11,7 +11,7 @@ before_install:
     - export PATH="$HOME/.yarn/bin:$PATH"
 
 before_script:
-    - yarn lerna:prepublish
+    - yarn --version
 
 script:
     - yarn ci:build
@@ -24,9 +24,8 @@ before_deploy:
 
 deploy:
     provider: script
-    script: "yarn run lerna:publish"
+    script: "yarn lerna:publish"
     skip_cleanup: true
     on:
         node: "12"
         branch: "master"
-        tags: true

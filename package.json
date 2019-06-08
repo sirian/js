@@ -35,7 +35,6 @@
         "tslint:fix": "lerna run tslint:fix --parallel",
         "test": "lerna run test --parallel",
         "test:watch": "lerna run test:watch --parallel",
-        "lerna:prepublish": "lerna run prepublish",
         "lerna:publish": "lerna publish --conventional-commits --yes --npm-client yarn"
     },
     "husky": {
