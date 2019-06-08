@@ -1,0 +1,43 @@
+{
+    "private": true,
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "repository": "https://github.com/sirian/js",
+    "workspaces": [
+        "packages/*"
+    ],
+    "dependencies": {
+    },
+    "devDependencies": {
+        "@types/jest": "^24.0.13",
+        "coveralls": "^3.0.4",
+        "husky": "^2.4.0",
+        "jest": "^24.8.0",
+        "rimraf": "^2.6.3",
+        "semantic-release": "^15.13.12",
+        "ts-jest": "^24.0.2",
+        "tslint": "^5.17.0",
+        "typescript": "^3.5.1"
+    },
+    "scripts": {
+        "ci:build": "lerna run ci:build --stream --parallel",
+        "clean": "lerna run clean --stream --parallel",
+        "build": "lerna run build --stream --parallel",
+        "build:clean": "lerna run build:clean --stream --parallel",
+        "build:watch": "lerna run build:watch --stream --parallel",
+        "lint": "lerna run lint --stream --parallel",
+        "lint:fix": "lerna run lint:fix --stream --parallel",
+        "tslint:lint": "lerna run tslint:lint --stream --parallel",
+        "tslint:fix": "lerna run tslint:fix --stream --parallel",
+        "test": "lerna run test --stream --parallel",
+        "test:watch": "lerna run test:watch --stream --parallel"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn lint"
+        }
+    }
+}

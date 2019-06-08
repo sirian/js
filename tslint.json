@@ -1,0 +1,18 @@
+{
+    "extends": ["tslint:latest"],
+    "rules": {
+        "object-literal-sort-keys": false,
+        "member-ordering": [true, {"order": "fields-first"}],
+        "prefer-conditional-expression": false,
+        "interface-name": false,
+        "no-shadowed-variable": false,
+        "unified-signatures": false,
+        "function-constructor": false,
+        "ban-types": false,
+        "no-bitwise": false,
+        "max-classes-per-file": false,
+        "only-arrow-functions": false,
+        "no-empty": false,
+        "callable-types": false
+    }
+}
