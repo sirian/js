@@ -12,15 +12,19 @@ before_install:
 
 before_script:
     - yarn --version
+    - yarn run greenkeeper-lockfile-update
 
 script:
     - yarn ci:build
 
+after_script:
+    - yarn run greenkeeper-lockfile-upload
+
 before_deploy:
     - git config --global user.email ${GITHUB_EMAIL}
     - git config --global user.name ${GITHUB_USER}
-    - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/sirian/js.git" > /dev/null 2>&1
-    - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+    - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/sirian/js.git"
+    - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.yarnrc
 
 deploy:
     provider: script

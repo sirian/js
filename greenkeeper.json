@@ -1,0 +1,9 @@
+{
+    "groups": {
+        "default": {
+            "packages": [
+                "packages/error/package.json"
+            ]
+        }
+    }
+}
