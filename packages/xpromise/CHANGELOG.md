@@ -3,20 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [4.38.7](https://github.com/sirian/js/compare/@sirian/common@4.38.6...@sirian/common@4.38.7) (2019-06-08)
+## 2.2.3 (2019-06-08)
 
 
 ### Bug Fixes
 
+* moved xpromise to monorepo ([eb96475](https://github.com/sirian/js/commit/eb96475))
 * package.json fixed ([1a0d51b](https://github.com/sirian/js/commit/1a0d51b))
-
-
-
-
-
-## 4.38.6 (2019-06-08)
-
-
-### Bug Fixes
-
-* added common package ([8107d7a](https://github.com/sirian/js/commit/8107d7a))
