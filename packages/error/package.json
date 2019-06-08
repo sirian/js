@@ -1,7 +1,7 @@
 {
     "name": "@sirian/error",
     "description": "",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -12,9 +12,6 @@
     ],
     "main": "build/index.js",
     "types": "build/index.d.ts",
-    "dependencies": {},
-    "devDependencies": {
-    },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",
