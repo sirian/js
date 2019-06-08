@@ -10,8 +10,8 @@
     "files": [
         "build/"
     ],
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "dependencies": {
         "@sirian/ts-extra-types": "^3.42.5"
     },
