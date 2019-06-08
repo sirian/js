@@ -9,13 +9,13 @@
     "workspaces": [
         "packages/*"
     ],
-    "dependencies": {
-    },
+    "dependencies": {},
     "devDependencies": {
         "@types/jest": "^24.0.13",
         "coveralls": "^3.0.4",
         "husky": "^2.4.0",
         "jest": "^24.8.0",
+        "lerna": "^3.14.1",
         "rimraf": "^2.6.3",
         "semantic-release": "^15.13.12",
         "ts-jest": "^24.0.2",
@@ -36,7 +36,7 @@
         "test": "lerna run test --parallel",
         "test:watch": "lerna run test:watch --parallel",
         "lerna:prepublish": "lerna run prepublish",
-        "lerna:publish":"lerna publish --conventional-commits --yes --npm-client yarn"
+        "lerna:publish": "lerna publish --conventional-commits --yes --npm-client yarn"
     },
     "husky": {
         "hooks": {
