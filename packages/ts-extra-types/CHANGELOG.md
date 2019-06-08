@@ -3,17 +3,9 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [2.0.3](https://github.com/sirian/js/compare/@sirian/error@2.0.2...@sirian/error@2.0.3) (2019-06-08)
+## 3.42.4 (2019-06-08)
 
 
 ### Bug Fixes
 
 * added ts-extra-types ([b01369b](https://github.com/sirian/js/commit/b01369b))
-
-
-
-
-
-## 2.0.2 (2019-06-08)
-
-**Note:** Version bump only for package @sirian/error

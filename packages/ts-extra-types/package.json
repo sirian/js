@@ -1,7 +1,7 @@
 {
     "name": "@sirian/ts-extra-types",
     "description": "TypeScript extra types",
-    "version": "3.42.3",
+    "version": "3.42.4",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -10,10 +10,7 @@
     "files": [
         "build/"
     ],
-
     "types": "build/index.d.ts",
-    "dependencies": {},
-    "devDependencies": {},
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",
