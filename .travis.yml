@@ -14,13 +14,12 @@ before_script:
     - yarn lerna:prepublish
 
 script:
-    - yarn test
+    - yarn ci:build
 
 before_deploy:
     - git config --global user.email ${GITHUB_EMAIL}
     - git config --global user.name ${GITHUB_USER}
-    - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/YOUR/PROJECT.git" > /dev/null 2>&1
-    - git checkout release
+    - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/sirian/js.git" > /dev/null 2>&1
     - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
 
 deploy:
@@ -29,5 +28,5 @@ deploy:
     skip_cleanup: true
     on:
         node: "12"
-        branch: "release"
+        branch: "master"
         tags: true
