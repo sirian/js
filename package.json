@@ -23,17 +23,20 @@
         "typescript": "^3.5.1"
     },
     "scripts": {
+        "bootstrap": "lerna bootstrap",
         "ci:build": "lerna run ci:build --parallel",
         "clean": "lerna run clean --parallel",
         "build": "lerna run build --parallel",
         "build:clean": "lerna run build:clean --parallel",
         "build:watch": "lerna run build:watch --parallel",
-        "lint": "lerna run lint --parallel",
-        "lint:fix": "lerna run lint:fix --parallel",
+        "lint": "lerna run lint  --parallel",
+        "lint:fix": "lerna run lint:fix  --parallel",
         "tslint:lint": "lerna run tslint:lint --parallel",
         "tslint:fix": "lerna run tslint:fix --parallel",
         "test": "lerna run test --parallel",
-        "test:watch": "lerna run test:watch --parallel"
+        "test:watch": "lerna run test:watch --parallel",
+        "lerna:prepublish": "lerna run prepublish",
+        "lerna:publish":"lerna publish from-git --yes --npm-client yarn"
     },
     "husky": {
         "hooks": {

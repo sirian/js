@@ -28,6 +28,34 @@
         "test": "jest",
         "test:watch": "jest --watch"
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn lint"
+        }
+    },
+    "release": {
+        "branch": "master",
+        "analyzeCommits": {
+            "releaseRules": [
+                {
+                    "type": "patch",
+                    "release": "patch"
+                },
+                {
+                    "type": "fix",
+                    "release": "patch"
+                },
+                {
+                    "type": "minor",
+                    "release": "minor"
+                },
+                {
+                    "type": "major",
+                    "release": "major"
+                }
+            ]
+        }
+    },
     "publishConfig": {
         "access": "public"
     },
