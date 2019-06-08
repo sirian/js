@@ -14,8 +14,8 @@
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",
-        "build": "yarn build:clean && tsc",
-        "build:clean": "rimraf types",
+        "build": "yarn build:clean && tsc --build",
+        "build:clean": "rimraf build tsconfig.tsbuildinfo",
         "build:watch": "yarn build --watch",
         "lint": "yarn tslint:lint",
         "lint:fix": "yarn tslint:fix",
