@@ -19,8 +19,5 @@
     },
     "publishConfig": {
         "access": "public"
-    },
-    "jest": {
-        "testEnvironment": "jsdom"
     }
 }

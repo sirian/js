@@ -83,7 +83,7 @@
         /* Forces imports with correct casing, so they work on case-sensitive OSs. */
         "newLine": "LF",
         /* Ensures files containing shebang (e.g. cli entry) work on any terminal. */
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
         /* Allow importing .json files with type checking. */
 
         /* Source Map Options */
@@ -93,7 +93,7 @@
         // "inlineSources": true,                 /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
 
         /* Experimental Options */
-        // "experimentalDecorators": true        /* Enables experimental support for ES7 decorators. */
+        "experimentalDecorators": true        /* Enables experimental support for ES7 decorators. */
         // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
     }
 }

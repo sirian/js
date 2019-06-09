@@ -12,6 +12,7 @@
     ],
     "types": "build/index.d.ts",
     "scripts": {
+        "test": "tsc -p tsconfig.test.json"
     },
     "publishConfig": {
         "access": "public"

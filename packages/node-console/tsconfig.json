@@ -3,7 +3,7 @@
     "compilerOptions": {
         "rootDir": "src",
         "outDir": "build",
-        "types": ["node", "jest"]
+        "types": ["node"]
     },
     "include": ["src"],
     "references": [
