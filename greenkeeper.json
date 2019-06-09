@@ -6,6 +6,7 @@
                 "packages/datetime/package.json",
                 "packages/disposer/package.json",
                 "packages/error/package.json",
+                "packages/event-dispatcher/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/xpromise/package.json"
             ]

@@ -13,8 +13,8 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.38.3",
-        "@sirian/ts-extra-types": "^3.42.3"
+        "@sirian/common": "^4.38.7",
+        "@sirian/ts-extra-types": "^3.42.6"
     },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
