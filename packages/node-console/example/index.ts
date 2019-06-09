@@ -20,7 +20,7 @@ class MyLoader implements ICommandLoader {
     public async get(name: string) {
         const fn = this.factories[name];
         const importResult = await fn();
-        for (const [key, value] of Object.entries(importResult)) {
+        for (const value of Object.values(importResult)) {
             if (Var.isSubclassOf(value, Command)) {
                 return value;
             }
