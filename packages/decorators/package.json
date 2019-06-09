@@ -1,7 +1,7 @@
 {
     "name": "@sirian/decorators",
     "description": "",
-    "version": "3.3.2",
+    "version": "1.2.2",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
