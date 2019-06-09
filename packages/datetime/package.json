@@ -17,17 +17,7 @@
         "@sirian/ts-extra-types": "^3.42.6"
     },
     "scripts": {
-        "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
-        "clean": "yarn build:clean",
-        "build": "yarn build:clean && tsc --build",
-        "build:clean": "rimraf build tsconfig.tsbuildinfo",
-        "build:watch": "yarn build --watch",
-        "lint": "yarn tslint:lint",
-        "lint:fix": "yarn tslint:fix",
-        "tslint:lint": "tslint '{src,tests}/**/*'",
-        "tslint:fix": "yarn tslint:lint --fix",
-        "test": "jest --config ../../jest.config.json --rootDir .",
-        "test:watch": "yarn test --watch"
+
     },
     "publishConfig": {
         "access": "public"

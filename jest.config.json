@@ -1,6 +1,6 @@
 {
     "roots": [
-        "<rootDir>/tests"
+        "<rootDir>/packages"
     ],
     "transform": {
         "^.+\\.ts$": "ts-jest"
@@ -19,7 +19,7 @@
     ],
     "globals": {
         "ts-jest": {
-            "tsConfig": "tsconfig.json"
+            "tsConfig": "tsconfig.test.json"
         }
     }
 }
