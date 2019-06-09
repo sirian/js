@@ -22,7 +22,7 @@
         "lint:fix": "yarn tslint:fix",
         "tslint:lint": "tslint '{src,tests}/**/*'",
         "tslint:fix": "yarn tslint:lint --fix",
-        "test": "jest --config jest.config.json",
+        "test": "jest --config ../../jest.config.json --rootDir .",
         "test:watch": "yarn test --watch"
     },
     "publishConfig": {

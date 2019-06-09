@@ -5,14 +5,15 @@
     "transform": {
         "^.+\\.ts$": "ts-jest"
     },
-    "testRegex": "/test[^/]*\\.tsx?$",
+    "testMatch": [
+        "<rootDir>/**/test*.ts"
+    ],
     "moduleFileExtensions": [
         "ts",
         "tsx",
         "json",
         "js"
     ],
-    "testEnvironment": "node",
     "coveragePathIgnorePatterns": [
         "/node_modules/"
     ],

@@ -1,3 +1,4 @@
+import {XPromise} from "@sirian/xpromise";
 import * as readline from "readline";
 import {Formatter} from "../Formatter";
 import {IO} from "../IO";
@@ -20,8 +21,8 @@ export class QuestionHelper {
         return result;
     }
 
-    protected readline<T>(question: AbstractQuestion<T>): Promise<string> {
-        return new Promise((resolve) => {
+    protected readline<T>(question: AbstractQuestion<T>): XPromise<string> {
+        return new XPromise((resolve) => {
             const io = this.io;
             const output = io.output;
 

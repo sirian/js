@@ -30,6 +30,7 @@
         "@sirian/event-dispatcher": "^4.2.2",
         "@sirian/ts-extra-types": "^3.42.6",
         "@sirian/unicode": "^1.0.1",
+        "@sirian/xpromise": "^2.2.3",
         "@types/node": "^12.0.7",
         "error-stack-parser": "^2.0.2"
     },
@@ -43,7 +44,7 @@
         "lint:fix": "yarn tslint:fix",
         "tslint:lint": "tslint '{src,tests}/**/*'",
         "tslint:fix": "yarn tslint:lint --fix",
-        "test": "jest --config jest.config.json",
+        "test": "jest --config ../../jest.config.json --rootDir .",
         "test:watch": "yarn test --watch"
     },
     "publishConfig": {

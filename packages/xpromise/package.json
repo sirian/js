@@ -22,7 +22,7 @@
         "lint:fix": "yarn tslint:fix",
         "tslint:lint": "tslint '{src,tests}/**/*'",
         "tslint:fix": "yarn tslint:lint --fix",
-        "test": "jest --config jest.config.json",
+        "test": "jest --config ../../jest.config.json --rootDir .",
         "test:watch": "yarn test --watch",
         "test:aplus": "yarn test:aplus:deferred && yarn test:aplus:xpromise",
         "test:aplus:deferred": "node --require ts-node/register node_modules/.bin/promises-aplus-tests tests/APlus/AsyncXPromiseAdapter.ts",

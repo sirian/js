@@ -12,6 +12,7 @@
         {"path": "../decorators"},
         {"path": "../error"},
         {"path": "../event-dispatcher"},
-        {"path": "../unicode"}
+        {"path": "../unicode"},
+        {"path": "../xpromise"}
     ]
 }
