@@ -1,7 +1,7 @@
 {
     "name": "@sirian/event-dispatcher",
     "description": "",
-    "version": "4.2.1",
+    "version": "4.2.2",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -14,7 +14,7 @@
     "types": "build/index.d.ts",
     "dependencies": {
         "@sirian/common": "^4.38.7",
-        "@sirian/disposer": "^1.5.0",
+        "@sirian/disposer": "^1.5.1",
         "@sirian/error": "^2.0.5",
         "@sirian/ts-extra-types": "^3.42.6",
         "@sirian/xpromise": "^2.2.3"

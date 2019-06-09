@@ -1,7 +1,7 @@
 {
     "name": "@sirian/datetime",
     "description": "",
-    "version": "3.3.1",
+    "version": "3.3.2",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
