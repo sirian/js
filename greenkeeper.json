@@ -8,6 +8,7 @@
                 "packages/error/package.json",
                 "packages/event-dispatcher/package.json",
                 "packages/ts-extra-types/package.json",
+                "packages/unicode/package.json",
                 "packages/xpromise/package.json"
             ]
         }

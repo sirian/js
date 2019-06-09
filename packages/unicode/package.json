@@ -1,7 +1,7 @@
 {
-    "name": "@sirian/event-dispatcher",
+    "name": "@sirian/unicode",
     "description": "",
-    "version": "4.2.2",
+    "version": "1.0.1",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -13,13 +13,9 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.38.7",
-        "@sirian/disposer": "^1.5.1",
-        "@sirian/error": "^2.0.5",
-        "@sirian/ts-extra-types": "^3.42.6",
-        "@sirian/xpromise": "^2.2.3"
     },
-    "devDependencies": {},
+    "devDependencies": {
+    },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",
