@@ -1,7 +1,7 @@
 {
     "name": "@sirian/decorators",
     "description": "",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -13,11 +13,10 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.38.7",
-        "@sirian/error": "^2.0.5",
+        "@sirian/common": "^4.38.8",
+        "@sirian/error": "^2.0.6",
         "@sirian/ts-extra-types": "^3.42.6"
     },
-    "devDependencies": {},
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean",
