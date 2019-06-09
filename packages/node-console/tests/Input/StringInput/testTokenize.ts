@@ -1,0 +1,52 @@
+import {StringInput} from "../../../src";
+
+const data: Array<[string, string[]]> = [
+    ["", []],
+    [`''`, [""]],
+    ["foo", ["foo"]],
+    ["foo ''", ["foo", ""]],
+    ["foo '' bar", ["foo", "", "bar"]],
+    ["foo ''bar", ["foo", "bar"]],
+    ["  foo  bar  ", ["foo", "bar"]],
+    [`"quoted"`, ["quoted"]],
+    ["'quoted'", ["quoted"]],
+    [`'a\rb\nc\td'`, ["a\rb\nc\td"]],
+    [`'a'\r'b'\n'c'\t'd'`, ["a", "b", "c", "d"]],
+    [`\\"quoted\\"`, [`"quoted"`]],
+    [`\\'quoted\\'`, ["'quoted'"]],
+    ["-a", ["-a"]],
+    ["-azc", ["-azc"]],
+    ["-awithavalue", ["-awithavalue"]],
+    ["-a\"foo bar\"", ["-afoo bar"]],
+    ["-a\"foo bar\"\"foo bar\"", ["-afoo barfoo bar"]],
+    ["-a'foo bar'", ["-afoo bar"]],
+    ["-a'foo bar''foo bar'", ["-afoo barfoo bar"]],
+    ["-a'foo bar'\"foo bar\"", ["-afoo barfoo bar"]],
+    ["--long-option", ["--long-option"]],
+    ["--long-option=foo", ["--long-option=foo"]],
+    ["--long-option=\"foo bar\"", ["--long-option=foo bar"]],
+    ["--long-option=\"foo bar\"\"another\"", ["--long-option=foo baranother"]],
+    ["--long-option='foo bar'", ["--long-option=foo bar"]],
+    ["--long-option='foo bar''another'", ["--long-option=foo baranother"]],
+    ["--long-option='foo bar'\"another\"", ["--long-option=foo baranother"]],
+    ["foo -a -ffoo --long bar", ["foo", "-a", "-ffoo", "--long", "bar"]],
+    [`a 'b' "c"`, ["a", "b", "c"]],
+    [`beep "boop" 'foo bar baz' "it's \\"so\\" groovy"`, ["beep", "boop", "foo bar baz", `it's "so" groovy`]],
+    ["a b\\ c d", ["a", "b c", "d"]],
+    ["\\$beep bo\\`op", ["$beep", "bo`op"]],
+    [`echo "foo = \\"foo\\""`, ["echo", "foo = \"foo\""]],
+    ["", []],
+    [" ", []],
+    ["\t", []],
+    [`a"b c d"e`, ["ab c de"]],
+    [`a\\ b"c d"\\ e f`, ["a bc d e", "f"]],
+    [`a\\ b"c d"\\ e'f g' h`, ["a bc d ef g", "h"]],
+    [`x "bl'a"'h'`, ["x", "bl'ah"]],
+    [`''a""b''`, ["ab"]],
+    [`''a'""b'''`, ["a\"\"b"]],
+];
+
+test.each(data)("StringInput.tokens('%s')", (str, expected) => {
+    const input = new StringInput(str);
+    expect(input.tokens).toEqual(expected.concat());
+});
