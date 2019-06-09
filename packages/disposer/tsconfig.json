@@ -4,5 +4,9 @@
         "rootDir": "src",
         "outDir": "build"
     },
-    "include": ["src"]
+    "include": ["src"],
+    "references": [
+        {"path": "../ts-extra-types"},
+        {"path": "../common"}
+    ]
 }
