@@ -3,6 +3,12 @@
     "useWorkspaces": true,
     "version": "independent",
     "stream": true,
+    "command": {
+        "publish": {
+            "allowBranch": "master",
+            "conventionalCommits": true
+        }
+    },
     "ignoreChanges": [
         "packages/*/tests/**"
     ]

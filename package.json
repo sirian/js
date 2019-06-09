@@ -37,7 +37,7 @@
         "tslint:fix": "lerna run tslint:fix --parallel",
         "test": "lerna run test --parallel",
         "test:watch": "lerna run test:watch --parallel",
-        "lerna:publish": "lerna publish --conventional-commits --yes"
+        "lerna:publish": "lerna publish --from-git --yes --conventional-commits --yes"
     },
     "husky": {
         "hooks": {
