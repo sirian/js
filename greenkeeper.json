@@ -3,6 +3,7 @@
         "default": {
             "packages": [
                 "packages/base64/package.json",
+                "packages/clone/package.json",
                 "packages/common/package.json",
                 "packages/datetime/package.json",
                 "packages/decorators/package.json",
@@ -11,6 +12,7 @@
                 "packages/event-dispatcher/package.json",
                 "packages/iterator/package.json",
                 "packages/logger/package.json",
+                "packages/mixin/package.json",
                 "packages/node-console/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/unicode/package.json",
