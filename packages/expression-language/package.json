@@ -1,0 +1,25 @@
+{
+    "name": "@sirian/expression-language",
+    "description": "",
+    "version": "1.0.5",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@sirian/common": "^4.38.13",
+        "@sirian/error": "^2.0.11",
+        "@sirian/parser": "^1.2.3",
+        "@sirian/ts-extra-types": "^3.42.9"
+    }
+}

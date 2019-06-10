@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {Ref} from "@sirian/common";
 
 // tslint:disable-next-line:no-namespace
 
@@ -14,11 +14,11 @@ export class Iter {
     }
 
     public static isAsyncIterable(value: any): value is AsyncIterable<any> {
-        return Var.hasMethod(value, Symbol.asyncIterator);
+        return Ref.hasMethod(value, Symbol.asyncIterator);
     }
 
     public static isIterable(value: any): value is Iterable<any> {
-        return Var.hasMethod(value, Symbol.iterator);
+        return Ref.hasMethod(value, Symbol.iterator);
     }
 
     public static isAnyIterable(value: any): value is AnyIterable {

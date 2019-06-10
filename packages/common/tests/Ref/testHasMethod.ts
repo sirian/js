@@ -15,7 +15,7 @@ describe("", () => {
         [/./, "foo", false],
     ];
 
-    test.each(data)("Var.hasMethod(%o, %o) === %o", (target, key, expected) => {
+    test.each(data)("Ref.hasMethod(%o, %o) === %o", (target, key, expected) => {
         expect(Ref.hasMethod(target, key)).toBe(expected);
     });
 });
