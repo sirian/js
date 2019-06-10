@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.38.13](https://github.com/sirian/js/compare/@sirian/common@4.38.12...@sirian/common@4.38.13) (2019-06-10)
+
+**Note:** Version bump only for package @sirian/common
+
+
+
+
+
 ## [4.38.12](https://github.com/sirian/js/compare/@sirian/common@4.38.11...@sirian/common@4.38.12) (2019-06-10)
 
 **Note:** Version bump only for package @sirian/common
