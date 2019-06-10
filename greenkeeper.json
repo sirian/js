@@ -2,12 +2,14 @@
     "groups": {
         "default": {
             "packages": [
+                "packages/base64/package.json",
                 "packages/common/package.json",
                 "packages/datetime/package.json",
                 "packages/decorators/package.json",
                 "packages/disposer/package.json",
                 "packages/error/package.json",
                 "packages/event-dispatcher/package.json",
+                "packages/logger/package.json",
                 "packages/node-console/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/unicode/package.json",
