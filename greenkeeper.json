@@ -9,6 +9,7 @@
                 "packages/disposer/package.json",
                 "packages/error/package.json",
                 "packages/event-dispatcher/package.json",
+                "packages/iterator/package.json",
                 "packages/logger/package.json",
                 "packages/node-console/package.json",
                 "packages/ts-extra-types/package.json",

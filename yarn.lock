@@ -1101,6 +1101,18 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
+"@sirian/common@^4.38.12":
+  version "4.38.12"
+  resolved "https://registry.yarnpkg.com/@sirian/common/-/common-4.38.12.tgz#511e0d2f79f590fe5de867111bd210397bc94dae"
+  integrity sha512-42FJ6bOC6druxvIpVjqD+dc5ukcmp29RosA8bc8aCfqbyDOpzBDqT2irg6YNhdFUOWtOzqZJkZcj20mIppZQdw==
+  dependencies:
+    "@sirian/ts-extra-types" "^3.42.8"
+
+"@sirian/ts-extra-types@^3.42.8":
+  version "3.42.8"
+  resolved "https://registry.yarnpkg.com/@sirian/ts-extra-types/-/ts-extra-types-3.42.8.tgz#3758e80cff3c661e2b13703484973b4b32cd0d97"
+  integrity sha512-mmZmWcZUCzPsHjwooO43pS6pPZIf8ydmYjaeDqpW8gtzF4x0KHAj4Sar7gkVlujQNm1NvGTDsjUe4MoiW0MbNQ==
+
 "@types/babel__core@^7.1.0":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.2.tgz#608c74f55928033fce18b99b213c16be4b3d114f"

@@ -1,0 +1,23 @@
+{
+    "name": "@sirian/iterator",
+    "description": "",
+    "version": "1.11.2",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@sirian/common": "^4.38.12",
+        "@sirian/ts-extra-types": "^3.42.8"
+    }
+}

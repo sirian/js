@@ -159,3 +159,7 @@ export type UnionToTuple<U, T extends any[] = []> = {
 
 type UnionToTupleRecursively_<T extends any[], U, S> =
     S extends any ? UnionToTuple<Exclude<U, S>, Push<T, S>> : never;
+
+export interface DeepArray<T> extends Array<T | DeepArray<T>> {
+
+}
