@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.42.9](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.42.8...@sirian/ts-extra-types@3.42.9) (2019-06-10)
+
+
+### Bug Fixes
+
+* Moved iterator to monorepo ([5ba4a2d](https://github.com/sirian/js/commit/5ba4a2d))
+
+
+
+
+
 ## [3.42.8](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.42.7...@sirian/ts-extra-types@3.42.8) (2019-06-10)
 
 **Note:** Version bump only for package @sirian/ts-extra-types
