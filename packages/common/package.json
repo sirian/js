@@ -1,7 +1,7 @@
 {
     "name": "@sirian/common",
     "description": "",
-    "version": "4.38.10",
+    "version": "4.38.11",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -13,10 +13,9 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/ts-extra-types": "^3.42.6"
+        "@sirian/ts-extra-types": "^3.42.7"
     },
-    "scripts": {
-    },
+    "scripts": {},
     "publishConfig": {
         "access": "public"
     }
