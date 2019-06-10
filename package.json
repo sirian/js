@@ -37,7 +37,7 @@
         "test": "yarn test:jest && lerna run test --parallel",
         "test:jest": "jest --config jest.config.json",
         "test:watch": "jest --config jest.config.json --watch",
-        "publish": "lerna publish --from-git --yes --conventional-commits --yes"
+        "lerna:publish": "lerna publish --from-git --yes --conventional-commits --yes"
     },
     "husky": {
         "hooks": {
