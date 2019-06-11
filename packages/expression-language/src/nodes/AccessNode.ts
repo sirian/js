@@ -3,7 +3,7 @@ import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
 
-export const enum AccessType {
+export enum AccessType {
     PROPERTY = "Property",
     METHOD = "Method",
     ARRAY = "Array",

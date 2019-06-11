@@ -1,4 +1,4 @@
-export const enum OperatorType {
+export enum OperatorType {
     UNARY,
     LEFT,
     RIGHT,

@@ -4,7 +4,7 @@ import {RuntimeError} from "../Error";
 import {Formatter} from "../Formatter";
 import {StrUtil} from "../Util";
 
-export const enum OutputVerbosity {
+export enum OutputVerbosity {
     QUIET,
     NORMAL,
     VERBOSE,
@@ -12,7 +12,7 @@ export const enum OutputVerbosity {
     DEBUG,
 }
 
-export const enum OutputType {
+export enum OutputType {
     NORMAL,
     RAW,
     PLAIN,

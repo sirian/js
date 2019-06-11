@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as pathUtil from "path";
 
-export const enum FileType {
+export enum FileType {
     UNKNOWN,
     FILE,
     DIR,

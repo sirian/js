@@ -1,7 +1,7 @@
 import {Descriptor, Var} from "@sirian/common";
 import {Args} from "@sirian/ts-extra-types";
 
-export const enum DecoratorType {
+export enum DecoratorType {
     CLASS = "class",
     PROPERTY = "property",
     METHOD = "method",
