@@ -12,7 +12,6 @@ before_install:
 
 before_script:
     - yarn --version
-    - yarn lerna:prepublish
 
 script:
     - yarn ci:build
