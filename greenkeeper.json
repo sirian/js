@@ -15,6 +15,8 @@
                 "packages/logger/package.json",
                 "packages/mixin/package.json",
                 "packages/node-console/package.json",
+                "packages/node-filesystem/package.json",
+                "packages/node-finder/package.json",
                 "packages/parser/package.json",
                 "packages/process/package.json",
                 "packages/ts-extra-types/package.json",

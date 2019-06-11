@@ -1,0 +1,26 @@
+{
+    "name": "@sirian/filesystem",
+    "description": "",
+    "version": "1.6.1",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "dependencies": {
+        "@sirian/common": "^4.38.14",
+        "@sirian/iterator": "^1.11.4",
+        "@sirian/ts-extra-types": "^3.42.10",
+        "@sirian/xpromise": "^2.2.10",
+        "@types/node": "^12.0.7"
+    },
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    }
+}
