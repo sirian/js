@@ -12,13 +12,9 @@ before_install:
 
 before_script:
     - yarn --version
-    - yarn run greenkeeper-lockfile-update
 
 script:
     - yarn ci:build
-
-after_script:
-    - yarn run greenkeeper-lockfile-upload
 
 before_deploy:
     - git config --global user.email ${GITHUB_EMAIL}
