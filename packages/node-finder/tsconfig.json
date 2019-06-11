@@ -1,0 +1,15 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build",
+        "types": ["node"]
+    },
+    "include": ["src"],
+    "references": [
+        {"path": "../common"},
+        {"path": "../node-filesystem"},
+        {"path": "../ts-extra-types"},
+        {"path": "../xpromise"}
+    ]
+}
