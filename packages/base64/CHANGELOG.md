@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/sirian/js/compare/@sirian/base64@1.1.3...@sirian/base64@1.1.4) (2019-06-11)
+
+
+### Bug Fixes
+
+* updated meta info ([7ca5c2d](https://github.com/sirian/js/commit/7ca5c2d))
+
+
+
+
+
 ## [1.1.3](https://github.com/sirian/js/compare/@sirian/base64@1.1.2...@sirian/base64@1.1.3) (2019-06-10)
 
 **Note:** Version bump only for package @sirian/base64

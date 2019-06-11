@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.6](https://github.com/sirian/js/compare/@sirian/iterator@1.11.5...@sirian/iterator@1.11.6) (2019-06-11)
+
+
+### Bug Fixes
+
+* updated meta info ([7ca5c2d](https://github.com/sirian/js/commit/7ca5c2d))
+* updated version ([023fab0](https://github.com/sirian/js/commit/023fab0))
+
+
+
+
+
 ## [1.11.5](https://github.com/sirian/js/compare/@sirian/iterator@1.11.4...@sirian/iterator@1.11.5) (2019-06-11)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.14](https://github.com/sirian/js/compare/@sirian/console@6.2.13...@sirian/console@6.2.14) (2019-06-11)
+
+
+### Bug Fixes
+
+* updated meta info ([7ca5c2d](https://github.com/sirian/js/commit/7ca5c2d))
+* updated version ([023fab0](https://github.com/sirian/js/commit/023fab0))
+
+
+
+
+
 ## [6.2.13](https://github.com/sirian/js/compare/@sirian/console@6.2.12...@sirian/console@6.2.13) (2019-06-11)
 
 
