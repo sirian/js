@@ -10,10 +10,17 @@ export class TaskQueue {
         return id;
     }
 
+    public remove(id: number) {
+        this.tasks.delete(id);
+    }
+
     public run(id: number) {
-        const fn = this.tasks.get(id);
-        if (fn) {
-            fn();
+        const tasks = this.tasks;
+        if (!tasks.has(id)) {
+            return;
         }
+        const fn = tasks.get(id)!;
+        tasks.delete(id);
+        return fn();
     }
 }

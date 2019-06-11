@@ -1,41 +1,88 @@
-import {Func0} from "@sirian/ts-extra-types";
+import {AbstractTimeout} from "./AbstractTimeout";
 import {TaskQueue} from "./TaskQueue";
 import {Timeout} from "./Timeout";
 
-declare const setImmediate: (callback: Func0) => any;
+export type ImmediateCallback = () => any;
 
-export class Immediate {
-    public static driver = Immediate.nativeDriver()
-        || Immediate.messagePortDriver()
-        || Immediate.setTimeoutDriver();
+interface ImmediateDriver {
+    set: (fn: ImmediateCallback) => any;
+    clear: (id: any) => void;
+}
+
+declare const setImmediate: (callback: ImmediateCallback) => any;
+declare const clearImmediate: (id: any) => void;
+
+export class Immediate extends AbstractTimeout {
+    public static driver?: ImmediateDriver;
+    public static readonly active = new Map<any, Immediate>();
+
+    protected id?: any;
+
+    public static clear(handleId: any) {
+        Immediate.active.delete(handleId);
+        this.getDriver().clear(handleId);
+    }
 
     public static set(callback: () => any) {
+        return this.getDriver().set(callback);
+    }
+
+    protected static getDriver() {
+        return this.driver = this.driver
+            || this.nativeDriver()
+            || this.messagePortDriver()
+            || this.timeoutDriver();
+    }
+
+    protected static nativeDriver(): ImmediateDriver | undefined {
         if ("function" === typeof setImmediate) {
-            this.driver(callback);
-        } else {
-            Timeout.set(0, callback);
+            return;
         }
+        return {
+            set: setImmediate,
+            clear: clearImmediate,
+        };
     }
 
-    protected static messagePortDriver() {
-        if ("undefined" === typeof MessageChannel) {
+    protected static messagePortDriver(): ImmediateDriver | undefined {
+        if ("function" !== typeof MessageChannel) {
             return;
         }
 
+        const tasks = new TaskQueue();
         const c = new MessageChannel();
-        const queue = new TaskQueue();
-        c.port1.onmessage = (e) => queue.run(e.data);
-        return (fn: Func0) => c.port2.postMessage(queue.add(fn));
+        c.port1.onmessage = (e) => tasks.run(e.data);
+
+        return {
+            set(fn: ImmediateCallback) {
+                const id = tasks.add(fn);
+                c.port2.postMessage(id);
+                return id;
+            },
+            clear(id) {
+                tasks.remove(id);
+            },
+        };
     }
 
-    protected static nativeDriver() {
-        if ("undefined" === typeof setImmediate) {
-            return;
-        }
-        return setImmediate;
+    protected static timeoutDriver(): ImmediateDriver {
+        return {
+            set: (fn) => Timeout.set(0, fn),
+            clear: (id) => Timeout.clear(id),
+        };
     }
 
-    protected static setTimeoutDriver() {
-        return (fn: Func0) => Timeout.set(0, fn);
+    protected handle() {
+        this.stop();
+        return this.callback();
+    }
+
+    protected doStart() {
+        this.id = Immediate.set(() => this.handle());
+        Immediate.active.set(this.id, this);
+    }
+
+    protected doStop() {
+        Immediate.clear(this.id);
     }
 }

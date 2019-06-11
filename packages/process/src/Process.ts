@@ -12,6 +12,7 @@ export class Process {
     }
 
     public static async nextTick(callback: Func0) {
-        return Promise.resolve().then(callback);
+        await void 0;
+        return callback();
     }
 }

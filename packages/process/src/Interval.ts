@@ -6,9 +6,11 @@ export class Interval extends AbstractTimeout {
     public static readonly active = new Map<IntervalId, Interval>();
 
     protected id?: IntervalId;
+    protected ms: number;
 
     constructor(ms: number, callback: () => any) {
-        super(ms, callback);
+        super(callback);
+        this.ms = ms;
     }
 
     public static set(ms: number, callback: TimeoutCallback) {
@@ -16,6 +18,7 @@ export class Interval extends AbstractTimeout {
     }
 
     public static clear(id: IntervalId) {
+        Interval.active.delete(id);
         return clearInterval(id);
     }
 
@@ -31,6 +34,5 @@ export class Interval extends AbstractTimeout {
     protected doStop() {
         const id = this.id!;
         Interval.clear(id);
-        Interval.active.delete(id);
     }
 }

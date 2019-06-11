@@ -6,9 +6,11 @@ export class Timeout extends AbstractTimeout {
     public static readonly active = new Map<TimeoutId, Timeout>();
 
     protected id?: TimeoutId;
+    protected ms: number;
 
     constructor(ms: number, callback: () => any) {
-        super(ms, callback);
+        super(callback);
+        this.ms = ms;
     }
 
     public static set(ms: number, callback: TimeoutCallback) {
@@ -16,6 +18,7 @@ export class Timeout extends AbstractTimeout {
     }
 
     public static clear(id: TimeoutId) {
+        Timeout.active.delete(id);
         return clearTimeout(id);
     }
 
@@ -30,8 +33,6 @@ export class Timeout extends AbstractTimeout {
     }
 
     protected doStop() {
-        const id = this.id!;
-        Timeout.clear(id);
-        Timeout.active.delete(id);
+        Timeout.clear(this.id!);
     }
 }

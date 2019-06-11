@@ -4,13 +4,11 @@ import {Args, Ctor} from "@sirian/ts-extra-types";
 export type TimeoutCallback = () => any;
 
 export abstract class AbstractTimeout {
-    protected active: boolean;
-    protected ms: number;
+    protected started: boolean;
     protected callback: TimeoutCallback;
 
-    constructor(ms: number, callback: TimeoutCallback) {
-        this.active = false;
-        this.ms = ms;
+    constructor(callback: TimeoutCallback) {
+        this.started = false;
         this.callback = callback;
     }
 
@@ -23,13 +21,13 @@ export abstract class AbstractTimeout {
         return timeout.start();
     }
 
-    public isActive() {
-        return this.active;
+    public isStarted() {
+        return this.started;
     }
 
     public start() {
-        if (!this.active && !this.isDisposed()) {
-            this.active = true;
+        if (!this.started && !this.isDisposed()) {
+            this.started = true;
             this.doStart();
         }
 
@@ -41,8 +39,8 @@ export abstract class AbstractTimeout {
     }
 
     public stop(dispose: boolean = false) {
-        if (this.active) {
-            this.active = false;
+        if (this.started) {
+            this.started = false;
             this.doStop();
         }
 
