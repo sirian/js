@@ -2,10 +2,10 @@ interface V8ErrorConstructor {
     captureStackTrace?: (target: object, ctor?: Function) => void;
 }
 
-const Err: ErrorConstructor & V8ErrorConstructor = Error;
-const Obj = Object;
-
 type ErrCtor = new (message?: string) => Error;
+
+const Obj = Object;
+const Err: ErrorConstructor & V8ErrorConstructor = Error;
 
 export class CustomError extends Err {
     public name: string;
@@ -29,6 +29,7 @@ export class CustomError extends Err {
     public static wrap<E extends Error>(target: E): E;
     public static wrap<T extends ErrCtor>(this: T, target: string): InstanceType<T>;
     public static wrap<T extends ErrCtor, O extends object>(this: T, o: O): Omit<InstanceType<T>, keyof O> & O;
+
     public static wrap<T extends ErrCtor>(this: T, target: any) {
         if (target instanceof Err) {
             return target;

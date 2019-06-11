@@ -1,0 +1,19 @@
+{
+    "name": "@sirian/unicode",
+    "description": "",
+    "version": "1.0.8",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    }
+}

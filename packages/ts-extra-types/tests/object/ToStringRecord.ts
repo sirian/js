@@ -1,0 +1,30 @@
+import {AssertExact, ToStringRecord} from "../../src";
+
+type Test = [
+    AssertExact<{}, ToStringRecord<[]>>,
+    AssertExact<{}, ToStringRecord<{}>>,
+    AssertExact<Record<string, boolean>, ToStringRecord<Record<string, boolean>>>,
+    AssertExact<Record<string, boolean>, ToStringRecord<Record<string, boolean>>>,
+    AssertExact<Record<string, boolean>, ToStringRecord<{ [id: string]: boolean }>>,
+    AssertExact<Record<string, boolean>, ToStringRecord<{ [id: number]: boolean }>>,
+    AssertExact<Record<string, 2>, ToStringRecord<{ [id: string]: 1 | 2 } & {[id: number]: 2 | 3}>>,
+    AssertExact<{ "0": 1 }, ToStringRecord<{ "0": 1 }>>,
+    AssertExact<{ "0": 1 }, ToStringRecord<{ 0: 1 }>>,
+    AssertExact<{ "0"?: 1, "1": 1 | undefined }, ToStringRecord<{ 0?: 1, 1: 1 | undefined }>>,
+    AssertExact<{ "0": 1 }, ToStringRecord<{ "0": 1 | 2 } & { 0: 1 | 3 }>>,
+    AssertExact<{ "0": 1, "1": 1 }, ToStringRecord<{ "0": 1, 1: 1 }>>,
+    AssertExact<{ "0"?: 1 }, ToStringRecord<[1?]>>,
+    AssertExact<{ "0": number }, ToStringRecord<[number]>>,
+    AssertExact<{ "0": number }, ToStringRecord<[number]>>,
+    AssertExact<{ "0"?: number }, ToStringRecord<{ 0?: number }>>,
+    AssertExact<{ "0"?: number }, ToStringRecord<{ 0?: number, length: 0 | 1 }>>,
+    AssertExact<{ "0"?: number }, ToStringRecord<[number?]>>,
+    AssertExact<{ "0": 2 }, ToStringRecord<[number] & { 0: 2 }>>,
+    AssertExact<{ "0"?: 2 }, ToStringRecord<[number?] & { 0?: 2 }>>,
+    AssertExact<{ "0": string, "1"?: number }, ToStringRecord<[string, number?]>>,
+    AssertExact<{ "0": 1 }, ToStringRecord<[number] & { 0: 1 }>>,
+    AssertExact<Record<string, number | string> & { "0": number }, ToStringRecord<[number, ...string[]]>>,
+    AssertExact<{ "0": string, "1": number }, ToStringRecord<[string, number]>>,
+    AssertExact<{ "0": number, "1": boolean }, ToStringRecord<[number, boolean]>>,
+    AssertExact<Record<string, boolean>, ToStringRecord<boolean[]>>
+];

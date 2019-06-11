@@ -1,0 +1,22 @@
+{
+    "name": "@sirian/common",
+    "description": "",
+    "version": "4.38.14",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "dependencies": {
+        "@sirian/ts-extra-types": "^3.42.10"
+    },
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    }
+}

@@ -1,8 +1,7 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "types": [
-      "jest"
-    ]
-  }
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "noUnusedLocals": false,
+        "noEmit": true
+    }
 }

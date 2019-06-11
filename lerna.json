@@ -7,11 +7,10 @@
         "publish": {
             "allowBranch": "master",
             "conventionalCommits": true,
-            "message": "chore(release): publish"
+            "message": "chore(release): publish [ci skip]"
         }
     },
     "ignoreChanges": [
-        "packages/*/test/**",
-        "packages/*/test-server/**"
+        "packages/*/tests/**"
     ]
 }

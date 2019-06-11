@@ -1,0 +1,25 @@
+{
+    "roots": [
+        "<rootDir>/packages"
+    ],
+    "transform": {
+        "^.+\\.ts$": "ts-jest"
+    },
+    "testMatch": [
+        "<rootDir>/**/test*.ts"
+    ],
+    "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "json",
+        "js"
+    ],
+    "coveragePathIgnorePatterns": [
+        "/node_modules/"
+    ],
+    "globals": {
+        "ts-jest": {
+            "tsConfig": "tsconfig.test.json"
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build"
+    },
+    "include": ["src"],
+    "references": [
+        {"path": "../common"},
+        {"path": "../error"},
+        {"path": "../ts-extra-types"}
+    ]
+}

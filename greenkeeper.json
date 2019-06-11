@@ -1,10 +1,26 @@
 {
-  "groups": {
-    "default": {
-      "packages": [
-        "package.json",
-        "packages/error/package.json"
-      ]
+    "groups": {
+        "default": {
+            "packages": [
+                "packages/base64/package.json",
+                "packages/clone/package.json",
+                "packages/common/package.json",
+                "packages/datetime/package.json",
+                "packages/decorators/package.json",
+                "packages/disposer/package.json",
+                "packages/error/package.json",
+                "packages/event-dispatcher/package.json",
+                "packages/expression-language/package.json",
+                "packages/iterator/package.json",
+                "packages/logger/package.json",
+                "packages/mixin/package.json",
+                "packages/node-console/package.json",
+                "packages/parser/package.json",
+                "packages/process/package.json",
+                "packages/ts-extra-types/package.json",
+                "packages/unicode/package.json",
+                "packages/xpromise/package.json"
+            ]
+        }
     }
-  }
 }

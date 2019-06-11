@@ -1,6 +1,7 @@
 .idea/
 node_modules/
-dist/
+build/
 coverage/
 yarn-*.log
 npm-*.log
+tsconfig.tsbuildinfo
