@@ -5,7 +5,7 @@
     "stream": true,
     "command": {
         "publish": {
-            "allowBranch": "master",
+            "allowBranch": "release",
             "conventionalCommits": true,
             "message": "chore(release): publish [ci skip]"
         }
