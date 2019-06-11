@@ -12,6 +12,7 @@ before_install:
 
 before_script:
     - yarn --version
+    - yarn lerna:prepublish
 
 script:
     - yarn ci:build
@@ -21,7 +22,7 @@ before_deploy:
     - git config --global user.name ${GITHUB_USER}
     - git remote set-url origin "https://${GITHUB_TOKEN}@github.com/sirian/js.git"
     - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-    - git checkout master
+    - git checkout release
 
 deploy:
     provider: script
@@ -29,4 +30,4 @@ deploy:
     skip_cleanup: true
     on:
         node: "12"
-        branch: "master"
+        branch: "release"
