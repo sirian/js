@@ -11,11 +11,12 @@ export class TaskQueue {
     }
 
     public remove(id: number) {
-        this.tasks.delete(id);
+        this.tasks.delete(+id);
     }
 
     public run(id: number) {
         const tasks = this.tasks;
+        id = +id;
         if (!tasks.has(id)) {
             return;
         }

@@ -18,7 +18,7 @@ export class Timeout extends AbstractTimeout {
     }
 
     public static clear(id: TimeoutId) {
-        Timeout.active.delete(id);
+        this.active.delete(id);
         return clearTimeout(id);
     }
 
