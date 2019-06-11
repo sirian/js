@@ -6,14 +6,14 @@ import {TableRow} from "./TableRow";
 import {TableSeparator} from "./TableSeparator";
 import {TableStyle} from "./TableStyle";
 
-export const enum Separator {
+export enum Separator {
     TOP,
     TOP_BOTTOM,
     MID,
     BOTTOM,
 }
 
-export const enum Border {
+export enum Border {
     OUTSIDE,
     INSIDE,
 }

@@ -1,7 +1,7 @@
 import {Var} from "@sirian/common";
 import {IFilter} from "./Filter";
 
-export const enum Operator {
+export enum Operator {
     GT = ">",
     LT = "<",
     GTE = ">=",
