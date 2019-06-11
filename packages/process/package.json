@@ -1,0 +1,23 @@
+{
+    "name": "@sirian/process",
+    "description": "",
+    "version": "1.0.0",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@sirian/disposer": "^1.5.8",
+        "@sirian/ts-extra-types": "^3.42.10"
+    }
+}
