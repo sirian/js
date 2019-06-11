@@ -1,41 +1,15 @@
-import {Obj, Ref, Var} from "@sirian/common";
-import {Application, Command, CommandNotFoundError, ICommandLoader} from "../src";
-
-class MyLoader implements ICommandLoader {
-    protected factories: Record<string, () => Promise<any>>;
-
-    constructor(factories: Record<string, () => Promise<any>>) {
-        this.factories = factories;
-
-    }
-
-    public has(name: string) {
-        return Ref.hasOwn(this.factories, name);
-    }
-
-    public getNames() {
-        return Obj.keys(this.factories);
-    }
-
-    public async get(name: string) {
-        const fn = this.factories[name];
-        const importResult = await fn();
-        for (const value of Object.values(importResult)) {
-            if (Var.isSubclassOf(value, Command)) {
-                return value;
-            }
-        }
-        throw new CommandNotFoundError(`Command "${name}" not found`);
-    }
-}
+import {Application} from "../src";
+import {HelloCommand} from "./HelloCommand";
+import {ProgressCommand} from "./ProgressCommand";
+import {TableCommand} from "./TableCommand";
 
 const app = new Application({
     name: "Example application",
-    commandLoader: new MyLoader({
-        progress: () => import("./ProgressCommand"),
-        table: () => import("./HelloCommand"),
-        hello: () => import("./TableCommand"),
-    }),
+    commands: [
+        HelloCommand,
+        ProgressCommand,
+        TableCommand,
+    ],
 });
 
 app.run();
