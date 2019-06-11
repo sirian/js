@@ -1,7 +1,7 @@
 {
     "name": "@sirian/expression-language",
     "description": "",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
