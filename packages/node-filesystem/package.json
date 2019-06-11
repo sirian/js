@@ -6,6 +6,8 @@
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
+    "repository": "https://github.com/sirian/js",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/filesystem",
     "license": "MIT",
     "files": [
         "build/"
