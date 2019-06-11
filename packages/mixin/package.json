@@ -1,7 +1,7 @@
 {
     "name": "@sirian/mixin",
     "description": "",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -19,8 +19,8 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^4.38.14",
-        "@sirian/ts-extra-types": "^3.42.10",
-        "@sirian/unicode": "^1.0.8"
+        "@sirian/common": "^4.38.15",
+        "@sirian/ts-extra-types": "^3.42.11",
+        "@sirian/unicode": "^1.0.9"
     }
 }
