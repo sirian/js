@@ -21,6 +21,7 @@
                 "packages/process/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/unicode/package.json",
+                "packages/workflow/package.json",
                 "packages/xpromise/package.json"
             ]
         }

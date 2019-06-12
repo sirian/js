@@ -1,0 +1,27 @@
+{
+    "name": "@sirian/workflow",
+    "description": "",
+    "version": "1.0.0",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "repository": "https://github.com/sirian/js",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/workflow",
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@sirian/common": "^4.38.15",
+        "@sirian/error": "^2.0.13",
+        "@sirian/event-dispatcher": "^4.2.10",
+        "@sirian/ts-extra-types": "^3.42.11"
+    }
+}
