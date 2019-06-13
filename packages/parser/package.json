@@ -1,7 +1,7 @@
 {
     "name": "@sirian/parser",
     "description": "",
-    "version": "1.2.5",
+    "version": "1.2.6",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -19,8 +19,8 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^4.38.15",
+        "@sirian/common": "^4.38.16",
         "@sirian/error": "^2.0.13",
-        "@sirian/ts-extra-types": "^3.42.11"
+        "@sirian/ts-extra-types": "^3.43.0"
     }
 }

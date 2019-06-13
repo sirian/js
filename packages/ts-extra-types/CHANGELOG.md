@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.43.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.42.11...@sirian/ts-extra-types@3.43.0) (2019-06-13)
+
+
+### Features
+
+* DeepRequire ([2a18371](https://github.com/sirian/js/commit/2a18371))
+* property-access ([4259e67](https://github.com/sirian/js/commit/4259e67))
+
+
+
+
+
 ## [3.42.11](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.42.10...@sirian/ts-extra-types@3.42.11) (2019-06-11)
 
 
