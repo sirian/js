@@ -1,11 +1,11 @@
 import {HybridMap} from "@sirian/common";
-import {SharedMap} from "../../src";
+import {SharedStore} from "../../src";
 
 describe("ShareStore.get", () => {
     test("ShareStore.get", () => {
-        const foo1 = SharedMap.get("foo");
-        const foo2 = SharedMap.get("foo");
-        const bar = SharedMap.get("bar");
+        const foo1 = SharedStore.get("foo");
+        const foo2 = SharedStore.get("foo");
+        const bar = SharedStore.get("bar");
 
         expect(foo1).toBeInstanceOf(HybridMap);
         expect(foo2).toBeInstanceOf(HybridMap);

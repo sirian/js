@@ -1,5 +1,5 @@
 {
-    "name": "@sirian/shared=map",
+    "name": "@sirian/shared=store",
     "description": "",
     "version": "1.0.0",
     "author": {
@@ -7,7 +7,7 @@
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/shared-map",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/shared-store",
     "license": "MIT",
     "files": [
         "build/"
