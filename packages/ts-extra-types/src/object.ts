@@ -31,7 +31,7 @@ export type EntriesOf<T> = Array<EntryOf<T>>;
 export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition ? K : never }[keyof T];
 export type Shrink<T, Condition> = MyPick<T, TypedKeyOf<T, Condition>>;
 
-export type Rewrite<T> = { [P in keyof T]: T[P] } | T & unknown;
+export type Rewrite<T> = { [P in keyof T]: T[P] };
 export type Overwrite<T, U> = MyOmit<T, keyof U> & U;
 export type Replace<T, U> = MyPick<Overwrite<T, U>, keyof T>;
 
