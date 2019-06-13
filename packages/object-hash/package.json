@@ -16,7 +16,7 @@
     "types": "build/index.d.ts",
     "dependencies": {
         "@sirian/common": "^4.38.15",
-        "@sirian/shared-store": "^1.0.0"
+        "@sirian/shared-store": "^1.0.1"
     },
     "scripts": {},
     "publishConfig": {
