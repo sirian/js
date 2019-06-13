@@ -6,7 +6,7 @@ export class UnexpectedTypeError extends PropertyAccessError {
         const message =
             "Property requires a graph of objects or arrays to operate on, " +
             `but it found type "${typeof value}" while trying to traverse path "${path}"` +
-            `at property "${path.getPart(pathIndex)}".`;
+            `at property "${path[pathIndex]}".`;
 
         super(message);
     }

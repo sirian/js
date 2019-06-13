@@ -1,7 +1,7 @@
 import {NumberToString, StringToNumber} from "./cast";
 import {If, Not} from "./logic";
 import {MustBeKey} from "./mustbe";
-import {ElementOf, Length} from "./tuple";
+import {ElementOf, Head, Length, Tail} from "./tuple";
 import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types";
 
 export type KeyOf<T> = Extract<keyof T, string>;
@@ -11,7 +11,17 @@ export type ValueOf<T, K extends keyof T = keyof T> = T[K];
 
 export type Get<T, K extends keyof any, TDefault = never> =
     K extends keyof T ? T[K] :
-    T extends { [P in K]: any } ? T[K] : TDefault;
+    [T] extends [{ [P in K]: infer V }] ? V : TDefault;
+
+export type Has<T, K extends keyof any> = K extends keyof T ? true : IsExtends<T, { [P in K]: any }>;
+
+export type GetDeep<T, L extends PropertyKey[], D = never> =
+    {
+        0: T
+        1: Has<T, Head<L>> extends true
+           ? GetDeep<Get<T, Head<L>>, Tail<L>, D>
+           : D;
+    }[L extends [any, ...any[]] ? 1 : 0];
 
 export type MapKey<T, K extends keyof any> =
     { [P in keyof T]-?: Record<K, 0> extends Record<P, 0> ? P : never }[keyof T];

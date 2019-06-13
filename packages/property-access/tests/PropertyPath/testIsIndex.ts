@@ -1,19 +1,20 @@
 import {PropertyPath} from "../../src";
 
-const data: Array<[string, number, boolean]> = [
-    ["foo", 0, false],
-    ["foo[0]", 0, false],
-    ["foo[0]", 1, true],
-    ["foo.0", 1, false],
-    ["0", 0, false],
-    ["[0]", 0, true],
-    ["[5][6]", 0, true],
-    ["[5][6]", 1, true],
-    ["[5].6", 0, true],
-    ["[5].6", 1, false],
+const data: Array<[string, boolean[]]> = [
+    ["foo", [false]],
+    ["foo[0]", [false, true]],
+    ["foo.0", [false, false]],
+    ["0", [false]],
+    ["[0]", [true]],
+    ["[5][6]", [true, true]],
+    ["[5].6", [true, false]],
+    ["5[6]", [false, true]],
+    ["5.6", [false, false]],
 ];
 
-test.each(data)("new PropertyPath(%p).isIndex(%d) === %p", (path, index, expected) => {
+test.each(data)("new PropertyPath(%p) indexes is %o", (path, expected) => {
     const p = new PropertyPath(path);
-    expect(p.getPart(index).isIndex).toBe(expected);
+    for (let i = 0; i < expected.length; i++) {
+        expect(p[i].asIndex).toBe(expected[i]);
+    }
 });

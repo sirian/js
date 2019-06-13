@@ -8,11 +8,8 @@
         "src"
     ],
     "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../datetime"
-        }
+        {"path": "../common"},
+        {"path": "../datetime"},
+        {"path": "../property-access"},
     ]
 }

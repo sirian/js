@@ -1,42 +1,54 @@
 import {Var, XMap} from "@sirian/common";
-import {InvalidPropertyPathError, OutOfBoundsError} from "./Error";
+import {InvalidPropertyPathError} from "./Error";
 
-export type Path = string | number;
+export type _Path = string | number;
 
-export interface PropertyPathPart {
-    readonly key: string;
-    readonly isIndex: boolean;
+export type Path = _Path | _Path[];
+
+export interface PathElement {
+    readonly key: string | number;
+    readonly asIndex: boolean;
 }
 
-export class PropertyPath {
+export class PropertyPath extends Array<PathElement> {
     protected static readonly cache = new XMap((path) => new PropertyPath(path));
 
-    public readonly parts: PropertyPathPart[];
-    public readonly keys: readonly string[];
-    public readonly path: string;
-
     constructor(arg: Path) {
+        super();
         const path = Var.stringify(arg);
+        const parts = PropertyPath.parse(path);
 
         if (!path) {
             const msg = `The property path should be non empty string. Given: ${path}`;
             throw new InvalidPropertyPathError(msg);
         }
 
-        this.path = path;
-        this.parts = PropertyPath.parse(path);
-        this.keys = this.parts.map((part) => part.key);
+        this.push(...parts);
     }
 
-    public get length() {
-        return this.parts.length;
+    public static get [Symbol.species]() {
+        return Array;
     }
 
     public get last() {
-        return this.getPart(this.length - 1);
+        return this[this.length - 1];
     }
 
-    public static parse(path: string) {
+    public static parse(path: Path): PathElement[] {
+        if (Var.isArray(path)) {
+            return path.map((key) => ({
+                key,
+                asIndex: Var.isNumber(key),
+            }));
+        }
+
+        if (Var.isNumber(path)) {
+            return [{
+                key: path,
+                asIndex: true,
+            }];
+        }
+
         const re = /^\[([^\]]+)]|(?:^|\.)([^.[]+)/;
 
         let pos = 0;
@@ -51,9 +63,11 @@ export class PropertyPath {
 
             const [text, index, key] = matches;
 
+            const asIndex = index !== undefined;
+
             parts.push({
-                key: key || index,
-                isIndex: Var.isNumeric(index),
+                key: asIndex ? (Var.isNumeric(index) ? +index : index) : key,
+                asIndex,
             });
 
             pos += text.length;
@@ -66,27 +80,27 @@ export class PropertyPath {
         return parts;
     }
 
+    public static from<T extends PropertyPath>(path: T): T;
+
+    public static from(path: Path): PropertyPath;
+
     public static from(path: PropertyPath | Path) {
         if (Var.isInstanceOf(path, PropertyPath)) {
-            return path;
+            return path as any;
         }
 
-        return this.cache.ensure(path);
+        return this.cache.ensure(path) as any;
     }
 
-    public getPart(index: number) {
-        if (index >= 0 && index < this.parts.length) {
-            return this.parts[index];
-        }
-
-        throw new OutOfBoundsError(`The index ${index} is not within the property path "${this.path}"`);
+    public getKeys() {
+        return [...this].map((v) => v.key);
     }
 
     public toString() {
-        return this.path;
-    }
-
-    public* [Symbol.iterator]() {
-        return yield* this.parts;
+        const result: string[] = [];
+        for (const part of this) {
+            result.push(part.asIndex ? `[${part.key}]` : `.${part.key}`);
+        }
+        return result.join("");
     }
 }
