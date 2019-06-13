@@ -1,0 +1,24 @@
+{
+    "name": "@sirian/shared=map",
+    "description": "",
+    "version": "1.0.0",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "repository": "https://github.com/sirian/js",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/shared-map",
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "dependencies": {
+        "@sirian/common": "^4.38.15"
+    },
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    }
+}
