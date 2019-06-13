@@ -11,12 +11,15 @@ export type AssertError<T extends ERROR> = T;
 export type AssertExtends<T extends U, U> = IsExtends<T, U>;
 export type AssertNotExtends<T extends T1, U, T1 = ValidateNotExtends<T, U>> = true;
 
-export type AssertExact<T extends ValidateExact<T1, U1, "T">,
-    U extends ValidateExact<U1, T1, "U">,
-    T1 = Rewrite<T>,
-    U1 = Rewrite<U>> = IsExact<T, U>;
+export type AssertExact<T extends TU,
+    U extends UT,
+    T1 = T,
+    U1 = U,
+    TU = ValidateExact<T1, U1, "U">,
+    UT = ValidateExact<T1, U1, "T">,
+    > = IsExact<T, U>;
 
-type ValidateExact<T, U, Z> =
-    [keyof T] extends [keyof U]
-    ? U
-    : U & ERROR<[Z, "Missed", Omit<T, keyof U>]>;
+type ValidateExact<T, U, Z, TR = Rewrite<T>, UR = Rewrite<U>> =
+    [keyof TR] extends [keyof UR]
+      ? U // IsExact<T, U> extends true ? U : U & ERROR<[Z, "not exact"]>
+      : UR & ERROR<[Z, "Missed", Omit<TR, keyof UR>]>;

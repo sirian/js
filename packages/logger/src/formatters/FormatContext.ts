@@ -1,5 +1,5 @@
 import {Var} from "@sirian/common";
-import {PropertyPath} from "./PropertyPath";
+import {Property} from "@sirian/property-access";
 import {StyleStack} from "./StyleStack";
 
 export class FormatContext {
@@ -33,7 +33,7 @@ export class FormatContext {
         return this;
     }
 
-    public getArgument(path?: string | number) {
+    public getArgument(path?: string | number): any {
         if (Var.isNullable(path)) {
             path = this.argIndex++;
         }
@@ -44,9 +44,9 @@ export class FormatContext {
             return this.args[index];
         }
 
-        const arg: any = this.getArgument(0);
+        const arg = this.getArgument(0);
 
-        return this.readProperty(arg, path);
+        return Property.read(arg, path);
     }
 
     public getExtraArgs() {
@@ -56,16 +56,5 @@ export class FormatContext {
 
     public toString() {
         return this.formatted.join("");
-    }
-
-    protected readProperty(value: any, path: string) {
-        const p = new PropertyPath(path);
-        for (const part of p) {
-            if (!Var.isObjectOrFunction(value)) {
-                return "";
-            }
-            value = (value as any)[part.key];
-        }
-        return value;
     }
 }

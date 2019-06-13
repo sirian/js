@@ -19,8 +19,10 @@
                 "packages/node-finder/package.json",
                 "packages/parser/package.json",
                 "packages/process/package.json",
+                "packages/property-access/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/unicode/package.json",
+                "packages/workflow/package.json",
                 "packages/xpromise/package.json"
             ]
         }

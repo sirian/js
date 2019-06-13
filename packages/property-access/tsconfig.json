@@ -4,12 +4,10 @@
         "rootDir": "src",
         "outDir": "build"
     },
-    "include": [
-        "src"
-    ],
+    "include": ["src"],
     "references": [
         {"path": "../common"},
-        {"path": "../datetime"},
-        {"path": "../property-access"},
+        {"path": "../error"},
+        {"path": "../ts-extra-types"}
     ]
 }
