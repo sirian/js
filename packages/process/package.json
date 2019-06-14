@@ -19,7 +19,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/disposer": "^1.5.9",
-        "@sirian/ts-extra-types": "^3.42.11"
+        "@sirian/disposer": "^1.5.10",
+        "@sirian/ts-extra-types": "^3.43.0"
     }
 }

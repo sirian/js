@@ -15,8 +15,9 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.38.15",
+        "@sirian/common": "^4.38.16",
         "@sirian/datetime": "^3.3.10",
+        "@sirian/property-access": "^1.1.1",
         "pretty-format": "^24.8.0"
     },
     "devDependencies": {
