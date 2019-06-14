@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.2](https://github.com/sirian/js/compare/@sirian/shared-store@1.0.1...@sirian/shared-store@1.0.2) (2019-06-14)
+
+
+### Bug Fixes
+
+* versions ([7e331c6](https://github.com/sirian/js/commit/7e331c6))
+* versions ([480a1af](https://github.com/sirian/js/commit/480a1af))
+
+
+
+
+
 ## 1.0.1 (2019-06-13)
 
 
