@@ -17,6 +17,7 @@
     "dependencies": {
         "@sirian/common": "^4.38.16",
         "@sirian/datetime": "^3.3.11",
+        "@sirian/property-access": "^1.1.1",
         "pretty-format": "^24.8.0"
     },
     "devDependencies": {

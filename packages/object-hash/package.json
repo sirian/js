@@ -15,7 +15,7 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.38.15",
+        "@sirian/common": "^4.38.16",
         "@sirian/shared-store": "^1.0.1"
     },
     "scripts": {},
