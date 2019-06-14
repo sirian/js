@@ -19,7 +19,7 @@
         "@sirian/disposer": "^1.5.10",
         "@sirian/error": "^2.0.13",
         "@sirian/ts-extra-types": "^3.43.0",
-        "@sirian/xpromise": "^2.2.11"
+        "@sirian/xpromise": "^2.2.12"
     },
     "scripts": {},
     "publishConfig": {
