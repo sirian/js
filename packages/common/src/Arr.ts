@@ -54,4 +54,14 @@ export class Arr {
 
         return array;
     }
+
+    public static range(from: number, to: number, step: number = 1) {
+        const result = [];
+        const sign = Math.sign(step);
+        while (sign * (to - from) >= 0) {
+            result.push(from);
+            from += step;
+        }
+        return result;
+    }
 }

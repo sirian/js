@@ -1,13 +1,13 @@
 {
-    "name": "@sirian/property-access",
+    "name": "@sirian/random",
     "description": "",
-    "version": "1.1.1",
+    "version": "1.0.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/property-access",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/random",
     "license": "MIT",
     "files": [
         "build/"
@@ -20,7 +20,6 @@
     },
     "dependencies": {
         "@sirian/common": "^4.38.16",
-        "@sirian/error": "^2.0.13",
         "@sirian/ts-extra-types": "^3.43.0"
     }
 }
