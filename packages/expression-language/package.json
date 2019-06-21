@@ -1,7 +1,7 @@
 {
     "name": "@sirian/expression-language",
     "description": "",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -19,9 +19,9 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^4.38.16",
+        "@sirian/common": "^4.39.0",
         "@sirian/error": "^2.0.13",
-        "@sirian/parser": "^1.2.6",
+        "@sirian/parser": "^1.2.7",
         "@sirian/ts-extra-types": "^3.43.0"
     }
 }
