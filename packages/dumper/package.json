@@ -1,0 +1,25 @@
+{
+    "name": "@sirian/dumper",
+    "description": "",
+    "version": "0.0.1",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "repository": "https://github.com/sirian/js",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/dumper",
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "dependencies": {
+        "@sirian/common": "^4.39.0",
+        "@sirian/ts-extra-types": "^3.43.0"
+    },
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    }
+}
