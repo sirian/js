@@ -1,6 +1,5 @@
 import {AsyncFunc, Ctor, Func} from "./function";
 import {And, If, Not} from "./logic";
-import {Require} from "./object";
 
 export type NonNull = object | boolean | bigint | number | string | symbol;
 export type Primitive = boolean | bigint | null | number | string | symbol | undefined | void;
@@ -104,8 +103,8 @@ export type DeepReadonly<T> = {
     readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
 
-export type DeepRequire<T, R = Require<T>> = {
-    [P in keyof R]: DeepRequire<R[P]>;
+export type DeepRequire<T> = {
+    [P in keyof T]-?: DeepRequire<T[P]>;
 };
 
 export type Thenable = { then: AnyFunc };
