@@ -2,7 +2,7 @@ import {NumberToString, StringToNumber} from "./cast";
 import {If, Not} from "./logic";
 import {MustBeKey} from "./mustbe";
 import {ElementOf, Head, Length, Tail} from "./tuple";
-import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types";
+import {IfExact, IsExtends, IsWide, UnionToIntersection} from "./types";
 
 export type KeyOf<T> = Extract<keyof T, string>;
 export type SymbolOf<T> = Extract<keyof T, symbol>;
@@ -30,18 +30,20 @@ export type ExtractKey<T, K extends keyof any> = Extract<keyof T, MapKey<T, K>>;
 export type ExcludeKey<T, K extends keyof any> = Exclude<keyof T, MapKey<T, K>>;
 
 export type MyPick<T, K extends keyof any> = Pick<T, ExtractKey<T, K>>;
-export type MyOmit<T, K extends keyof any> = IfNever<K, T, Pick<T, ExcludeKey<T, K>>>;
+export type MyOmit<T, K extends keyof any> = [K] extends [never] ? T : Pick<T, ExcludeKey<T, K>>;
+
+export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition ? K : never }[keyof T];
+export type PickTyped<T, Condition> = Pick<T, TypedKeyOf<T, Condition>>;
+export type OmitTyped<T, Condition> = Omit<T, TypedKeyOf<T, Condition>>;
 export type OmitIndexSignature<T> = Pick<T, ExcludeWide<keyof T>>;
+export type OmitNever<T> = OmitTyped<T, never>;
 
 export type EntryOf<T> = ObjectEntryOf<ToStringRecord<T>>;
 export type ObjectEntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
 
 export type EntriesOf<T> = Array<EntryOf<T>>;
 
-export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition ? K : never }[keyof T];
-export type Shrink<T, Condition> = MyPick<T, TypedKeyOf<T, Condition>>;
-
-export type Rewrite<T> = { [P in keyof T]: T[P] };
+export type Rewrite<T, U extends T = { [P in keyof T]: T[P] }> = U;
 export type Overwrite<T, U> = MyOmit<T, keyof U> & U;
 export type Replace<T, U> = MyPick<Overwrite<T, U>, keyof T>;
 

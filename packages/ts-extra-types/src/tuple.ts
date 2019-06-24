@@ -1,7 +1,8 @@
-import {Every, If} from "./logic";
+import {If} from "./logic";
 import {MustBeArray, MustBeNumber} from "./mustbe";
+import {Dec, Inc} from "./number";
 import {IsPartial, IsRequired, Partialize, ToStringRecord} from "./object";
-import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
+import {IfNever, IsExact, IsFiniteNumber, IsWide} from "./types";
 
 export type FixArray<T> = T & {
     [Symbol.iterator]: any;
@@ -15,15 +16,19 @@ export type Head<T extends any[], D = T[0]> = T extends [infer R, ...any[]] ? R 
 export type Tail<L extends any[]> =
     ((...t: L) => void) extends ((h: any, ...rest: infer R) => void) ? R : never;
 
-export type Unshift<L extends any[], X> =
-    ((x: X, ...t: L) => void) extends ((...t: infer R) => void) ? R : never;
+export type ReplaceTail<T extends any[], L extends any[]> = Cons<Head<T>, L, T extends [any, ...any[]] ? false : true>;
 
-export type Cons<X, L extends any[]> = Unshift<L, X>;
+export type Cons<X, L extends any[], Optional extends boolean = false> =
+    Optional extends true
+    ? ((x?: X, ...t: L) => void) extends ((...t: infer R) => void) ? R : never
+    : ((x: X, ...t: L) => void) extends ((...t: infer R) => void) ? R : never;
 
 export type Push<L extends any[], T> =
-    ((r: unknown, ...x: L) => void) extends ((...x: infer L2) => void)
-    ? { [K in keyof L2]-?: K extends keyof L ? L[K] : T }
-    : never;
+    IsOpenTuple<L> extends true
+    ? L
+    : ((r: unknown, ...x: L) => void) extends ((...x: infer L2) => void)
+      ? { [K in keyof L2]-?: K extends keyof L ? L[K] : T }
+      : never;
 
 export type Reverse<L extends any[]> =
     IsOpenTuple<L> extends true ? Array<ElementOf<L>> :
@@ -37,11 +42,15 @@ type _Reverse<L extends any[]> = {
 }[L extends [any, ...any[]] ? 1 : 0];
 
 export type Concat<A extends any[], B extends any[]> =
-    A extends [] ? B :
+    IsEmptyTuple<A> extends true ? B :
     {
         0: A,
         1: Concat<Push<A, Head<B>>, Tail<B>>,
-    }[B extends [] ? 0 : 1];
+    }[IsEmptyTuple<B> extends true ? 0 : 1];
+
+export type DropTail<L extends any[]> =
+    IsEmptyTuple<L> extends true ? [] :
+    L extends [any, ...any[]] ? [Head<L>] : [Head<L>?];
 
 export type DropRight<N extends number, L extends any[]> =
     number extends N ? [] :
@@ -49,33 +58,41 @@ export type DropRight<N extends number, L extends any[]> =
     Length<DropLeft<N, Required<L>>> extends MustBeNumber<infer NN> ? Take<NN, L> : never;
 
 export type DropLast<L extends any[]> = DropRight<1, L>;
-export type DropLeft<N extends number, L extends any[], TMP extends any[] = []> =
+export type DropLeft<N extends number, L extends any[], TMP extends any[] = []> = {
+    0: L,
+    1: DropLeft<N, Tail<L>, Cons<any, TMP>>,
+}[Length<TMP> extends N ? 0 : 1];
+
+export type Drop<L extends any[], K extends keyof any, N extends number = 0> =
+    number extends K ? [] :
+    IsRepeatedTuple<L> extends true ? L :
     {
-        0: L,
-        1: DropLeft<N, Tail<L>, Cons<any, TMP>>,
-    }[Length<TMP> extends N ? 0 : 1];
+        0: []
+        1: Drop<Tail<L>, K, Inc<N>> extends MustBeArray<infer R>
+           ? [N] extends [K]
+             ? R
+             : ReplaceTail<L, R>
+           : never;
+    }[IsEmptyTuple<L> extends true ? 0 : 1];
 
 export type Slice<T extends any[], TStart extends number = 0, TLength extends number = Length<T>> =
     DropLeft<TStart, T> extends MustBeArray<infer R> ? Take<TLength, R> : never;
 
-export type Take<N extends number, L extends any[], TMP extends any[] = []> =
+export type Take<N extends number, L extends any[]> =
     number extends N ? L :
+    IsEmptyTuple<L> extends true ? [] :
     {
-        0: TMP
-        1: Take<N, Tail<L>, Push<TMP, Head<L>>>;
-    }[Length<TMP> extends N ? 0 : IsEmptyTuple<L> extends true ? 0 : 1];
+        0: []
+        1: ReplaceTail<L, Take<Dec<N>, Tail<L>>>;
+    }[N extends 0 ? 0 : 1];
 
 export type Length<T> = T extends { length: MustBeNumber<infer L> } ? L : never;
 
-export type IsArray<T> = IsExtends<T, any[]>;
-export type IsFiniteTuple<T> = Every<[IsArray<T>, IsFiniteNumber<Length<T>>]>;
-export type IsOpenTuple<T> = Every<[IsArray<T>, IsWide<Length<T>>]>;
-export type IsEmptyTuple<T> = Every<[IsArray<T>, IsExact<Length<T>, 0>]>;
-export type IsRepeatedTuple<T> = Every<[IsArray<T>, IsExact<T, Array<ElementOf<T>>>]>;
-export type TupleType<T extends any[]> =
-    IsEmptyTuple<T> extends true ? "empty" :
-    IsFiniteTuple<T> extends true ? "finite" :
-    IsRepeatedTuple<T> extends true ? "repeated" : "open";
+export type IsArray<T> = T extends any[] ? true : false;
+export type IsFiniteTuple<T> = T extends any[] ? IsFiniteNumber<Length<T>> : false;
+export type IsOpenTuple<T> = T extends any[] ? IsWide<Length<T>> : false;
+export type IsEmptyTuple<T> = T extends any[] ? IsExact<Length<Required<T>>, 0> : false;
+export type IsRepeatedTuple<T> = IsExact<Required<T>, Array<ElementOf<T>>>;
 
 export type ElementOf<T> = T extends Array<infer U> ? U : never;
 
@@ -84,18 +101,17 @@ export type TupleEntryOf<T extends any[]> =
     If<IsOpenTuple<T>, [string, ElementOf<GetRest<T>>]>;
 
 export type DropRest<T extends any[]> =
-    T extends [] ? T :
+    IsOpenTuple<T> extends false ? T :
     {
         0: []
-        1: Cons<Head<T>, DropRest<Tail<T>>>;
-    }[IsRepeatedTuple<T> extends true ? 0 : 1];
+        1: ReplaceTail<T, DropRest<Tail<T>>>;
+    }[Required<T> extends [any, ...any[]] ? 1 : 0];
 
 export type GetRest<T extends any[]> =
-    T extends [] ? T :
     {
         0: T
         1: GetRest<Tail<T>>;
-    }[IsRepeatedTuple<T> extends true ? 0 : 1];
+    }[Required<T> extends [any, ...any[]] ? 1 : 0];
 
 export type TupleKey<T extends any[]> = Exclude<keyof T, keyof any[]>;
 

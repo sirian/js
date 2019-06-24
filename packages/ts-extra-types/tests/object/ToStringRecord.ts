@@ -7,7 +7,7 @@ type Test = [
     AssertExact<Record<string, boolean>, ToStringRecord<Record<string, boolean>>>,
     AssertExact<Record<string, boolean>, ToStringRecord<{ [id: string]: boolean }>>,
     AssertExact<Record<string, boolean>, ToStringRecord<{ [id: number]: boolean }>>,
-    AssertExact<Record<string, 2>, ToStringRecord<{ [id: string]: 1 | 2 } & {[id: number]: 2 | 3}>>,
+    AssertExact<Record<string, 2>, ToStringRecord<{ [id: string]: 1 | 2 } & { [id: number]: 2 | 3 }>>,
     AssertExact<{ "0": 1 }, ToStringRecord<{ "0": 1 }>>,
     AssertExact<{ "0": 1 }, ToStringRecord<{ 0: 1 }>>,
     AssertExact<{ "0"?: 1, "1": 1 | undefined }, ToStringRecord<{ 0?: 1, 1: 1 | undefined }>>,

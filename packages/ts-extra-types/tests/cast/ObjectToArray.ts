@@ -11,7 +11,7 @@ type Test = [
     AssertExact<[0?, 1?], ObjectToArray<[0?, 1?]>>,
 
     AssertExact<[never], ObjectToArray<{ length: 1 }>>,
-    AssertExact<[true], ObjectToArray<{0: boolean} & { 0: true, length: 1 }>>,
+    AssertExact<[true], ObjectToArray<{ 0: boolean } & { 0: true, length: 1 }>>,
     AssertExact<[true], ObjectToArray<[boolean] & { "0": true }>>,
     AssertExact<[true], ObjectToArray<[boolean] & { 0: true }>>,
     AssertExact<[true], ObjectToArray<{ 0: true, length: 1 }>>,

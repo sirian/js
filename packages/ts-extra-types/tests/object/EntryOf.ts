@@ -1,4 +1,4 @@
-import {AssertExact, EntryOf, IsOpenTuple} from "../../src";
+import {AssertExact, EntryOf} from "../../src";
 
 interface IFoo {
     a: number;
