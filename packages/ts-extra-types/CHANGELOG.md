@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.44.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.43.0...@sirian/ts-extra-types@3.44.0) (2019-06-26)
+
+
+### Bug Fixes
+
+* DeepRequire ([5e56cb0](https://github.com/sirian/js/commit/5e56cb0))
+* ObjKeyOf ([aba49cd](https://github.com/sirian/js/commit/aba49cd))
+* ObjKeyOf ([9fb165f](https://github.com/sirian/js/commit/9fb165f))
+
+
+### Features
+
+* **types:** DropTail, ReplaceTail, StripNever ([68c70d0](https://github.com/sirian/js/commit/68c70d0))
+
+
+
+
+
 # [3.43.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.42.11...@sirian/ts-extra-types@3.43.0) (2019-06-13)
 
 
