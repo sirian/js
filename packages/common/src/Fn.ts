@@ -1,4 +1,4 @@
-import {Func0, Func1} from "@sirian/ts-extra-types";
+import {Args, Drop, Func, Func0, Func1, Get} from "@sirian/ts-extra-types";
 import {_Function} from "./native";
 import {Obj} from "./Obj";
 
@@ -29,6 +29,22 @@ export class Fn {
         }
 
         return args.slice(0, index + 1);
+    }
+
+    public static bindArgs<K extends number, F extends Func>(fn: F, bind: { [P in K]: Get<Args<F>, P> }) {
+        return function(this: any, ...args: Drop<Args<F>, K>) {
+            const mergedArgs: any[] = Obj.assign([], bind);
+
+            for (let i = 0; args.length > 0; i++) {
+                if (i in mergedArgs) {
+                    continue;
+                }
+
+                mergedArgs[i] = args.shift();
+            }
+
+            return fn.apply(this, mergedArgs as Args<F>) as ReturnType<F>;
+        };
     }
 
     public static compose<T, U, V>(f: (arg: T) => U, g: (arg: U) => V): (arg: T) => V {

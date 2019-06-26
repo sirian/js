@@ -1,4 +1,4 @@
-import {Args, Ctor, DescriptorOf, Ensure, Func, KeyOf, SymbolOf} from "@sirian/ts-extra-types";
+import {Args, Ctor, DescriptorOf, Ensure, Func} from "@sirian/ts-extra-types";
 import {global} from "./global";
 import {_Object} from "./native";
 import {Obj} from "./Obj";
@@ -21,11 +21,11 @@ export class Ref {
     }
 
     public static ownPropertyNames<T>(target: T) {
-        return _Object.getOwnPropertyNames(target) as Array<KeyOf<T>>;
+        return _Object.getOwnPropertyNames(target) as Array<keyof T>;
     }
 
-    public static ownPropertySymbols<T>(target: T) {
-        return _Object.getOwnPropertySymbols(target) as Array<SymbolOf<T>>;
+    public static ownPropertySymbols<S extends symbol>(target: {[P in S]: any}) {
+        return _Object.getOwnPropertySymbols(target) as S[];
     }
 
     public static ownProperties<T extends object>(target: T) {

@@ -33,7 +33,7 @@
         "@sirian/ts-extra-types": "^3.43.0",
         "@sirian/unicode": "^1.0.9",
         "@sirian/xpromise": "^2.2.12",
-        "@types/node": "^12.0.8",
+        "@types/node": "^12.0.10",
         "error-stack-parser": "^2.0.2"
     },
     "scripts": {},

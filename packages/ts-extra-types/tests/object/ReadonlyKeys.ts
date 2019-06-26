@@ -31,5 +31,5 @@ type Test = [
     AssertExact<ReadonlyKeys<[number?]>, never>,
     AssertExact<ReadonlyKeys<[number]>, never>,
     AssertExact<ReadonlyKeys<[number?]>, never>,
-    AssertExact<ReadonlyKeys<[number, boolean]>, never>,
+    AssertExact<ReadonlyKeys<[number, boolean]>, never>
 ];

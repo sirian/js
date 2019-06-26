@@ -1,4 +1,4 @@
-import {EntriesOf, FromEntries, KeyOf, ToPrimitive, UnionToIntersection, ValueOf} from "@sirian/ts-extra-types";
+import {FromEntries, ObjEntryOf, ObjKeyOf, ObjValueOf, ToPrimitive, UnionToIntersection} from "@sirian/ts-extra-types";
 import {_Object, _Symbol} from "./native";
 import {Ref} from "./Ref";
 import {Var} from "./Var";
@@ -34,15 +34,15 @@ export class Obj {
     }
 
     public static keys<T>(target: T) {
-        return _Object.keys(target) as Array<KeyOf<T>>;
+        return _Object.keys(target) as Array<ObjKeyOf<T>>;
     }
 
     public static values<T>(target: T) {
-        return _Object.values(target) as Array<ValueOf<T>>;
+        return _Object.values(target) as Array<ObjValueOf<T>>;
     }
 
     public static entries<T>(target: T) {
-        return _Object.entries(target) as EntriesOf<T>;
+        return _Object.entries(target) as Array<ObjEntryOf<T>>;
     }
 
     public static create<T extends object>(o: T | null = null, properties?: PropertyDescriptorMap): T {
@@ -76,7 +76,7 @@ export class Obj {
         throw new Error(`Could not convert ${Obj.getStringTag(target)} to primitive value`);
     }
 
-    public static fromEntries<E extends Array<[PropertyKey, any]>>(entries: E): FromEntries<E> {
+    public static fromEntries<E extends Array<[keyof any[], any]>>(entries: E): FromEntries<E> {
         const record: any = {};
 
         for (const [key, value] of entries) {

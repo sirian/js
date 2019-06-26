@@ -1,4 +1,3 @@
-import {Rewrite} from "./object";
 import {IfExtends, IsExact, IsExtends} from "./types";
 
 declare const ERROR: unique symbol;
@@ -16,10 +15,10 @@ export type AssertExact<T extends TU,
     T1 = T,
     U1 = U,
     TU = ValidateExact<T1, U1, "U">,
-    UT = ValidateExact<T1, U1, "T">,
+    UT = ValidateExact<U1, T1, "T">,
     > = IsExact<T, U>;
 
-type ValidateExact<T, U, Z, TR = Rewrite<T>, UR = Rewrite<U>> =
-    [keyof TR] extends [keyof UR]
-      ? U // IsExact<T, U> extends true ? U : U & ERROR<[Z, "not exact"]>
-      : UR & ERROR<[Z, "Missed", Omit<TR, keyof UR>]>;
+type ValidateExact<T, U, Z> =
+    [keyof T] extends [keyof U]
+    ? U
+    : ERROR<[Z, "Missed", {[P in Exclude<keyof T, keyof U>]: T[P]}]>;

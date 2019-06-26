@@ -6,7 +6,7 @@
     },
     "include": ["src"],
     "references": [
-        {"path": "../disposer"},
-        {"path": "../ts-extra-types"}
+        {"path": "../ts-extra-types"},
+        {"path": "../common"}
     ]
 }

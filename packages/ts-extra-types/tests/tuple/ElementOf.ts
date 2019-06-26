@@ -1,9 +1,9 @@
-import {AssertExact, ElementOf} from "../../src";
+import {ArrayElementOf, AssertExact} from "../../src";
 
 type Test = [
-    AssertExact<never, ElementOf<[]>>,
-    AssertExact<string, ElementOf<[string]>>,
-    AssertExact<string | number, ElementOf<[string, number]>>,
-    AssertExact<string | number | boolean, ElementOf<[string, number, boolean | number]>>,
-    AssertExact<number, ElementOf<number[]>>
+    AssertExact<never, ArrayElementOf<[]>>,
+    AssertExact<string, ArrayElementOf<[string]>>,
+    AssertExact<string | number, ArrayElementOf<[string, number]>>,
+    AssertExact<string | number | boolean, ArrayElementOf<[string, number, boolean | number]>>,
+    AssertExact<number, ArrayElementOf<number[]>>
 ];

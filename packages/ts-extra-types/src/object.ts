@@ -1,13 +1,27 @@
-import {NumberToString, StringToNumber} from "./cast";
+import {KeyToNumber, KeyToString} from "./cast";
 import {If, Not} from "./logic";
 import {MustBeKey} from "./mustbe";
-import {ElementOf, Head, Length, Tail} from "./tuple";
+import {ArrayElementOf, Head, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
 import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types";
 
-export type KeyOf<T> = Extract<keyof T, string>;
-export type SymbolOf<T> = Extract<keyof T, symbol>;
-export type IndexOf<T> = { [P in keyof T]: If<IsWide<P>, never, P> }[Extract<keyof T, number>];
-export type ValueOf<T, K extends keyof T = keyof T> = T[K];
+export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
+
+export type ObjKeyOf<T> =
+    T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
+    {
+        [P in keyof T]-?:
+        P extends string ? P :
+        P extends number ? KeyToString<P> :
+        never;
+    }[keyof T];
+
+export type ObjValueOf<T> =
+    T extends any[] ? ArrayElementOf<T> : T[keyof T];
+
+export type ObjEntryOf<T> =
+    T extends any[]
+    ? { [P in KeyOf<T>]: [P, T[P]] }[TupleKeyOf<T>]
+    : { [P in KeyOf<T>]: [KeyToString<P>, T[P]] }[KeyOf<T>];
 
 export type Get<T, K extends keyof any, TDefault = never> =
     K extends keyof T ? T[K] :
@@ -23,23 +37,18 @@ export type GetDeep<T, L extends PropertyKey[], D = never> =
            : D;
     }[L extends [any, ...any[]] ? 1 : 0];
 
-export type MapKey<T, K extends keyof any> =
-    { [P in keyof T]-?: Record<K, 0> extends Record<P, 0> ? P : never }[keyof T];
+export type ExpandKey<K extends keyof any> = K | ExcludeWide<KeyToString<K>> | ExcludeWide<KeyToNumber<K>>;
+export type Expand<T> = { [P in ExpandKey<keyof T>]?: unknown } & T;
 
-export type ExtractKey<T, K extends keyof any> = Extract<keyof T, MapKey<T, K>>;
-export type ExcludeKey<T, K extends keyof any> = Exclude<keyof T, MapKey<T, K>>;
-
-export type MyPick<T, K extends keyof any> = Pick<T, ExtractKey<T, K>>;
-export type MyOmit<T, K extends keyof any> = IfNever<K, T, Pick<T, ExcludeKey<T, K>>>;
-export type OmitIndexSignature<T> = Pick<T, ExcludeWide<keyof T>>;
-
-export type EntryOf<T> = ObjectEntryOf<ToStringRecord<T>>;
-export type ObjectEntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
-
-export type EntriesOf<T> = Array<EntryOf<T>>;
+export type MyPick<T, K extends keyof any> = Pick<T, Extract<keyof T, ExpandKey<K>>>;
+export type MyOmit<T, K extends keyof any> = IfNever<K, T, Pick<T, Exclude<keyof T, ExpandKey<K>>>>;
 
 export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition ? K : never }[keyof T];
-export type Shrink<T, Condition> = MyPick<T, TypedKeyOf<T, Condition>>;
+export type PickTyped<T, Condition> = Pick<T, TypedKeyOf<T, Condition>>;
+export type OmitTyped<T, Condition> = Omit<T, TypedKeyOf<T, Condition>>;
+
+export type OmitIndexSignature<T> = Pick<T, ExcludeWide<keyof T>>;
+export type OmitNever<T> = OmitTyped<T, never>;
 
 export type Rewrite<T> = { [P in keyof T]: T[P] };
 export type Overwrite<T, U> = MyOmit<T, keyof U> & U;
@@ -47,36 +56,18 @@ export type Replace<T, U> = MyPick<Overwrite<T, U>, keyof T>;
 
 export type ExcludeWide<T> = T extends any ? If<IsWide<T>, never, T> : never;
 
-export type ToStringRecord<T> =
-    T extends ArrayLike<any> ? _ArrayLikeToStringRecord<T> : _ToStringRecord<T>;
+// ? Omit<T, number>
+//     & {[P in NumberToString<Extract<OptionalKeys<O>, number>>]?: Get<T, P>}
+//     & {[P in NumberToString<Extract<RequiredKeys<O>, number>>]: Get<T, P>}
+// & Partialize<{ [P in NumberToString<NumberKeyOf<T>>]: Get<Required<T>, P}, >
+// & (number extends keyof T ? { [id: string]: GetIndexSignature<T> } : {});
 
-type _ArrayLikeToStringRecord<T extends ArrayLike<any>> =
-    Omit<T, Exclude<keyof any[], number>> extends infer O
-    ? number extends Length<T>
-      ? _ToStringRecord<O>
-      : _ToStringRecord<OmitIndexSignature<O>>
-    : never;
+export type MatchingKeys<T, U> = _MatchingKeys<T, U> & _MatchingKeys<U, T>;
 
-export type GetIndexSignature<T, K extends number | string = number | string> =
-    K extends any
-    ? { [P in keyof T]: K extends P ? T[P] : never }[keyof T]
-    : never;
-
-type _ToStringRecord<T> =
-    Omit<T, number>
-    & Partialize<{ [P in ExcludeWide<NumberToString<IndexOf<Required<T>>>>]: Get<Required<T>, P> }, OptionalKeys<T>>
-    & (number extends keyof T ? Record<string, GetIndexSignature<T>> : {});
-
-export type ToNumberRecord<T> = _ToNumberRecord<ToStringRecord<T>>;
-
-export type _ToNumberRecord<T> =
-    Omit<T, string>
-    & Partialize<{ [P in ExcludeWide<StringToNumber<KeyOf<Required<T>>>>]: Get<Required<T>, P> }, OptionalKeys<T>>
-    & (string extends keyof T ? Record<number, GetIndexSignature<T>> : {});
-
-export type MatchingKeys<T, U> = {
-    [P in keyof (T | U)]-?: IfExact<MyPick<T, P>, MyPick<U, P>, P, never>;
-}[keyof (T | U)];
+export type _MatchingKeys<T, U> = {
+    [P in KeyOf<T>]-?:
+    IfExact<Pick<T, P>, Pick<U, Extract<keyof U, P>>, P>
+}[KeyOf<T>];
 
 export type OptionalKeys<T> = {
     [K in keyof T]-?: If<IsOptionalKey<T, K>, K>
@@ -98,8 +89,10 @@ export type Writable<T> = {
     -readonly [P in keyof T]: T[P];
 };
 
-export type WritableKeys<T> = MatchingKeys<T, Writable<T>>;
-export type ReadonlyKeys<T> = Exclude<keyof T, WritableKeys<T>>;
+export type WritableKeys<T> = Exclude<KeyOf<T>, ReadonlyKeys<T>>;
+export type ReadonlyKeys<T> = {
+    [P in KeyOf<T>]-?: Pick<Required<T>, P> extends infer O ? IfExact<Writable<O>, O, never, P> : never
+}[KeyOf<T>];
 
 export type Require<T, K extends keyof any = keyof T> = Overwrite<T, Required<MyPick<T, K>>>;
 
@@ -114,7 +107,7 @@ export type FromEntry<E extends [any, any]> =
 
 export type FromEntries<L extends Array<[any, any]>> =
     Length<L> extends 0 ? {} :
-    UnionToIntersection<FromEntry<ElementOf<L>>>;
+    UnionToIntersection<FromEntry<ArrayElementOf<L>>>;
 
 type Without<T, U> = { [K in Exclude<keyof T, keyof U>]?: never };
 export type Exclusive<T, U> =

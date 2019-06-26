@@ -1,22 +1,22 @@
 import {Obj, Ref, Var} from "@sirian/common";
-import {EntriesOf, IterableEntries, IterableKeys, IterableValues, KeyOf, ValueOf} from "@sirian/ts-extra-types";
+import {IterableEntries, IterableKeys, IterableValues, ObjEntryOf, ObjKeyOf, ObjValueOf} from "@sirian/ts-extra-types";
 
 type KVValues<T> =
     T extends string ? string[] :
     T extends IterableValues<infer V> ? V[] :
-    T extends object ? Array<ValueOf<T>> :
+    T extends object ? Array<ObjValueOf<T>> :
     [];
 
 type KVEntries<T> =
     T extends string ? Array<[number, string]> :
     T extends IterableEntries<infer E> ? E[] :
-    T extends object ? EntriesOf<T> :
-    [];
+    T extends object ? Array<ObjEntryOf<T>> :
+    unknown;
 
 type KVKeys<T> =
     T extends string ? Array<[number, string]> :
     T extends IterableKeys<infer E> ? E[] :
-    T extends object ? Array<KeyOf<T>> :
+    T extends object ? Array<ObjKeyOf<T>> :
     [];
 
 export class KV {

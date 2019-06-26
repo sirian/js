@@ -1,4 +1,4 @@
-import {NumberToString} from "./cast";
+import {KeyToString} from "./cast";
 import {MustBeArray} from "./mustbe";
 import {Cons, DropLast, Head, LastElement, Length, Tail} from "./tuple";
 import {NotFunc, Primitive, Thenable} from "./types";
@@ -23,7 +23,7 @@ export type Arg<N extends number, F> =
     Args<F> extends MustBeArray<infer A>
     ? number extends N
       ? A[N]
-      : NumberToString<N> extends keyof A
+      : KeyToString<N> extends keyof A
         ? A[N]
         : A[N] | undefined
     : never;
