@@ -24,7 +24,7 @@ type Test = [
     AssertExact<WritableKeys<Partial<Record<number, number>>>, number>,
 
     AssertExact<WritableKeys<[]>, keyof []>,
-    AssertExact<WritableKeys<number[]>, number | keyof []>,
+    AssertExact<WritableKeys<number[]>, keyof number[]>,
     AssertExact<WritableKeys<[number]>, keyof [number]>,
     AssertExact<WritableKeys<[number]>, keyof [number?]>,
     AssertExact<WritableKeys<[number?]>, keyof [number]>,

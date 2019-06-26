@@ -21,4 +21,4 @@ export type AssertExact<T extends TU,
 type ValidateExact<T, U, Z> =
     [keyof T] extends [keyof U]
     ? U
-    : { [P in keyof U]: U[P] } & ERROR<[Z, "Missed", { [P in Exclude<keyof T, keyof U>]: T[P] }]>;
+    : ERROR<[Z, "Missed", {[P in Exclude<keyof T, keyof U>]: T[P]}]>;

@@ -24,6 +24,6 @@ export class SingleStateMarkingStore<K extends string> implements MarkingStoreIn
 
     public setMarking<S extends string>(subject: Record<K, S>, marking: Marking<S>) {
         const keys = Obj.keys(marking.getPlaces());
-        subject[this.property] = keys[0];
+        subject[this.property] = keys[0] as S;
     }
 }

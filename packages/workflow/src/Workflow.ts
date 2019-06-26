@@ -56,7 +56,7 @@ export class Workflow<S extends string = any> {
         const places = this.definition.places;
 
         for (const place of Obj.keys(marking.getPlaces())) {
-            if (places.has(place)) {
+            if (places.has(place as S)) {
                 continue;
             }
 

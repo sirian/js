@@ -52,6 +52,7 @@ export type TypeGuard<U extends V = any, V = any, R extends any[] = any[]> = (ar
 export type GuardedType<T extends Func> = T extends TypeGuard<infer R> ? R : never;
 
 export type IsExact<X, Y> = And<IsExtendsStrict<X, Y>, IsExtendsStrict<Y, X>>;
+export type IsTrue<X> = IsExact<X, true>;
 
 export type IsExtendsStrict<X, Y> =
     IsExtends<X, Y> extends true
@@ -67,6 +68,7 @@ export type IsExtends<X, Y> = [X] extends [Y] ? true : false;
 export type IfExtends<X, Y, T = X, F = never> = If<IsExtends<X, Y>, T, F>;
 export type IfNotExtends<X, Y, T = X, F = never> = X extends Y ? F : T;
 export type HasKey<T, K extends keyof any> = K extends keyof T ? true : false;
+export type HasExactKey<T, K extends keyof any> = {[P in keyof T]-?: IfExact<P, K, true, never>}[keyof T];
 
 export type IsSubType<V, T> = And<IsExtends<V, T>, Not<IsExtends<T, V>>>;
 export type IsFiniteNumber<V> = IsSubType<V, number>;
@@ -111,3 +113,9 @@ export type DeepRequire<T> = {
 };
 
 export type Thenable = { then: AnyFunc };
+
+export type Box<T> = {_: T};
+export type UnBox<T> = T extends Box<infer U> ? U : never;
+export type UnBoxTuple<T extends Box<unknown>[]> = {
+    [P in keyof T]: UnBox<T[P]>;
+};

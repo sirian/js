@@ -1,7 +1,8 @@
-import {If} from "./logic";
+import {KeyToNumber} from "./cast";
+import {Lengthwise} from "./interfaces";
 import {MustBeArray, MustBeNumber} from "./mustbe";
 import {Dec, Inc} from "./number";
-import {IsPartial, IsRequired, Partialize, ToStringRecord} from "./object";
+import {Expand, IsPartial, IsRequired, OmitIndexSignature, Partialize} from "./object";
 import {IfNever, IsExact, IsFiniteNumber, IsWide} from "./types";
 
 export type FixArray<T> = T & {
@@ -31,7 +32,7 @@ export type Push<L extends any[], T> =
       : never;
 
 export type Reverse<L extends any[]> =
-    IsOpenTuple<L> extends true ? Array<ElementOf<L>> :
+    IsOpenTuple<L> extends true ? Array<ArrayElementOf<L>> :
     IsPartial<L> extends true ? Partial<_Reverse<Required<L>>> :
     IsRequired<L> extends true ? _Reverse<L> :
     never;
@@ -92,13 +93,37 @@ export type IsArray<T> = T extends any[] ? true : false;
 export type IsFiniteTuple<T> = T extends any[] ? IsFiniteNumber<Length<T>> : false;
 export type IsOpenTuple<T> = T extends any[] ? IsWide<Length<T>> : false;
 export type IsEmptyTuple<T> = T extends any[] ? IsExact<Length<Required<T>>, 0> : false;
-export type IsRepeatedTuple<T> = IsExact<Required<T>, Array<ElementOf<T>>>;
+export type IsRepeatedTuple<T> = IsExact<Required<T>, Array<ArrayElementOf<T>>>;
 
-export type ElementOf<T> = T extends Array<infer U> ? U : never;
+export type TupleKeyOf<T> = Exclude<Extract<keyof T, string>, keyof any[]>;
+export type ArrayKeyOf<T> = Exclude<keyof T, Exclude<keyof any[], number>>;
 
-export type TupleEntryOf<T extends any[]> =
-    { [P in TupleKey<T>]: [P, T[P]] }[TupleKey<T>] |
-    If<IsOpenTuple<T>, [string, ElementOf<GetRest<T>>]>;
+export type TupleIndex<T extends any[]> = KeyToNumber<TupleKeyOf<T>>;
+
+export type StripArray<T> =
+    T extends Lengthwise
+    ? number extends Length<T>
+      ? OmitArrayProto<T>
+      : OmitIndexSignature<OmitArrayProto<T>>
+    : T;
+
+export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
+
+// export type WrapTuple<T extends any[] & (number extends T["length"] ? never : unknown)> =
+//     { length: T["length"] }
+//     & { [K in keyof StripTuple<T>]: Box<T[K]> }
+//     & Array<keyof StripTuple<T> extends infer K
+//             ? K extends keyof T? Box<T[K]> : never
+//             : never>;
+
+export type ArrayElementOf<T> = T extends Array<infer U> ? U : never;
+
+export type TupleEntryOf<T extends any[]> = { [P in TupleKeyOf<T>]: [P, T[P]] }[TupleKeyOf<T>];
+
+export type ArrayEntryOf<T extends any[]> =
+    IsFiniteTuple<T> extends true
+    ? TupleEntryOf<T>
+    : TupleEntryOf<T> | [string, ArrayElementOf<T>];
 
 export type DropRest<T extends any[]> =
     IsOpenTuple<T> extends false ? T :
@@ -113,8 +138,6 @@ export type GetRest<T extends any[]> =
         1: GetRest<Tail<T>>;
     }[Required<T> extends [any, ...any[]] ? 1 : 0];
 
-export type TupleKey<T extends any[]> = Exclude<keyof T, keyof any[]>;
-
 export type Range<N, T extends number[] = [0]> =
     N extends number
     ? {
@@ -126,7 +149,7 @@ export type Range<N, T extends number[] = [0]> =
 export type LastElement<T extends any[]> =
     Required<T> extends [any] ? Head<T> :
     {
-        0: ElementOf<T>;
+        0: ArrayElementOf<T>;
         1: LastElement<Tail<T>>;
     }[T extends [any, ...any[]] ? 1 : 0];
 
@@ -135,7 +158,7 @@ export type LastIndex<R extends any[]> = R extends [] ? unknown : Length<Tail<Re
 export type IndexRange<N extends number, TMP extends number[] = []> =
     number extends N ? N :
     {
-        0: ElementOf<TMP>
+        0: ArrayElementOf<TMP>
         1: IndexRange<N, Cons<Length<TMP>, TMP>>;
     }[N extends Length<Partial<TMP>> ? 0 : 1];
 
@@ -165,7 +188,7 @@ export type SizedArray<N extends number, T = any> =
 export type Repeat<N extends number, T = any> =
     number extends N ? T[] :
     IndexRange<N> extends MustBeNumber<infer K>
-    ? IfNever<K, [], SizedArray<N, T> & Partialize<ToStringRecord<Record<K, T>>, N>>
+    ? IfNever<K, [], SizedArray<N, T> & Expand<Partialize<Record<K, T>, N>>>
     : never;
 
 export type UnionToTuple<U, T extends any[] = []> = {

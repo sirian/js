@@ -1,4 +1,4 @@
-import {Obj, Var} from "@sirian/common";
+import {Obj, Ref} from "@sirian/common";
 
 export type MarkingPlaces<S extends string = any> = Partial<Record<S, number>>;
 
@@ -9,7 +9,7 @@ export class Marking<S extends string = any> {
         this.places = {};
         if (representation) {
             for (const place of Obj.keys(representation)) {
-                this.mark(place);
+                this.mark(place as S);
             }
         }
     }
@@ -23,7 +23,7 @@ export class Marking<S extends string = any> {
     }
 
     public has(place: S) {
-        return Var.hasOwn(this.places, place);
+        return Ref.hasOwn(this.places, place);
     }
 
     public getPlaces() {
