@@ -7,7 +7,7 @@ import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types"
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
 
 export type ObjKeyOf<T> =
-    T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, "string"> :
+    T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
     {
         [P in keyof T]-?:
         P extends string ? P :
