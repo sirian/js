@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.39.1](https://github.com/sirian/js/compare/@sirian/common@4.39.0...@sirian/common@4.39.1) (2019-06-26)
+
+
+### Bug Fixes
+
+* ObjKeyOf ([9fb165f](https://github.com/sirian/js/commit/9fb165f))
+
+
+
+
+
 # [4.39.0](https://github.com/sirian/js/compare/@sirian/common@4.38.16...@sirian/common@4.39.0) (2019-06-19)
 
 
