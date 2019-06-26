@@ -1,13 +1,13 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If, Not} from "./logic";
 import {MustBeKey} from "./mustbe";
-import {ArrayElementOf, Head, Length, Tail, TupleKeyOf} from "./tuple";
+import {ArrayElementOf, Head, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
 import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types";
 
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
 
 export type ObjKeyOf<T> =
-    T extends any[] ? TupleKeyOf<T> :
+    T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, "string"> :
     {
         [P in keyof T]-?:
         P extends string ? P :
