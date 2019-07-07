@@ -54,7 +54,7 @@ export const Fn = new class {
         throw error;
     }
 
-    public try<T, R>(fn: () => T): T | undefined;
+    public try<T>(fn: () => T): T | undefined;
     public try<T, R>(fn: () => T, onError: (err: any) => R): T | R;
     public try(fn: Func0, onError?: Func1) {
         try {
