@@ -9,13 +9,13 @@ export abstract class AbstractTransformIterator<V, R> extends BaseIterator<R> {
         this.target = target;
     }
 
-    public*[Symbol.iterator]() {
+    public* [Symbol.iterator]() {
         for (const x of this.target as any) {
             yield this.transform(x);
         }
     }
 
-    public async*[Symbol.asyncIterator]() {
+    public async* [Symbol.asyncIterator]() {
         for await (const x of this.target) {
             yield this.transform(x);
         }

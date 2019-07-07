@@ -12,5 +12,4 @@ export class TransformIterator<V, R> extends AbstractTransformIterator<V, R> {
     protected transform(value: V): R {
         return this.callback(value);
     }
-
 }
