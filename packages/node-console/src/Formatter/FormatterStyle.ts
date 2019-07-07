@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {Ref} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
 import {ESC, TTYStyle, TTYStyles} from "../TTY";
 
@@ -13,7 +13,7 @@ export class FormatterStyle {
     }
 
     public static isValid(option: string): option is TTYStyle {
-        return Var.hasOwn(TTYStyles, option);
+        return Ref.hasOwn(TTYStyles, option);
     }
 
     public add(option: TTYStyle) {
