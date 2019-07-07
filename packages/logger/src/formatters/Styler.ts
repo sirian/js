@@ -1,4 +1,4 @@
-import {Obj, Str, Var} from "@sirian/common";
+import {Obj, Ref, Str, Var} from "@sirian/common";
 import {StyleInit} from "./StyleStack";
 
 export class Styler {
@@ -39,7 +39,7 @@ export class Styler {
     }
 
     public hasStyle(name: string) {
-        return Var.hasOwn(this.styles, name);
+        return Ref.hasOwn(this.styles, name);
     }
 
     public setStyle(name: string, style: StyleInit) {
