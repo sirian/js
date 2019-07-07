@@ -1,11 +1,11 @@
 import {JSONValue} from "@sirian/ts-extra-types";
 import {Var} from "./Var";
 
-export class Json {
-    public static stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
-    public static stringify(value: any, replacer?: Array<number | string> | null, space?: string | number): string;
+export const Json = new class {
+    public stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
+    public stringify(value: any, replacer?: Array<number | string> | null, space?: string | number): string;
 
-    public static stringify(value: any, ...args: any[]) {
+    public stringify(value: any, ...args: any[]) {
         if (undefined === value) {
             value = null;
         }
@@ -14,7 +14,7 @@ export class Json {
         return JSON.stringify(value, ...args);
     }
 
-    public static parse(text?: string | null, reviver?: (key: any, value: any) => any): JSONValue | undefined {
+    public parse(text?: string | null, reviver?: (key: any, value: any) => any): JSONValue | undefined {
         if (null === text) {
             return null;
         }
@@ -26,7 +26,7 @@ export class Json {
         return JSON.parse(text!, reviver);
     }
 
-    public static stripComments(value: string) {
+    public stripComments(value: string) {
         value = Var.stringify(value);
 
         const tokenizer = /"|(?:\/\*)|(?:\*\/)|(?:\/\/)|\n|\r/g;
@@ -79,4 +79,4 @@ export class Json {
         result.push(value.substring(pos));
         return result.join("");
     }
-}
+};
