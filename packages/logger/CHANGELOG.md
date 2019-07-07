@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4](https://github.com/sirian/js/compare/@sirian/logger@1.3.3...@sirian/logger@1.3.4) (2019-07-07)
+
+
+### Bug Fixes
+
+* logger ([83ae369](https://github.com/sirian/js/commit/83ae369))
+
+
+
+
+
 ## [1.3.3](https://github.com/sirian/js/compare/@sirian/logger@1.3.2...@sirian/logger@1.3.3) (2019-06-26)
 
 **Note:** Version bump only for package @sirian/logger
