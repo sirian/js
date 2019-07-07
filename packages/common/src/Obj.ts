@@ -1,25 +1,33 @@
-import {FromEntries, ObjEntryOf, ObjKeyOf, ObjValueOf, ToPrimitive, UnionToIntersection} from "@sirian/ts-extra-types";
-import {_Object, _Symbol} from "./native";
+import {
+    FromEntries,
+    ObjectZip,
+    ObjEntryOf,
+    ObjKeyOf,
+    ObjValueOf,
+    ToPrimitive,
+    UnionToIntersection,
+    Wrap,
+} from "@sirian/ts-extra-types";
 import {Ref} from "./Ref";
 import {Var} from "./Var";
 
-const objToString = _Object.prototype.toString;
+const objToString = Object.prototype.toString;
 
 export type MapCallback<T1> = <K1 extends keyof T1>(value: T1[K1], key: K1) => any;
 export type MapResult<T, C> = {
     [P in keyof T]: C extends (value: T[P], key: P) => infer U ? U : never
 };
 
-export class Obj {
-    public static stringify(target: object) {
+export const Obj = new class {
+    public stringify(target: object) {
         return objToString.call(target);
     }
 
-    public static assign<T extends object, U extends any[]>(target: T, ...src: U): T & UnionToIntersection<U[number]> {
-        return _Object.assign(target, ...src);
+    public assign<T extends object, U extends any[]>(target: T, ...src: U): T & UnionToIntersection<U[number]> {
+        return Object.assign(target, ...src);
     }
 
-    public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
+    public replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
         for (const source of sources) {
             for (const [key, value] of Obj.entries(source)) {
                 if (Var.isUndefined(value)) {
@@ -33,37 +41,37 @@ export class Obj {
         return target;
     }
 
-    public static keys<T>(target: T) {
-        return _Object.keys(target) as Array<ObjKeyOf<T>>;
+    public keys<T>(target: T) {
+        return Object.keys(target) as Array<ObjKeyOf<T>>;
     }
 
-    public static values<T>(target: T) {
-        return _Object.values(target) as Array<ObjValueOf<T>>;
+    public values<T>(target: T) {
+        return Object.values(target) as Array<ObjValueOf<T>>;
     }
 
-    public static entries<T>(target: T) {
-        return _Object.entries(target) as Array<ObjEntryOf<T>>;
+    public entries<T>(target: T) {
+        return Object.entries(target) as Array<ObjEntryOf<T>>;
     }
 
-    public static create<T extends object>(o: T | null = null, properties?: PropertyDescriptorMap): T {
-        return _Object.create(o, properties as any); // todo: typescript typings bug
+    public create<T extends object>(o: T | null = null, properties: PropertyDescriptorMap = {}): T {
+        return Object.create(o, properties);
     }
 
-    public static getStringTag(arg: any) {
+    public getStringTag(arg: any) {
         // extract "[object (.*)]"
         return Obj.stringify(arg).slice(8, -1);
     }
 
-    public static wrap(value: any) {
-        return _Object(value);
+    public wrap<T>(value: T): Wrap<T> {
+        return Object(value);
     }
 
-    public static toPrimitive<T>(target: T): ToPrimitive<T> {
+    public toPrimitive<T>(target: T): ToPrimitive<T> {
         if (Var.isPrimitive(target)) {
             return target as ToPrimitive<T>;
         }
 
-        const toPrimitve = _Symbol.toPrimitive;
+        const toPrimitve = Symbol.toPrimitive;
 
         if (Ref.hasMethod(target, toPrimitve)) {
             return (target as any)[toPrimitve]("default");
@@ -76,26 +84,14 @@ export class Obj {
         throw new Error(`Could not convert ${Obj.getStringTag(target)} to primitive value`);
     }
 
-    public static fromEntries<E extends Array<[keyof any[], any]>>(entries: E): FromEntries<E> {
-        const record: any = {};
-
-        for (const [key, value] of entries) {
-            record[key] = value;
-        }
-
-        return record;
+    public fromEntries<E extends Array<[keyof any[], any]>>(entries: E): FromEntries<E> {
+        return entries.reduce((obj, [key, value]) => {
+            obj[key] = value;
+            return obj;
+        }, {} as any);
     }
 
-    public static map<T, C extends MapCallback<T>>(obj: T, callback: C) {
-        const accumulator: any = {};
-
-        for (const [key, value] of Obj.entries(obj)) {
-            accumulator[key] = callback(value as any, key as any);
-        }
-        return accumulator as MapResult<T, C>;
-    }
-
-    public static isEmpty(obj: object) {
+    public isEmpty(obj: object) {
         // noinspection LoopStatementThatDoesntLoopJS
         for (const key in obj) { // tslint:disable-line:forin
             // noinspection JSUnfilteredForInLoop
@@ -103,4 +99,18 @@ export class Obj {
         }
         return true;
     }
-}
+
+    public zip<K extends Array<keyof any>, V extends any[]>(keys: K, values: V): ObjectZip<K, V> {
+        return keys.reduce((obj, key, index) => {
+            obj[key] = values[index];
+            return obj;
+        }, {} as any);
+    }
+
+    public pick<T, K extends keyof T>(target: T, keys: K[]): Pick<T, K> {
+        return keys.reduce((obj, key) => {
+            obj[key] = target[key];
+            return obj;
+        }, {} as any);
+    }
+};

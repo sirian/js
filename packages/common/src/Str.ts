@@ -1,11 +1,7 @@
-import {global} from "./global";
-import {_String} from "./native";
 import {Obj} from "./Obj";
 import {Rgx} from "./Rgx";
 import {Unicode} from "./Unicode";
 import {Var} from "./Var";
-
-const Math = global.Math;
 
 export const enum StrSide {
     LEFT = "left",
@@ -15,14 +11,14 @@ export const enum StrSide {
 
 export type ReplaceCallback = (substring: string, ...args: any[]) => string;
 
-export class Str {
-    public static stringify(value: any) {
+export const Str = new class {
+    public stringify(value: any) {
         // String(Symbol.iterator) === 'Symbol(Symbol.iterator)'
         // ("" + Symbol.iterator) throws Error
-        return _String(value);
+        return String(value);
     }
 
-    public static wrap(value: any, wrapChar: string, escapeChar: string = "\\") {
+    public wrap(value: any, wrapChar: string, escapeChar: string = "\\") {
         const escapeCharRgx = Rgx.create(Rgx.escape(escapeChar), "g");
         const wrapCharRgx = Rgx.create(Rgx.escape(wrapChar), "g");
 
@@ -33,15 +29,15 @@ export class Str {
         return wrapChar + escaped + wrapChar;
     }
 
-    public static padRight(str: any, maxLength: number, chars: string = " ") {
+    public padRight(str: any, maxLength: number, chars: string = " ") {
         return Str.pad(str, maxLength, chars, StrSide.RIGHT);
     }
 
-    public static padLeft(str: any, maxLength: number, chars: string = " ") {
+    public padLeft(str: any, maxLength: number, chars: string = " ") {
         return Str.pad(str, maxLength, chars, StrSide.LEFT);
     }
 
-    public static pad(str: any, maxLength: number, chars: string = " ", side: StrSide = StrSide.LEFT) {
+    public pad(str: any, maxLength: number, chars: string = " ", side: StrSide = StrSide.LEFT) {
         str = Var.stringify(str);
         const length = str.length;
         const padLength = maxLength - length;
@@ -59,7 +55,7 @@ export class Str {
         }
     }
 
-    public static repeat(chars: string, maxLength: number) {
+    public repeat(chars: string, maxLength: number) {
         chars = Var.stringify(chars);
 
         if (maxLength <= 0 || !chars) {
@@ -71,15 +67,15 @@ export class Str {
             .substr(0, maxLength);
     }
 
-    public static trimLeft(value: any, mask?: string) {
+    public trimLeft(value: any, mask?: string) {
         return Str.trim(value, mask, StrSide.LEFT);
     }
 
-    public static trimRight(value: any, mask?: string) {
+    public trimRight(value: any, mask?: string) {
         return Str.trim(value, mask, StrSide.RIGHT);
     }
 
-    public static trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
+    public trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
         const str = Var.stringify(value);
 
         const maskChars = Unicode.from(mask).symbols;
@@ -105,19 +101,19 @@ export class Str {
         return str.replace(re, "");
     }
 
-    public static camelCase(value: any) {
+    public camelCase(value: any) {
         const re = /[-_\s]+(.)?/g;
         return Str.trim(value).replace(re, (s, c) => c ? c.toUpperCase() : "");
     }
 
-    public static dashCase(value: any) {
+    public dashCase(value: any) {
         return Str.trim(value)
             .replace(/([A-Z])/g, "-$1")
             .replace(/[-_\s]+/g, "-")
             .toLowerCase();
     }
 
-    public static caseFirst(value: any, type: "lower" | "upper", locale: boolean = false) {
+    public caseFirst(value: any, type: "lower" | "upper", locale: boolean = false) {
         const str = Var.stringify(value);
 
         if (!str) {
@@ -136,15 +132,15 @@ export class Str {
         return chars.join("");
     }
 
-    public static lowerFirst(value: any, locale: boolean = false) {
+    public lowerFirst(value: any, locale: boolean = false) {
         return Str.caseFirst(value, "lower", locale);
     }
 
-    public static upperFirst(value: any, locale: boolean = false) {
+    public upperFirst(value: any, locale: boolean = false) {
         return Str.caseFirst(value, "upper", locale);
     }
 
-    public static replace(value: any, pairs: Record<string, string | ReplaceCallback>) {
+    public replace(value: any, pairs: Record<string, string | ReplaceCallback>) {
         const str = Var.stringify(value);
 
         if (!str) {
@@ -166,7 +162,7 @@ export class Str {
         });
     }
 
-    public static substringCount(str: string, substr: string) {
+    public substringCount(str: string, substr: string) {
         str = Var.stringify(str);
         substr = Var.stringify(substr);
 
@@ -185,7 +181,7 @@ export class Str {
         }
     }
 
-    public static split(value: string, re: string | RegExp, limit: number = Number.MAX_SAFE_INTEGER) {
+    public split(value: string, re: string | RegExp, limit: number = Number.MAX_SAFE_INTEGER) {
         const str = Var.stringify(value);
 
         if (limit <= 0) {
@@ -216,4 +212,4 @@ export class Str {
 
         return res;
     }
-}
+};

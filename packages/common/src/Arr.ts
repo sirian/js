@@ -1,12 +1,12 @@
 import {Var} from "./Var";
 import {XSet} from "./XSet";
 
-export class Arr {
-    public static removeItem<T>(array: T[], value: T, limit?: number) {
+export const Arr = new class {
+    public removeItem<T>(array: T[], value: T, limit?: number) {
         return Arr.remove(array, (item) => Var.isEqual(item, value), limit);
     }
 
-    public static remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
+    public remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
         let removed = 0;
 
         for (let i = 0; i < array.length;) {
@@ -28,13 +28,13 @@ export class Arr {
         return array;
     }
 
-    public static intersect<T>(array: T[], ...arrays: T[][]): T[] {
+    public intersect<T>(array: T[], ...arrays: T[][]): T[] {
         const sets = arrays.map((arr) => new Set(arr));
 
         return array.filter((value) => sets.every((set) => set.has(value)));
     }
 
-    public static chunk(value: any[], size: number) {
+    public chunk(value: any[], size: number) {
         const result = [];
 
         for (let i = 0; i < value.length; i += size) {
@@ -43,11 +43,11 @@ export class Arr {
         return result;
     }
 
-    public static cast<T>(value: T | T[]): T[] {
+    public cast<T>(value: T | T[]): T[] {
         return Var.isArray(value) ? value : [value];
     }
 
-    public static removeDuplicates<T>(array: T[]) {
+    public removeDuplicates<T>(array: T[]) {
         const set = new XSet(array);
 
         array.splice(0, array.length, ...set);
@@ -55,7 +55,7 @@ export class Arr {
         return array;
     }
 
-    public static range(from: number, to: number, step: number = 1) {
+    public range(from: number, to: number, step: number = 1) {
         const result = [];
         const sign = Math.sign(step);
         while (sign * (to - from) >= 0) {
@@ -64,4 +64,4 @@ export class Arr {
         }
         return result;
     }
-}
+};

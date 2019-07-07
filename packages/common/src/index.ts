@@ -5,7 +5,6 @@ export * from "./Fn";
 export * from "./Json";
 export * from "./global";
 export * from "./HybridMap";
-export * from "./native";
 export * from "./Num";
 export * from "./Obj";
 export * from "./Ref";

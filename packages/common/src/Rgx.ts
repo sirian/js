@@ -1,4 +1,3 @@
-import {_RegExp} from "./native";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
 
@@ -9,11 +8,11 @@ export interface RgxInit {
     addFlags: string | string[];
 }
 
-export class Rgx {
-    public static create(pattern: string | RegExp, options: Partial<RgxInit>): RegExp;
-    public static create(pattern: string | RegExp, flags?: string): RegExp;
+export const Rgx = new class {
+    public create(pattern: string | RegExp, options: Partial<RgxInit>): RegExp;
+    public create(pattern: string | RegExp, flags?: string): RegExp;
 
-    public static create(pattern: string, options: string | Partial<RgxInit> = "") {
+    public create(pattern: string, options: string | Partial<RgxInit> = "") {
         if (Var.isString(options)) {
             return Rgx.create(pattern, {flags: options});
         }
@@ -34,14 +33,14 @@ export class Rgx {
 
         const source = Var.isRegExp(pattern) ? pattern.source : pattern;
 
-        return new _RegExp(source, resFlags.toArray().join(""));
+        return new RegExp(source, resFlags.toArray().join(""));
     }
 
-    public static escape(str: string) {
+    public escape(str: string) {
         return Var.stringify(str).replace(escapeRe, "\\$&"); // $& means the whole matched string
     }
 
-    public static* matchAll(subject: string, pattern: RegExp | string) {
+    public* matchAll(subject: string, pattern: RegExp | string) {
         const regex = Rgx.create(pattern, {addFlags: "g"});
         const str = Var.stringify(subject);
 
@@ -61,4 +60,4 @@ export class Rgx {
             lastIndex = regex.lastIndex;
         }
     }
-}
+};

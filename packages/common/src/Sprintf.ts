@@ -1,5 +1,4 @@
 import {Json} from "./Json";
-import {_Error, _String, _SyntaxError, _TypeError} from "./native";
 import {Num} from "./Num";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
@@ -37,7 +36,7 @@ export class Sprintf {
 
     protected placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
         b: (arg) => Num.toInt(arg).toString(2),
-        c: (arg) => _String.fromCharCode(Num.toInt(arg)),
+        c: (arg) => String.fromCharCode(Num.toInt(arg)),
         i: (arg) => Num.toInt(arg),
         d: (arg) => Num.toInt(arg),
         j: (arg, ph) => Json.stringify(arg, null, ph.width),
@@ -106,7 +105,7 @@ export class Sprintf {
 
         for (const [index, key] of keys.entries()) {
             if (null === arg || undefined === arg) {
-                throw new _Error(`[sprintf] Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
+                throw new Error(`[sprintf] Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
             }
 
             arg = arg[key];
@@ -143,7 +142,7 @@ export class Sprintf {
             const match = re.placeholder.exec(str);
 
             if (!match) {
-                throw new _SyntaxError(`Sprintf unexpected placeholder at index ${index}`);
+                throw new SyntaxError(`Sprintf unexpected placeholder at index ${index}`);
             }
 
             const [text, paramNum, replacementField, sign, rawPadChar, align, width, precision, type] = match;
@@ -181,7 +180,7 @@ export class Sprintf {
 
         while (true) {
             if (!match) {
-                throw new _SyntaxError("[sprintf] failed to parse named argument key");
+                throw new SyntaxError("[sprintf] failed to parse named argument key");
             }
 
             const [text, key] = match;
@@ -205,7 +204,7 @@ export class Sprintf {
         const callback = this.placeholders[type];
 
         if (!callback) {
-            throw new _Error(`Formatter for "${type}" not found`);
+            throw new Error(`Formatter for "${type}" not found`);
         }
 
         if (!/^[Tv]/.test(type) && Var.isFunction(arg)) {
@@ -213,10 +212,10 @@ export class Sprintf {
         }
 
         if (/[bcdiefguxX]/.test(type) && typeof arg !== "number" && isNaN(arg)) {
-            throw new _TypeError(`[sprintf] expecting number, given ${typeof arg} "${arg}"`);
+            throw new TypeError(`[sprintf] expecting number, given ${typeof arg} "${arg}"`);
         }
 
-        return _String(callback(arg, ph));
+        return String(callback(arg, ph));
     }
 
     protected format(args: any[]) {
@@ -235,7 +234,7 @@ export class Sprintf {
 
             const type = ph.type;
 
-            let argText = _String(this.handlePlaceholder(ph, arg));
+            let argText = String(this.handlePlaceholder(ph, arg));
 
             if (re.json.test(type)) {
                 output.push(argText);
@@ -270,7 +269,7 @@ export class Sprintf {
     }
 
     private substr(arg: any, ph: Placeholder) {
-        const v = _String(arg);
+        const v = String(arg);
         return v.substr(0, ph.precision || v.length);
     }
 }

@@ -17,11 +17,11 @@ export interface TypedArrayConstructor<T extends TypedArray = TypedArray> {
     new(arrayOrArrayBuffer: ArrayBuffer): T;
 }
 
-export class TypedArr {
-    public static create<T extends TypedArray>(constructor: TypedArrayConstructor<T>, source: ArrBufTarget | DataView) {
+export const TypedArr = new class {
+    public create<T extends TypedArray>(constructor: TypedArrayConstructor<T>, source: ArrBufTarget | DataView) {
         const sourceBuffer = ArrBuf.getBuffer(source);
         const buffer = ArrBuf.align(sourceBuffer, constructor.BYTES_PER_ELEMENT);
 
         return new constructor(buffer);
     }
-}
+};

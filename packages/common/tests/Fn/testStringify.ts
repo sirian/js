@@ -1,4 +1,4 @@
-import {_Function, _Object, Fn} from "../../src";
+import {Fn} from "../../src";
 
 describe("", () => {
     const data = [
@@ -18,13 +18,13 @@ describe("", () => {
             yield "foo";
             return "bar";
         },
-        _Function,
-        _Object,
+        Function,
+        Object,
     ];
 
     test.each(data)("Fn.stringify(%O)", (fn) => {
         const result = Fn.stringify(fn);
-        expect(result).toEqual(_Function.prototype.toString.call(fn));
+        expect(result).toEqual(Function.prototype.toString.call(fn));
         expect(result).toEqual("" + fn);
     });
 });

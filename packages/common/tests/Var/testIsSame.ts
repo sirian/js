@@ -1,4 +1,4 @@
-import {_Object, Var} from "../../src";
+import {Var} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -26,7 +26,7 @@ describe("", () => {
         const x = Util.eval(code1);
         for (const code2 of data) {
             const y = Util.eval(code2);
-            const expected = _Object.is(x, y);
+            const expected = Object.is(x, y);
             test(`Var.isSame(${code1}, ${code2}) = ${expected}`, () => expect(Var.isEqual(x, y)).toBe(expected));
         }
     }

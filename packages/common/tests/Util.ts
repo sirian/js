@@ -1,9 +1,8 @@
 import {Push} from "@sirian/ts-extra-types";
-import {_Function} from "../src";
 
 export class Util {
     public static eval(code: string) {
-        const fn = new _Function(`return (${code})`);
+        const fn = new Function(`return (${code})`);
         return fn();
     }
 
