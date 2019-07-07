@@ -1,13 +1,6 @@
-interface V8ErrorConstructor {
-    captureStackTrace?: (target: object, ctor?: Function) => void;
-}
-
 type ErrCtor = new (message?: string) => Error;
 
-const Obj = Object;
-const Err: ErrorConstructor & V8ErrorConstructor = Error;
-
-export class CustomError extends Err {
+export class CustomError extends Error {
     public name: string;
     public message: string;
     public previous?: Error;
@@ -31,25 +24,25 @@ export class CustomError extends Err {
     public static wrap<T extends ErrCtor, O extends object>(this: T, o: O): Omit<InstanceType<T>, keyof O> & O;
 
     public static wrap<T extends ErrCtor>(this: T, target: any) {
-        if (target instanceof Err) {
+        if (target instanceof Error) {
             return target;
         }
 
         if (null !== target && "object" === typeof target || "function" === typeof target) {
             const error = new this(target.message);
-            return Obj.assign(error, target);
+            return Object.assign(error, target);
         }
 
         return new this(target);
     }
 
     public static captureStackTrace(target: Partial<Error>, ctor?: Function) {
-        if (Err.captureStackTrace) {
-            Err.captureStackTrace(target, ctor);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(target, ctor);
             return;
         }
 
-        const error = new Err(target.message);
+        const error = new Error(target.message);
 
         let stack = error.stack || "";
 
@@ -57,7 +50,7 @@ export class CustomError extends Err {
             stack = stack.replace(/^Error:/, target.name);
         }
 
-        Obj.defineProperty(target, "stack", {
+        Object.defineProperty(target, "stack", {
             configurable: true,
             enumerable: false,
             writable: true,
