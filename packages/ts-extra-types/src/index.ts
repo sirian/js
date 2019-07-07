@@ -11,3 +11,4 @@ export * from "./object";
 export * from "./promise";
 export * from "./tuple";
 export * from "./types";
+export {ObjectToArray} from "./tuple";

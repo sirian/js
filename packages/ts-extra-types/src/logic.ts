@@ -18,14 +18,14 @@ export type Every<T extends boolean[]> =
     T extends [] ? true :
     {
         0: ArrayElementOf<T>;
-        1: And<Head<T>, Every<Tail<T>>>
+        1: And<T[0], Every<Tail<T>>>
     }[T extends [any, ...any[]] ? 1 : 0];
 
 export type Some<T extends boolean[]> =
     T extends [] ? false :
     {
         0: ArrayElementOf<T>;
-        1: Or<Head<T>, Some<Tail<T>>>;
+        1: Or<T[0], Some<Tail<T>>>;
     }[T extends [any, ...any[]] ? 1 : 0];
 
 export type Not<C extends boolean> =
