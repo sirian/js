@@ -1,7 +1,6 @@
-import {_String} from "./native";
 import {Var} from "./Var";
 
-export class Unicode extends _String {
+export class Unicode extends String {
     constructor(value: any) {
         super(Var.stringify(value));
     }

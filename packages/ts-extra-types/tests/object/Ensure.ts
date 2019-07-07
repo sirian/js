@@ -1,14 +1,13 @@
-import {AssertExact, Ensure, NonNull} from "../../src";
+import {AssertExact, Ensure} from "../../src";
 
 type Tests = [
     AssertExact<string, Ensure<string, "length">>,
 
-    AssertExact<{ y: boolean }, Ensure<{ y?: boolean | number }, "y", boolean>>,
-
     AssertExact<{ y: boolean | number | undefined }, Ensure<{ y?: boolean | number }, "y">>,
-    AssertExact<{ y: boolean | number }, Ensure<{ y?: boolean | number }, "y", NonNull>>,
 
-    AssertExact<{ y: boolean }, Ensure<{}, "y", boolean>>,
+    AssertExact<{ y: boolean | number | undefined }, Ensure<{ y: boolean | number | undefined }, "y">>,
+
+    AssertExact<{ y: unknown }, Ensure<{}, "y">>,
 
     AssertExact<{ x: number, y: unknown }, Ensure<{ x: number }, "y">>,
 
@@ -20,11 +19,9 @@ type Tests = [
 
     AssertExact<{ y: unknown }, Ensure<{}, "y">>,
 
-    AssertExact<{ y: number }, Ensure<unknown, "y", number>>,
+    AssertExact<{ y: unknown } & object, Ensure<object, "y">>,
 
-    AssertExact<{ y: number }, Ensure<object, "y", number>>,
-
-    AssertExact<number & { y: number }, Ensure<number, "y", number>>,
+    AssertExact<{ y: unknown } & number, Ensure<number, "y">>,
 
     AssertExact<{ length: number | undefined } | { foo: string, length: unknown },
         Ensure<{ length?: number } | { foo: string }, "length">>,

@@ -1,5 +1,5 @@
 import {Ref, Str, Var} from "@sirian/common";
-import {Get, GetDeep, Head, Tail} from "@sirian/ts-extra-types";
+import {Get, GetDeep, Tail} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
 import {Path, PathElement, PropertyPath} from "./PropertyPath";
 
@@ -8,7 +8,7 @@ export type DeepType<T, P extends Path> =
     P extends any[]
     ? {
         0: T
-        1: GetDeep<Get<T, Head<P>>, Tail<P>>;
+        1: GetDeep<Get<T, P[0]>, Tail<P>>;
     }[P extends [any, ...any[]] ? 1 : 0]
     : never;
 

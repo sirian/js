@@ -1,5 +1,5 @@
-export interface Lengthwise {
-    length: number;
+export interface Lengthwise<L extends number = number> {
+    length: L;
 }
 
 export interface Sizeable {

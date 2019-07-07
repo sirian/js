@@ -12,6 +12,7 @@ type Test = [
     AssertExact<symbol, Widen<symbol>>,
     AssertExact<null, Widen<null>>,
     AssertExact<undefined, Widen<undefined>>,
+    AssertExact<void, Widen<void>>,
     AssertExact<unknown, Widen<unknown>>,
     AssertExact<never, Widen<never>>,
     AssertExact<(x: number) => any, Widen<(x: number) => any>>,

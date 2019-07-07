@@ -1,8 +1,6 @@
-import {KeyToNumber} from "./cast";
-import {Lengthwise} from "./interfaces";
 import {MustBeArray, MustBeNumber} from "./mustbe";
-import {Dec, Inc} from "./number";
-import {Expand, IsPartial, IsRequired, OmitIndexSignature, Partialize} from "./object";
+import {Dec, Inc, Numbers} from "./number";
+import {Expand, IsPartial, IsRequired, KeyOf, OmitIndexSignature, Partialize, Rec} from "./object";
 import {IfNever, IsExact, IsFiniteNumber, IsWide} from "./types";
 
 export type FixArray<T> = T & {
@@ -12,7 +10,8 @@ export type FixArray<T> = T & {
 
 export type Fix<T, U> = T extends any[] ? FixArray<U> : U;
 
-export type Head<T extends any[], D = T[0]> = T extends [infer R, ...any[]] ? R : D;
+export type Head<T extends any[]> =
+    T extends [infer U, ...any[]] ? U : T[0] | undefined;
 
 export type Tail<L extends any[]> =
     ((...t: L) => void) extends ((h: any, ...rest: infer R) => void) ? R : never;
@@ -95,19 +94,24 @@ export type IsOpenTuple<T> = T extends any[] ? IsWide<Length<T>> : false;
 export type IsEmptyTuple<T> = T extends any[] ? IsExact<Length<Required<T>>, 0> : false;
 export type IsRepeatedTuple<T> = IsExact<Required<T>, Array<ArrayElementOf<T>>>;
 
-export type TupleKeyOf<T> = Exclude<Extract<keyof T, string>, keyof any[]>;
-export type ArrayKeyOf<T> = Exclude<keyof T, Exclude<keyof any[], number>>;
-
-export type TupleIndex<T extends any[]> = KeyToNumber<TupleKeyOf<T>>;
+export type TupleKeyOf<T> = KeyOf<T, keyof Numbers>;
+export type TupleIndex<T> = KeyOf<T, Numbers[keyof Numbers]>;
 
 export type StripArray<T> =
-    T extends Lengthwise
+    T extends any
     ? number extends Length<T>
       ? OmitArrayProto<T>
       : OmitIndexSignature<OmitArrayProto<T>>
-    : T;
+    : never;
 
 export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
+
+export type StripTuple<T> = Pick<T, TupleKeyOf<T> | TupleIndex<T>>;
+
+export type ObjectToArray<T, Len extends number = Length<T>> =
+    StripArray<T> extends infer O
+    ? Repeat<Len, O[keyof O]> & Expand<OmitIndexSignature<O>>
+    : never;
 
 // export type WrapTuple<T extends any[] & (number extends T["length"] ? never : unknown)> =
 //     { length: T["length"] }
@@ -188,7 +192,7 @@ export type SizedArray<N extends number, T = any> =
 export type Repeat<N extends number, T = any> =
     number extends N ? T[] :
     IndexRange<N> extends MustBeNumber<infer K>
-    ? IfNever<K, [], SizedArray<N, T> & Expand<Partialize<Record<K, T>, N>>>
+    ? IfNever<K, [], SizedArray<N, T> & Expand<Partialize<Rec<K, T>, N>>>
     : never;
 
 export type UnionToTuple<U, T extends any[] = []> = {

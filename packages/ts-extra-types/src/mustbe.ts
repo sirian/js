@@ -1,4 +1,5 @@
 import {Ctor, Func} from "./function";
+import {Rec} from "./object";
 import {Primitive} from "./types";
 
 export type MustBe<T extends U, U> = T;
@@ -13,6 +14,6 @@ export type MustBeBoolean<T extends boolean> = T;
 export type MustBeTrue<T extends true> = T;
 export type MustBeFalse<T extends false> = T;
 export type MustBeKey<T extends PropertyKey> = T;
-export type MustBeRecord<T extends Record<any, any>> = T;
+export type MustBeRecord<T extends Rec> = T;
 
 export type MustBeArray<T extends any[]> = T;

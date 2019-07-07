@@ -27,6 +27,10 @@ export enum PromiseStatus {
     REJECTED = "rejected",
 }
 
+declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+
+declare function clearTimeout(timeoutId: any): void;
+
 export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     protected status: PromiseStatus;
     protected value?: any;

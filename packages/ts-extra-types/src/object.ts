@@ -1,10 +1,14 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If, Not} from "./logic";
 import {MustBeKey} from "./mustbe";
-import {ArrayElementOf, Head, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
+import {ArrayElementOf, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
 import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types";
 
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
+export type EntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
+
+export type Rec<K extends keyof any = any, V = any> = { [P in K]: V };
+export type PartialRec<K extends keyof any = any, V = any> = { [P in K]?: V };
 
 export type ObjKeyOf<T> =
     T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
@@ -21,7 +25,7 @@ export type ObjValueOf<T> =
 export type ObjEntryOf<T> =
     T extends any[]
     ? { [P in KeyOf<T>]: [P, T[P]] }[TupleKeyOf<T>]
-    : { [P in KeyOf<T>]: [KeyToString<P>, T[P]] }[KeyOf<T>];
+    : { [P in KeyOf<T>]: [KeyToString<P>, T[P]] }[KeyOf<T, string | number>];
 
 export type Get<T, K extends keyof any, TDefault = never> =
     K extends keyof T ? T[K] :
@@ -32,8 +36,8 @@ export type Has<T, K extends keyof any> = K extends keyof T ? true : IsExtends<T
 export type GetDeep<T, L extends PropertyKey[], D = never> =
     {
         0: T
-        1: Has<T, Head<L>> extends true
-           ? GetDeep<Get<T, Head<L>>, Tail<L>, D>
+        1: Has<T, L[0]> extends true
+           ? GetDeep<Get<T, L[0]>, Tail<L>, D>
            : D;
     }[L extends [any, ...any[]] ? 1 : 0];
 
@@ -47,6 +51,7 @@ export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition 
 export type PickTyped<T, Condition> = Pick<T, TypedKeyOf<T, Condition>>;
 export type OmitTyped<T, Condition> = Omit<T, TypedKeyOf<T, Condition>>;
 
+export type GetIndexSignature<T, K extends string | number = string | number> = Pick<T, Extract<K, KeyOf<T>>>;
 export type OmitIndexSignature<T> = Pick<T, ExcludeWide<keyof T>>;
 export type OmitNever<T> = OmitTyped<T, never>;
 
@@ -98,12 +103,10 @@ export type Require<T, K extends keyof any = keyof T> = Overwrite<T, Required<My
 
 export type Partialize<T, K extends keyof any = keyof T> = Overwrite<T, Partial<MyPick<T, K>>>;
 
-export type Ensure<T, K extends keyof any, V = any> = T & {
-    [P in K]: Extract<Get<T, P, V>, V>
-};
+export type Ensure<T, K extends keyof any> = { [P in K]: unknown } & T;
 
 export type FromEntry<E extends [any, any]> =
-    E extends [MustBeKey<infer K>, infer V] ? Record<K, V> : never;
+    E extends [MustBeKey<infer K>, infer V] ? Rec<K, V> : never;
 
 export type FromEntries<L extends Array<[any, any]>> =
     Length<L> extends 0 ? {} :
@@ -114,3 +117,9 @@ export type Exclusive<T, U> =
     (T | U) extends any
     ? (Without<T, U> & U) | (Without<U, T> & T)
     : T | U;
+
+export type ObjectZip<K extends Array<keyof any>, V extends any[]> =
+    {
+        0: {};
+        1: ObjectZip<Tail<K>, Tail<V>> & (V extends [] ? PartialRec<K[0], V[0]> : Rec<K[0], V[0]>)
+    }[Required<K> extends [any, ...any[]] ? 1 : 0];

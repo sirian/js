@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {Ref} from "@sirian/common";
 import {IFilter} from "./Filter";
 
 export enum Operator {
@@ -51,6 +51,6 @@ export class CompareFilter<T = any> implements IFilter<T> {
     }
 
     public hasOperator(operator: Operator) {
-        return Var.hasOwn(this.tests, operator);
+        return Ref.hasOwn(this.tests, operator);
     }
 }

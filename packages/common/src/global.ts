@@ -9,6 +9,9 @@ export interface Global {
     Object: typeof Object;
     String: typeof String;
     Symbol: typeof Symbol;
+    RegExp: typeof RegExp;
+    Array: typeof Array;
+    Promise: typeof Promise;
 
     Math: typeof Math;
     Date: typeof Date;
@@ -16,6 +19,7 @@ export interface Global {
     JSON: typeof JSON;
 
     ArrayBuffer: typeof ArrayBuffer;
+    DataView: typeof DataView;
     Int8Array: typeof Int8Array;
     Int16Array: typeof Int16Array;
     Int32Array: typeof Int32Array;

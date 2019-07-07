@@ -17,6 +17,6 @@ describe("Var.xtype", () => {
     ];
 
     test.each(data)("Var.xtype(%o) === %o", (value, expected) => {
-        expect(Var.xtype(value)).toBe(expected);
+        expect(Var.getXType(value)).toBe(expected);
     });
 });

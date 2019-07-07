@@ -1,7 +1,5 @@
 import {Ref} from "@sirian/common";
 
-// tslint:disable-next-line:no-namespace
-
 export type AnyIterable<V = any> = Iterable<V> | AsyncIterable<V>;
 
 export class Iter {

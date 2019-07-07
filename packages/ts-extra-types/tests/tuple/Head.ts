@@ -3,7 +3,7 @@ import {AssertExact, Head} from "../../src";
 type Test = [
     AssertExact<undefined, Head<[]>>,
 
-    AssertExact<number, Head<number[]>>,
+    AssertExact<number | undefined, Head<number[]>>,
 
     AssertExact<1, Head<[1]>>,
     AssertExact<1 | undefined, Head<[1?]>>,
