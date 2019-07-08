@@ -63,7 +63,7 @@ export abstract class Parameter<T> {
                 throw new ValueValidateError(
                     `Value "${value}" is not allowed for ${
                         this.constructor.name
-                        } ${this.getName()}. Allowed: ${allowedValues.join(", ")}`,
+                    } ${this.getName()}. Allowed: ${allowedValues.join(", ")}`,
                 );
             }
         }

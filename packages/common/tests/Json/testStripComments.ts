@@ -1,7 +1,7 @@
 import {Json} from "../../src";
 
 describe("Json.stripComments", () => {
-    const data: Array<{source: string, expected: string}> = [
+    const data: Array<{ source: string, expected: string }> = [
         {
             source: "\
 			// this is a JSON file with comments\n\

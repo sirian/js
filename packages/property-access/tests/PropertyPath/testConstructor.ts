@@ -1,4 +1,4 @@
-import {PathElement, PropertyPath} from "../../src";
+import {PropertyPath} from "../../src";
 
 const data: Array<[string, Array<string | number>]> = [
     ["x", ["x"]],

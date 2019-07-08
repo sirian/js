@@ -1,13 +1,13 @@
 {
-    "name": "@sirian/finder",
+    "name": "@sirian/filesystem",
     "description": "",
-    "version": "1.1.10",
+    "version": "1.6.10",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/node-finder",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/filesystem",
     "license": "MIT",
     "files": [
         "build/"
@@ -16,9 +16,10 @@
     "types": "build/index.d.ts",
     "dependencies": {
         "@sirian/common": "^4.40.2",
-        "@sirian/filesystem": "^1.6.10",
         "@sirian/iterator": "^1.11.12",
-        "@sirian/ts-extra-types": "^3.45.1"
+        "@sirian/ts-extra-types": "^3.45.1",
+        "@sirian/xpromise": "^2.2.15",
+        "@types/node": "^12.6.0"
     },
     "scripts": {},
     "publishConfig": {

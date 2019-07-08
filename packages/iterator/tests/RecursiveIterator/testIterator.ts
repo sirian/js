@@ -19,7 +19,7 @@ test.each(data)("[...new RecursiveIterator(%j, %j)] === %j", (value, options, ex
 
 test.each(data)("", async (value: any[], options, expected) => {
     const gen = (async function*() {
-        yield*value.map((val) => Promise.resolve(val));
+        yield* value.map((val) => Promise.resolve(val));
     })();
 
     const it2 = new RecursiveIterator(new NestedIterator(gen), options);

@@ -1,7 +1,7 @@
 import {HybridMap} from "@sirian/common";
 
 const symbol: unique symbol = Symbol.for("@sirian/shared-store");
-const target: {[symbol]?: HybridMap<any, any>} = Symbol as any;
+const target: { [symbol]?: HybridMap<any, any> } = Symbol as any;
 
 export class SharedStore {
     public static get<T>(key: any, init: () => T) {

@@ -11,13 +11,13 @@ export class SortIterator<V> extends BaseIterator<V> {
         this.target = target;
     }
 
-    public*[Symbol.iterator]() {
+    public* [Symbol.iterator]() {
         const data = [...this.target as any];
-        yield*data.sort(this.callback);
+        yield* data.sort(this.callback);
     }
 
-    public async*[Symbol.asyncIterator]() {
+    public async* [Symbol.asyncIterator]() {
         const data = await this.toArray();
-        yield*data.sort(this.callback);
+        yield* data.sort(this.callback);
     }
 }

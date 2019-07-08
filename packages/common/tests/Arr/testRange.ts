@@ -9,7 +9,7 @@ describe("Arr.range", () => {
 
         [1, 0, 1, []],
         [1, 0, -0.5, [1, 0.5, 0]],
-        [1, 0,  -1, [1, 0]],
+        [1, 0, -1, [1, 0]],
     ];
 
     test.each(data)("Arr.range(%o, %o, %o) === %o", (from, to, step, expected) => {

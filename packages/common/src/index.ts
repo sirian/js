@@ -3,7 +3,7 @@ export * from "./ArrBuf";
 export * from "./Descriptor";
 export * from "./Fn";
 export * from "./Json";
-export * from "./global";
+export * from "./Entries";
 export * from "./HybridMap";
 export * from "./Num";
 export * from "./Obj";
