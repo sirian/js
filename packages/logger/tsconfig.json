@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "rootDir": "src",
         "outDir": "build"
@@ -10,6 +10,6 @@
     "references": [
         {"path": "../common"},
         {"path": "../datetime"},
-        {"path": "../property-access"},
+        {"path": "../property-access"}
     ]
 }

@@ -15,6 +15,7 @@ test("", () => {
 
             }
         }
+
         return Foo;
     }).toThrow("Only put a @debounce decorator on a method");
 });

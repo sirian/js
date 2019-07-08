@@ -14,12 +14,15 @@
         "json",
         "js"
     ],
+    "moduleNameMapper": {
+        "@sirian/(.*)$": "<rootDir>/packages/$1/src"
+    },
     "coveragePathIgnorePatterns": [
         "/node_modules/"
     ],
     "globals": {
         "ts-jest": {
-            "tsConfig": "tsconfig.test.json"
+            "tsConfig": "./tsconfig.test.json"
         }
     }
 }

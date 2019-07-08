@@ -13,7 +13,7 @@ export class FilterIterator<V> extends BaseIterator<V> {
         this.target = target;
     }
 
-    public*[Symbol.iterator]() {
+    public* [Symbol.iterator]() {
         for (const x of this.target as any) {
             if (this.callback(x)) {
                 yield x;
@@ -21,7 +21,7 @@ export class FilterIterator<V> extends BaseIterator<V> {
         }
     }
 
-    public async*[Symbol.asyncIterator]() {
+    public async* [Symbol.asyncIterator]() {
         for await (const x of this.target) {
             if (await this.callback(x)) {
                 yield x;

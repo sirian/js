@@ -1,4 +1,4 @@
-import {Definition, DefinitionBuilder, Transition} from "../src";
+import {Definition, Transition} from "../src";
 
 export class TestWorkflowFactory {
     public static createComplexWorkflowDefinition() {

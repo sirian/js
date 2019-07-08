@@ -1,4 +1,3 @@
-
 import {Arr} from "../../src";
 
 describe("", () => {

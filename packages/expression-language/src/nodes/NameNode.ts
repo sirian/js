@@ -2,7 +2,7 @@ import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
 
-export class NameNode extends Node<{}, {name: string}> {
+export class NameNode extends Node<{}, { name: string }> {
     constructor(name: string) {
         super({}, {name});
     }

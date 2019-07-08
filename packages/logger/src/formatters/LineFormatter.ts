@@ -1,6 +1,6 @@
 import {Json, Var} from "@sirian/common";
 import {DateTime} from "@sirian/datetime";
-import prettyFormat = require("pretty-format");
+import prettyFormat from "pretty-format";
 import {LogRecord} from "../LogRecord";
 import {Parser, Token, TokenStream} from "../parser";
 import {FormatContext} from "./FormatContext";

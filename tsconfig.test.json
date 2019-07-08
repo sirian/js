@@ -1,7 +1,6 @@
 {
-    "extends": "./tsconfig.base.json",
+    "extends": "./tsconfig.json",
     "compilerOptions": {
-        "noUnusedLocals": false,
         "noEmit": true,
         "lib": ["esnext", "dom"]
     }

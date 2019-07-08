@@ -13,15 +13,15 @@ export class AppendIterator<V> extends BaseIterator<V> {
         this.sources.push(iterator);
     }
 
-    public*[Symbol.iterator]() {
+    public* [Symbol.iterator]() {
         for (const source of this.sources) {
-            yield*source as any;
+            yield* source as any;
         }
     }
 
-    public async*[Symbol.asyncIterator]() {
+    public async* [Symbol.asyncIterator]() {
         for (const source of this.sources) {
-            yield*source;
+            yield* source;
         }
     }
 }

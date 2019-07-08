@@ -12,7 +12,7 @@ export class MultipleStateMarkingStore<K extends string> implements MarkingStore
         return new Marking(subject[this.property]);
     }
 
-    public setMarking<S extends string>(subject: {[P in K]?: MarkingPlaces<S>}, marking: Marking<S>) {
+    public setMarking<S extends string>(subject: { [P in K]?: MarkingPlaces<S> }, marking: Marking<S>) {
         subject[this.property] = marking.getPlaces();
     }
 }

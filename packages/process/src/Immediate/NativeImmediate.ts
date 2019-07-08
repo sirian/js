@@ -7,9 +7,11 @@ export class NativeImmediate {
     public static supports() {
         return "function" === typeof setImmediate;
     }
+
     public set(fn: ImmediateCallback) {
         return setImmediate(fn);
     }
+
     public clear(id: any) {
         clearImmediate(id);
     }

@@ -1,4 +1,5 @@
 import {Var} from "./Var";
+
 const Inf = 1 / 0;
 
 export const Num = new class {
