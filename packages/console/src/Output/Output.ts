@@ -31,7 +31,7 @@ export interface IOutputWriteOptions {
     type: OutputType;
 }
 
-export type OutputStream = Writable & { isTTY?: boolean; columns?: number; rows?: number };
+export type OutputStream = NodeJS.WritableStream & { isTTY?: boolean; columns?: number; rows?: number };
 
 export abstract class Output {
     protected verbosity: OutputVerbosity;
