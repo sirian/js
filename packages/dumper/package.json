@@ -1,7 +1,7 @@
 {
     "name": "@sirian/dumper",
     "description": "",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -15,8 +15,8 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.40.2",
-        "@sirian/ts-extra-types": "^3.45.1"
+        "@sirian/common": "^4.40.3",
+        "@sirian/ts-extra-types": "^3.45.2"
     },
     "scripts": {},
     "publishConfig": {
