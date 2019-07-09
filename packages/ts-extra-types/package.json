@@ -1,6 +1,5 @@
 {
     "name": "@sirian/ts-extra-types",
-    "type": "module",
     "description": "TypeScript extra types",
     "version": "3.45.3",
     "author": {
@@ -13,7 +12,7 @@
     "files": [
         "build/"
     ],
-    "types": "build/index.d.ts",
+    "types": "build/types/index.d.ts",
     "scripts": {
         "test": "tsc -p tsconfig.test.json",
         "test:watch": "tsc -w -p tsconfig.test.json"

@@ -1,15 +1,24 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build"
-    },
+    "extends": "../../tsconfig.base.json",
     "include": [
         "src"
     ],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/logger.tsbuildinfo",
+        "declarationDir": "build/types"
+    },
     "references": [
-        {"path": "../common"},
-        {"path": "../datetime"},
-        {"path": "../property-access"}
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../datetime"
+        },
+        {
+            "path": "../property-access"
+        }
     ]
 }

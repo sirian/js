@@ -1,15 +1,30 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build"
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/event-dispatcher.tsbuildinfo",
+        "declarationDir": "build/types"
     },
-    "include": ["src"],
     "references": [
-        {"path": "../ts-extra-types"},
-        {"path": "../common"},
-        {"path": "../disposer"},
-        {"path": "../error"},
-        {"path": "../xpromise"}
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../disposer"
+        },
+        {
+            "path": "../error"
+        },
+        {
+            "path": "../ts-extra-types"
+        },
+        {
+            "path": "../xpromise"
+        }
     ]
 }

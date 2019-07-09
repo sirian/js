@@ -1,5 +1,6 @@
 .idea/
 node_modules/
+tmp/
 build/
 coverage/
 yarn-*.log

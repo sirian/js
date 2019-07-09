@@ -1,14 +1,27 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build"
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/expression-language.tsbuildinfo",
+        "declarationDir": "build/types"
     },
-    "include": ["src"],
     "references": [
-        {"path": "../common"},
-        {"path": "../error"},
-        {"path": "../parser"},
-        {"path": "../ts-extra-types"}
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../error"
+        },
+        {
+            "path": "../parser"
+        },
+        {
+            "path": "../ts-extra-types"
+        }
     ]
 }

@@ -1,13 +1,24 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build"
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/clone.tsbuildinfo",
+        "declarationDir": "build/types"
     },
-    "include": ["src"],
     "references": [
-        {"path": "../common"},
-        {"path": "../error"},
-        {"path": "../ts-extra-types"}
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../error"
+        },
+        {
+            "path": "../ts-extra-types"
+        }
     ]
 }

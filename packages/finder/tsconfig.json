@@ -1,15 +1,30 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build",
-        "types": ["node"]
+        "outDir": "build/cjs",
+        "types": [
+            "node"
+        ],
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/finder.tsbuildinfo",
+        "declarationDir": "build/types"
     },
-    "include": ["src"],
     "references": [
-        {"path": "../common"},
-        {"path": "../filesystem"},
-        {"path": "../ts-extra-types"},
-        {"path": "../xpromise"}
+        {
+            "path": "../common"
+        },
+        {
+            "path": "../filesystem"
+        },
+        {
+            "path": "../iterator"
+        },
+        {
+            "path": "../ts-extra-types"
+        }
     ]
 }
