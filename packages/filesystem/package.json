@@ -1,5 +1,6 @@
 {
     "name": "@sirian/filesystem",
+    "type": "module",
     "description": "",
     "version": "1.6.11",
     "author": {

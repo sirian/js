@@ -1,5 +1,6 @@
 {
     "name": "@sirian/property-access",
+    "type": "module",
     "description": "",
     "version": "1.1.7",
     "author": {

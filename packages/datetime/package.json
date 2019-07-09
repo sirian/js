@@ -1,5 +1,6 @@
 {
     "name": "@sirian/datetime",
+    "type": "module",
     "description": "",
     "version": "3.3.17",
     "author": {

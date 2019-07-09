@@ -1,5 +1,6 @@
 {
     "name": "@sirian/console",
+    "type": "module",
     "description": "The Console component allows you to create command-line commands",
     "version": "6.2.21",
     "author": {
