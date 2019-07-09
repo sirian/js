@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/sirian/js/compare/@sirian/random@1.1.6...@sirian/random@1.2.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [1.1.6](https://github.com/sirian/js/compare/@sirian/random@1.1.5...@sirian/random@1.1.6) (2019-07-09)
 
 

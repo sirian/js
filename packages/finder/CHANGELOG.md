@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/sirian/js/compare/@sirian/finder@1.1.12...@sirian/finder@1.2.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [1.1.12](https://github.com/sirian/js/compare/@sirian/finder@1.1.11...@sirian/finder@1.1.12) (2019-07-09)
 
 

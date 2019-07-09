@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/sirian/js/compare/@sirian/dumper@0.1.5...@sirian/dumper@0.2.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [0.1.5](https://github.com/sirian/js/compare/@sirian/dumper@0.1.4...@sirian/dumper@0.1.5) (2019-07-09)
 
 

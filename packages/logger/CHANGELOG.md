@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/sirian/js/compare/@sirian/logger@1.3.8...@sirian/logger@1.4.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [1.3.8](https://github.com/sirian/js/compare/@sirian/logger@1.3.7...@sirian/logger@1.3.8) (2019-07-09)
 
 

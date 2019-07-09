@@ -1,7 +1,7 @@
 {
     "name": "@sirian/dumper",
     "description": "",
-    "version": "0.1.5",
+    "version": "0.2.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,8 +16,8 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.40.4",
-        "@sirian/ts-extra-types": "^3.45.3"
+        "@sirian/common": "^4.41.0",
+        "@sirian/ts-extra-types": "^3.46.0"
     },
     "scripts": {},
     "publishConfig": {

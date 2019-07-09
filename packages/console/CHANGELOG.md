@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/sirian/js/compare/@sirian/console@6.2.22...@sirian/console@6.3.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [6.2.22](https://github.com/sirian/js/compare/@sirian/console@6.2.21...@sirian/console@6.2.22) (2019-07-09)
 
 

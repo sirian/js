@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/sirian/js/compare/@sirian/disposer@1.5.17...@sirian/disposer@1.6.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [1.5.17](https://github.com/sirian/js/compare/@sirian/disposer@1.5.16...@sirian/disposer@1.5.17) (2019-07-09)
 
 

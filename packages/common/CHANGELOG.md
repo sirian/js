@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.41.0](https://github.com/sirian/js/compare/@sirian/common@4.40.4...@sirian/common@4.41.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [4.40.4](https://github.com/sirian/js/compare/@sirian/common@4.40.3...@sirian/common@4.40.4) (2019-07-09)
 
 

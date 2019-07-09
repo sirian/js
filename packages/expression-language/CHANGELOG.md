@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/sirian/js/compare/@sirian/expression-language@1.0.16...@sirian/expression-language@1.1.0) (2019-07-09)
+
+
+### Features
+
+* esm and cjs support ([426e015](https://github.com/sirian/js/commit/426e015))
+
+
+
+
+
 ## [1.0.16](https://github.com/sirian/js/compare/@sirian/expression-language@1.0.15...@sirian/expression-language@1.0.16) (2019-07-09)
 
 
