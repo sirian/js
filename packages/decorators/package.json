@@ -1,6 +1,5 @@
 {
     "name": "@sirian/decorators",
-    "type": "module",
     "description": "",
     "version": "1.2.19",
     "author": {
@@ -13,8 +12,9 @@
     "files": [
         "build/"
     ],
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
+    "main": "build/cjs/index.js",
+    "module": "build/esm/index.js",
+    "types": "build/types/index.d.ts",
     "dependencies": {
         "@sirian/common": "^4.40.4",
         "@sirian/error": "^2.0.18",

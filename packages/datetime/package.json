@@ -1,6 +1,5 @@
 {
     "name": "@sirian/datetime",
-    "type": "module",
     "description": "",
     "version": "3.3.18",
     "author": {
@@ -13,8 +12,9 @@
     "files": [
         "build/"
     ],
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
+    "main": "build/cjs/index.js",
+    "module": "build/esm/index.js",
+    "types": "build/types/index.d.ts",
     "dependencies": {
         "@sirian/common": "^4.40.4",
         "@sirian/ts-extra-types": "^3.45.3"

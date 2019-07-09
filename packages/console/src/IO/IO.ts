@@ -1,5 +1,5 @@
 import {Str, Var} from "@sirian/common";
-import * as ErrorStackParser from "error-stack-parser";
+import ErrorStackParser from "error-stack-parser";
 import {Formatter} from "../Formatter";
 import {ArgvInput, Input} from "../Input";
 import {IOutputWriteOptions, Output, OutputVerbosity, StdioOutput} from "../Output";

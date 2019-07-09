@@ -1,13 +1,18 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build"
-    },
+    "extends": "../../tsconfig.base.json",
     "include": [
         "src"
     ],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/shared-store.tsbuildinfo",
+        "declarationDir": "build/types"
+    },
     "references": [
-        {"path": "../common"}
+        {
+            "path": "../common"
+        }
     ]
 }

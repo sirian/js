@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "lib": [
+            "esnext"
+        ],
+        "declaration": true,
+        "composite": true,
+        "incremental": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noFallthroughCasesInSwitch": true,
+        "moduleResolution": "node",
+        "baseUrl": "./",
+        "paths": {
+            "@sirian/*": [
+                "packages/*/src"
+            ]
+        },
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "newLine": "LF",
+        "resolveJsonModule": true,
+        "inlineSourceMap": true,
+        "inlineSources": false,
+        "experimentalDecorators": true
+    }
+}

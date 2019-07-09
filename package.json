@@ -20,15 +20,18 @@
         "ts-jest": "^24.0.2",
         "ts-node": "^8.3.0",
         "tslint": "^5.18.0",
-        "typescript": "^3.5.2"
+        "typescript": "^3.5.3"
     },
     "scripts": {
         "bootstrap": "lerna bootstrap",
-        "ci:build": "yarn clean && yarn lint && yarn build && yarn test",
+        "ci:build": "yarn clean && yarn lint && yarn build:cjs && yarn build:esm && yarn test",
         "clean": "yarn build:clean",
+        "build:prepare": "ts-node scripts/prebuild.ts",
+        "build:esm": "yarn build:prepare esm && yarn build",
+        "build:cjs": "yarn build:prepare cjs && yarn build",
         "build": "tsc -b packages/*",
-        "build:clean": "tsc -b packages/* --clean",
-        "build:watch": "tsc -b packages/* --watch",
+        "build:clean": "yarn build --clean",
+        "build:watch": "yarn build --watch",
         "lint": "yarn tslint:lint",
         "lint:fix": "yarn tslint:fix",
         "tslint:lint": "tslint 'packages/*/{src,tests,example}/**/*'",

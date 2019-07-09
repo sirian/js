@@ -1,13 +1,25 @@
 {
-    "extends": "../../tsconfig.json",
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build",
-        "lib": ["esnext", "dom"]
+        "outDir": "build/cjs",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/process.tsbuildinfo",
+        "declarationDir": "build/types"
     },
-    "include": ["src"],
     "references": [
-        {"path": "../disposer"},
-        {"path": "../ts-extra-types"}
+        {
+            "path": "../disposer"
+        },
+        {
+            "path": "../ts-extra-types"
+        }
     ]
 }
