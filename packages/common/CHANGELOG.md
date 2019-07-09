@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.40.4](https://github.com/sirian/js/compare/@sirian/common@4.40.3...@sirian/common@4.40.4) (2019-07-09)
+
+
+### Bug Fixes
+
+* added 'type: module' ([b14d846](https://github.com/sirian/js/commit/b14d846))
+
+
+
+
+
 ## [4.40.3](https://github.com/sirian/js/compare/@sirian/common@4.40.2...@sirian/common@4.40.3) (2019-07-08)
 
 **Note:** Version bump only for package @sirian/common

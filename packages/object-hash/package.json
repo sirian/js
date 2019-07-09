@@ -2,7 +2,7 @@
     "name": "@sirian/object-hash",
     "type": "module",
     "description": "",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,8 +16,8 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.40.3",
-        "@sirian/shared-store": "^1.0.8"
+        "@sirian/common": "^4.40.4",
+        "@sirian/shared-store": "^1.0.9"
     },
     "scripts": {},
     "publishConfig": {

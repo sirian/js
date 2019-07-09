@@ -2,7 +2,7 @@
     "name": "@sirian/ts-extra-types",
     "type": "module",
     "description": "TypeScript extra types",
-    "version": "3.45.2",
+    "version": "3.45.3",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"

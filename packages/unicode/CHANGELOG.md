@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.12](https://github.com/sirian/js/compare/@sirian/unicode@1.0.11...@sirian/unicode@1.0.12) (2019-07-09)
+
+
+### Bug Fixes
+
+* added 'type: module' ([b14d846](https://github.com/sirian/js/commit/b14d846))
+
+
+
+
+
 ## [1.0.11](https://github.com/sirian/js/compare/@sirian/unicode@1.0.10...@sirian/unicode@1.0.11) (2019-07-08)
 
 **Note:** Version bump only for package @sirian/unicode

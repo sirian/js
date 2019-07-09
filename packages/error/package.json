@@ -2,7 +2,7 @@
     "name": "@sirian/error",
     "type": "module",
     "description": "",
-    "version": "2.0.17",
+    "version": "2.0.18",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"

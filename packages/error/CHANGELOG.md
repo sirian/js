@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.18](https://github.com/sirian/js/compare/@sirian/error@2.0.17...@sirian/error@2.0.18) (2019-07-09)
+
+
+### Bug Fixes
+
+* added 'type: module' ([b14d846](https://github.com/sirian/js/commit/b14d846))
+
+
+
+
+
 ## [2.0.17](https://github.com/sirian/js/compare/@sirian/error@2.0.16...@sirian/error@2.0.17) (2019-07-08)
 
 **Note:** Version bump only for package @sirian/error

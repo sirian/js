@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.17](https://github.com/sirian/js/compare/@sirian/disposer@1.5.16...@sirian/disposer@1.5.17) (2019-07-09)
+
+
+### Bug Fixes
+
+* added 'type: module' ([b14d846](https://github.com/sirian/js/commit/b14d846))
+
+
+
+
+
 ## [1.5.16](https://github.com/sirian/js/compare/@sirian/disposer@1.5.15...@sirian/disposer@1.5.16) (2019-07-08)
 
 **Note:** Version bump only for package @sirian/disposer

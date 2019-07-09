@@ -2,7 +2,7 @@
     "name": "@sirian/datetime",
     "type": "module",
     "description": "",
-    "version": "3.3.17",
+    "version": "3.3.18",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,8 +16,8 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.40.3",
-        "@sirian/ts-extra-types": "^3.45.2"
+        "@sirian/common": "^4.40.4",
+        "@sirian/ts-extra-types": "^3.45.3"
     },
     "scripts": {},
     "publishConfig": {

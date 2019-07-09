@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.11.14](https://github.com/sirian/js/compare/@sirian/iterator@1.11.13...@sirian/iterator@1.11.14) (2019-07-09)
+
+
+### Bug Fixes
+
+* added 'type: module' ([b14d846](https://github.com/sirian/js/commit/b14d846))
+
+
+
+
+
 ## [1.11.13](https://github.com/sirian/js/compare/@sirian/iterator@1.11.12...@sirian/iterator@1.11.13) (2019-07-08)
 
 **Note:** Version bump only for package @sirian/iterator

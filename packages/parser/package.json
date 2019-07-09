@@ -2,7 +2,7 @@
     "name": "@sirian/parser",
     "type": "module",
     "description": "",
-    "version": "1.2.12",
+    "version": "1.2.13",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -20,8 +20,8 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^4.40.3",
-        "@sirian/error": "^2.0.17",
-        "@sirian/ts-extra-types": "^3.45.2"
+        "@sirian/common": "^4.40.4",
+        "@sirian/error": "^2.0.18",
+        "@sirian/ts-extra-types": "^3.45.3"
     }
 }

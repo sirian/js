@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.45.3](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.45.2...@sirian/ts-extra-types@3.45.3) (2019-07-09)
+
+
+### Bug Fixes
+
+* added 'type: module' ([b14d846](https://github.com/sirian/js/commit/b14d846))
+
+
+
+
+
 ## [3.45.2](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.45.1...@sirian/ts-extra-types@3.45.2) (2019-07-08)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

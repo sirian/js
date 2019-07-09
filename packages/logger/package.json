@@ -2,7 +2,7 @@
     "name": "@sirian/logger",
     "type": "module",
     "description": "",
-    "version": "1.3.7",
+    "version": "1.3.8",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,9 +16,9 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.40.3",
-        "@sirian/datetime": "^3.3.17",
-        "@sirian/property-access": "^1.1.7",
+        "@sirian/common": "^4.40.4",
+        "@sirian/datetime": "^3.3.18",
+        "@sirian/property-access": "^1.1.8",
         "pretty-format": "^24.8.0"
     },
     "devDependencies": {
