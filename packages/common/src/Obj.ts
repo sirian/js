@@ -1,6 +1,5 @@
 import {
     FromEntries,
-    ObjectZip,
     ObjEntryOf,
     ObjKeyOf,
     ObjValueOf,
@@ -84,7 +83,7 @@ export const Obj = new class {
         throw new Error(`Could not convert ${Obj.getStringTag(target)} to primitive value`);
     }
 
-    public fromEntries<E extends Array<[keyof any[], any]>>(entries: E): FromEntries<E> {
+    public fromEntries<E extends [keyof any, any]>(entries: E[]): FromEntries<E> {
         return entries.reduce((obj, [key, value]) => {
             obj[key] = value;
             return obj;
@@ -100,12 +99,12 @@ export const Obj = new class {
         return true;
     }
 
-    public zip<K extends Array<keyof any>, V extends any[]>(keys: K, values: V): ObjectZip<K, V> {
-        return keys.reduce((obj, key, index) => {
-            obj[key] = values[index];
-            return obj;
-        }, {} as any);
-    }
+    // public zip<K extends Array<keyof any>, V extends any[]>(keys: K, values: V): ObjectZip<K, V> {
+    //     return keys.reduce((obj, key, index) => {
+    //         obj[key] = values[index];
+    //         return obj;
+    //     }, {} as any);
+    // }
 
     public pick<T, K extends keyof T>(target: T, keys: K[]): Pick<T, K> {
         return keys.reduce((obj, key) => {

@@ -12,10 +12,6 @@ export const Ref = new class {
         return Reflect.setPrototypeOf(target, proto);
     }
 
-    public ownEnumerablePropertyNames<T>(target: T) {
-        return Obj.keys(target);
-    }
-
     public ownPropertyNames<T>(target: T) {
         return Object.getOwnPropertyNames(target) as Array<keyof T>;
     }

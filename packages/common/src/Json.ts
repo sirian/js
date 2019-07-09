@@ -1,5 +1,7 @@
-import {JSONValue} from "@sirian/ts-extra-types";
+import {JSONArray, JSONObject, JSONPrimitive} from "@sirian/ts-extra-types";
 import {Var} from "./Var";
+
+type JSONValue = JSONPrimitive | JSONObject | JSONArray;
 
 export const Json = new class {
     public stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
@@ -14,7 +16,7 @@ export const Json = new class {
         return JSON.stringify(value, ...args);
     }
 
-    public parse(text?: string | null, reviver?: (key: any, value: any) => any): JSONValue | undefined {
+    public parse(text?: string | null, fn?: (key: any, value: any) => any): JSONValue | undefined {
         if (null === text) {
             return null;
         }
@@ -23,7 +25,7 @@ export const Json = new class {
             return undefined;
         }
 
-        return JSON.parse(text!, reviver);
+        return JSON.parse(text!, fn);
     }
 
     public stripComments(value: string) {

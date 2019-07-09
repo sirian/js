@@ -1,9 +1,8 @@
 import {
+    AnyFunc,
     Ctor,
     ExtractByTypeName,
     ExtractByXTypeName,
-    ExtractFunction,
-    ExtractObject,
     Primitive,
     TypeName,
     XTypeName,
@@ -89,7 +88,7 @@ export const Var = new class {
         return "symbol" === typeof value;
     }
 
-    public isFunction<T extends any>(value: T): value is ExtractFunction<T> {
+    public isFunction<T extends any>(value: T): value is Extract<T, AnyFunc> {
         return "function" === typeof value;
     }
 
@@ -117,7 +116,7 @@ export const Var = new class {
         return !a;
     }
 
-    public isObject<T>(value: T): value is ExtractObject<T> {
+    public isObject<T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> {
         return null !== value && "object" === typeof value;
     }
 
