@@ -1,5 +1,6 @@
 {
     "name": "@sirian/expression-language",
+    "type": "module",
     "description": "",
     "version": "1.0.15",
     "author": {

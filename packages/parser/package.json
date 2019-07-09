@@ -1,5 +1,6 @@
 {
     "name": "@sirian/parser",
+    "type": "module",
     "description": "",
     "version": "1.2.12",
     "author": {

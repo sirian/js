@@ -1,5 +1,6 @@
 {
     "name": "@sirian/ts-extra-types",
+    "type": "module",
     "description": "TypeScript extra types",
     "version": "3.45.2",
     "author": {

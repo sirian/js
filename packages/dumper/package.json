@@ -1,5 +1,6 @@
 {
     "name": "@sirian/dumper",
+    "type": "module",
     "description": "",
     "version": "0.1.4",
     "author": {

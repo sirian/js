@@ -1,5 +1,6 @@
 {
     "name": "@sirian/disposer",
+    "type": "module",
     "description": "",
     "version": "1.5.16",
     "author": {

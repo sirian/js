@@ -1,5 +1,6 @@
 {
     "name": "@sirian/iterator",
+    "type": "module",
     "description": "",
     "version": "1.11.13",
     "author": {

@@ -1,5 +1,6 @@
 {
     "name": "@sirian/unicode",
+    "type": "module",
     "description": "",
     "version": "1.0.11",
     "author": {
