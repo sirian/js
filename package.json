@@ -37,9 +37,9 @@
         "tslint:lint": "tslint 'packages/*/{src,tests,example}/**/*'",
         "tslint:fix": "yarn tslint:lint --fix",
         "test": "yarn test:jest && lerna run test --parallel",
-        "test:clean": "jest --clearCache",
+        "test:clean": "yarn test:jest --clearCache",
         "test:jest": "jest --config jest.config.json",
-        "test:watch": "jest --config jest.config.json --watch",
+        "test:watch": "yarn test:jest --watch",
         "lerna:publish": "lerna publish --from-git --yes --conventional-commits --yes"
     },
     "husky": {

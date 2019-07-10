@@ -14,6 +14,7 @@
                 "packages/expression-language/package.json",
                 "packages/iterator/package.json",
                 "packages/logger/package.json",
+                "packages/merge/package.json",
                 "packages/mixin/package.json",
                 "packages/node-console/package.json",
                 "packages/node-filesystem/package.json",

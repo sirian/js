@@ -1,0 +1,27 @@
+{
+    "name": "@sirian/merge",
+    "description": "",
+    "version": "1.0.0",
+    "author": {
+        "name": "Vasiliy Khayrulin",
+        "email": "sirianru@gmail.com"
+    },
+    "repository": "https://github.com/sirian/js",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/merge",
+    "license": "MIT",
+    "files": [
+        "build/"
+    ],
+    "main": "build/cjs/index.js",
+    "module": "build/esm/index.js",
+    "types": "build/types/index.d.ts",
+    "scripts": {},
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@sirian/clone": "^1.4.2",
+        "@sirian/common": "^4.41.1",
+        "@sirian/ts-extra-types": "^3.46.1"
+    }
+}
