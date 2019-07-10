@@ -19,12 +19,13 @@
         "noUnusedLocals": true,
         "noFallthroughCasesInSwitch": true,
         "moduleResolution": "node",
-        "baseUrl": "./",
+        "baseUrl": ".",
         "paths": {
             "@sirian/*": [
                 "packages/*/src"
             ]
         },
+        "types": [],
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "newLine": "LF",
@@ -32,5 +33,7 @@
         "inlineSourceMap": true,
         "inlineSources": false,
         "experimentalDecorators": true
-    }
+    },
+    "include": ["packages"],
+    "exclude": ["node_modules"]
 }

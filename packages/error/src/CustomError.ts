@@ -37,8 +37,8 @@ export class CustomError extends Error {
     }
 
     public static captureStackTrace(target: Partial<Error>, ctor?: Function) {
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(target, ctor);
+        if ("function" === typeof (Error as any).captureStackTrace) {
+            (Error as any).captureStackTrace(target, ctor);
             return;
         }
 

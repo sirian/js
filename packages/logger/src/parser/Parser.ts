@@ -1,4 +1,5 @@
 import {Reader} from "./Reader";
+import {Token} from "./token";
 import {EscapeTokenizer, MacroTokenizer, PlaceholderTokenizer, TagTokenizer, Tokenizer} from "./tokenizer";
 
 export class Parser {
@@ -13,7 +14,7 @@ export class Parser {
         ];
     }
 
-    public parse(line: string) {
+    public parse(line: string): Token[] {
         const reader = new Reader(line);
 
         while (true) {
