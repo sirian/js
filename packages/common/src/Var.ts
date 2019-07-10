@@ -13,21 +13,21 @@ import {Obj} from "./Obj";
 import {Ref} from "./Ref";
 import {Str} from "./Str";
 
-export const Var = new class {
-    public isNull(value: any): value is null {
+export class Var {
+    public static isNull(value: any): value is null {
         return null === value;
     }
 
-    public isUndefined(value: any): value is undefined {
+    public static isUndefined(value: any): value is undefined {
         return undefined === value;
     }
 
-    public isNullable(value: any): value is null | undefined {
+    public static isNullable(value: any): value is null | undefined {
         return null === value || undefined === value;
     }
 
-    public getXType<T>(value: T): XTypeNameOf<T>;
-    public getXType(value: any) {
+    public static getXType<T>(value: T): XTypeNameOf<T>;
+    public static getXType(value: any) {
         if (null === value) {
             return "null";
         }
@@ -38,8 +38,8 @@ export const Var = new class {
         return typeof value;
     }
 
-    public isXType<V, T extends XTypeName>(value: V, ...types: T[] | [T[]]): value is ExtractByXTypeName<V, T>;
-    public isXType(value: any, types: XTypeName | XTypeName[], ...rest: XTypeName[]) {
+    public static isXType<V, T extends XTypeName>(value: V, ...types: T[] | [T[]]): value is ExtractByXTypeName<V, T>;
+    public static isXType(value: any, types: XTypeName | XTypeName[], ...rest: XTypeName[]) {
         const type = Var.getXType(value);
 
         if (types === type || -1 !== rest.indexOf(type)) {
@@ -49,8 +49,8 @@ export const Var = new class {
         return Var.isArray(types) && -1 !== types.indexOf(type);
     }
 
-    public isType<V, T extends TypeName>(value: V, ...types: T[] | [T[]]): value is ExtractByTypeName<V, T>;
-    public isType(value: any, types: TypeName | TypeName[], ...rest: TypeName[]) {
+    public static isType<V, T extends TypeName>(value: V, ...types: T[] | [T[]]): value is ExtractByTypeName<V, T>;
+    public static isType(value: any, types: TypeName | TypeName[], ...rest: TypeName[]) {
         const type = typeof value;
 
         if (types === type || -1 !== rest.indexOf(type)) {
@@ -60,39 +60,39 @@ export const Var = new class {
         return Var.isArray(types) && -1 !== types.indexOf(type);
     }
 
-    public isNumber(value: any): value is number {
+    public static isNumber(value: any): value is number {
         return "number" === typeof value;
     }
 
-    public isBigInt(value: any): value is bigint {
+    public static isBigInt(value: any): value is bigint {
         return "bigint" === typeof value;
     }
 
-    public isBoolean(value: any): value is boolean {
+    public static isBoolean(value: any): value is boolean {
         return "boolean" === typeof value;
     }
 
-    public isString(value: any): value is string {
+    public static isString(value: any): value is string {
         return "string" === typeof value;
     }
 
-    public isPropertyKey(value: any): value is string | number | symbol {
+    public static isPropertyKey(value: any): value is string | number | symbol {
         return Var.isType(value, "string", "number", "symbol");
     }
 
-    public isPrimitive<T extends any>(value: T): value is Extract<T, Primitive> {
+    public static isPrimitive<T extends any>(value: T): value is Extract<T, Primitive> {
         return !Var.isObjectOrFunction(value);
     }
 
-    public isSymbol(value: any): value is symbol {
+    public static isSymbol(value: any): value is symbol {
         return "symbol" === typeof value;
     }
 
-    public isFunction<T extends any>(value: T): value is Extract<T, AnyFunc> {
+    public static isFunction<T extends any>(value: T): value is Extract<T, AnyFunc> {
         return "function" === typeof value;
     }
 
-    public isConstructor(value: any) {
+    public static isConstructor(value: any) {
         if (!Var.isFunction(value)) {
             return false;
         }
@@ -108,39 +108,39 @@ export const Var = new class {
         }
     }
 
-    public isTruthy(a: any) {
+    public static isTruthy(a: any) {
         return !!a;
     }
 
-    public isFalsy(a: any) {
+    public static isFalsy(a: any) {
         return !a;
     }
 
-    public isObject<T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> {
+    public static isObject<T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> {
         return null !== value && "object" === typeof value;
     }
 
-    public isNumeric(value: any): value is string | number {
+    public static isNumeric(value: any): value is string | number {
         return Var.isType(value, "number", "string") && !Var.isEqualNaN(value - parseFloat(value));
     }
 
-    public isPromiseLike(value: any): value is PromiseLike<any> {
+    public static isPromiseLike(value: any): value is PromiseLike<any> {
         return Var.isObjectOrFunction(value) && Ref.hasMethod(value, "then");
     }
 
-    public isObjectOrFunction(value: any): value is object {
+    public static isObjectOrFunction(value: any): value is object {
         return Var.isObject(value) || Var.isFunction(value);
     }
 
-    public isInstanceOf<C extends Ctor>(obj: any, ctor: C): obj is InstanceType<C> {
+    public static isInstanceOf<C extends Ctor>(obj: any, ctor: C): obj is InstanceType<C> {
         return obj instanceof ctor;
     }
 
-    public isEqualNaN(value: any): value is number {
+    public static isEqualNaN(value: any): value is number {
         return value !== value;
     }
 
-    public isSubclassOf<A, B extends Ctor>(a: A, b: B): a is Extract<A, B> {
+    public static isSubclassOf<A, B extends Ctor>(a: A, b: B): a is Extract<A, B> {
         if (!Var.isFunction(a) || !Var.isFunction(b)) {
             return false;
         }
@@ -148,14 +148,14 @@ export const Var = new class {
         return Var.isInstanceOf(a.prototype, b) || Var.isEqual(a, b);
     }
 
-    public isSameType<T>(x: any, value: T): value is T {
+    public static isSameType<T>(x: any, value: T): value is T {
         if (x === null || value === null) {
             return x === value;
         }
         return typeof x === typeof value;
     }
 
-    public isBetween<T extends string | number>(x: T, min: T, max: T) {
+    public static isBetween<T extends string | number>(x: T, min: T, max: T) {
         if (!Var.isSameType(x, min) || !Var.isSameType(x, max)) {
             return false;
         }
@@ -163,11 +163,11 @@ export const Var = new class {
         return x >= min && x <= max;
     }
 
-    public isArray(value: any): value is any[] {
+    public static isArray(value: any): value is any[] {
         return Array.isArray(value);
     }
 
-    public isArrayLike(value: any): value is ArrayLike<any> {
+    public static isArrayLike(value: any): value is ArrayLike<any> {
         if (Var.isArray(value)) {
             return true;
         }
@@ -185,11 +185,11 @@ export const Var = new class {
         return Num.isInt(length) && length >= 0;
     }
 
-    public isPlain(value: any) {
+    public static isPlain(value: any) {
         return Var.isPlainArray(value) || Var.isPlainObject(value);
     }
 
-    public isPlainArray(value: any): value is any[] {
+    public static isPlainArray(value: any): value is any[] {
         if (!Var.isArray(value)) {
             return false;
         }
@@ -205,11 +205,11 @@ export const Var = new class {
         return !Var.isArray(nextProto);
     }
 
-    public isRegExp(value: any): value is RegExp {
+    public static isRegExp(value: any): value is RegExp {
         return Var.isInstanceOf(value, RegExp);
     }
 
-    public stringify(value: any) {
+    public static stringify(value: any) {
         if (Var.isNullable(value) || Var.isSymbol(value)) {
             return "";
         }
@@ -217,7 +217,7 @@ export const Var = new class {
         return Str.stringify(value);
     }
 
-    public isEqual(x: any, y: any) {
+    public static isEqual(x: any, y: any) {
         if (x === y) {
             return true;
         }
@@ -225,7 +225,7 @@ export const Var = new class {
         return Var.isEqualNaN(x) && Var.isEqualNaN(y);
     }
 
-    public isPlainObject(x: any) {
+    public static isPlainObject(x: any) {
         if (!Var.isObject(x)) {
             return false;
         }
@@ -247,4 +247,4 @@ export const Var = new class {
 
         return !ctor || !Var.isFunction(ctor) || ctor.prototype !== x;
     }
-};
+}

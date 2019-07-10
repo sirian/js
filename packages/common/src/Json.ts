@@ -1,13 +1,11 @@
-import {JSONArray, JSONObject, JSONPrimitive} from "@sirian/ts-extra-types";
+import {JSONValue} from "@sirian/ts-extra-types";
 import {Var} from "./Var";
 
-type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+export class Json {
+    public static stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
+    public static stringify(value: any, replacer?: Array<number | string> | null, space?: string | number): string;
 
-export const Json = new class {
-    public stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
-    public stringify(value: any, replacer?: Array<number | string> | null, space?: string | number): string;
-
-    public stringify(value: any, ...args: any[]) {
+    public static stringify(value: any, ...args: any[]) {
         if (undefined === value) {
             value = null;
         }
@@ -16,7 +14,7 @@ export const Json = new class {
         return JSON.stringify(value, ...args);
     }
 
-    public parse(text?: string | null, fn?: (key: any, value: any) => any): JSONValue | undefined {
+    public static parse(text?: string | null, fn?: (key: any, value: any) => any): JSONValue | undefined {
         if (null === text) {
             return null;
         }
@@ -28,7 +26,7 @@ export const Json = new class {
         return JSON.parse(text!, fn);
     }
 
-    public stripComments(value: string) {
+    public static stripComments(value: string) {
         value = Var.stringify(value);
 
         const tokenizer = /"|(?:\/\*)|(?:\*\/)|(?:\/\/)|\n|\r/g;
@@ -81,4 +79,4 @@ export const Json = new class {
         result.push(value.substring(pos));
         return result.join("");
     }
-};
+}

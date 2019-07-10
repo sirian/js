@@ -8,11 +8,11 @@ export interface RgxInit {
     addFlags: string | string[];
 }
 
-export const Rgx = new class {
-    public create(pattern: string | RegExp, options: Partial<RgxInit>): RegExp;
-    public create(pattern: string | RegExp, flags?: string): RegExp;
+export class Rgx {
+    public static create(pattern: string | RegExp, options: Partial<RgxInit>): RegExp;
+    public static create(pattern: string | RegExp, flags?: string): RegExp;
 
-    public create(pattern: string, options: string | Partial<RgxInit> = "") {
+    public static create(pattern: string, options: string | Partial<RgxInit> = "") {
         if (Var.isString(options)) {
             return Rgx.create(pattern, {flags: options});
         }
@@ -36,11 +36,11 @@ export const Rgx = new class {
         return new RegExp(source, resFlags.toArray().join(""));
     }
 
-    public escape(str: string) {
+    public static escape(str: string) {
         return Var.stringify(str).replace(escapeRe, "\\$&"); // $& means the whole matched string
     }
 
-    public* matchAll(subject: string, pattern: RegExp | string) {
+    public static* matchAll(subject: string, pattern: RegExp | string) {
         const regex = Rgx.create(pattern, {addFlags: "g"});
         const str = Var.stringify(subject);
 
@@ -60,4 +60,4 @@ export const Rgx = new class {
             lastIndex = regex.lastIndex;
         }
     }
-};
+}

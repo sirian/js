@@ -2,16 +2,16 @@ import {Var} from "./Var";
 
 export type ArrBufTarget = ArrayBufferLike | ArrayBufferView;
 
-export const ArrBuf = new class {
-    public isBuffer(value: any): value is ArrayBuffer {
+export class ArrBuf {
+    public static isBuffer(value: any): value is ArrayBuffer {
         return Var.isInstanceOf(value, ArrayBuffer);
     }
 
-    public isView(arg: any): arg is ArrayBufferView {
+    public static isView(arg: any): arg is ArrayBufferView {
         return ArrayBuffer.isView(arg);
     }
 
-    public getBuffer(arg: ArrBufTarget) {
+    public static getBuffer(arg: ArrBufTarget) {
         if (ArrBuf.isBuffer(arg)) {
             return arg;
         }
@@ -23,7 +23,7 @@ export const ArrBuf = new class {
         throw new Error("Expected ArrayBuffer or DataView");
     }
 
-    public isEqual(t1: ArrBufTarget, t2: ArrBufTarget) {
+    public static isEqual(t1: ArrBufTarget, t2: ArrBufTarget) {
         const buf1 = ArrBuf.getBuffer(t1);
         const buf2 = ArrBuf.getBuffer(t2);
 
@@ -47,13 +47,13 @@ export const ArrBuf = new class {
         return true;
     }
 
-    public set(from: ArrBufTarget, to: ArrBufTarget, offset: number = 0) {
+    public static set(from: ArrBufTarget, to: ArrBufTarget, offset: number = 0) {
         const sourceView = new Uint8Array(ArrBuf.getBuffer(from));
         const destView = new Uint8Array(ArrBuf.getBuffer(to));
         destView.set(sourceView, offset);
     }
 
-    public transfer(source: ArrBufTarget, length: number) {
+    public static transfer(source: ArrBufTarget, length: number) {
         let buf = ArrBuf.getBuffer(source);
 
         if (length < buf.byteLength) {
@@ -67,9 +67,9 @@ export const ArrBuf = new class {
         return dest;
     }
 
-    public align(source: ArrBufTarget, bytesPerElement: number) {
+    public static align(source: ArrBufTarget, bytesPerElement: number) {
         const elements = Math.ceil(source.byteLength / bytesPerElement);
 
         return ArrBuf.transfer(source, elements * bytesPerElement);
     }
-};
+}
