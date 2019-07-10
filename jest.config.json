@@ -1,4 +1,5 @@
 {
+    "cacheDirectory": "tmp/jest-cache",
     "roots": [
         "<rootDir>/packages"
     ],
