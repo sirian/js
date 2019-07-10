@@ -3,12 +3,9 @@ const Buffer = buf.Buffer;
 delete buf.Buffer;
 
 const engines = {
-    Base64: require('../build').Base64,
+    Base64: require('../build/cjs').Base64,
     "js-base64": require('js-base64').Base64,
 };
-
-const Base64 = require('../build').Base64;
-const JsBase64 = require('js-base64').Base64;
 
 // tslint:disable:no-console max-line-length
 
