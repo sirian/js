@@ -11,14 +11,14 @@ export const enum StrSide {
 
 export type ReplaceCallback = (substring: string, ...args: any[]) => string;
 
-export const Str = new class {
-    public stringify(value: any) {
+export class Str {
+    public static stringify(value: any) {
         // String(Symbol.iterator) === 'Symbol(Symbol.iterator)'
         // ("" + Symbol.iterator) throws Error
         return String(value);
     }
 
-    public wrap(value: any, wrapChar: string, escapeChar: string = "\\") {
+    public static wrap(value: any, wrapChar: string, escapeChar: string = "\\") {
         const escapeCharRgx = Rgx.create(Rgx.escape(escapeChar), "g");
         const wrapCharRgx = Rgx.create(Rgx.escape(wrapChar), "g");
 
@@ -29,15 +29,15 @@ export const Str = new class {
         return wrapChar + escaped + wrapChar;
     }
 
-    public padRight(str: any, maxLength: number, chars: string = " ") {
+    public static padRight(str: any, maxLength: number, chars: string = " ") {
         return Str.pad(str, maxLength, chars, StrSide.RIGHT);
     }
 
-    public padLeft(str: any, maxLength: number, chars: string = " ") {
+    public static padLeft(str: any, maxLength: number, chars: string = " ") {
         return Str.pad(str, maxLength, chars, StrSide.LEFT);
     }
 
-    public pad(str: any, maxLength: number, chars: string = " ", side: StrSide = StrSide.LEFT) {
+    public static pad(str: any, maxLength: number, chars: string = " ", side: StrSide = StrSide.LEFT) {
         str = Var.stringify(str);
         const length = str.length;
         const padLength = maxLength - length;
@@ -55,7 +55,7 @@ export const Str = new class {
         }
     }
 
-    public repeat(chars: string, maxLength: number) {
+    public static repeat(chars: string, maxLength: number) {
         chars = Var.stringify(chars);
 
         if (maxLength <= 0 || !chars) {
@@ -67,15 +67,15 @@ export const Str = new class {
             .substr(0, maxLength);
     }
 
-    public trimLeft(value: any, mask?: string) {
+    public static trimLeft(value: any, mask?: string) {
         return Str.trim(value, mask, StrSide.LEFT);
     }
 
-    public trimRight(value: any, mask?: string) {
+    public static trimRight(value: any, mask?: string) {
         return Str.trim(value, mask, StrSide.RIGHT);
     }
 
-    public trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
+    public static trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
         const str = Var.stringify(value);
 
         const maskChars = Unicode.from(mask).symbols;
@@ -101,19 +101,19 @@ export const Str = new class {
         return str.replace(re, "");
     }
 
-    public camelCase(value: any) {
+    public static camelCase(value: any) {
         const re = /[-_\s]+(.)?/g;
         return Str.trim(value).replace(re, (s, c) => c ? c.toUpperCase() : "");
     }
 
-    public dashCase(value: any) {
+    public static dashCase(value: any) {
         return Str.trim(value)
             .replace(/([A-Z])/g, "-$1")
             .replace(/[-_\s]+/g, "-")
             .toLowerCase();
     }
 
-    public caseFirst(value: any, type: "lower" | "upper", locale: boolean = false) {
+    public static caseFirst(value: any, type: "lower" | "upper", locale: boolean = false) {
         const str = Var.stringify(value);
 
         if (!str) {
@@ -132,15 +132,15 @@ export const Str = new class {
         return chars.join("");
     }
 
-    public lowerFirst(value: any, locale: boolean = false) {
+    public static lowerFirst(value: any, locale: boolean = false) {
         return Str.caseFirst(value, "lower", locale);
     }
 
-    public upperFirst(value: any, locale: boolean = false) {
+    public static upperFirst(value: any, locale: boolean = false) {
         return Str.caseFirst(value, "upper", locale);
     }
 
-    public replace(value: any, pairs: Record<string, string | ReplaceCallback>) {
+    public static replace(value: any, pairs: Record<string, string | ReplaceCallback>) {
         const str = Var.stringify(value);
 
         if (!str) {
@@ -162,7 +162,7 @@ export const Str = new class {
         });
     }
 
-    public substringCount(str: string, substr: string) {
+    public static substringCount(str: string, substr: string) {
         str = Var.stringify(str);
         substr = Var.stringify(substr);
 
@@ -181,7 +181,7 @@ export const Str = new class {
         }
     }
 
-    public split(value: string, re: string | RegExp, limit: number = Number.MAX_SAFE_INTEGER) {
+    public static split(value: string, re: string | RegExp, limit: number = Number.MAX_SAFE_INTEGER) {
         const str = Var.stringify(value);
 
         if (limit <= 0) {
@@ -212,4 +212,4 @@ export const Str = new class {
 
         return res;
     }
-};
+}

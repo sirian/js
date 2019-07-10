@@ -1,6 +1,6 @@
 import {AssertExact, Ensure} from "../../src";
 
-type Tests = [
+type Test = [
     AssertExact<string, Ensure<string, "length">>,
 
     AssertExact<{ y: boolean | number | undefined }, Ensure<{ y?: boolean | number }, "y">>,

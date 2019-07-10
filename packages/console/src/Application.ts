@@ -1,6 +1,6 @@
 import {Rgx, sprintf, Str, Var, XSet} from "@sirian/common";
 import {EventDispatcher} from "@sirian/event-dispatcher";
-import {HelpCommand, ICommandConstructor, ListCommand} from "./Command";
+import {CommandDefinition, HelpCommand, ICommandConstructor, ListCommand} from "./Command";
 import {ICommandLoader} from "./Command/ICommandLoader";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
 import {ErrorEvent} from "./Event";
@@ -132,7 +132,7 @@ export class Application {
         return this;
     }
 
-    public add(factory: ICommandConstructor) {
+    public add(factory: ICommandConstructor): CommandDefinition {
         const definition = factory.getDefinition();
 
         const name = definition.getName();
