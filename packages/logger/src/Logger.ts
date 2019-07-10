@@ -2,6 +2,7 @@ import {AbstractLogger, LogLevel} from "./AbstractLogger";
 import {ILogHandler} from "./handlers";
 import {LogRecord} from "./LogRecord";
 import {ILogProcessor} from "./processors";
+import {IProcessor} from "./processors/IProcessor";
 
 export interface LoggerInit {
     name?: string;
@@ -48,7 +49,7 @@ export class Logger extends AbstractLogger {
         return this;
     }
 
-    public popProcessor() {
+    public popProcessor(): IProcessor<LogRecord> | undefined {
         return this.processors.shift();
     }
 

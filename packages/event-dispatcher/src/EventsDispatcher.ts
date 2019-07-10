@@ -3,7 +3,7 @@ import {Disposer} from "@sirian/disposer";
 import {XPromise} from "@sirian/xpromise";
 import {Event} from "./Event";
 import {EventDispatcher} from "./EventDispatcher";
-import {TEventListener} from "./EventListener";
+import {EventListener, TEventListener} from "./EventListener";
 
 export class EventsDispatcher<T extends Record<string, Event> = Record<string, Event>> {
     protected dispatchers: XMap<keyof T, EventDispatcher>;
@@ -23,7 +23,7 @@ export class EventsDispatcher<T extends Record<string, Event> = Record<string, E
         return event;
     }
 
-    public dispatch<K extends keyof T>(eventName: K | K[], event: T[K]) {
+    public dispatch<K extends keyof T>(eventName: K | K[], event: T[K]): XPromise<T[K]> {
         const names = Arr.cast(eventName);
 
         let result: XPromise<T[K]> = XPromise.resolve();
@@ -39,7 +39,7 @@ export class EventsDispatcher<T extends Record<string, Event> = Record<string, E
         return result;
     }
 
-    public getListeners<K extends keyof T>(eventName: K) {
+    public getListeners<K extends keyof T>(eventName: K): Array<EventListener<T[K]>> {
         const dispatcher = this.getDispatcher(eventName);
 
         if (!dispatcher) {

@@ -68,7 +68,7 @@ export class LexerTokenizer<T extends TokenTypes = TokenTypes> {
         }
     }
 
-    protected handleNext(reader: Reader, stream: TokenStream<T>) {
+    protected handleNext(reader: Reader, stream: TokenStream<T>): ILexer<T> | undefined {
         for (const lexer of this.lexers) {
             if (lexer.handle(reader, stream)) {
                 return lexer;

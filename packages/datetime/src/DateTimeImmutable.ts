@@ -1,6 +1,7 @@
 import {Var} from "@sirian/common";
 import {DateTimeDiff} from "./DateTimeDiff";
 import {DateTimeFormatter} from "./DateTimeFormatter";
+import {DateTimeInterval} from "./DateTimeInterval";
 import {DateTimeParser} from "./DateTimeParser";
 
 export interface TimeParts {
@@ -127,7 +128,7 @@ export class DateTimeImmutable implements IDateTime {
         return DateTimeImmutable.daysInMonth(this.year, this.month);
     }
 
-    public diff(date: DateArg) {
+    public diff(date: DateArg): DateTimeInterval {
         return DateTimeDiff.diff(this, date);
     }
 

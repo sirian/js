@@ -1,3 +1,4 @@
+import {XPromise} from "@sirian/xpromise";
 import {Event} from "./Event";
 import {EventDispatcher} from "./EventDispatcher";
 
@@ -6,7 +7,7 @@ export class SimpleEventDispatcher extends EventDispatcher<Event> {
         return super.dispatchSync(event || new Event());
     }
 
-    public dispatch(event?: Event) {
+    public dispatch(event?: Event): XPromise<Event> {
         return super.dispatch(event || new Event());
     }
 }

@@ -1,3 +1,4 @@
+import {XPromise} from "@sirian/xpromise";
 import {DispatchError} from "./DispatchError";
 import {DispatchQueue} from "./DispatchQueue";
 import {Event} from "./Event";
@@ -18,7 +19,7 @@ export class EventDispatcher<E extends Event = any> extends Listenable<E> {
         return event;
     }
 
-    public dispatch(event: E) {
+    public dispatch(event: E): XPromise<E> {
         return this.doDispatch(event, true);
     }
 

@@ -19,12 +19,12 @@ export class DispatchQueue<E extends Event> {
         this.async = init.async;
     }
 
-    public static dispatch<E extends Event>(init: DispatchQueueInit<E>) {
+    public static dispatch<E extends Event>(init: DispatchQueueInit<E>): XPromise<E> {
         const queue = new DispatchQueue(init);
         return queue.dispatch();
     }
 
-    public dispatch() {
+    public dispatch(): XPromise<E> {
         return XPromise
             .wrap(() => this.dispatchNext())
             .then(() => this.event);

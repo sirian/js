@@ -38,8 +38,4 @@ export class Tokenizer extends LexerTokenizer<TokenTypes> {
 
         return stream;
     }
-
-    protected handleNext(reader: Reader, stream: TokenStream) {
-        return super.handleNext(reader, stream);
-    }
 }
