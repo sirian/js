@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.41.1](https://github.com/sirian/js/compare/@sirian/common@4.41.0...@sirian/common@4.41.1) (2019-07-10)
+
+
+### Bug Fixes
+
+* **common:** revert back to static classes (ts build ugly declarations) ([692c347](https://github.com/sirian/js/commit/692c347))
+* **common:** types ([5ae7a48](https://github.com/sirian/js/commit/5ae7a48))
+
+
+
+
+
 # [4.41.0](https://github.com/sirian/js/compare/@sirian/common@4.40.4...@sirian/common@4.41.0) (2019-07-09)
 
 
