@@ -1,7 +1,7 @@
 {
     "name": "@sirian/logger",
     "description": "",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,8 +17,8 @@
     "types": "build/types/index.d.ts",
     "dependencies": {
         "@sirian/common": "^4.41.1",
-        "@sirian/datetime": "^3.4.1",
-        "@sirian/property-access": "^1.2.1",
+        "@sirian/datetime": "^3.4.2",
+        "@sirian/property-access": "^1.2.2",
         "pretty-format": "^24.8.0"
     },
     "devDependencies": {
