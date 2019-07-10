@@ -25,6 +25,7 @@
                 "packages/*/src"
             ]
         },
+        "skipLibCheck": true,
         "types": [],
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
