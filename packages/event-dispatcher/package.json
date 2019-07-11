@@ -1,7 +1,7 @@
 {
     "name": "@sirian/event-dispatcher",
     "description": "",
-    "version": "4.3.2",
+    "version": "4.3.3",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -20,7 +20,7 @@
         "@sirian/disposer": "^1.6.1",
         "@sirian/error": "^2.1.1",
         "@sirian/ts-extra-types": "^3.46.1",
-        "@sirian/xpromise": "^2.3.0"
+        "@sirian/xpromise": "^2.3.1"
     },
     "scripts": {},
     "publishConfig": {
