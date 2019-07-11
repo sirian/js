@@ -1,26 +1,69 @@
 import {Cloner} from "@sirian/clone";
-import {MergeContext} from "./MergeContext";
+import {Obj, Ref, Var} from "@sirian/common";
 
 export interface MergeOptions {
     clone?: boolean;
-    deep?: boolean;
+    maxDepth?: number;
     allowAdd?: boolean;
     cloner?: Cloner;
 }
 
 export class Merge {
-    public static merge<T extends object[], O extends MergeOptions>(objects: T, options?: O) {
+    public static merge<T extends object[], O extends MergeOptions>(objects: T, opts?: O) {
         if (!objects.length) {
             return;
         }
 
+        const options = {
+            clone: true,
+            maxDepth: 1 / 0,
+            allowAdd: true,
+            cloner: Cloner.defaultCloner,
+            ...opts,
+        };
+
         let target: any = objects.shift();
-        objects.unshift({});
 
         for (const source of objects) {
-            const ctx = new MergeContext(target, source, {options});
+            target = this.doMerge(target, source, options);
+        }
 
-            target = ctx.merge();
+        return target;
+    }
+
+    protected static doMerge(target: any, source: any, options: Required<MergeOptions>) {
+        const {clone, cloner, maxDepth, allowAdd} = options;
+
+        if (!Var.isPlainObject(source)) {
+            if (clone) {
+                source = cloner.clone(source);
+            }
+            return source;
+        }
+
+        if (clone) {
+            target = cloner.clone(target);
+        }
+
+        const keys = Obj.keys(source);
+
+        for (const key of keys) {
+            if (!allowAdd && !Ref.hasOwn(target, key)) {
+                continue;
+            }
+
+            const value = target[key];
+            const newValue = source[key];
+
+            if (maxDepth > 0 && Var.isPlainObject(value) && Var.isPlainObject(newValue)) {
+                const childOptions = {...options};
+                childOptions.maxDepth--;
+
+                target[key] = this.doMerge(value, newValue, childOptions);
+                continue;
+            }
+
+            target[key] = newValue;
         }
 
         return target;

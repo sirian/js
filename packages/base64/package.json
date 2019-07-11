@@ -15,7 +15,9 @@
     "main": "build/cjs/index.js",
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
-    "scripts": {},
+    "scripts": {
+        "benchmark": "ts-node --skip-project benchmark/index.ts"
+    },
     "publishConfig": {
         "access": "public"
     },
