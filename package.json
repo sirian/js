@@ -25,6 +25,7 @@
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build:all",
         "clean": "yarn build:clean && yarn test:clean",
+        "build:reset": "yarn build:prepare cjs",
         "build:prepare": "ts-node scripts/prebuild.ts",
         "build:esm": "yarn build:prepare esm && yarn build",
         "build:cjs": "yarn build:prepare cjs && yarn build",
@@ -44,7 +45,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "yarn lint"
+            "pre-commit": "yarn build:reset && yarn lint"
         }
     }
 }
