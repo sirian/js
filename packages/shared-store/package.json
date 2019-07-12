@@ -1,7 +1,7 @@
 {
     "name": "@sirian/shared-store",
     "description": "",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,7 +16,7 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.41.1"
+        "@sirian/common": "^4.41.2"
     },
     "scripts": {},
     "publishConfig": {

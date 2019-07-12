@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.47.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.46.1...@sirian/ts-extra-types@3.47.0) (2019-07-12)
+
+
+### Features
+
+* FnArgs, CtorArgs ([737bab0](https://github.com/sirian/js/commit/737bab0))
+
+
+
+
+
 ## [3.46.1](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.46.0...@sirian/ts-extra-types@3.46.1) (2019-07-10)
 
 
