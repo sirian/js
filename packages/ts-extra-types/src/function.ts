@@ -15,9 +15,12 @@ export type Instance<T> = T extends Ctor<infer R> ? R : never;
 export type Normalizer<T, U> = (value: T) => U;
 
 export type Args<F> =
-    F extends Func<any, infer T> ? T :
+    F extends Func<any, infer A> ? A :
     F extends Ctor<any, infer U> ? U :
     F extends Function ? any[] : never;
+
+export type CtorArgs<F> = F extends Ctor<any, infer A> ? A : never;
+export type FnArgs<F> = F extends Func<any, infer A> ? A : never;
 
 export type Arg<N extends number, F> =
     Args<F> extends MustBeArray<infer A>
