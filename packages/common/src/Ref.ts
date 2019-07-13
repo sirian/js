@@ -1,4 +1,4 @@
-import {Args, Ctor, DescriptorOf, Ensure, Func} from "@sirian/ts-extra-types";
+import {Args, Ctor, DescriptorOf, Ensure, Func, Instance, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -69,13 +69,13 @@ export class Ref {
         return true === desc.writable || Var.isFunction(desc.set);
     }
 
-    public static construct<F extends Ctor>(constructor: F, args: Args<F>, newTarget?: Function): InstanceType<F>;
+    public static construct<F extends Ctor>(constructor: F, args: Args<F>, newTarget?: Function): Instance<F>;
 
     public static construct(...args: Args<typeof Reflect["construct"]>) {
         return Reflect.construct(...args);
     }
 
-    public static apply<F extends Func>(target: F, thisArg: any, args: Args<F>): ReturnType<F> {
+    public static apply<F extends Func>(target: F, thisArg: any, args: Args<F>): Return<F> {
         return Reflect.apply(target, thisArg, args);
     }
 

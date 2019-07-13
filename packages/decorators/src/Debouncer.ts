@@ -1,5 +1,5 @@
 import {HybridMap, Var} from "@sirian/common";
-import {Args, Func, ThisArg} from "@sirian/ts-extra-types";
+import {Args, Func, Return, ThisArg} from "@sirian/ts-extra-types";
 
 export interface IDebouncerOptions<A extends any[] = any[]> {
     ms: number | Func<number, A>;
@@ -9,7 +9,7 @@ export interface IDebouncerOptions<A extends any[] = any[]> {
 export class Debouncer<F extends Func<void>> {
     protected fn: F;
     protected options: IDebouncerOptions<Args<F>>;
-    protected timeouts: HybridMap<any, ReturnType<typeof setTimeout>>;
+    protected timeouts: HybridMap<any, Return<typeof setTimeout>>;
 
     constructor(fn: F, options?: number | Partial<IDebouncerOptions<Args<F>>>) {
         this.fn = fn;

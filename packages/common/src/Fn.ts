@@ -1,4 +1,4 @@
-import {Args, Drop, Func, Func0, Func1, Get} from "@sirian/ts-extra-types";
+import {Args, Drop, Func, Func0, Func1, Get, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 
 const fnProto = Function.prototype;
@@ -42,7 +42,7 @@ export class Fn {
                 mergedArgs[i] = args.shift();
             }
 
-            return fn.apply(this, mergedArgs as Args<F>) as ReturnType<F>;
+            return fn.apply(this, mergedArgs as Args<F>) as Return<F>;
         };
     }
 

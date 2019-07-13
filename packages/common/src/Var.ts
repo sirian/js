@@ -2,7 +2,7 @@ import {
     AnyFunc,
     Ctor,
     ExtractByTypeName,
-    ExtractByXTypeName,
+    ExtractByXTypeName, Instance,
     Primitive,
     TypeName,
     XTypeName,
@@ -132,7 +132,7 @@ export class Var {
         return Var.isObject(value) || Var.isFunction(value);
     }
 
-    public static isInstanceOf<C extends Ctor>(obj: any, ctor: C): obj is InstanceType<C> {
+    public static isInstanceOf<C extends Ctor | Function>(obj: any, ctor: C): obj is Instance<C> {
         return obj instanceof ctor;
     }
 

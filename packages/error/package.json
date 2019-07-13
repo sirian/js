@@ -1,4 +1,4 @@
-{
+        {
     "name": "@sirian/error",
     "description": "",
     "version": "2.1.1",
@@ -18,5 +18,8 @@
     "scripts": {},
     "publishConfig": {
         "access": "public"
+    },
+    "dependencies": {
+        "@sirian/ts-extra-types": "^3.47.0"
     }
 }

@@ -1,12 +1,12 @@
 import {HybridMap} from "@sirian/common";
-import {Args, Func, ThisArg} from "@sirian/ts-extra-types";
+import {Args, Func, Return, ThisArg} from "@sirian/ts-extra-types";
 
 export interface IMemoizerOptions<A extends any[]> {
     hasher?: Func<any, A>;
 }
 
 export class Memoizer<F extends Func> {
-    protected map: HybridMap<any, HybridMap<any, ReturnType<F>>>;
+    protected map: HybridMap<any, HybridMap<any, Return<F>>>;
     protected options: IMemoizerOptions<Args<F>>;
     protected fn: F;
 

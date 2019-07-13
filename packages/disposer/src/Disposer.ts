@@ -1,3 +1,5 @@
+import {Return} from "@sirian/ts-extra-types";
+
 export type DisposeCallback = () => void;
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
@@ -19,7 +21,7 @@ export class Disposer {
     protected state: DisposeState;
     protected callbacks: Set<DisposeCallback>;
     protected initiator?: object;
-    protected timeoutId?: ReturnType<typeof setTimeout>;
+    protected timeoutId?: Return<typeof setTimeout>;
 
     constructor(target: object) {
         this.target = target;

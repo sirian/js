@@ -1,5 +1,5 @@
 import {Descriptor, Var} from "@sirian/common";
-import {Args} from "@sirian/ts-extra-types";
+import {Args, Return} from "@sirian/ts-extra-types";
 
 export enum DecoratorType {
     CLASS = "class",
@@ -67,7 +67,7 @@ export class Decorator {
             }
 
             return callback(...args);
-        }) as F & ReturnType<F>;
+        }) as F & Return<F>;
     }
 
     public static parseArgs<T extends DecoratorType>(type: T, args: Args<Decorators[T]>): DecoratorParams[T] {

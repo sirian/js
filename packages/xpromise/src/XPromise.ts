@@ -1,3 +1,5 @@
+import {Return} from "@sirian/ts-extra-types";
+
 type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
 type AwaitedArray<T extends any[]> = { [P in keyof T]: Awaited<T[P]> };
@@ -36,7 +38,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     protected value?: any;
     protected reactions: Array<PromiseReaction<any>>;
     protected resolved: boolean;
-    protected timeout?: ReturnType<typeof setTimeout>;
+    protected timeout?: Return<typeof setTimeout>;
 
     constructor(executor?: PromiseExecutor<T>) {
         this.status = PromiseStatus.PENDING;
@@ -134,7 +136,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public static wrap<F extends () => any>(fn: F) {
-        return XPromise.create<Awaited<ReturnType<F>>>((resolve) => resolve(fn()));
+        return XPromise.create<Awaited<Return<F>>>((resolve) => resolve(fn()));
     }
 
     public setTimeout(ms?: number) {
