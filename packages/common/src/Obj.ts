@@ -1,4 +1,13 @@
-import {FromEntries, ObjectZip, ObjEntryOf, ObjKeyOf, ObjValueOf, ToPrimitive, Wrap} from "@sirian/ts-extra-types";
+import {
+    FromEntries,
+    ObjectZip,
+    ObjEntryOf,
+    ObjKeyOf,
+    ObjValueOf,
+    ToPrimitive,
+    UnionToIntersection,
+    Wrap,
+} from "@sirian/ts-extra-types";
 import {Ref} from "./Ref";
 import {Var} from "./Var";
 
@@ -7,15 +16,17 @@ export class Obj {
         return Object.prototype.toString.call(target);
     }
 
+    public static assign<T extends object, U extends any[]>(target: T, ...args: U): T & UnionToIntersection<U[number]> {
+        return Object.assign(target, ...args);
+    }
+
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
         for (const source of sources) {
             for (const [key, value] of Obj.entries(source)) {
-                if (Var.isUndefined(value)) {
+                if (Var.isUndefined(value) || !Ref.hasOwn(target, key)) {
                     continue;
                 }
-                if (Ref.hasOwn(target, key)) {
-                    target[key] = value as any;
-                }
+                target[key] = value as any;
             }
         }
         return target;
@@ -33,7 +44,8 @@ export class Obj {
         return Object.entries(target) as Array<ObjEntryOf<T>>;
     }
 
-    public static create<T extends object>(o: T | null = null, properties: PropertyDescriptorMap = {}): T {
+    // tslint:disable-next-line:max-line-length
+    public static create<T extends object, U>(o: T | null = null, properties: { [P in keyof U]: TypedPropertyDescriptor<U[P]> }): T & U {
         return Object.create(o, properties);
     }
 
