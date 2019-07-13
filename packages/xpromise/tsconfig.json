@@ -10,5 +10,9 @@
         "tsBuildInfoFile": "../../tmp/xpromise.tsbuildinfo",
         "declarationDir": "build/types"
     },
-    "references": []
+    "references": [
+        {
+            "path": "../ts-extra-types"
+        }
+    ]
 }

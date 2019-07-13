@@ -1,5 +1,5 @@
 import {Disposer} from "@sirian/disposer";
-import {Args, Ctor} from "@sirian/ts-extra-types";
+import {Args, Ctor, Instance} from "@sirian/ts-extra-types";
 
 export type TimeoutCallback = () => any;
 
@@ -13,11 +13,11 @@ export abstract class AbstractTimeout {
     }
 
     public static create<C extends Ctor<AbstractTimeout>>(this: C, ...args: Args<C>) {
-        return new this(...args) as InstanceType<C>;
+        return new this(...args) as Instance<C>;
     }
 
     public static start<C extends Ctor<AbstractTimeout>>(this: C, ...args: Args<C>) {
-        const timeout = new this(...args) as InstanceType<C>;
+        const timeout = new this(...args) as Instance<C>;
         return timeout.start();
     }
 

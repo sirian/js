@@ -1,4 +1,5 @@
 import {Var} from "@sirian/common";
+import {Instance} from "@sirian/ts-extra-types";
 import {Application} from "../Application";
 import {LogicError} from "../Error";
 import {Input, InputDefinition} from "../Input";
@@ -38,7 +39,7 @@ export class Command<A extends Application = Application> {
 
     public static create<A extends Application, C extends ICommandConstructor<A>>(this: C, app: A, io: IO) {
         const definition = this.getDefinition();
-        return new this(definition, app, io) as InstanceType<C>;
+        return new this(definition, app, io) as Instance<C>;
     }
 
     public static getDefinition() {

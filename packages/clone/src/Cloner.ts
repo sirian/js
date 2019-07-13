@@ -1,5 +1,5 @@
 import {Obj, Ref, Var} from "@sirian/common";
-import {Ctor} from "@sirian/ts-extra-types";
+import {Instance} from "@sirian/ts-extra-types";
 import {cloneSymbol} from "./Cloneable";
 import {CloneContext} from "./CloneContext";
 import {CloneOptions, ICloner} from "./ICloner";
@@ -8,11 +8,6 @@ export interface ICloneHandler<T> {
     create?: (src: T) => T;
     init?: (copy: T, src: T, ctx: CloneContext) => any;
 }
-
-export type CloneHandlerTarget<T> =
-    T extends Ctor ? InstanceType<T> :
-    T extends { prototype: infer P } ? P :
-    never;
 
 export class Cloner implements ICloner<any> {
     public static readonly symbol: typeof cloneSymbol = cloneSymbol;
@@ -110,7 +105,7 @@ export class Cloner implements ICloner<any> {
         return false;
     }
 
-    public addHandler<T extends { prototype: any }>(target: T, handler: ICloneHandler<CloneHandlerTarget<T>>) {
+    public addHandler<T extends { prototype: any }>(target: T, handler: ICloneHandler<Instance<T>>) {
         this.handlers.set(target.prototype, handler);
 
     }

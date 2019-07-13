@@ -11,7 +11,11 @@ export type Func2<R = any, A = any, B = any> = (a: A, b: B) => R;
 export type SyncFunc = (...args: any[]) => Primitive | object & { then?: NotFunc };
 export type AsyncFunc = (...args: any[]) => Thenable;
 export type Return<T> = T extends Func<infer R> ? R : never;
-export type Instance<T> = T extends Ctor<infer R> ? R : never;
+export type Instance<T> =
+    T extends Ctor<infer R> ? R :
+    T extends { prototype: infer P } ? P :
+    never;
+
 export type Normalizer<T, U> = (value: T) => U;
 
 export type Args<F> =

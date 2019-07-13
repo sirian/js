@@ -1,6 +1,6 @@
 import {Arr, Var} from "@sirian/common";
 import {Disposer} from "@sirian/disposer";
-import {Ctor} from "@sirian/ts-extra-types";
+import {Ctor, Instance} from "@sirian/ts-extra-types";
 import {Event} from "./Event";
 import {EventListener, EventListenerFn, EventListenerObj, TEventListener} from "./EventListener";
 
@@ -14,7 +14,7 @@ export class Listenable<E extends Event> {
     }
 
     public addListener<EV extends E>(listener: TEventListener<EV>): this;
-    public addListener<EV extends E, C extends Ctor<EV>>(filter: C | C[], fn: EventListenerFn<InstanceType<C>>): this;
+    public addListener<EV extends E, C extends Ctor<EV>>(filter: C | C[], fn: EventListenerFn<Instance<C>>): this;
 
     public addListener(...args: EventListenerObjInit) {
         const init = this.resolveArgs(...args);
@@ -38,7 +38,7 @@ export class Listenable<E extends Event> {
     }
 
     public once<EV extends E>(listener: TEventListener<EV>): this;
-    public once<EV extends E, C extends Ctor<EV>>(filter: C | C[], fn: EventListenerFn<InstanceType<C>>): this;
+    public once<EV extends E, C extends Ctor<EV>>(filter: C | C[], fn: EventListenerFn<Instance<C>>): this;
 
     public once(...args: EventListenerObjInit) {
         const init = this.resolveArgs(...args);

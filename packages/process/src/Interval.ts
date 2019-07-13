@@ -1,6 +1,7 @@
+import {Return} from "@sirian/ts-extra-types";
 import {AbstractTimeout, TimeoutCallback} from "./AbstractTimeout";
 
-export type IntervalId = ReturnType<typeof setInterval>;
+export type IntervalId = Return<typeof setInterval>;
 
 export class Interval extends AbstractTimeout {
     public static readonly active = new Map<IntervalId, Interval>();
