@@ -1,7 +1,7 @@
 {
     "name": "@sirian/logger",
     "description": "",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,9 +16,9 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.41.2",
-        "@sirian/datetime": "^3.4.3",
-        "@sirian/property-access": "^1.2.3",
+        "@sirian/common": "^4.41.3",
+        "@sirian/datetime": "^3.4.4",
+        "@sirian/property-access": "^1.2.4",
         "pretty-format": "^24.8.0"
     },
     "devDependencies": {
