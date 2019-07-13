@@ -45,8 +45,8 @@ export class Obj {
     }
 
     // tslint:disable-next-line:max-line-length
-    public static create<T extends object, U>(o: T | null = null, properties: { [P in keyof U]: TypedPropertyDescriptor<U[P]> }): T & U {
-        return Object.create(o, properties);
+    public static create<T extends object, U>(o: T | null = null, properties?: { [P in keyof U]: TypedPropertyDescriptor<U[P]> }): T & U {
+        return Object.create(o, properties || {});
     }
 
     public static getStringTag(arg: any) {
