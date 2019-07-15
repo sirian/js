@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.42.0](https://github.com/sirian/js/compare/@sirian/common@4.41.3...@sirian/common@4.42.0) (2019-07-15)
+
+
+### Bug Fixes
+
+* types ([386a9ce](https://github.com/sirian/js/commit/386a9ce))
+
+
+### Features
+
+* Obj.assign, Obj.create typings ([09e7b1c](https://github.com/sirian/js/commit/09e7b1c))
+
+
+
+
+
 ## [4.41.3](https://github.com/sirian/js/compare/@sirian/common@4.41.2...@sirian/common@4.41.3) (2019-07-13)
 
 **Note:** Version bump only for package @sirian/common

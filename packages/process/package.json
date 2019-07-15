@@ -1,7 +1,7 @@
 {
     "name": "@sirian/process",
     "description": "",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -20,7 +20,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/disposer": "^1.6.3",
-        "@sirian/ts-extra-types": "^3.47.1"
+        "@sirian/disposer": "^1.6.4",
+        "@sirian/ts-extra-types": "^3.48.0"
     }
 }
