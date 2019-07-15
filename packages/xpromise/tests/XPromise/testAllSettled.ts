@@ -8,6 +8,11 @@ describe("Xpromise.allSettled", () => {
     const b = {x: "b"};
     const c = {x: "c"};
 
+    test("empty array", async () => {
+        const result = await XPromise.allSettled([]);
+        expect(result).toStrictEqual([]);
+    });
+
     test("no promise values", async () => {
         const result = await XPromise.allSettled([a, b, c]);
 
@@ -39,5 +44,14 @@ describe("Xpromise.allSettled", () => {
             yes(b),
             no(c),
         ]);
+    });
+
+    test("poisoned .then", async () => {
+        const err = new Error("poisoned");
+        const poisoned = new Promise(() => {});
+        poisoned.then = () => { throw err; };
+
+        const result = await XPromise.allSettled([poisoned, a]);
+        expect(result).toStrictEqual([no(err), yes(a)]);
     });
 });
