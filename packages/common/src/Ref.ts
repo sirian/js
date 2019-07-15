@@ -1,4 +1,4 @@
-import {Args, Ctor, DescriptorOf, Ensure, Func, Instance, Return} from "@sirian/ts-extra-types";
+import {Args, Ctor, DescriptorOf, DescriptorsOf, Ensure, Func, Instance, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -40,7 +40,7 @@ export class Ref {
         return Object.getOwnPropertyDescriptor(target, key) as DescriptorOf<T, K> | undefined;
     }
 
-    public static getOwnDescriptors<T>(target: T) {
+    public static getOwnDescriptors<T>(target: T): DescriptorsOf<T> {
         return Object.getOwnPropertyDescriptors(target);
     }
 

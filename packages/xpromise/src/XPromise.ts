@@ -123,14 +123,30 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     //     });
     // }
 
+    public static allSettled<T extends any[]>(promises: T) {
+        return this.create<{
+            [P in keyof T]:
+            { status: PromiseStatus.FULFILLED, value: Awaited<T[P]> } |
+            { status: PromiseStatus.REJECTED, reason: any }
+        }>((resolve) => {
+            const wrapped = Array.from(promises, (promise) => {
+                return this.resolve(promise).then(
+                    (value: any) => ({status: PromiseStatus.FULFILLED, value}),
+                    (reason: any) => ({status: PromiseStatus.REJECTED, reason}),
+                );
+            });
+
+            resolve(XPromise.all(wrapped) as any);
+        });
+    }
+
     public static race<T extends any[]>(promises: T) {
         return this.create<Awaited<T[number]>>((resolve, reject) => {
-            const length = promises.length;
-            if (!length) {
+            if (!promises.length) {
                 return resolve([] as any);
             }
-            for (let i = 0; i < length; i++) {
-                this.resolve(promises[i]).then(resolve, reject);
+            for (const promise of promises) {
+                this.resolve(promise).then(resolve, reject);
             }
         });
     }

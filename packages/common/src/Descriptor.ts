@@ -33,7 +33,7 @@ export class Descriptor<T extends AccessorPropertyDescriptor | DataPropertyDescr
     public static read(desc: PropertyDescriptor, obj: any): any;
 
     public static read(desc: any, obj: any) {
-        const type = this.getDescriptorType(desc);
+        const type = Descriptor.getDescriptorType(desc);
 
         switch (type) {
             case DescriptorType.ACCESSOR:
@@ -47,15 +47,15 @@ export class Descriptor<T extends AccessorPropertyDescriptor | DataPropertyDescr
     }
 
     public static isDescriptor(d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor {
-        return DescriptorType.NONE !== this.getDescriptorType(d);
+        return DescriptorType.NONE !== Descriptor.getDescriptorType(d);
     }
 
     public static isAccessorDescriptor(d: any): d is AccessorPropertyDescriptor {
-        return DescriptorType.ACCESSOR === this.getDescriptorType(d);
+        return DescriptorType.ACCESSOR === Descriptor.getDescriptorType(d);
     }
 
     public static isDataDescriptor(d: any): d is DataPropertyDescriptor {
-        return DescriptorType.DATA === this.getDescriptorType(d);
+        return DescriptorType.DATA === Descriptor.getDescriptorType(d);
     }
 
     public static getDescriptorType(d: any) {
@@ -66,8 +66,7 @@ export class Descriptor<T extends AccessorPropertyDescriptor | DataPropertyDescr
         let hasAccessor = false;
         let hasValueOrWritable = false;
 
-        for (const key of Obj.keys(d)) {
-            const v = d[key];
+        for (const [key, v] of Obj.entries(d)) {
             const type = typeof v;
             const defined = undefined !== v;
 
