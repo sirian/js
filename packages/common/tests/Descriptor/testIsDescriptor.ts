@@ -1,7 +1,7 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor} from "@sirian/ts-extra-types";
 import {Descriptor, Obj, Ref} from "../../src";
 
-describe("", () => {
+describe("Descriptor", () => {
     const dataDescriptors: DataPropertyDescriptor[] = [
         {},
         Obj.create(),
@@ -43,6 +43,10 @@ describe("", () => {
         {writable: false, set: () => 1},
         {writable: false, get: undefined},
         {writable: false, set: undefined},
+        {get: "foo"},
+        {set: "foo"},
+        {get: "foo", set: () => 1},
+        {get: () => 1, set: "foo"},
         {value: undefined, get: undefined},
         {value: undefined, set: undefined},
         {value: undefined, set: () => void 0},
