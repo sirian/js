@@ -78,7 +78,7 @@ export class Str {
     public static trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
         const str = Var.stringify(value);
 
-        const maskChars = Unicode.from(mask).symbols;
+        const maskChars = Unicode.getSymbols(mask);
 
         const maskPattern = maskChars.map(Rgx.escape).join("|");
 
