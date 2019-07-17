@@ -1,7 +1,7 @@
 {
     "name": "@sirian/filesystem",
     "description": "",
-    "version": "1.7.5",
+    "version": "1.7.6",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,8 +16,8 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.42.0",
-        "@sirian/iterator": "^1.12.4",
+        "@sirian/common": "^4.42.1",
+        "@sirian/iterator": "^1.12.5",
         "@sirian/ts-extra-types": "^3.48.0",
         "@sirian/xpromise": "^2.4.0",
         "@types/node": "^12.6.3"
