@@ -14,7 +14,7 @@
             "dom"
         ],
         "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/proxy.tsbuildinfo",
+        "tsBuildInfoFile": "../../tmp/xproxy.tsbuildinfo",
         "declarationDir": "build/types"
     },
     "references": [
