@@ -16,9 +16,6 @@
         },
         {
             "path": "../ts-extra-types"
-        },
-        {
-            "path": "../unicode"
         }
     ]
 }

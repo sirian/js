@@ -1,6 +1,7 @@
+import {Unicode} from "./Unicode";
 import {Var} from "./Var";
 
-export type ArrBufTarget = ArrayBufferLike | ArrayBufferView;
+export type ArrBufTarget = ArrayBufferLike | ArrayBufferView | string;
 
 export class ArrBuf {
     public static isBuffer(value: any): value is ArrayBuffer {
@@ -12,6 +13,11 @@ export class ArrBuf {
     }
 
     public static getBuffer(arg: ArrBufTarget) {
+        if (Var.isPrimitive(arg)) {
+            const bytes = Unicode.stringToBytes(Var.stringify(arg));
+            return bytes.buffer;
+        }
+
         if (ArrBuf.isBuffer(arg)) {
             return arg;
         }
@@ -68,7 +74,9 @@ export class ArrBuf {
     }
 
     public static align(source: ArrBufTarget, bytesPerElement: number) {
-        const elements = Math.ceil(source.byteLength / bytesPerElement);
+        const buffer = this.getBuffer(source);
+
+        const elements = Math.ceil(buffer.byteLength / bytesPerElement);
 
         return ArrBuf.transfer(source, elements * bytesPerElement);
     }

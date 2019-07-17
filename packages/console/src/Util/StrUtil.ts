@@ -1,5 +1,4 @@
-import {Arr, Str, Var} from "@sirian/common";
-import {Unicode} from "@sirian/unicode";
+import {Arr, Str, Unicode, Var} from "@sirian/common";
 
 export class StrUtil {
     public static stripTags(text: string) {

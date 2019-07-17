@@ -1,5 +1,4 @@
-import {ArrBuf, Str, Var} from "@sirian/common";
-import {Unicode} from "@sirian/unicode";
+import {ArrBuf, Str, Unicode, Var} from "@sirian/common";
 
 export type HttpHeaderValue = undefined | string | number | ArrayBuffer;
 
