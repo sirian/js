@@ -1,57 +1,73 @@
-import {Unicode} from "@sirian/unicode";
-import {IBase64Engine} from "./IBase64Engine";
+import {ArrBufTarget, TypedArr, Unicode} from "@sirian/common";
 
 const chars: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-interface ITextCodec {
-    encode: (str: string) => Uint8Array;
-    decode: (str: Uint8Array) => string;
-}
-
-export class Base64 implements IBase64Engine {
-    public static engine: IBase64Engine = new Base64();
-
-    protected textCodec: ITextCodec;
-
-    constructor(encoder?: ITextCodec) {
-        this.textCodec = encoder || {
-            encode: Unicode.stringToBytes,
-            decode: Unicode.bytesToString,
-        };
+export class Base64 {
+    public static encode(str: ArrBufTarget) {
+        return new Base64().encode(str);
     }
 
-    public static encode(str: string) {
-        return this.engine.encode(str);
-    }
+    public static decode(str: string, asString?: true): string;
+    public static decode(str: string, asString: boolean): Uint8Array;
 
-    public static decode(str: string) {
-        return this.engine.decode(str);
-    }
-
-    public static decodeToBytes(str: string) {
-        return this.engine.decodeToBytes(str);
-    }
-
-    public static encodeBytes(bytes: Uint8Array) {
-        return this.engine.encodeBytes(bytes);
+    public static decode(str: string, asString: boolean = true) {
+        return new Base64().decode(str, asString) as any;
     }
 
     public static test(str: string) {
         return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(str);
     }
 
-    public encode(str: string) {
-        const bytes = this.textCodec.encode(str);
-        return this.encodeBytes(bytes);
+    public encode(data: ArrBufTarget): string {
+        const uint8 = TypedArr.create(Uint8Array, data);
+        const length = uint8.length;
+        const extraBytes = length % 3; // if we have 1 byte left, pad 2 bytes
+        const parts = [];
+        const maxChunkLength = 16383; // must be multiple of 3
+
+        const length3 = length - extraBytes;
+
+        // go through the array every three bytes, we'll deal with trailing stuff later
+        for (let start = 0; start < length3; start += maxChunkLength) {
+            const chunkEnd = start + maxChunkLength;
+
+            const end = chunkEnd > length3 ? length3 : chunkEnd;
+
+            const part = this.encodeChunk(uint8, start, end);
+
+            parts.push(part);
+        }
+
+        // pad the end with zeros, but make sure to not forget the extra bytes
+        switch (extraBytes) {
+            case 1: {
+                const tmp = uint8[length - 1];
+                parts.push(
+                    chars[(tmp >> 2)],
+                    chars[0x3F & (tmp << 4)],
+                    "==",
+                );
+                break;
+            }
+            case 2: {
+                const tmp = (uint8[length - 2] << 8) + (uint8[length - 1]);
+                parts.push(
+                    chars[(tmp >> 10)],
+                    chars[0x3F & (tmp >> 4)],
+                    chars[0x3F & (tmp << 2)],
+                    "=",
+                );
+                break;
+            }
+        }
+
+        return parts.join("");
     }
 
-    public decode(str: string) {
-        const bytes = this.decodeToBytes(str);
+    public decode(b64: string, asString?: true): string;
+    public decode(b64: string, asString: boolean): Uint8Array;
 
-        return this.textCodec.decode(bytes);
-    }
-
-    public decodeToBytes(b64: string) {
+    public decode(b64: string, asString = true) {
         const length = b64.length;
         const placeHolders = this.placeHoldersCount(b64);
 
@@ -101,52 +117,7 @@ export class Base64 implements IBase64Engine {
             }
         }
 
-        return bytes;
-    }
-
-    public encodeBytes(uint8: Uint8Array) {
-        const length = uint8.length;
-        const extraBytes = length % 3; // if we have 1 byte left, pad 2 bytes
-        const parts = [];
-        const maxChunkLength = 16383; // must be multiple of 3
-
-        const length3 = length - extraBytes;
-
-        // go through the array every three bytes, we'll deal with trailing stuff later
-        for (let start = 0; start < length3; start += maxChunkLength) {
-            const chunkEnd = start + maxChunkLength;
-
-            const end = chunkEnd > length3 ? length3 : chunkEnd;
-
-            const part = this.encodeChunk(uint8, start, end);
-
-            parts.push(part);
-        }
-
-        // pad the end with zeros, but make sure to not forget the extra bytes
-        switch (extraBytes) {
-            case 1: {
-                const tmp = uint8[length - 1];
-                parts.push(
-                    chars[(tmp >> 2)],
-                    chars[0x3F & (tmp << 4)],
-                    "==",
-                );
-                break;
-            }
-            case 2: {
-                const tmp = (uint8[length - 2] << 8) + (uint8[length - 1]);
-                parts.push(
-                    chars[(tmp >> 10)],
-                    chars[0x3F & (tmp >> 4)],
-                    chars[0x3F & (tmp << 2)],
-                    "=",
-                );
-                break;
-            }
-        }
-
-        return parts.join("");
+        return asString ? Unicode.bytesToString(bytes) : bytes;
     }
 
     protected rev(char: string) {

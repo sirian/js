@@ -1,4 +1,4 @@
-import {Unicode} from "@sirian/unicode";
+import {Unicode} from "@sirian/common";
 import {HttpHeader, HttpHeaderValue} from "../../src";
 
 describe("toString", () => {

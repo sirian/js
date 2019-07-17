@@ -21,7 +21,6 @@
     },
     "dependencies": {
         "@sirian/common": "^4.42.0",
-        "@sirian/ts-extra-types": "^3.48.0",
-        "@sirian/unicode": "^1.1.0"
+        "@sirian/ts-extra-types": "^3.48.0"
     }
 }
