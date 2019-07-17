@@ -1,0 +1,21 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/xxtea.tsbuildinfo",
+        "declarationDir": "build/types"
+    },
+    "references": [
+        {
+            "path": "../base64"
+        },
+        {
+            "path": "../common"
+        }
+    ]
+}
