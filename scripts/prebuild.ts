@@ -1,12 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 
-const rootDir = path.resolve(__dirname + "/..");
-const packagesDir = rootDir + "/packages";
-const dirs = fs.readdirSync(packagesDir, {
-    withFileTypes: true,
-});
-
 const types = {cjs: "commonjs", esm: "esnext"};
 
 const type = process.argv[2];
@@ -14,6 +8,22 @@ const type = process.argv[2];
 if (!types.hasOwnProperty(type)) {
     throw new Error("Unknown type. Should be 'cjs' or 'esm'");
 }
+
+const rootDir = path.resolve(__dirname + "/..");
+const packagesDir = rootDir + "/packages";
+const dirs = fs.readdirSync(packagesDir, {
+    withFileTypes: true,
+}).sort();
+
+const greenkeeper = {
+    groups: {
+        default: {
+            packages: dirs.map((dir) => `packages/${dir.name}/package.json`),
+        },
+    },
+};
+
+fs.writeFileSync(`${rootDir}/greenkeeper.json`, JSON.stringify(greenkeeper, null, 4));
 
 for (const dir of dirs) {
     if (!dir.isDirectory()) {
