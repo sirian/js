@@ -24,4 +24,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Features
 
-* @sirian/xproxy ([625b6cf](https://github.com/sirian/js/commit/625b6cf))
+* @sirian/proxy ([625b6cf](https://github.com/sirian/js/commit/625b6cf))
