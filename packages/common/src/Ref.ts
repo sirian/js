@@ -1,7 +1,12 @@
-import {Args, Ctor, DescriptorOf, DescriptorsOf, Ensure, Func, Instance, Return} from "@sirian/ts-extra-types";
+import {Args, Ctor, DescriptorOf, Ensure, Func, Instance, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
+
+export interface ProtoChainOptions {
+    maxDepth?: number;
+    stopAt?: object;
+}
 
 export class Ref {
     public static getPrototypeOf(target: object) {
@@ -40,7 +45,7 @@ export class Ref {
         return Object.getOwnPropertyDescriptor(target, key) as DescriptorOf<T, K> | undefined;
     }
 
-    public static getOwnDescriptors<T>(target: T): DescriptorsOf<T> {
+    public static getOwnDescriptors<T>(target: T): { [P in keyof T]: TypedPropertyDescriptor<T[P]> } {
         return Object.getOwnPropertyDescriptors(target);
     }
 
@@ -79,17 +84,22 @@ export class Ref {
         return Reflect.apply(target, thisArg, args);
     }
 
-    public static getProtoChain(target: any) {
-        const result = new XSet<object>();
+    public static getProtoChain<T>(target: T, options: ProtoChainOptions = {}): [T, ...Array<Partial<T>>] {
+        const result = new XSet<any>();
+        const {maxDepth, stopAt} = options;
 
-        let current: any = target;
-
-        while (Var.isObjectOrFunction(current) && !result.has(current)) {
+        for (let current: Partial<T> = target;;) {
+            if (maxDepth && (result.size >= maxDepth)) {
+                break;
+            }
+            if (Var.isPrimitive(current) || result.has(current) || stopAt === current) {
+                break;
+            }
             result.add(current);
             current = Ref.getPrototypeOf(current);
         }
 
-        return result.toArray();
+        return [...result] as [T, ...Array<Partial<T>>];
     }
 
     public static hasOwn<T, K extends keyof any>(target: T, key: K): target is Ensure<T, K> {
