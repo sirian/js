@@ -20,7 +20,7 @@
         "@sirian/iterator": "^1.12.5",
         "@sirian/ts-extra-types": "^3.48.0",
         "@sirian/xpromise": "^2.4.0",
-        "@types/node": "^12.6.3"
+        "@types/node": "^12.6.8"
     },
     "scripts": {},
     "publishConfig": {

@@ -8,8 +8,9 @@ import {
     UnionToIntersection,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {Ref} from "./Ref";
+import {ProtoChainOptions, Ref} from "./Ref";
 import {Var} from "./Var";
+import {XSet} from "./XSet";
 
 export class Obj {
     public static stringify(target: object) {
@@ -30,6 +31,24 @@ export class Obj {
             }
         }
         return target;
+    }
+
+    public static snapshot<T extends object>(target: T, options: ProtoChainOptions = {}) {
+        const keys = new XSet<string>(Obj.keys(target));
+
+        const opts = {
+            stopAt: Object.prototype,
+            ...options,
+        };
+        for (const x of Ref.getProtoChain(target, opts)) {
+            for (const [key, desc] of Obj.entries(Ref.getOwnDescriptors(x))) {
+                if (Var.isFunction(desc.get)) {
+                    keys.add(key);
+                }
+            }
+        }
+
+        return Obj.pick(target, [...keys] as Array<keyof T>) as T;
     }
 
     public static keys<T>(target: T) {
@@ -63,10 +82,10 @@ export class Obj {
             return target as ToPrimitive<T>;
         }
 
-        const toPrimitve = Symbol.toPrimitive;
+        const toPrimitive = Symbol.toPrimitive;
 
-        if (Ref.hasMethod(target, toPrimitve)) {
-            return (target as any)[toPrimitve]("default");
+        if (Ref.hasMethod(target, toPrimitive)) {
+            return (target as any)[toPrimitive]("default");
         }
 
         if (Ref.hasMethod(target, "valueOf")) {
