@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.43.0](https://github.com/sirian/js/compare/@sirian/common@4.42.1...@sirian/common@4.43.0) (2019-07-18)
+
+
+### Features
+
+* Obj.snapshot ([5bdcb36](https://github.com/sirian/js/commit/5bdcb36))
+
+
+
+
+
 ## [4.42.1](https://github.com/sirian/js/compare/@sirian/common@4.42.0...@sirian/common@4.42.1) (2019-07-17)
 
 **Note:** Version bump only for package @sirian/common
