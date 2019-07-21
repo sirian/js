@@ -1,11 +1,12 @@
 import {
+    Args,
+    Assign,
     FromEntries,
     ObjectZip,
     ObjEntryOf,
     ObjKeyOf,
     ObjValueOf,
     ToPrimitive,
-    UnionToIntersection,
     Wrap,
 } from "@sirian/ts-extra-types";
 import {ProtoChainOptions, Ref} from "./Ref";
@@ -17,8 +18,9 @@ export class Obj {
         return Object.prototype.toString.call(target);
     }
 
-    public static assign<T extends object, U extends any[]>(target: T, ...args: U): T & UnionToIntersection<U[number]> {
-        return Object.assign(target, ...args);
+    public static assign<T, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
+    public static assign(...args: any) {
+        return Object.assign(...args as Args<ObjectConstructor["assign"]>);
     }
 
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
@@ -42,6 +44,9 @@ export class Obj {
         };
         for (const x of Ref.getProtoChain(target, opts)) {
             for (const [key, desc] of Obj.entries(Ref.getOwnDescriptors(x))) {
+                if ("__proto__" === key) {
+                    continue;
+                }
                 if (Var.isFunction(desc.get)) {
                     keys.add(key);
                 }
