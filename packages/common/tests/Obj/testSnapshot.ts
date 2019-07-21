@@ -27,4 +27,24 @@ describe("Obj.snapshot", () => {
         expect(Obj.snapshot(target)).toStrictEqual(expected);
         expect(JSON.stringify(Obj.snapshot(target))).toStrictEqual(JSON.stringify(expected));
     });
+
+    test("Obj.snapshot(URL)", () => {
+        const url = new URL("https://example.org/foo");
+        expect({...url}).toStrictEqual({});
+
+        expect(Obj.snapshot(url)).toStrictEqual({
+            hash: "",
+            host: "example.org",
+            hostname: "example.org",
+            href: "https://example.org/foo",
+            origin: "https://example.org",
+            password: "",
+            pathname: "/foo",
+            port: "",
+            protocol: "https:",
+            search: "",
+            searchParams: url.searchParams,
+            username: "",
+        });
+    });
 });

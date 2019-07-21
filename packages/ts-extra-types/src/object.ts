@@ -123,3 +123,9 @@ export type ObjectZip<K extends Array<keyof any>, V extends any[]> =
         0: {};
         1: ObjectZip<Tail<K>, Tail<V>> & (V extends [] ? PartialRec<K[0], V[0]> : Rec<K[0], V[0]>)
     }[Required<K> extends [any, ...any[]] ? 1 : 0];
+
+export type Assign<T, S extends any[]> =
+    {
+        0: T
+        1: Assign<T & S[0], Tail<S>>,
+    }[S extends [any, ...any[]] ? 1 : 0];
