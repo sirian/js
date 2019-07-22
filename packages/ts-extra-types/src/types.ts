@@ -115,4 +115,3 @@ export type UnBox<T> = T extends Box<infer U> ? U : never;
 export type UnBoxTuple<T extends Box<unknown>[]> = {
     [P in keyof T]: UnBox<T[P]>;
 };
-
