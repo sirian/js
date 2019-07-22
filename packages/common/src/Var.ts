@@ -2,8 +2,12 @@ import {
     AnyFunc,
     Ctor,
     ExtractByTypeName,
-    ExtractByXTypeName, Instance,
+    ExtractByXTypeName,
+    Instance,
+    Lengthwise,
+    Newable,
     Primitive,
+    Thenable,
     TypeName,
     XTypeName,
     XTypeNameOf,
@@ -38,26 +42,19 @@ export class Var {
         return typeof value;
     }
 
-    public static isXType<V, T extends XTypeName>(value: V, ...types: T[] | [T[]]): value is ExtractByXTypeName<V, T>;
-    public static isXType(value: any, types: XTypeName | XTypeName[], ...rest: XTypeName[]) {
-        const type = Var.getXType(value);
+    public static isXType<V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> {
+        const type: any = Var.getXType(v);
 
-        if (types === type || -1 !== rest.indexOf(type)) {
-            return true;
-        }
-
-        return Var.isArray(types) && -1 !== types.indexOf(type);
+        return Var.isArray(types) ? Var.isSome(type, types) : type === types;
     }
 
-    public static isType<V, T extends TypeName>(value: V, ...types: T[] | [T[]]): value is ExtractByTypeName<V, T>;
-    public static isType(value: any, types: TypeName | TypeName[], ...rest: TypeName[]) {
-        const type = typeof value;
+    public static isType<V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> {
+        const type = typeof v;
+        return Var.isArray(types) ? Var.isSome(type, types) : type === types;
+    }
 
-        if (types === type || -1 !== rest.indexOf(type)) {
-            return true;
-        }
-
-        return Var.isArray(types) && -1 !== types.indexOf(type);
+    public static isSome<U>(value: any, values: U[]): value is U {
+        return values.includes(value);
     }
 
     public static isNumber(value: any): value is number {
@@ -76,11 +73,11 @@ export class Var {
         return "string" === typeof value;
     }
 
-    public static isPropertyKey(value: any): value is string | number | symbol {
-        return Var.isType(value, "string", "number", "symbol");
+    public static isPropertyKey(value: any): value is keyof any {
+        return Var.isType(value, ["string", "number", "symbol"]);
     }
 
-    public static isPrimitive<T extends any>(value: T): value is Extract<T, Primitive> {
+    public static isPrimitive(value: any): value is Primitive {
         return !Var.isObjectOrFunction(value);
     }
 
@@ -92,17 +89,14 @@ export class Var {
         return "function" === typeof value;
     }
 
-    public static isConstructor(value: any) {
+    public static isConstructor<T>(value: T): value is Extract<T, Newable> {
         if (!Var.isFunction(value)) {
             return false;
         }
-        const o = {};
-        const p = new Proxy(value, {
-            construct: () => o,
-        });
+        const p: any = new Proxy(value, {construct: () => ({})});
 
         try {
-            return o === new p();
+            return new p() && true;
         } catch (e) {
             return false;
         }
@@ -121,10 +115,10 @@ export class Var {
     }
 
     public static isNumeric(value: any): value is string | number {
-        return Var.isType(value, "number", "string") && !Var.isEqualNaN(value - parseFloat(value));
+        return Var.isType(value, ["number", "string"]) && !Var.isEqualNaN(value - parseFloat(value));
     }
 
-    public static isPromiseLike(value: any): value is PromiseLike<any> {
+    public static isPromiseLike(value: any): value is Thenable {
         return Var.isObjectOrFunction(value) && Ref.hasMethod(value, "then");
     }
 
@@ -132,15 +126,15 @@ export class Var {
         return Var.isObject(value) || Var.isFunction(value);
     }
 
-    public static isInstanceOf<C extends Ctor | Function>(obj: any, ctor: C): obj is Instance<C> {
-        return obj instanceof ctor;
+    public static isInstanceOf<C extends Ctor | Newable>(obj: any, ctor: C): obj is Instance<C> {
+        return Var.isFunction(ctor) && (obj instanceof ctor);
     }
 
     public static isEqualNaN(value: any): value is number {
         return value !== value;
     }
 
-    public static isSubclassOf<A, B extends Ctor>(a: A, b: B): a is Extract<A, B> {
+    public static isSubclassOf<A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> {
         if (!Var.isFunction(a) || !Var.isFunction(b)) {
             return false;
         }
@@ -167,7 +161,7 @@ export class Var {
         return Array.isArray(value);
     }
 
-    public static isArrayLike(value: any): value is ArrayLike<any> {
+    public static isArrayLike(value: any): value is Lengthwise {
         if (Var.isArray(value)) {
             return true;
         }
@@ -231,7 +225,7 @@ export class Var {
         }
         const prototype = Ref.getPrototypeOf(x);
 
-        if (Obj.stringify(x) !== "[object Object]") {
+        if (Obj.getStringTag(x) !== "Object") {
             return !prototype;
         }
 

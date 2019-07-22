@@ -1,22 +1,31 @@
 import {KeyToString} from "./cast";
+import {Thenable} from "./interfaces";
 import {MustBeArray} from "./mustbe";
+import {Overwrite} from "./object";
 import {Cons, DropLast, Head, LastElement, Length, Tail} from "./tuple";
-import {NotFunc, Primitive, Thenable} from "./types";
+import {NotFunc, Primitive} from "./types";
 
 export type Ctor<TInstance = any, TArgs extends any[] = any[]> = new(...args: TArgs) => TInstance;
+export type Ctor0<T = any> = Ctor<T, []>;
+export type Ctor1<T = any, A = any> = Ctor<T, [A]>;
+export type Ctor2<T = any, A = any, B = any> = Ctor<T, [A, B]>;
+
+export type Newable<T = any> = Overwrite<NewableFunction, { prototype: T }>;
+
+export type Instance<T> =
+    T extends Ctor<infer R> ? R :
+    T extends Newable<infer P> ? P :
+    never;
+
 export type Func<TReturn = any, TArgs extends any[] = any[], This = any> = (this: This, ...args: TArgs) => TReturn;
 export type Func0<R = any> = () => R;
 export type Func1<R = any, A = any> = (a: A) => R;
 export type Func2<R = any, A = any, B = any> = (a: A, b: B) => R;
-export type SyncFunc = (...args: any[]) => Primitive | object & { then?: NotFunc };
-export type AsyncFunc = (...args: any[]) => Thenable;
-export type Return<T> = T extends Func<infer R> ? R : never;
-export type Instance<T> =
-    T extends Ctor<infer R> ? R :
-    T extends { prototype: infer P } ? P :
-    never;
 
-export type Normalizer<T, U> = (value: T) => U;
+export type Return<T> = T extends Func<infer R> ? R : never;
+
+export type SyncFunc = Func<Primitive | object & { then?: NotFunc }>;
+export type AsyncFunc = Func<Thenable>;
 
 export type Args<F> =
     F extends Func<any, infer A> ? A :
