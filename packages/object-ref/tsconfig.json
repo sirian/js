@@ -7,7 +7,7 @@
         "rootDir": "src",
         "outDir": "build/cjs",
         "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/object-hash.tsbuildinfo",
+        "tsBuildInfoFile": "../../tmp/object-ref.tsbuildinfo",
         "declarationDir": "build/types"
     },
     "references": [
