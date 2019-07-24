@@ -1,4 +1,4 @@
-import {FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
+import {IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Ref} from "./Ref";
 import {Var} from "./Var";
@@ -33,7 +33,7 @@ export class Entries<T extends [any, any]> {
         return new Entries(items);
     }
 
-    public toObject(): FromEntries<T> {
+    public toObject() {
         return Obj.fromEntries(this.items);
     }
 
