@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.2](https://github.com/sirian/js/compare/@sirian/common@4.43.1...@sirian/common@4.43.2) (2019-07-24)
+
+
+### Bug Fixes
+
+* **common:** typings Obj.fromEntries ([1a1fd1c](https://github.com/sirian/js/commit/1a1fd1c))
+
+
+
+
+
 ## [4.43.1](https://github.com/sirian/js/compare/@sirian/common@4.43.0...@sirian/common@4.43.1) (2019-07-21)
 
 **Note:** Version bump only for package @sirian/common

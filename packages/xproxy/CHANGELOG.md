@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.3](https://github.com/sirian/js/compare/@sirian/xproxy@1.2.2...@sirian/xproxy@1.2.3) (2019-07-24)
+
+
+### Bug Fixes
+
+* **xproxy:** fix ([8bc09ec](https://github.com/sirian/js/commit/8bc09ec))
+
+
+
+
+
 ## [1.2.2](https://github.com/sirian/js/compare/@sirian/xproxy@1.2.1...@sirian/xproxy@1.2.2) (2019-07-21)
 
 **Note:** Version bump only for package @sirian/xproxy

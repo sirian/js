@@ -1,7 +1,7 @@
 {
     "name": "@sirian/finder",
     "description": "",
-    "version": "1.2.8",
+    "version": "1.2.9",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,10 +16,10 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.43.1",
-        "@sirian/filesystem": "^1.7.8",
-        "@sirian/iterator": "^1.12.7",
-        "@sirian/ts-extra-types": "^3.48.1"
+        "@sirian/common": "^4.43.2",
+        "@sirian/filesystem": "^1.7.9",
+        "@sirian/iterator": "^1.12.8",
+        "@sirian/ts-extra-types": "^3.48.2"
     },
     "scripts": {},
     "publishConfig": {

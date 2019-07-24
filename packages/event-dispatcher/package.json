@@ -1,7 +1,7 @@
 {
     "name": "@sirian/event-dispatcher",
     "description": "",
-    "version": "4.3.9",
+    "version": "4.3.10",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -16,11 +16,11 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "dependencies": {
-        "@sirian/common": "^4.43.1",
-        "@sirian/disposer": "^1.6.7",
-        "@sirian/error": "^2.1.4",
-        "@sirian/ts-extra-types": "^3.48.1",
-        "@sirian/xpromise": "^2.4.2"
+        "@sirian/common": "^4.43.2",
+        "@sirian/disposer": "^1.6.8",
+        "@sirian/error": "^2.1.5",
+        "@sirian/ts-extra-types": "^3.48.2",
+        "@sirian/xpromise": "^2.4.3"
     },
     "scripts": {},
     "publishConfig": {
