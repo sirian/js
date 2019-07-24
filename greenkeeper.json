@@ -19,7 +19,7 @@
                 "packages/logger/package.json",
                 "packages/merge/package.json",
                 "packages/mixin/package.json",
-                "packages/object-hash/package.json",
+                "packages/object-ref/package.json",
                 "packages/parser/package.json",
                 "packages/process/package.json",
                 "packages/property-access/package.json",
