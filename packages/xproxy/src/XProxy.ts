@@ -41,7 +41,7 @@ export class XProxy<T extends object> {
 
     public setTarget(target: T) {
         if (Var.isPrimitive(target)) {
-            throw new Error(`Invalid proxy target "${target}"`);
+            throw new Error(`Invalid proxy target "${typeof target}"`);
         }
 
         this.target = target;
@@ -58,11 +58,12 @@ export class XProxy<T extends object> {
             return;
         }
 
-        if (!Var.isFunction(this.targetFactory)) {
+        const factory = this.targetFactory;
+        if (!factory) {
             throw new Error("Proxy targetFactory is not a function");
         }
 
-        const target = this.targetFactory();
+        const target = factory();
         this.setTarget(target);
         delete this.targetFactory;
     }
