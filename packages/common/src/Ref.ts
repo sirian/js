@@ -1,4 +1,4 @@
-import {Args, Ctor, DescriptorOf, Ensure, Func, Instance, Return} from "@sirian/ts-extra-types";
+import {Args, Ctor, DescriptorOf, Ensure, Func, Instance, Newable, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -54,11 +54,11 @@ export class Ref {
     }
 
     public static getConstructor<T extends any>(target: T) {
-        if (Var.isNullable(target)) {
-            return;
-        }
+        const ctor = target && target.constructor;
 
-        return target.constructor as Ctor<T>;
+        if (Var.isConstructor(ctor)) {
+            return ctor as Newable<T>;
+        }
     }
 
     public static isWritable(object: any, property: PropertyKey) {

@@ -100,11 +100,12 @@ export class Obj {
         throw new Error(`Could not convert ${Obj.getStringTag(target)} to primitive value`);
     }
 
-    public static fromEntries<E extends [keyof any, any]>(entries: E[]): FromEntries<E> {
-        return entries.reduce((obj, [key, value]) => {
+    public static fromEntries<E extends [any, any]>(entries: Iterable<E>): FromEntries<E[]> {
+        const obj: any = {};
+        for (const [key, value] of entries) {
             obj[key] = value;
-            return obj;
-        }, {} as any);
+        }
+        return obj;
     }
 
     public static isEmpty(obj: object) {

@@ -25,13 +25,10 @@ export type Wrap<T> =
     T extends Primitive ? PrimitiveWrapper<T>["prototype"] :
     T;
 
-export type AnyFunc = Func | Function | Ctor;
+export type AnyFunc = Func | Ctor | CallableFunction | NewableFunction;
 export type AnyType = Primitive | AnyFunc | NotFunc;
 
-export type NotFunc = Primitive | any[] | {
-    [id: string]: unknown;
-    caller?: never,
-};
+export type NotFunc = Primitive | any[] | object & { caller?: never };
 
 export type TypeName = "function" | "object" | "string" | "number" | "boolean" | "symbol" | "bigint" | "undefined";
 export type XTypeName = TypeName | "null" | "array";
@@ -113,12 +110,8 @@ export type DeepRequire<T> = {
     [P in keyof T]-?: DeepRequire<T[P]>;
 };
 
-export type Thenable = { then: AnyFunc };
-
 export type Box<T> = { _: T };
 export type UnBox<T> = T extends Box<infer U> ? U : never;
 export type UnBoxTuple<T extends Box<unknown>[]> = {
     [P in keyof T]: UnBox<T[P]>;
 };
-
-export type Falsy = false | null | undefined | number | "" | 0 | 0n;
