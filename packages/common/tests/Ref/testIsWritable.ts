@@ -15,6 +15,8 @@ describe("Ref.isWritable", () => {
         [Object.seal({x: 1}), true],
         [Object.freeze({x: 1}), false],
         [Object.freeze({}), false],
+        [Object.preventExtensions(new class {public x() {}}), true],
+        [Object.preventExtensions(new class {public y() {}}), false],
     ];
 
     test.each(data)("Ref.isWritable(%p, 'x') === %p", (value, expected) => {
