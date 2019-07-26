@@ -10,9 +10,5 @@
         "declarationDir": "build/types",
         "tsBuildInfoFile": "../../tmp/format.tsbuildinfo"
     },
-    "references": [
-        {
-            "path": "../common"
-        }
-    ]
+    "references": []
 }

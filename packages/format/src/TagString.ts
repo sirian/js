@@ -1,5 +1,3 @@
-import {Var} from "@sirian/common";
-
 export interface TemplateStringsLike {
     readonly length: number;
     raw?: readonly string[];
@@ -45,10 +43,14 @@ export class TagString {
     }
 
     protected normalize(strings: string | ArrayLike<string>) {
-        if (Var.isPrimitive(strings)) {
-            strings = [strings];
+        if (null === strings) {
+            return [];
         }
 
-        return Array.from(strings).map(Var.stringify);
+        if ("function" === typeof strings || "object" === typeof strings) {
+            return Array.from(strings).map(String);
+        }
+
+        return [String(strings)];
     }
 }
