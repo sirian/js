@@ -14,4 +14,8 @@ describe("Obj.pick", () => {
     test.each(data)("pick(%o, %o)", (obj, keys) => {
         expect(Obj.pick(obj, keys)).toStrictEqual(JSON.parse(JSON.stringify(obj, keys)));
     });
+
+    test("", () => {
+        expect(Obj.pick([1, 2], ["length"])).toStrictEqual({length: 2});
+    });
 });
