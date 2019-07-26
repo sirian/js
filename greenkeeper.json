@@ -15,6 +15,7 @@
                 "packages/expression-language/package.json",
                 "packages/filesystem/package.json",
                 "packages/finder/package.json",
+                "packages/format/package.json",
                 "packages/iterator/package.json",
                 "packages/logger/package.json",
                 "packages/merge/package.json",
