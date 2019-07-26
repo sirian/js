@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.3](https://github.com/sirian/js/compare/@sirian/common@4.43.2...@sirian/common@4.43.3) (2019-07-26)
+
+
+### Bug Fixes
+
+* **common:** Ref.isWritable ([0a65eb8](https://github.com/sirian/js/commit/0a65eb8))
+
+
+
+
+
 ## [4.43.2](https://github.com/sirian/js/compare/@sirian/common@4.43.1...@sirian/common@4.43.2) (2019-07-24)
 
 

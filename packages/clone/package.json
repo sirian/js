@@ -1,7 +1,7 @@
 {
     "name": "@sirian/clone",
     "description": "",
-    "version": "1.4.9",
+    "version": "1.4.10",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -20,7 +20,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^4.43.2",
+        "@sirian/common": "^4.43.3",
         "@sirian/error": "^2.1.5",
         "@sirian/ts-extra-types": "^3.48.2"
     }
