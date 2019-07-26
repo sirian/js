@@ -8,15 +8,15 @@ export class CloneContext {
     protected stack: object[];
     protected map: XMap<any, any>;
     protected cloner: Cloner;
-    protected options: CloneOptions;
+    protected maxDepth: number;
+    protected bypass: (object: object, ctx: CloneContext) => boolean;
 
     constructor(cloner: Cloner, options: Partial<CloneOptions> = {}) {
-        this.options = Obj.replace({
-            maxDepth: 0,
-            bypass: () => false,
-        }, options);
+        const {maxDepth = 0, bypass = () => false} = options;
+        this.maxDepth = maxDepth;
+        this.bypass = bypass;
 
-        if (!(this.options.maxDepth >= 0)) {
+        if (!(maxDepth >= 0)) {
             throw new CloneError("Cloner.clone option maxDepth should be >= 0");
         }
 
@@ -68,14 +68,12 @@ export class CloneContext {
     }
 
     protected doClone<T>(src: T): T {
-        const options = this.options;
-
-        if (!Var.isObject(src) || this.depth > options.maxDepth) {
+        if (!Var.isObject(src) || this.depth > this.maxDepth) {
             return src;
         }
 
         if (!this.cloner.supports(src)) {
-            if (options.bypass(src, this)) {
+            if (this.bypass(src, this)) {
                 return src;
             }
             throw new CloneError(`Could not clone ${Obj.getStringTag(src)} - provide bypass option to copy as-is`);

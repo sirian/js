@@ -1,5 +1,6 @@
 import {Args, Drop, Func, Func0, Func1, Get, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
+import {Var} from "./Var";
 
 const fnProto = Function.prototype;
 const fnToString = fnProto.toString;
@@ -55,14 +56,12 @@ export class Fn {
     }
 
     public static try<T>(fn: () => T): T | undefined;
-    public static try<T, R>(fn: () => T, onError: (err: any) => R): T | R;
+    public static try<T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): T | R;
     public static try(fn: Func0, onError?: Func1) {
         try {
             return fn();
         } catch (error) {
-            if (onError) {
-                return onError(error);
-            }
+            return Var.isFunction(onError) ? onError(error) : onError;
         }
     }
 }

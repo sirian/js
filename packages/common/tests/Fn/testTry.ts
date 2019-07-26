@@ -30,6 +30,12 @@ describe("Fn.try", () => {
         expect(onErr).toHaveBeenCalledWith(err1);
     });
 
+    test(`Fn.try(${fnThrow1}, ${onErrResult}) === ${onErrResult}`, () => {
+        jest.clearAllMocks();
+        expect(Fn.try(fnThrow1, onErrResult)).toBe(onErrResult);
+        expect(fnThrow1).toHaveBeenCalled();
+    });
+
     test(`Fn.try(${fnThrow1}) === undefined`, () => {
         jest.clearAllMocks();
         expect(Fn.try(fnThrow1)).toBe(undefined);

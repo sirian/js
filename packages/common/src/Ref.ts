@@ -53,11 +53,11 @@ export class Ref {
         return Reflect.defineProperty(t, k, d);
     }
 
-    public static getConstructor<T extends any>(target: T) {
+    public static getConstructor<T extends any>(target: T): Newable<T> | undefined {
         const ctor = target && target.constructor;
 
         if (Var.isConstructor(ctor)) {
-            return ctor as Newable<T>;
+            return ctor;
         }
     }
 
@@ -66,7 +66,7 @@ export class Ref {
             return false;
         }
 
-        const desc = Ref.getOwnDescriptor(object, property);
+        const desc = Ref.getDescriptor(object, property);
         if (!desc) {
             return Object.isExtensible(object);
         }

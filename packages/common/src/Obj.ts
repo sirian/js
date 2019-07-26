@@ -1,5 +1,4 @@
 import {
-    Args,
     Assign,
     FromEntries,
     ObjectZip,
@@ -19,18 +18,28 @@ export class Obj {
     }
 
     public static assign<T, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
-    public static assign(...args: any) {
-        return Object.assign(...args as Args<ObjectConstructor["assign"]>);
+    public static assign(target: any, ...sources: any[]) {
+        const keys = new XSet(Obj.keys(target));
+        for (const source of sources) {
+            if (Var.isNullable(source)) {
+                continue;
+            }
+            keys.add(...Obj.keys(source));
+
+            for (const key of keys) {
+                if (Ref.has(source, key)) {
+                    target[key] = source[key] as any;
+                }
+            }
+        }
+
+        return target;
     }
 
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
+        const keys = Obj.keys(target) as Array<keyof T>;
         for (const source of sources) {
-            for (const [key, value] of Obj.entries(source)) {
-                if (Var.isUndefined(value) || !Ref.hasOwn(target, key)) {
-                    continue;
-                }
-                target[key] = value as any;
-            }
+            Obj.assign(target, Obj.pick(source, keys));
         }
         return target;
     }
@@ -126,7 +135,9 @@ export class Obj {
 
     public static pick<T, K extends keyof T>(target: T, keys: K[]): Pick<T, K> {
         return keys.reduce((obj, key) => {
-            obj[key] = target[key];
+            if (Ref.has(target, key)) {
+                obj[key] = target[key];
+            }
             return obj;
         }, {} as any);
     }
