@@ -25,7 +25,7 @@ export class Entries<T extends [any, any]> {
     }
 
     public static fromObject<T extends object>(target: T) {
-        return new this(Obj.entries(target)) as Entries<ObjEntryOf<T>>;
+        return new Entries(Obj.entries(target));
     }
 
     public map<R extends [any, any]>(callback: <E extends T>(key: E[0], value: E[1]) => R | undefined) {
