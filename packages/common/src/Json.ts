@@ -14,16 +14,16 @@ export class Json {
         return JSON.stringify(value, ...args);
     }
 
-    public static parse(text?: string | null, fn?: (key: any, value: any) => any): JSONValue | undefined {
+    public static parse<T extends JSONValue | undefined>(text?: string | null, fn?: (key: any, value: any) => any) {
         if (null === text) {
             return null;
         }
 
-        if (undefined === text || "" === text || "undefined" === text) {
+        if (Var.isSome(text, [undefined, "", "undefined"])) {
             return undefined;
         }
 
-        return JSON.parse(text!, fn);
+        return JSON.parse(text, fn);
     }
 
     public static stripComments(value: string) {
