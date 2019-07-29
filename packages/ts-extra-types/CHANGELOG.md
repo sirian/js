@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.48.3](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.2...@sirian/ts-extra-types@3.48.3) (2019-07-29)
+
+
+### Bug Fixes
+
+* typings FromEntries, ObjectZip ([bf49aac](https://github.com/sirian/js/commit/bf49aac))
+
+
+
+
+
 ## [3.48.2](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.1...@sirian/ts-extra-types@3.48.2) (2019-07-24)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

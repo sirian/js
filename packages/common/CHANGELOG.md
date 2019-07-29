@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.4](https://github.com/sirian/js/compare/@sirian/common@4.43.3...@sirian/common@4.43.4) (2019-07-29)
+
+
+### Bug Fixes
+
+* typings FromEntries, ObjectZip ([bf49aac](https://github.com/sirian/js/commit/bf49aac))
+
+
+
+
+
 ## [4.43.3](https://github.com/sirian/js/compare/@sirian/common@4.43.2...@sirian/common@4.43.3) (2019-07-26)
 
 
