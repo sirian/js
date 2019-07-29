@@ -126,7 +126,7 @@ export class Obj {
         return true;
     }
 
-    public static zip<K extends Array<keyof any>, V extends any[]>(keys: K, values: V): ObjectZip<K, V> {
+    public static zip<K extends PropertyKey[], V extends any[]>(keys: K, values: V): ObjectZip<K, V> {
         return keys.reduce((obj, key, index) => {
             obj[key] = values[index];
             return obj;

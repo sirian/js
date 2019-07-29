@@ -1,14 +1,11 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If, Not} from "./logic";
 import {MustBeKey} from "./mustbe";
-import {ArrayElementOf, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
-import {IfExact, IfNever, IsExtends, IsWide, UnionToIntersection} from "./types";
+import {ArrayElementOf, IsEmptyTuple, IsOpenTuple, Tail, TupleKeyOf} from "./tuple";
+import {IfExact, IfNever, IsExtends, IsWide} from "./types";
 
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
 export type EntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
-
-export type Rec<K extends keyof any = any, V = any> = { [P in K]: V };
-export type PartialRec<K extends keyof any = any, V = any> = { [P in K]?: V };
 
 export type ObjKeyOf<T> =
     T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
@@ -106,11 +103,14 @@ export type Partialize<T, K extends keyof any = keyof T> = Overwrite<T, Partial<
 export type Ensure<T, K extends keyof any> = { [P in K]: unknown } & T;
 
 export type FromEntry<E extends [any, any]> =
-    E extends [MustBeKey<infer K>, infer V] ? Rec<K, V> : never;
+    E extends [MustBeKey<infer K>, infer V] ? Record<K, V> : never;
 
 export type FromEntries<L extends Array<[any, any]>> =
-    Length<L> extends 0 ? {} :
-    UnionToIntersection<FromEntry<ArrayElementOf<L>>>;
+    IsEmptyTuple<L> extends true ? {} :
+    {
+        0: FromEntry<ArrayElementOf<L>>;
+        1: FromEntry<L[0]> & FromEntries<Tail<L>>;
+    }[Required<L> extends [any, ...any[]] ? 1 : 0];
 
 type Without<T, U> = { [K in Exclude<keyof T, keyof U>]?: never };
 export type Exclusive<T, U> =
@@ -118,14 +118,17 @@ export type Exclusive<T, U> =
     ? (Without<T, U> & U) | (Without<U, T> & T)
     : T | U;
 
-export type ObjectZip<K extends Array<keyof any>, V extends any[]> =
+export type ObjectZip<K extends PropertyKey[], V extends any[]> =
+    IsEmptyTuple<K> extends true ? {} :
     {
-        0: {};
-        1: ObjectZip<Tail<K>, Tail<V>> & (V extends [] ? PartialRec<K[0], V[0]> : Rec<K[0], V[0]>)
+        0: Record<ArrayElementOf<K>, ArrayElementOf<V>>;
+        1: (V extends [] ? Partial<Record<K[0], V[0]>> : Record<K[0], V[0]>)
+            & ObjectZip<Tail<K>, Tail<V>>
     }[Required<K> extends [any, ...any[]] ? 1 : 0];
 
 export type Assign<T, S extends any[]> =
+    IsEmptyTuple<S> extends true ? T :
     {
         0: T
-        1: Assign<T & S[0], Tail<S>>,
-    }[S extends [any, ...any[]] ? 1 : 0];
+        1: Overwrite<T, Assign<S[0], Tail<S>>>,
+    }[Required<S> extends [any, ...any[]] ? 1 : 0];

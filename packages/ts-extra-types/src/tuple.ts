@@ -1,6 +1,6 @@
 import {MustBeArray, MustBeNumber} from "./mustbe";
 import {Dec, Inc, Numbers} from "./number";
-import {Expand, IsPartial, IsRequired, KeyOf, OmitIndexSignature, Partialize, Rec} from "./object";
+import {Expand, IsPartial, IsRequired, KeyOf, OmitIndexSignature, Partialize} from "./object";
 import {IfNever, IsExact, IsFiniteNumber, IsWide} from "./types";
 
 export type FixArray<T> = T & {
@@ -192,7 +192,7 @@ export type SizedArray<N extends number, T = any> =
 export type Repeat<N extends number, T = any> =
     number extends N ? T[] :
     IndexRange<N> extends MustBeNumber<infer K>
-    ? IfNever<K, [], SizedArray<N, T> & Expand<Partialize<Rec<K, T>, N>>>
+    ? IfNever<K, [], SizedArray<N, T> & Expand<Partialize<Record<K, T>, N>>>
     : never;
 
 export type UnionToTuple<U, T extends any[] = []> = {
