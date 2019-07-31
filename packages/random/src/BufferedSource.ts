@@ -1,6 +1,6 @@
-import {IRandomSource} from "../Random";
+import {IRandomSource} from "./Random";
 
-export abstract class BufferedRandomSource implements IRandomSource {
+export abstract class BufferedSource implements IRandomSource {
     protected buffer: Uint8Array;
     protected index: number;
 

@@ -1,6 +1,6 @@
-import {IRandomSource} from "../Random";
+import {IRandomSource} from "./Random";
 
-export class CallbackRandomSource implements IRandomSource {
+export class CallbackSource implements IRandomSource {
     protected callback: () => number;
 
     constructor(callback: () => number) {

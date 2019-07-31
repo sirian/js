@@ -1,4 +1,4 @@
-import {IRandomSource} from "../Random";
+import {IRandomSource} from "./Random";
 
 export class NativeMathSource implements IRandomSource {
     public uint8() {
