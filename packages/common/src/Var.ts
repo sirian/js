@@ -57,31 +57,31 @@ export class Var {
         return values.includes(value);
     }
 
-    public static isNumber(value: any): value is number {
+    public static isNumber<T>(value: T): value is Extract<T, number> {
         return "number" === typeof value;
     }
 
-    public static isBigInt(value: any): value is bigint {
+    public static isBigInt<T>(value: T): value is Extract<T, bigint> {
         return "bigint" === typeof value;
     }
 
-    public static isBoolean(value: any): value is boolean {
+    public static isBoolean<T>(value: T): value is Extract<T, boolean> {
         return "boolean" === typeof value;
     }
 
-    public static isString(value: any): value is string {
+    public static isString<T>(value: T): value is Extract<T, string> {
         return "string" === typeof value;
     }
 
-    public static isPropertyKey(value: any): value is keyof any {
+    public static isPropertyKey<T>(value: T): value is Extract<T, PropertyKey> {
         return Var.isType(value, ["string", "number", "symbol"]);
     }
 
-    public static isPrimitive(value: any): value is Primitive {
+    public static isPrimitive<T>(value: T): value is Extract<T, Primitive> {
         return !Var.isObjectOrFunction(value);
     }
 
-    public static isSymbol(value: any): value is symbol {
+    public static isSymbol<T>(value: T): value is Extract<T, symbol> {
         return "symbol" === typeof value;
     }
 
@@ -149,7 +149,7 @@ export class Var {
         return typeof x === typeof value;
     }
 
-    public static isBetween<T extends string | number>(x: T, min: T, max: T) {
+    public static isBetween<T extends string | number | bigint>(x: T, min: T, max: T) {
         if (!Var.isSameType(x, min) || !Var.isSameType(x, max)) {
             return false;
         }

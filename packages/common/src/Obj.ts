@@ -123,6 +123,7 @@ export class Obj {
             // noinspection JSUnfilteredForInLoop
             return !Ref.hasOwn(obj, key);
         }
+
         return true;
     }
 
