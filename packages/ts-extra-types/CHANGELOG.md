@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.48.5](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.4...@sirian/ts-extra-types@3.48.5) (2019-08-01)
+
+
+### Bug Fixes
+
+* **types:** Newable default value ([89e3698](https://github.com/sirian/js/commit/89e3698))
+
+
+
+
+
 ## [3.48.4](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.3...@sirian/ts-extra-types@3.48.4) (2019-08-01)
 
 

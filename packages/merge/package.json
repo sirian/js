@@ -1,7 +1,7 @@
 {
     "name": "@sirian/merge",
     "description": "",
-    "version": "1.1.11",
+    "version": "1.1.12",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -20,8 +20,8 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/clone": "^1.4.12",
-        "@sirian/common": "^4.43.5",
-        "@sirian/ts-extra-types": "^3.48.4"
+        "@sirian/clone": "^1.4.13",
+        "@sirian/common": "^4.43.6",
+        "@sirian/ts-extra-types": "^3.48.5"
     }
 }
