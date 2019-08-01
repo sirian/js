@@ -7,7 +7,7 @@ export abstract class AbstractTimeout {
     protected started: boolean;
     protected callback: TimeoutCallback;
 
-    constructor(callback: TimeoutCallback) {
+    protected constructor(callback: TimeoutCallback) {
         this.started = false;
         this.callback = callback;
     }

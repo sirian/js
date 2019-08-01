@@ -1,9 +1,9 @@
-import {ImmediateCallback} from "@sirian/process";
+import {ImmediateAdapter, ImmediateCallback} from "./Immediate";
 
 declare const setImmediate: (callback: ImmediateCallback) => any;
 declare const clearImmediate: (id: any) => void;
 
-export class NativeImmediate {
+export class NativeImmediateAdapter implements ImmediateAdapter {
     public static supports() {
         return "function" === typeof setImmediate;
     }

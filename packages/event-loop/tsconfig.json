@@ -11,7 +11,7 @@
             "dom"
         ],
         "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/process.tsbuildinfo",
+        "tsBuildInfoFile": "../../tmp/event-loop.tsbuildinfo",
         "declarationDir": "build/types"
     },
     "references": [
