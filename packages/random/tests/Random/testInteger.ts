@@ -8,18 +8,17 @@ describe("Random.integer", () => {
         [1, 0],
         [-Infinity, 0],
         [0, Infinity],
-        [0, 2 ** 53 - 1],
-        [0, 2 ** 53],
-        [0, 2 ** 53 + 1],
     ];
 
-    test.each(errorData)("Random.integer(%o, %o) throws %o", (min, max, expected = "Invalid integer range") => {
+    test.each(errorData)("Random.integer(%o, %o) throws %o", (min, max, expected = "Invalid range") => {
         const r = new Random();
-        expect(() => r.integer(min, max)).toThrow(expected);
+        expect(() => r.int(min, max)).toThrow(expected);
     });
 
     test("", () => {
         const r = new Random();
-        expect(r.integer(0, 2 ** 53 - 2)).toBeGreaterThanOrEqual(0);
+        for (let i = 0; i < 100; i++) {
+            expect(r.int(2 ** 53, 2 ** 53 + 1)).toBe(2 ** 53);
+        }
     });
 });

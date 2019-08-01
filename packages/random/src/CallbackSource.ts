@@ -7,7 +7,7 @@ export class CallbackSource implements IRandomSource {
         this.callback = callback;
     }
 
-    public uint8() {
+    public nextByte() {
         return this.callback();
     }
 }

@@ -1,9 +1,8 @@
-import {Var} from "@sirian/common";
-import {RuntimeError} from "@sirian/console";
+import {Num} from "@sirian/common";
 import {NativeMathSource} from "./NativeMathSource";
 
 export interface IRandomSource {
-    uint8(): number;
+    nextByte(): number;
 }
 
 export class Random {
@@ -21,56 +20,69 @@ export class Random {
 
         const delta = max - min;
 
-        const real01 = this.uint(bits) / 2 ** bits;
+        const real01 = this.real01(bits);
 
         return min + delta * real01;
     }
 
     public real01(bits: number = 32) {
-        return this.uint(bits) / (2 ** bits);
+        const max = 2 ** bits;
+        return this.int(0, max) / (max);
     }
 
-    public integer(min: number, max: number) {
+    public int(min: number, max: number) {
         const iMin = Math.ceil(min);
         const iMax = Math.floor(max);
 
-        const range = iMax - iMin + 1;
+        const range = iMax - iMin;
 
-        if (!Var.isBetween(range, 1, 2 ** 53 - 1)) {
-            throw new RangeError(`Invalid integer range [${min}, ${max}]`);
+        if (range < 0 || !Num.isFinite(range)) {
+            throw new RangeError(`Invalid range [${min}, ${max}]`);
         }
 
-        const bytes = Math.ceil(Math.log2(range) / 8);
+        const big = this.bigInt(BigInt(iMin), BigInt(iMax));
+        return Number(big);
+    }
 
-        if (!bytes) {
-            return iMin;
+    public bigInt(min: bigint, max: bigint) {
+        if (min === max) {
+            return min;
         }
 
-        const maxNum = 256 ** bytes;
+        const range = max - min + 1n;
+
+        let bytes = 0n;
+        let maxNum = 1n;
+
+        while (range > maxNum) {
+            maxNum <<= 8n;
+            bytes++;
+        }
 
         const {maxAttempts, source} = this;
 
         for (let attempt = 0; attempt < maxAttempts; attempt++) {
-            let val = 0;
+            let val = 0n;
 
             for (let i = 0; i < bytes; i++) {
-                const uint8 = (source.uint8() >>> 0) % 256;
-                val = (val << 8) + uint8;
+                const byte = source.nextByte();
+                const uint8 = (byte >>> 0) % 256;
+                val = (val << 8n) + BigInt(uint8);
             }
 
             if (val < maxNum - maxNum % range) {
-                return iMin + (val % range);
+                return min + (val % range);
             }
         }
 
-        throw new RuntimeError(`Random integer generation [${min}, ${max}] failed after ${maxAttempts} attempts`);
+        throw new Error(`Random integer generation [${min}, ${max}] failed after ${maxAttempts} attempts`);
     }
 
     public uuid4() {
         const tpl = "10000000-1000-4000-8000-100000000000";
         return tpl.replace(/[018]/g, (x) => {
             const shift = +x / 4;
-            const y = this.uint(4) >> shift;
+            const y = this.int(0, 15) >> shift;
             const v = +x ^ y;
             return v.toString(16);
         });
@@ -78,7 +90,7 @@ export class Random {
 
     public shuffle<T extends any[]>(array: T): T {
         for (let i = array.length - 1; i > 0; --i) {
-            const j = this.integer(0, i);
+            const j = this.int(0, i);
             if (i === j) {
                 continue;
             }
@@ -87,14 +99,5 @@ export class Random {
             array[j] = tmp;
         }
         return array;
-    }
-
-    public int(bits: number) {
-        const x = 2 ** (bits - 1);
-        return this.integer(-x, x - 1);
-    }
-
-    public uint(bits: number) {
-        return this.integer(0, 2 ** bits - 1);
     }
 }

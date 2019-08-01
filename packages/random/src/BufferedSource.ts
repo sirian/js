@@ -1,21 +1,24 @@
 import {IRandomSource} from "./Random";
 
 export abstract class BufferedSource implements IRandomSource {
-    protected buffer: Uint8Array;
+    protected view: DataView;
     protected index: number;
 
-    constructor(size: number = 128) {
-        this.index = size;
-        this.buffer = new Uint8Array(size);
+    constructor(bufferSize: number = 128) {
+        const buffer = new ArrayBuffer(bufferSize);
+        this.view = new DataView(buffer);
+        this.index = 0;
     }
 
-    public uint8() {
-        if (this.index >= this.buffer.length) {
-            this.init();
-            this.index = 0;
+    public nextByte() {
+        const {index, view} = this;
+        if (0 === index) {
+            this.reset();
         }
-        return this.buffer[this.index++];
+        this.index = (index + 1) % view.byteLength;
+
+        return view.getUint8(index);
     }
 
-    protected abstract init(): void;
+    protected abstract reset(): void;
 }
