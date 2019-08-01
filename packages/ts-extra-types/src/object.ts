@@ -127,8 +127,7 @@ export type ObjectZip<K extends PropertyKey[], V extends any[]> =
     }[Required<K> extends [any, ...any[]] ? 1 : 0];
 
 export type Assign<T, S extends any[]> =
-    IsEmptyTuple<S> extends true ? T :
     {
         0: T
-        1: Overwrite<T, Assign<S[0], Tail<S>>>,
-    }[Required<S> extends [any, ...any[]] ? 1 : 0];
+        1: Assign<Overwrite<T, S[0]>, Tail<S>>,
+    }[S extends [any, ...any[]] ? 1 : 0];

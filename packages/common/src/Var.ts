@@ -73,7 +73,7 @@ export class Var {
         return "string" === typeof value;
     }
 
-    public static isPropertyKey(value: any): value is keyof any {
+    public static isPropertyKey<T>(value: T): value is Extract<T, PropertyKey> {
         return Var.isType(value, ["string", "number", "symbol"]);
     }
 
@@ -149,7 +149,7 @@ export class Var {
         return typeof x === typeof value;
     }
 
-    public static isBetween<T extends string | number>(x: T, min: T, max: T) {
+    public static isBetween<T extends string | number | bigint>(x: T, min: T, max: T) {
         if (!Var.isSameType(x, min) || !Var.isSameType(x, max)) {
             return false;
         }
