@@ -129,5 +129,5 @@ export type ObjectZip<K extends PropertyKey[], V extends any[]> =
 export type Assign<T, S extends any[]> =
     {
         0: T
-        1: Assign<T & S[0], Tail<S>>,
+        1: Assign<Overwrite<T, S[0]>, Tail<S>>,
     }[S extends [any, ...any[]] ? 1 : 0];
