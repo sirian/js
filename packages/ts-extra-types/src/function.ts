@@ -10,7 +10,7 @@ export type Ctor0<T = any> = Ctor<T, []>;
 export type Ctor1<T = any, A = any> = Ctor<T, [A]>;
 export type Ctor2<T = any, A = any, B = any> = Ctor<T, [A, B]>;
 
-export type Newable<T = Function> = Overwrite<NewableFunction, { prototype: T }>;
+export type Newable<T = any> = Overwrite<NewableFunction, { prototype: T }>;
 
 export type Instance<T> =
     T extends Ctor<infer R> ? R :
