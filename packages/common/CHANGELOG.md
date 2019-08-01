@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.43.5](https://github.com/sirian/js/compare/@sirian/common@4.43.4...@sirian/common@4.43.5) (2019-08-01)
+
+
+### Bug Fixes
+
+* **common:** Var type guards ([92a1189](https://github.com/sirian/js/commit/92a1189))
+
+
+
+
+
 ## [4.43.4](https://github.com/sirian/js/compare/@sirian/common@4.43.3...@sirian/common@4.43.4) (2019-07-29)
 
 

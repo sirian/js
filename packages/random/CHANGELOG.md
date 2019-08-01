@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/sirian/js/compare/@sirian/random@1.2.10...@sirian/random@1.2.11) (2019-08-01)
+
+
+### Bug Fixes
+
+* **random:** switch to bigint ([a25ed49](https://github.com/sirian/js/commit/a25ed49))
+
+
+
+
+
 ## [1.2.10](https://github.com/sirian/js/compare/@sirian/random@1.2.9...@sirian/random@1.2.10) (2019-07-29)
 
 **Note:** Version bump only for package @sirian/random

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.48.4](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.3...@sirian/ts-extra-types@3.48.4) (2019-08-01)
+
+
+### Bug Fixes
+
+* **types:** Assign ([f15136f](https://github.com/sirian/js/commit/f15136f))
+* **types:** Assign, Newable, DescriptorOf ([acdf944](https://github.com/sirian/js/commit/acdf944))
+
+
+
+
+
 ## [3.48.3](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.2...@sirian/ts-extra-types@3.48.3) (2019-07-29)
 
 

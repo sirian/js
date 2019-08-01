@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.7](https://github.com/sirian/js/compare/@sirian/error@2.1.6...@sirian/error@2.1.7) (2019-08-01)
+
+**Note:** Version bump only for package @sirian/error
+
+
+
+
+
 ## [2.1.6](https://github.com/sirian/js/compare/@sirian/error@2.1.5...@sirian/error@2.1.6) (2019-07-29)
 
 **Note:** Version bump only for package @sirian/error
