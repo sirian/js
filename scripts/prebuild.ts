@@ -1,3 +1,4 @@
+import * as proc from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -11,9 +12,9 @@ if (!types.hasOwnProperty(type)) {
 
 const rootDir = path.resolve(__dirname + "/..");
 const packagesDir = rootDir + "/packages";
-const dirs = fs.readdirSync(packagesDir, {
-    withFileTypes: true,
-}).sort();
+const dirs = fs.readdirSync(packagesDir, {withFileTypes: true})
+    .sort()
+    .filter((dir) => dir.isDirectory());
 
 const greenkeeper = {
     groups: {
@@ -23,19 +24,32 @@ const greenkeeper = {
     },
 };
 
+function yarnInfo(pkg: string) {
+    const args = ["info", "--json", pkg];
+    const data = proc.spawnSync("yarn", args, {cwd: process.cwd()});
+    const output = data.output.join("");
+    return JSON.parse(output).data;
+}
+
 fs.writeFileSync(`${rootDir}/greenkeeper.json`, JSON.stringify(greenkeeper, null, 4));
 
-for (const dir of dirs) {
-    if (!dir.isDirectory()) {
-        continue;
-    }
-    const pkgName = dir.name;
-    const pkgDir = path.resolve(packagesDir, pkgName);
+for (let i = 0; i < dirs.length; i++) {
+    const dir = dirs[i];
+    const pkgDirName = dir.name;
+    console.log("[%d/%d] %s", i, dirs.length, pkgDirName);
+    const pkgDir = path.resolve(packagesDir, pkgDirName);
     const packageFile = path.resolve(pkgDir, "package.json");
 
-    const info = JSON.parse(fs.readFileSync(packageFile, "utf-8"));
+    const pkg = JSON.parse(fs.readFileSync(packageFile, "utf-8"));
 
-    const deps = Object.keys({...info.dependencies, ...info.devDependencies});
+    // const pkgName = pkg.name;
+    // const info = yarnInfo(pkgName);
+    //
+    // if (pkg.version !== info.version) {
+    //     throw new Error(`Version ${pkgName} mismatch. Remote ${info.version}, local: ${pkg.version}`);
+    // }
+
+    const deps = Object.keys({...pkg.dependencies, ...pkg.devDependencies});
     const references = [];
     for (const dep of deps) {
         const match = dep.match(/^@sirian\/([^\/]+)$/);
@@ -66,7 +80,7 @@ for (const dir of dirs) {
             rootDir: "src",
             outDir: `build/${type}`,
             declarationDir: "build/types",
-            tsBuildInfoFile: `${tmpDir}/${pkgName}.tsbuildinfo`,
+            tsBuildInfoFile: `${tmpDir}/${pkgDirName}.tsbuildinfo`,
         },
         references,
     };
