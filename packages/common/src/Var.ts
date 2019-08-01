@@ -57,19 +57,19 @@ export class Var {
         return values.includes(value);
     }
 
-    public static isNumber<T>(value: T): value is Extract<T, number> {
+    public static isNumber(value: any): value is number {
         return "number" === typeof value;
     }
 
-    public static isBigInt<T>(value: T): value is Extract<T, bigint> {
+    public static isBigInt(value: any): value is bigint {
         return "bigint" === typeof value;
     }
 
-    public static isBoolean<T>(value: T): value is Extract<T, boolean> {
+    public static isBoolean(value: any): value is boolean {
         return "boolean" === typeof value;
     }
 
-    public static isString<T>(value: T): value is Extract<T, string> {
+    public static isString(value: any): value is string {
         return "string" === typeof value;
     }
 
@@ -77,11 +77,11 @@ export class Var {
         return Var.isType(value, ["string", "number", "symbol"]);
     }
 
-    public static isPrimitive<T>(value: T): value is Extract<T, Primitive> {
+    public static isPrimitive(value: any): value is Primitive {
         return !Var.isObjectOrFunction(value);
     }
 
-    public static isSymbol<T>(value: T): value is Extract<T, symbol> {
+    public static isSymbol(value: any): value is symbol {
         return "symbol" === typeof value;
     }
 

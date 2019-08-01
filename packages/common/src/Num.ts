@@ -1,7 +1,5 @@
 import {Var} from "./Var";
 
-const Inf = 1 / 0;
-
 export class Num {
     public static parse(value?: boolean | string | number | null, defaultValue: number = NaN): number {
         if (Var.isNullable(value)) {
@@ -14,7 +12,7 @@ export class Num {
             case "string":
                 const x = +value;
 
-                return x === x ? x : defaultValue;
+                return Var.isEqualNaN(x) ? defaultValue : x;
             default:
                 return defaultValue;
         }
@@ -22,6 +20,7 @@ export class Num {
 
     public static parseInt(value?: boolean | string | number | null, defaultValue?: number) {
         return Num.toInt(Num.parse(value, defaultValue));
+
     }
 
     public static toInt(x: number) {
@@ -41,7 +40,7 @@ export class Num {
     }
 
     public static isFinite(value: any): value is number {
-        return +value === value && value !== -Inf && value !== Inf;
+        return +value === value && value !== -(1 / 0) && value !== (1 / 0);
     }
 
     public static isInt32(value: any): value is number {

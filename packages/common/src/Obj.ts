@@ -17,7 +17,7 @@ export class Obj {
         return Object.prototype.toString.call(target);
     }
 
-    public static assign<T, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
+    public static assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
     public static assign(target: any, ...sources: any[]) {
         const keys = new XSet(Obj.keys(target));
         for (const source of sources) {

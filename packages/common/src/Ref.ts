@@ -1,4 +1,15 @@
-import {Args, Ctor, DescriptorOf, Ensure, Func, Instance, Newable, Return} from "@sirian/ts-extra-types";
+import {
+    Args,
+    Ctor0,
+    CtorArgs,
+    DescriptorOf,
+    Ensure,
+    Func,
+    Func0,
+    Instance,
+    Newable,
+    Return,
+} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -34,22 +45,26 @@ export class Ref {
 
     public static getDescriptor<T, K extends keyof any>(target: T, key: K) {
         for (const obj of Ref.getProtoChain(target)) {
-            const descriptor: unknown = Ref.getOwnDescriptor(obj, key);
+            const descriptor = Ref.getOwnDescriptor(obj, key);
             if (descriptor) {
                 return descriptor as DescriptorOf<T, K>;
             }
         }
     }
 
-    public static getOwnDescriptor<T, K extends keyof any>(target: T, key: K) {
-        return Object.getOwnPropertyDescriptor(target, key) as DescriptorOf<T, K> | undefined;
+    public static getOwnDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
+    public static getOwnDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
+    public static getOwnDescriptor(target: any, key: PropertyKey) {
+        return Object.getOwnPropertyDescriptor(target, key);
     }
 
     public static getOwnDescriptors<T>(target: T): { [P in keyof T]: TypedPropertyDescriptor<T[P]> } {
         return Object.getOwnPropertyDescriptors(target);
     }
 
-    public static defineProperty<T extends object, K extends keyof any>(t: T, k: K, d: DescriptorOf<T, K>) {
+    public static defineProperty<T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
+    public static defineProperty(t: object, k: PropertyKey, d: PropertyDescriptor): boolean;
+    public static defineProperty(t: object, k: PropertyKey, d: PropertyDescriptor) {
         return Reflect.defineProperty(t, k, d);
     }
 
@@ -71,16 +86,20 @@ export class Ref {
             return Object.isExtensible(object);
         }
 
-        return true === desc.writable || Var.isFunction(desc.set);
+        return desc.writable || Var.isFunction(desc.set);
     }
 
-    public static construct<F extends Ctor>(constructor: F, args: Args<F>, newTarget?: Function): Instance<F>;
+    public static construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
+    public static construct<F extends Newable>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
 
-    public static construct(...args: Args<typeof Reflect["construct"]>) {
-        return Reflect.construct(...args);
+    public static construct(target: Function, args: any[] = [], newTarget?: Function) {
+        const rest = newTarget ? [newTarget] : [];
+        return Reflect.construct(target, args, ...rest);
     }
 
-    public static apply<F extends Func>(target: F, thisArg: any, args: Args<F>): Return<F> {
+    public static apply<F extends Func0>(target: F, thisArg?: any, args?: Args<F>): Return<F>;
+    public static apply<F extends Func>(target: F, thisArg: any, args: Args<F>): Return<F>;
+    public static apply(target: Func, thisArg?: any, args: any[] = []) {
         return Reflect.apply(target, thisArg, args);
     }
 
@@ -88,7 +107,7 @@ export class Ref {
         const result = new XSet<any>();
         const {maxDepth, stopAt} = options;
 
-        for (let current: Partial<T> = target;;) {
+        for (let current: Partial<T> = target; ;) {
             if (maxDepth && (result.size >= maxDepth)) {
                 break;
             }
