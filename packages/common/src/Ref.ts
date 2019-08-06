@@ -1,15 +1,4 @@
-import {
-    Args,
-    Ctor0,
-    CtorArgs,
-    DescriptorOf,
-    Ensure,
-    Func,
-    Func0,
-    Instance,
-    Newable,
-    Return,
-} from "@sirian/ts-extra-types";
+import {Args, Ctor0, CtorArgs, Ensure, Func, Func0, Instance, Newable, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -36,18 +25,20 @@ export class Ref {
         return Object.getOwnPropertySymbols(target) as S[];
     }
 
-    public static ownProperties<T extends object>(target: T) {
+    public static ownProperties<T extends object>(target: T): Array<keyof T> {
         return [
             ...Ref.ownPropertyNames(target),
             ...Ref.ownPropertySymbols(target),
         ];
     }
 
+    public static getDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
+    public static getDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
     public static getDescriptor<T, K extends keyof any>(target: T, key: K) {
         for (const obj of Ref.getProtoChain(target)) {
             const descriptor = Ref.getOwnDescriptor(obj, key);
             if (descriptor) {
-                return descriptor as DescriptorOf<T, K>;
+                return descriptor;
             }
         }
     }

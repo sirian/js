@@ -73,7 +73,7 @@ export class Var {
         return "string" === typeof value;
     }
 
-    public static isPropertyKey<T>(value: T): value is Extract<T, PropertyKey> {
+    public static isPropertyKey(value: any): value is PropertyKey {
         return Var.isType(value, ["string", "number", "symbol"]);
     }
 
@@ -157,11 +157,11 @@ export class Var {
         return x >= min && x <= max;
     }
 
-    public static isArray(value: any): value is any[] {
+    public static isArray(value: any): value is unknown[] {
         return Array.isArray(value);
     }
 
-    public static isArrayLike(value: any): value is Lengthwise {
+    public static isArrayLike<T>(value: T): value is Lengthwise & Extract<T, Lengthwise> {
         if (Var.isArray(value)) {
             return true;
         }
@@ -183,7 +183,7 @@ export class Var {
         return Var.isPlainArray(value) || Var.isPlainObject(value);
     }
 
-    public static isPlainArray(value: any): value is any[] {
+    public static isPlainArray(value: any): value is unknown[] {
         if (!Var.isArray(value)) {
             return false;
         }
