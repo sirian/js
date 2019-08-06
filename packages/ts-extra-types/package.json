@@ -13,6 +13,7 @@
         "build/"
     ],
     "types": "build/types/index.d.ts",
+    "sideEffects": false,
     "scripts": {
         "test": "tsc -p tsconfig.test.json",
         "test:watch": "tsc -w -p tsconfig.test.json"

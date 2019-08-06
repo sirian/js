@@ -1,4 +1,5 @@
-import {Num} from "@sirian/common";
+import {Num, Var} from "@sirian/common";
+import {IterableEntries} from "@sirian/ts-extra-types";
 import {NativeMathSource} from "./NativeMathSource";
 
 export interface IRandomSource {
@@ -11,6 +12,21 @@ export class Random {
 
     constructor(source?: IRandomSource) {
         this.source = source || new NativeMathSource();
+    }
+
+    public pick<V>(target: V[]): [number, V];
+    public pick<K, V>(target: IterableEntries<[K, V]>): [K, V];
+
+    public pick(target: string[] | IterableEntries) {
+        if (!Var.isArray(target)) {
+            const entries = [...target.entries()];
+            const [/*index*/, entry] = this.pick(entries);
+            return entry;
+        }
+
+        const index = this.int(0, target.length - 1);
+        const elem = target[index];
+        return [index, elem];
     }
 
     public real(min: number, max: number, bits: number = 32) {
