@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.13](https://github.com/sirian/js/compare/@sirian/shared-store@1.1.12...@sirian/shared-store@1.1.13) (2019-08-06)
+
+**Note:** Version bump only for package @sirian/shared-store
+
+
+
+
+
 ## [1.1.12](https://github.com/sirian/js/compare/@sirian/shared-store@1.1.11...@sirian/shared-store@1.1.12) (2019-08-01)
 
 **Note:** Version bump only for package @sirian/shared-store

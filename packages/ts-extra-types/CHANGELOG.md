@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.48.6](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.5...@sirian/ts-extra-types@3.48.6) (2019-08-06)
+
+**Note:** Version bump only for package @sirian/ts-extra-types
+
+
+
+
+
 ## [3.48.5](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.4...@sirian/ts-extra-types@3.48.5) (2019-08-01)
 
 
