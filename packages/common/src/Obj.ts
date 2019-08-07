@@ -82,6 +82,20 @@ export class Obj {
         return Object.create(o, properties || {});
     }
 
+    public static clear<T extends object>(target: T): Partial<T> {
+        if (Var.isArray(target)) {
+            target.length = 0;
+        }
+        // tslint:disable-next-line:forin
+        for (const prop in target) {
+            // noinspection JSUnfilteredForInLoop
+            if (Ref.hasOwn(target, prop)) {
+                Reflect.deleteProperty(target, prop);
+            }
+        }
+        return target as Partial<T>;
+    }
+
     public static getStringTag(arg: any) {
         // extract "[object (.*)]"
         return Obj.stringify(arg).slice(8, -1);
