@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.44.0](https://github.com/sirian/js/compare/@sirian/common@4.43.7...@sirian/common@4.44.0) (2019-08-10)
+
+
+### Features
+
+* Obj.clear ([83ef2fd](https://github.com/sirian/js/commit/83ef2fd))
+
+
+
+
+
 ## [4.43.7](https://github.com/sirian/js/compare/@sirian/common@4.43.6...@sirian/common@4.43.7) (2019-08-06)
 
 **Note:** Version bump only for package @sirian/common

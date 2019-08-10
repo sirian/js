@@ -1,7 +1,7 @@
 {
     "name": "@sirian/finder",
     "description": "",
-    "version": "1.2.14",
+    "version": "1.2.15",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,9 +17,9 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^4.43.7",
-        "@sirian/filesystem": "^1.7.14",
-        "@sirian/iterator": "^1.12.13",
+        "@sirian/common": "^4.44.0",
+        "@sirian/filesystem": "^1.7.15",
+        "@sirian/iterator": "^1.12.14",
         "@sirian/ts-extra-types": "^3.48.6"
     },
     "scripts": {},

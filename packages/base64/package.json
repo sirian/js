@@ -1,7 +1,7 @@
 {
     "name": "@sirian/base64",
     "description": "",
-    "version": "1.2.11",
+    "version": "1.2.12",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -26,6 +26,6 @@
         "js-base64": "^2.5.1"
     },
     "dependencies": {
-        "@sirian/common": "^4.43.7"
+        "@sirian/common": "^4.44.0"
     }
 }
