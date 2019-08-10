@@ -4,7 +4,6 @@ import {
     ExtractByTypeName,
     ExtractByXTypeName,
     Instance,
-    Lengthwise,
     Newable,
     Primitive,
     Thenable,
@@ -161,20 +160,19 @@ export class Var {
         return Array.isArray(value);
     }
 
-    public static isArrayLike<T>(value: T): value is Lengthwise & Extract<T, Lengthwise> {
-        if (Var.isArray(value)) {
+    public static isArrayLike(value: any, strict: boolean = true): value is { length: number } {
+        if (Var.isString(value)) {
             return true;
         }
-
-        if (!Var.isObject(value)) {
-            return false;
-        }
-
-        if (!Ref.has(value, "length")) {
+        if (!Var.isObject(value) || !Ref.has(value, "length")) {
             return false;
         }
 
         const length = value.length;
+
+        if (!strict) {
+            return Var.isNumeric(length);
+        }
 
         return Num.isInt(length) && length >= 0;
     }
