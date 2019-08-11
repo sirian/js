@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/sirian/js/compare/@sirian/common@5.0.1...@sirian/common@5.1.0) (2019-08-11)
+
+
+### Features
+
+* **xproxy:** XProxy.removeTarget, XProxy.revoke ([84fb6a7](https://github.com/sirian/js/commit/84fb6a7))
+
+
+
+
+
 ## [5.0.1](https://github.com/sirian/js/compare/@sirian/common@5.0.0...@sirian/common@5.0.1) (2019-08-11)
 
 

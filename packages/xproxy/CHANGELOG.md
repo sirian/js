@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/sirian/js/compare/@sirian/xproxy@1.2.11...@sirian/xproxy@1.3.0) (2019-08-11)
+
+
+### Features
+
+* **xproxy:** XProxy.removeTarget, XProxy.revoke ([84fb6a7](https://github.com/sirian/js/commit/84fb6a7))
+
+
+
+
+
 ## [1.2.11](https://github.com/sirian/js/compare/@sirian/xproxy@1.2.10...@sirian/xproxy@1.2.11) (2019-08-11)
 
 **Note:** Version bump only for package @sirian/xproxy
