@@ -26,8 +26,8 @@ describe("Descriptor", () => {
     ];
 
     const descriptors = [
-        ...Obj.values(Ref.getOwnDescriptors(Object)),
-        ...Obj.values(Ref.getOwnDescriptors(Function)),
+        ...Obj.values(Ref.ownDescriptors(Object)),
+        ...Obj.values(Ref.ownDescriptors(Function)),
     ];
 
     const invalidDescriptors = [

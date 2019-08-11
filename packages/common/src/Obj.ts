@@ -8,16 +8,19 @@ import {
     ToPrimitive,
     Wrap,
 } from "@sirian/ts-extra-types";
+import {Fn} from "./Fn";
 import {ProtoChainOptions, Ref} from "./Ref";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
 
 export class Obj {
-    public static stringify(target: object) {
-        return Object.prototype.toString.call(target);
-    }
+    public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
+    public static values = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
+    public static entries = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
+    public static stringify = Fn.withThis(Object.prototype.toString) as (target: any) => string;
 
     public static assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
+
     public static assign(target: any, ...sources: any[]) {
         const keys = new XSet(Obj.keys(target));
         for (const source of sources) {
@@ -51,8 +54,8 @@ export class Obj {
             stopAt: Object.prototype,
             ...options,
         };
-        for (const x of Ref.getProtoChain(target, opts)) {
-            for (const [key, desc] of Obj.entries(Ref.getOwnDescriptors(x))) {
+        for (const x of Ref.getPrototypes(target, opts)) {
+            for (const [key, desc] of Obj.entries(Ref.ownDescriptors(x))) {
                 if ("__proto__" === key) {
                     continue;
                 }
@@ -63,18 +66,6 @@ export class Obj {
         }
 
         return Obj.pick(target, [...keys] as Array<keyof T>) as T;
-    }
-
-    public static keys<T>(target: T) {
-        return Object.keys(target) as Array<ObjKeyOf<T>>;
-    }
-
-    public static values<T>(target: T) {
-        return Object.values(target) as Array<ObjValueOf<T>>;
-    }
-
-    public static entries<T>(target: T) {
-        return Object.entries(target) as Array<ObjEntryOf<T>>;
     }
 
     // tslint:disable-next-line:max-line-length
@@ -90,7 +81,7 @@ export class Obj {
         for (const prop in target) {
             // noinspection JSUnfilteredForInLoop
             if (Ref.hasOwn(target, prop)) {
-                Reflect.deleteProperty(target, prop);
+                Ref.delete(target, prop);
             }
         }
         return target as Partial<T>;
@@ -102,7 +93,7 @@ export class Obj {
     }
 
     public static wrap<T>(value: T): Wrap<T> {
-        return Object(value);
+        return Var.isObject(value) ? value : Object(value);
     }
 
     public static toPrimitive<T>(target: T): ToPrimitive<T> {

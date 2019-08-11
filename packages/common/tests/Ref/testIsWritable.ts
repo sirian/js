@@ -4,8 +4,8 @@ describe("Ref.isWritable", () => {
     const data = [
         [null, false],
         [undefined, false],
-        ["foo", false],
-        [3, false],
+        ["foo", true],
+        [3, true],
         [{}, true],
         [() => 1, true],
         [Object.create(null), true],

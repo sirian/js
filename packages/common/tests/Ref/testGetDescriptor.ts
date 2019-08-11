@@ -16,7 +16,7 @@ const data: Array<[object, PropertyKey, PropertyDescriptor?]> = [
     [["foo"], "length", desc(1, false, false)],
 ];
 
-test.each(data)("Ref.getDescriptor(%p, %p) === %p", (target, key, expected) => {
-    const descriptor = Ref.getDescriptor(target, key);
+test.each(data)("Ref.descriptor(%p, %p) === %p", (target, key, expected) => {
+    const descriptor = Ref.descriptor(target, key);
     expect(descriptor).toStrictEqual(expected!);
 });

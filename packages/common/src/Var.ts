@@ -186,13 +186,13 @@ export class Var {
             return false;
         }
 
-        const proto = Ref.getPrototypeOf(value);
+        const proto = Ref.getPrototype(value);
 
         if (!Var.isArray(proto)) {
             return false;
         }
 
-        const nextProto = Ref.getPrototypeOf(proto);
+        const nextProto = Ref.getPrototype(proto);
 
         return !Var.isArray(nextProto);
     }
@@ -221,7 +221,7 @@ export class Var {
         if (!Var.isObject(x)) {
             return false;
         }
-        const prototype = Ref.getPrototypeOf(x);
+        const prototype = Ref.getPrototype(x);
 
         if (Obj.getStringTag(x) !== "Object") {
             return !prototype;

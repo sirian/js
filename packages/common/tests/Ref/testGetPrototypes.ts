@@ -1,6 +1,6 @@
 import {Ref, Var} from "../../src";
 
-describe("Ref.getProtoChain", () => {
+describe("Ref.getPrototypes", () => {
     class Foo {}
 
     class Bar extends Foo {}
@@ -13,8 +13,8 @@ describe("Ref.getProtoChain", () => {
     const objProto = Object.prototype;
 
     const data: Array<[any, object[]]> = [
-        [1, []],
-        ["", []],
+        [1, [Number.prototype, objProto]],
+        ["", [String.prototype, objProto]],
         [null, []],
         [undefined, []],
 
@@ -37,8 +37,8 @@ describe("Ref.getProtoChain", () => {
         }
     }
 
-    test.each(data)("Ref.getProtoChain(%p) === %p", (target, expected) => {
-        const chain = Ref.getProtoChain(target);
+    test.each(data)("Ref.getPrototypes(%p) === %p", (target, expected) => {
+        const chain = Ref.getPrototypes(target);
         expect(chain).toStrictEqual(expected);
     });
 
