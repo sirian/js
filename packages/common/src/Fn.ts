@@ -6,7 +6,9 @@ import {Var} from "./Var";
 type WithThis<F extends Func> = <O extends Overloads<F>>(thisArg: ThisArg<F>, ...args: O[0]) => O[1];
 
 export class Fn {
-    public static stringify = Fn.withThis(Function.prototype.toString);
+    public static stringify(value: string) {
+        return Function.prototype.toString.call(value);
+    }
 
     public static withThis<F extends Func>(fn: F): WithThis<F> {
         return (thisArg, ...args) => Ref.apply(fn, thisArg, args as any);
