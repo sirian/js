@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/sirian/js/compare/@sirian/common@4.44.0...@sirian/common@5.0.0) (2019-08-11)
+
+
+### Features
+
+* **common:** refactoring ([3decbd8](https://github.com/sirian/js/commit/3decbd8))
+
+
+### BREAKING CHANGES
+
+* **common:** API changed
+
+
+
+
+
 # [4.44.0](https://github.com/sirian/js/compare/@sirian/common@4.43.7...@sirian/common@4.44.0) (2019-08-10)
 
 

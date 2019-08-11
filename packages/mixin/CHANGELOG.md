@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/sirian/js/compare/@sirian/mixin@1.2.14...@sirian/mixin@1.2.15) (2019-08-11)
+
+**Note:** Version bump only for package @sirian/mixin
+
+
+
+
+
 ## [1.2.14](https://github.com/sirian/js/compare/@sirian/mixin@1.2.13...@sirian/mixin@1.2.14) (2019-08-10)
 
 **Note:** Version bump only for package @sirian/mixin
