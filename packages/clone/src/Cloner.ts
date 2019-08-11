@@ -76,7 +76,7 @@ export class Cloner implements ICloner<any> {
     }
 
     public static hasCloneSymbol(value: any) {
-        for (const proto of Ref.getProtoChain(value)) {
+        for (const proto of Ref.getPrototypes(value)) {
             if (Ref.hasMethod(proto, cloneSymbol)) {
                 return true;
             }
@@ -92,9 +92,9 @@ export class Cloner implements ICloner<any> {
             return true;
         }
 
-        const proto = Ref.getPrototypeOf(value);
+        const proto = Ref.getPrototype(value);
 
-        if (this.handlers.has(proto)) {
+        if (!proto || this.handlers.has(proto)) {
             return true;
         }
 
@@ -117,14 +117,11 @@ export class Cloner implements ICloner<any> {
     }
 
     public getHandler<T extends object>(src: T): ICloneHandler<T> | undefined {
-        const proto = Ref.getPrototypeOf(src);
-        return this.handlers.get(proto);
+        const proto = Ref.getPrototype(src);
+        return this.handlers.get(proto as any);
     }
 
     public cloneDeep<T>(src: T, options: Partial<CloneOptions> = {}) {
         return this.clone(src, {maxDepth: 1 / 0, ...options});
     }
 }
-
-export const clone = Cloner.clone.bind(Cloner);
-export const cloneDeep = Cloner.cloneDeep.bind(Cloner);

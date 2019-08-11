@@ -34,13 +34,13 @@ export class CloneContext {
     }
 
     public cloneProperties<T extends object>(copy: T, src: T) {
-        for (const key of Ref.ownProperties(src)) {
+        for (const key of Ref.ownKeys(src)) {
             this.cloneProperty(copy, src, key);
         }
     }
 
     public addProperties<T extends object>(copy: T, src: T) {
-        for (const key of Ref.ownProperties(src)) {
+        for (const key of Ref.ownKeys(src)) {
             this.addProperty(copy, src, key);
         }
     }
@@ -52,7 +52,7 @@ export class CloneContext {
     }
 
     public cloneProperty<T extends object, K extends keyof T>(copy: T, src: T, key: K) {
-        const descriptor = Ref.getOwnDescriptor(src, key);
+        const descriptor = Ref.ownDescriptor(src, key);
 
         if (!descriptor) {
             delete copy[key];
@@ -64,7 +64,7 @@ export class CloneContext {
             descriptor.value = this.clone(value);
         }
 
-        Ref.defineProperty(copy, key, descriptor);
+        Ref.define(copy, key, descriptor);
     }
 
     protected doClone<T>(src: T): T {
@@ -120,15 +120,15 @@ export class CloneContext {
     }
 
     protected createStub<T extends object>(src: T, handler?: ICloneHandler<T>): T {
-        const proto = Ref.getPrototypeOf(src);
+        const proto = Ref.getPrototype(src);
 
-        if (!Ref.hasMethod(handler, "create")) {
+        if (!proto || !Ref.hasMethod(handler, "create")) {
             return Obj.create(proto) as T;
         }
 
         const stub = handler.create(src);
 
-        Ref.setPrototypeOf(stub, proto);
+        Ref.setPrototype(stub, proto);
 
         return stub;
     }
