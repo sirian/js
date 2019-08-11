@@ -1,4 +1,4 @@
-import {Args, Ctor0, CtorArgs, Ensure, Func, Func0, Get, Instance, Newable, Return} from "@sirian/ts-extra-types";
+import {Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -89,8 +89,8 @@ export class Ref {
         return Reflect.construct(target, args, ...rest);
     }
 
-    public static apply<F extends Func0>(target: F, thisArg?: any, args?: Args<F>): Return<F>;
-    public static apply<F extends Func>(target: F, thisArg: any, args: Args<F>): Return<F>;
+    public static apply<R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
+    public static apply<R>(target: () => R, thisArg?: any, args?: []): R;
     public static apply(target: Func, thisArg?: any, args: any[] = []) {
         return Reflect.apply(target, thisArg, args);
     }

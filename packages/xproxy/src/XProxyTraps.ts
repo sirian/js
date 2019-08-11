@@ -1,5 +1,7 @@
 import {CtorArgs, FnArgs, KeyOf} from "@sirian/ts-extra-types";
 
+export type ProxyTrap = keyof XProxyTraps<any>;
+
 export interface XProxyTraps<T> {
     getPrototypeOf?: (target: T) => object | null | void;
 
@@ -20,8 +22,6 @@ export interface XProxyTraps<T> {
     deleteProperty?: <K extends keyof T>(target: T, p: K) => boolean | void;
 
     defineProperty?: <K extends keyof T>(target: T, p: K, attributes: TypedPropertyDescriptor<T[K]>) => boolean | void;
-
-    enumerate?: (target: T) => KeyOf<T> | void;
 
     ownKeys?: (target: T) => KeyOf<T> | void;
 
