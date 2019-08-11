@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/sirian/js/compare/@sirian/common@5.0.0...@sirian/common@5.0.1) (2019-08-11)
+
+
+### Bug Fixes
+
+* **common:** Fn.stringify ([d9eff98](https://github.com/sirian/js/commit/d9eff98))
+* **common:** Fn.stringify ([680a836](https://github.com/sirian/js/commit/680a836))
+
+
+
+
+
 # [5.0.0](https://github.com/sirian/js/compare/@sirian/common@4.44.0...@sirian/common@5.0.0) (2019-08-11)
 
 
