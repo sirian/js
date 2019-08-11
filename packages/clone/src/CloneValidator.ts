@@ -108,8 +108,8 @@ export class CloneValidator {
     }
 
     protected validateKey(src: object, clone: object | object, key: PropertyKey) {
-        const desc1 = Ref.getOwnDescriptor(src, key);
-        const desc2 = Ref.getOwnDescriptor(clone, key);
+        const desc1 = Ref.ownDescriptor(src, key);
+        const desc2 = Ref.ownDescriptor(clone, key);
 
         const type1 = Descriptor.getDescriptorType(desc1);
         const type2 = Descriptor.getDescriptorType(desc2);

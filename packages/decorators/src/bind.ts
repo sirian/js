@@ -23,7 +23,7 @@ export const bind = Decorator.forMethod(() => {
                 return bound.get(this)! as F;
             },
             set(this: any, value: any) {
-                Ref.defineProperty(this, key, {
+                Ref.define(this, key, {
                     configurable: true,
                     enumerable: true,
                     writable: true,

@@ -49,7 +49,12 @@ export class XMap<K = any, V = any> extends Map<K, V> {
         return Array.from(src as any);
     }
 
-    public static pick<K, V>(map: IMapMini<K, V>, key: K) {
+    public static pick<K, V>(map: IMapMini<K, V>, key: K, strict: true): V;
+    public static pick<K, V>(map: IMapMini<K, V>, key: K, strict?: boolean): V | undefined;
+    public static pick<K, V>(map: IMapMini<K, V>, key: K, throws = false) {
+        if (throws && !map.has(key)) {
+            throw new Error(`Key ${key} not found`);
+        }
         const result = map.get(key);
         map.delete(key);
         return result;
@@ -105,7 +110,9 @@ export class XMap<K = any, V = any> extends Map<K, V> {
         return result;
     }
 
-    public pick(key: K) {
-        return XMap.pick(this, key);
+    public pick(key: K, strict: true): V;
+    public pick(key: K, strict?: boolean): V | undefined;
+    public pick(key: K, strict = false) {
+        return XMap.pick(this, key, strict);
     }
 }

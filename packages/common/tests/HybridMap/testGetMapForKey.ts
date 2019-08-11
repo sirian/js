@@ -1,6 +1,6 @@
 import {HybridMap} from "../../src";
 
-describe("HybridMap.getMapForKey", () => {
+describe("HybridMap.getMap", () => {
     const map = new HybridMap();
     const data: Array<[any, any]> = [
         [{}, map.weakMap],
@@ -11,7 +11,7 @@ describe("HybridMap.getMapForKey", () => {
         [1, map.strongMap],
     ];
 
-    test.each(data)("HybridMap.getMapForKey(%o) === %o", (key, expected) => {
-        expect(map.getMapForKey(key)).toBe(expected);
+    test.each(data)("HybridMap.getMap(%o) === %o", (key, expected) => {
+        expect(map.getMap(key)).toBe(expected);
     });
 });

@@ -22,17 +22,17 @@ export class HybridMap<K, V> implements IMapMini<K, V> {
     }
 
     public ensure(key: K, initializer?: () => V) {
-        return this.getMapForKey(key).ensure(key, initializer);
+        return this.getMap(key).ensure(key, initializer);
     }
 
-    public pick(key: K) {
-        const result = this.get(key);
-        this.delete(key);
-        return result;
+    public pick(key: K, strict: true): V;
+    public pick(key: K, strict?: boolean): V | undefined;
+    public pick(key: K, strict = false) {
+        return XMap.pick(this, key, strict);
     }
 
     public get(key: K) {
-        return this.getMapForKey(key).get(key);
+        return this.getMap(key).get(key);
     }
 
     public has(key: K) {
@@ -40,7 +40,7 @@ export class HybridMap<K, V> implements IMapMini<K, V> {
     }
 
     public set(key: K, value: V) {
-        this.getMapForKey(key).set(key, value);
+        this.getMap(key).set(key, value);
 
         return this;
     }
@@ -54,7 +54,7 @@ export class HybridMap<K, V> implements IMapMini<K, V> {
         this.weakMap = new XWeakMap();
     }
 
-    public getMapForKey(key: K) {
+    public getMap(key: K) {
         if (key === null || "object" !== typeof key && "function" !== typeof key) {
             return this.strongMap as HybridMapStore<K, V>;
         }

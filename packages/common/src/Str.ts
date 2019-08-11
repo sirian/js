@@ -55,6 +55,12 @@ export class Str {
         }
     }
 
+    public static isEqual(a?: string, b?: string, sensitive = true) {
+        return Var.isString(a)
+            && Var.isString(b)
+            && (sensitive ? a === b : a.toUpperCase() === b.toUpperCase());
+    }
+
     public static repeat(chars: string, maxLength: number) {
         chars = Var.stringify(chars);
 

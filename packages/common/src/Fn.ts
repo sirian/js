@@ -1,13 +1,15 @@
-import {Args, Drop, Func, Func0, Func1, Get, Return} from "@sirian/ts-extra-types";
+import {Args, Drop, Func, Func0, Func1, Get, Overloads, Return, ThisArg} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
+import {Ref} from "./Ref";
 import {Var} from "./Var";
 
-const fnProto = Function.prototype;
-const fnToString = fnProto.toString;
+type WithThis<F extends Func> = <O extends Overloads<F>>(thisArg: ThisArg<F>, ...args: O[0]) => O[1];
 
 export class Fn {
-    public static stringify(fn: Function) {
-        return fnToString.call(fn);
+    public static stringify = Fn.withThis(Function.prototype.toString);
+
+    public static withThis<F extends Func>(fn: F): WithThis<F> {
+        return (thisArg, ...args) => Ref.apply(fn, thisArg, args as any);
     }
 
     public static execute(code: string, args: Record<string, any> = {}) {

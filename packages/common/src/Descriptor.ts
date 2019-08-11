@@ -20,7 +20,7 @@ export class Descriptor<T extends AccessorPropertyDescriptor | DataPropertyDescr
     }
 
     public static from<T, K extends keyof T>(target: T, key: K): Descriptor<TypedPropertyDescriptor<T[K]>> {
-        const desc = Ref.getOwnDescriptor(target, key);
+        const desc = Ref.ownDescriptor(target, key);
 
         if (!desc) {
             throw new Error(`Descriptor ${target}[${key}] not found`);

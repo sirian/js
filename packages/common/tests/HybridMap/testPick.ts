@@ -9,7 +9,7 @@ describe("set", () => {
     ];
 
     const map = new HybridMap();
-    test.each(data)("set(%o) === %o", (key) => {
+    test.each(data)("XMap.pick(%o) === %o", (key) => {
         const value = 123;
 
         expect(map.get(key)).toBe(undefined);
