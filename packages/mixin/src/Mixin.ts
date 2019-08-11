@@ -55,7 +55,7 @@ export class Mixin {
     public static has<M extends MixinFn>(object: object, mixin: M): object is MixinInstance<M> {
         const unwrapped = Mixin.unwrap(mixin);
 
-        for (const o of Ref.getProtoChain(object)) {
+        for (const o of Ref.getPrototypes(object)) {
             if (Mixin.applied.get(o) === unwrapped) {
                 return true;
             }
@@ -96,7 +96,7 @@ export class Mixin {
     }
 
     protected static wrap(mixin: MixinFn, wrapper: MixinFn) {
-        Ref.setPrototypeOf(wrapper, mixin);
+        Ref.setPrototype(wrapper, mixin);
 
         Mixin.wrappers.set(wrapper, Mixin.unwrap(mixin));
 
@@ -127,7 +127,7 @@ export class Mixin {
             value: (o: object) => Mixin.has(o, mixin),
         };
 
-        Ref.defineProperty(mixin, Symbol.hasInstance, desc);
+        Ref.define(mixin, Symbol.hasInstance, desc);
 
         return mixin;
     }
