@@ -1,7 +1,7 @@
 {
     "name": "@sirian/object-ref",
     "description": "",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -18,7 +18,7 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^5.1.0",
-        "@sirian/shared-store": "^1.1.17"
+        "@sirian/shared-store": "^1.2.0"
     },
     "scripts": {},
     "publishConfig": {

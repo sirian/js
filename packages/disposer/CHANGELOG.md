@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/sirian/js/compare/@sirian/disposer@1.6.17...@sirian/disposer@1.7.0) (2019-08-12)
+
+
+### Features
+
+* **disposer:** disposer.target getter ([50a3545](https://github.com/sirian/js/commit/50a3545))
+
+
+
+
+
 ## [1.6.17](https://github.com/sirian/js/compare/@sirian/disposer@1.6.16...@sirian/disposer@1.6.17) (2019-08-11)
 
 **Note:** Version bump only for package @sirian/disposer
