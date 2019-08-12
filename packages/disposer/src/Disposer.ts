@@ -1,4 +1,4 @@
-import {Ref, XSet, XWeakMap} from "@sirian/common";
+import {Ref, XSet} from "@sirian/common";
 import {SharedStore} from "@sirian/shared-store";
 import {Return} from "@sirian/ts-extra-types";
 
@@ -18,15 +18,13 @@ enum DisposeState {
 
 export class Disposer {
     public readonly children: XSet<object>;
-    public readonly target: object;
     public readonly errors: any[] = [];
 
     protected state: DisposeState;
     protected callbacks: DisposeCallback[];
     protected timeoutId?: Return<typeof setTimeout>;
 
-    constructor(target: object) {
-        this.target = target;
+    constructor() {
         this.state = DisposeState.INITIAL;
         this.children = new XSet();
         this.callbacks = [];
@@ -36,13 +34,18 @@ export class Disposer {
         return SharedStore.get({
             key: "disposer",
             init: () => ({
-                disposers: new XWeakMap<object, Disposer>(),
+                disposers: new WeakMap<object, Disposer>(),
+                targets: new WeakMap<Disposer, object>(),
             }),
         });
     }
 
     protected static get disposers() {
         return this.store.disposers;
+    }
+
+    public get target() {
+        return Disposer.store.targets.get(this);
     }
 
     public static addCallback(target: object, callback: DisposeCallback) {
@@ -88,12 +91,14 @@ export class Disposer {
     }
 
     public static for(target: object) {
-        const disposers = Disposer.store.disposers;
+        const store = Disposer.store;
+        const disposers = store.disposers;
 
         if (!disposers.has(target)) {
-            const disposer = new Disposer(target);
+            const disposer = new Disposer();
             disposers.set(target, disposer);
             disposers.set(disposer, disposer);
+            store.targets.set(disposer, target);
         }
 
         return disposers.get(target)!;
@@ -161,12 +166,12 @@ export class Disposer {
         this.disposeChildren();
 
         this.state = DisposeState.DISPOSED;
+
     }
 
     protected disposeChildren() {
-        const children = [...this.children];
+        Disposer.dispose(...this.children);
         this.children.clear();
-        Disposer.dispose(...children);
     }
 
     protected applyCallbacks() {
