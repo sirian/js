@@ -1,15 +1,41 @@
 import {HybridMap} from "@sirian/common";
+import {Func} from "@sirian/ts-extra-types";
 
-const symbol: unique symbol = Symbol.for("@sirian/shared-store");
+export interface ISharedStoreOptions<T> {
+    target?: any;
+    propertyKey?: PropertyKey;
+    key: any;
+    init: () => T;
+}
 
 export class SharedStore {
-    public static get<T>(key: any, init: () => T) {
-        const target = globalThis as { [symbol]?: HybridMap<any, any> };
-
-        if (!target[symbol]) {
-            target[symbol] = new HybridMap();
+    public static get<T>(data: ISharedStoreOptions<T>): T;
+    public static get<T>(key: any, init: () => T): T;
+    public static get(opts: any, fn?: Func) {
+        if (fn) {
+            return SharedStore.get({
+                key: opts,
+                init: fn,
+            });
         }
 
-        return target[symbol]!.ensure(key, init);
+        const {
+            target = globalThis,
+            propertyKey = Symbol.for("@sirian/shared-store"),
+            key,
+            init,
+        } = opts;
+
+        if (!target[propertyKey]) {
+            target[propertyKey] = new HybridMap();
+        }
+
+        const map = target[propertyKey] as HybridMap<any, any>;
+
+        if (!map.has(key)) {
+            map.set(key, init());
+        }
+
+        return map.get(key)!;
     }
 }

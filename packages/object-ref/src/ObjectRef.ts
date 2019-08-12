@@ -1,22 +1,23 @@
-import {Obj, Ref} from "@sirian/common";
+import {Obj, Ref, Var} from "@sirian/common";
 import {SharedStore} from "@sirian/shared-store";
 
 export class ObjectRef {
-    public readonly target: object;
     public readonly id: number;
     public readonly name: string;
 
     protected constructor(target: object, id: number) {
-        this.target = target;
-
         this.id = id;
         this.name = ObjectRef.guessName(target) + "#" + id;
     }
 
     public static get store() {
-        return SharedStore.get("@sirian/object-ref", () => Obj.assign(new WeakMap(), {
-            count: 0,
-        }));
+        return SharedStore.get({
+            key: "ref",
+            init: () => ({
+                map: new WeakMap(),
+                lastId: 0,
+            }),
+        });
     }
 
     public static guessName(obj: object) {
@@ -27,14 +28,25 @@ export class ObjectRef {
         }
 
         const ctor = Ref.getConstructor(obj);
-        return ctor ? ctor.name : tag;
+        if (ctor) {
+            const name = ctor.name;
+            if (Var.isString(name) && name) {
+                return name;
+            }
+        }
+
+        return tag;
     }
 
     public static for(obj: object) {
-        const {store} = this;
-        if (!store.has(obj)) {
-            store.set(obj, new ObjectRef(obj, ++store.count));
+        const store = ObjectRef.store;
+
+        const map = store.map;
+
+        if (!map.has(obj)) {
+            map.set(obj, new ObjectRef(obj, ++store.lastId));
         }
-        return store.get(obj)!;
+
+        return map.get(obj)!;
     }
 }

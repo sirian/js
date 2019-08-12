@@ -6,7 +6,7 @@ test("Disposer.setTimeout", async () => {
 
     expect(Disposer.isDisposed(obj)).toBe(false);
 
-    Disposer.setTimeout(2, obj);
+    Disposer.setTimeout(obj, 2);
 
     jest.runTimersToTime(1);
     expect(Disposer.isDisposed(obj)).toBe(false);
