@@ -16,7 +16,7 @@ test("Disposer.once", () => {
     expect(Disposer.isDisposed(wrapped)).toBe(true);
     expect(Disposer.isDisposed(fn)).toBe(false);
 
-    expect(() => wrapped()).toThrow(`Object disposed`);
+    expect(() => wrapped()).toThrow(`Cannot perform 'apply' on a proxy that has been revoked`);
 
     expect(fn()).toBe(2);
 });

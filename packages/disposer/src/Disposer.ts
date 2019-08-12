@@ -1,3 +1,5 @@
+import {Ref, XSet, XWeakMap} from "@sirian/common";
+import {SharedStore} from "@sirian/shared-store";
 import {Return} from "@sirian/ts-extra-types";
 
 export type DisposeCallback = () => void;
@@ -15,72 +17,78 @@ enum DisposeState {
 }
 
 export class Disposer {
-    public readonly children: Set<object>;
+    public readonly children: XSet<object>;
     public readonly target: object;
+    public readonly errors: any[] = [];
 
     protected state: DisposeState;
-    protected callbacks: Set<DisposeCallback>;
-    protected initiator?: object;
+    protected callbacks: DisposeCallback[];
     protected timeoutId?: Return<typeof setTimeout>;
 
     constructor(target: object) {
         this.target = target;
         this.state = DisposeState.INITIAL;
-        this.children = new Set();
-        this.callbacks = new Set();
+        this.children = new XSet();
+        this.callbacks = [];
+    }
+
+    public static get store() {
+        return SharedStore.get({
+            key: "disposer",
+            init: () => ({
+                disposers: new XWeakMap<object, Disposer>(),
+            }),
+        });
+    }
+
+    protected static get disposers() {
+        return this.store.disposers;
     }
 
     public static addCallback(target: object, callback: DisposeCallback) {
         Disposer.for(target).addCallback(callback);
     }
 
-    public static setTimeout<T extends object>(ms: number, object: T) {
+    public static setTimeout<T extends object>(object: T, ms: number) {
         Disposer.for(object).setTimeout(ms);
-        return object;
     }
 
     public static once<F extends (...args: any[]) => any>(fn: F) {
-        const wrapper = new Proxy(fn, {
-            apply: (target, thisArg, args) => {
-                Disposer.assertNotDisposed(target, wrapper);
-
+        const {proxy, revoke} = Proxy.revocable(fn, {
+            apply(target, thisArg, args) {
                 try {
-                    return target.apply(thisArg, args);
+                    return Ref.apply(fn, thisArg, args);
                 } finally {
-                    Disposer.dispose(wrapper);
+                    Disposer.dispose(proxy);
                 }
             },
         });
 
-        return wrapper;
+        Disposer.for(proxy).addSource(fn).addCallback(revoke);
+
+        return proxy;
     }
 
-    public static addChild(target: object, ...child: [object, ...object[]]) {
-        Disposer.for(target).addChild(...child);
-    }
-
-    public static assertNotDisposed(...objects: [object, ...object[]]) {
-        for (const object of objects) {
-            if (this.isDisposed(object)) {
-                throw new Error(`Object disposed "${object}"`);
-            }
-        }
+    public static addChild(target: object, ...children: [object, ...object[]]) {
+        Disposer.for(target).addChild(...children);
     }
 
     public static isDisposed(target: object) {
-        if (!this.getMap().has(target)) {
+        if (!Disposer.disposers.has(target)) {
             return false;
         }
 
-        return this.for(target).isDisposed();
+        return Disposer.for(target).isDisposed();
     }
 
-    public static dispose(target: object) {
-        this.for(target).dispose();
+    public static dispose(...targets: object[]) {
+        for (const target of targets) {
+            Disposer.for(target).dispose();
+        }
     }
 
     public static for(target: object) {
-        const disposers = this.getMap();
+        const disposers = Disposer.store.disposers;
 
         if (!disposers.has(target)) {
             const disposer = new Disposer(target);
@@ -89,21 +97,6 @@ export class Disposer {
         }
 
         return disposers.get(target)!;
-    }
-
-    protected static getMap(): WeakMap<object, Disposer> {
-        const target: any = Symbol;
-        const key = Symbol.for("@sirian/disposer");
-        if (!target[key]) {
-            Reflect.defineProperty(target, key, {
-                configurable: true,
-                writable: false,
-                enumerable: false,
-                value: new WeakMap(),
-            });
-        }
-
-        return target[key];
     }
 
     public setTimeout(ms: number) {
@@ -127,23 +120,21 @@ export class Disposer {
     }
 
     public addCallback(callback: DisposeCallback) {
-        if (this.state >= DisposeState.EXECUTE_CALLBACKS) {
-            this.applyCallback(callback);
-            return this;
-        }
 
-        this.callbacks.add(callback);
+        if (this.state > DisposeState.EXECUTE_CALLBACKS) {
+            this.applyCallback(callback);
+        } else {
+            this.callbacks.push(callback);
+        }
 
         return this;
     }
 
     public addChild(...children: [object, ...object[]]) {
-        for (const child of children) {
-            if (this.state >= DisposeState.DISPOSE_CHILDREN) {
-                this.disposeChild(child);
-            } else {
-                this.children.add(child);
-            }
+        if (this.state >= DisposeState.DISPOSE_CHILDREN) {
+            Disposer.dispose(...children);
+        } else {
+            this.children.add(...children);
         }
 
         return this;
@@ -151,7 +142,7 @@ export class Disposer {
 
     public addSource(...sources: [object, ...object[]]) {
         for (const source of sources) {
-            Disposer.for(source).addChild(this);
+            Disposer.addChild(source, this);
         }
 
         return this;
@@ -173,27 +164,15 @@ export class Disposer {
     }
 
     protected disposeChildren() {
-
         const children = [...this.children];
         this.children.clear();
-
-        for (const child of children) {
-            this.disposeChild(child);
-        }
-    }
-
-    protected disposeChild(child: object) {
-        const childDisposer = Disposer.for(child);
-        childDisposer.initiator = this;
-        childDisposer.dispose();
+        Disposer.dispose(...children);
     }
 
     protected applyCallbacks() {
-        const callbacks = [...this.callbacks];
-        this.callbacks.clear();
-
-        for (const callback of callbacks) {
-            this.applyCallback(callback);
+        const callbacks = this.callbacks;
+        while (callbacks.length) {
+            this.applyCallback(callbacks.shift()!);
         }
     }
 
@@ -201,7 +180,7 @@ export class Disposer {
         try {
             callback();
         } catch (e) {
-            // todo
+            this.errors.push(e);
         }
     }
 }

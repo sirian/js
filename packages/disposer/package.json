@@ -18,6 +18,7 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^5.1.0",
+        "@sirian/shared-store": "^1.1.17",
         "@sirian/ts-extra-types": "^3.48.6"
     },
     "scripts": {},
