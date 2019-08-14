@@ -16,6 +16,7 @@
         "callable-types": false,
         "array-type": [false, "array-simple"],
         "no-shadowed-variable": [true, {"class": false}],
-        "new-parens": false
+        "new-parens": false,
+        "no-empty-interface": false
     }
 }
