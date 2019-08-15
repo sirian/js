@@ -55,6 +55,16 @@ export class Fn {
         throw error;
     }
 
+    public static async tryAsync<T>(fn: () => T): Promise<T | void>;
+    public static async tryAsync<T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): Promise<T | R>;
+    public static async tryAsync(fn: Func0, onError?: Func1) {
+        try {
+            return await fn();
+        } catch (error) {
+            return Var.isFunction(onError) ? await onError(error) : onError;
+        }
+    }
+
     public static try<T>(fn: () => T): T | undefined;
     public static try<T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): T | R;
     public static try(fn: Func0, onError?: Func1) {

@@ -1,5 +1,5 @@
 import {Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
-import {Obj} from "./Obj";
+import {Obj, TypedPropertyDescriptorMap} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
 
@@ -11,10 +11,10 @@ export interface ProtoChainOptions {
 
 export class Ref {
     public static getPrototype(target: any) {
-        if (Var.isNullable(target)) {
-            return;
+        if (!Var.isNullable(target)) {
+            target = Obj.wrap(target);
         }
-        return Reflect.getPrototypeOf(Obj.wrap(target));
+        return Reflect.getPrototypeOf(target);
     }
 
     public static setPrototype(target: object, proto: object | null) {
@@ -22,26 +22,41 @@ export class Ref {
     }
 
     public static ownNames<T>(target: T) {
-        return Object.getOwnPropertyNames(target) as Array<keyof T>;
+        return Ref.ownKeys(target).filter(Var.isString) as Array<Extract<keyof T, string>>;
     }
 
     public static ownSymbols<S extends symbol>(target: { [P in S]: any }) {
-        return Object.getOwnPropertySymbols(target) as S[];
+        return Ref.ownKeys(target).filter(Var.isSymbol);
     }
 
-    public static ownKeys<T extends object>(target: T): Array<keyof T> {
-        return Reflect.ownKeys(target) as Array<keyof T>;
+    public static ownKeys<T>(target: T) {
+        return Var.isNullable(target)
+               ? []
+               : Reflect.ownKeys(Obj.wrap(target)) as Array<keyof T>;
     }
 
     public static descriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
     public static descriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
-    public static descriptor<T, K extends keyof any>(target: T, key: K) {
-        for (const obj of Ref.getPrototypes(target)) {
-            const descriptor = Ref.ownDescriptor(obj, key);
+    public static descriptor(target: any, key: PropertyKey) {
+        while (target) {
+            const descriptor = Ref.ownDescriptor(target, key);
             if (descriptor) {
                 return descriptor;
             }
+            target = Ref.getPrototype(target);
         }
+    }
+
+    public static descriptors<T>(target: T) {
+        const result = Obj.create();
+        for (const obj of Ref.getPrototypes(target)) {
+            for (const key of Ref.ownKeys(obj)) {
+                if (!Ref.has(result, key)) {
+                    result[key] = Ref.ownDescriptor(obj, key);
+                }
+            }
+        }
+        return result as TypedPropertyDescriptorMap<T>;
     }
 
     public static ownDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
@@ -50,7 +65,7 @@ export class Ref {
         return Object.getOwnPropertyDescriptor(target, key);
     }
 
-    public static ownDescriptors<T>(target: T): { [P in keyof T]: TypedPropertyDescriptor<T[P]> } {
+    public static ownDescriptors<T>(target: T) {
         return Object.getOwnPropertyDescriptors(target);
     }
 
@@ -126,11 +141,11 @@ export class Ref {
     }
 
     public static has<T, K extends keyof any>(target: T, key: K): target is Ensure<T, K> {
-        return !Var.isNullable(target) && Reflect.has(Obj.wrap(target) as any, key);
+        return !Var.isNullable(target) && (key in Obj.wrap(target));
     }
 
     public static hasMethod<T, K extends keyof any>(target: T, key: K): target is Record<K, Func> & T {
-        return Var.isFunction(Ref.get(target, key));
+        return Var.isNullable(target) ? false : Var.isFunction((target as any)[key]);
     }
 
     public static get<T, K extends keyof any>(target: T, key: K) {
@@ -140,14 +155,10 @@ export class Ref {
     }
 
     public static set<T, K extends keyof any>(target: T, key: K, value: Get<T, K, any>) {
-        if (!Var.isPrimitive(target)) {
-            (target as any)[key] = value;
-        }
+        return Var.isObjectOrFunction(target) ? Reflect.set(target, key, value) : false;
     }
 
     public static delete<T, K extends keyof T>(target: T, key: K | keyof any) {
-        if (!Var.isPrimitive(target)) {
-            Reflect.deleteProperty(target as any, key);
-        }
+        return Var.isObjectOrFunction(target) ? Reflect.deleteProperty(target, key) : false;
     }
 }

@@ -13,11 +13,13 @@ import {ProtoChainOptions, Ref} from "./Ref";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
 
+export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
+
 export class Obj {
     public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
     public static values = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
     public static entries = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
-    public static stringify = Fn.withThis(Object.prototype.toString) as (target: any) => string;
+    public static stringify = Fn.withThis(Object.prototype.toString);
 
     public static assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
 
@@ -68,9 +70,10 @@ export class Obj {
         return Obj.pick(target, [...keys] as Array<keyof T>) as T;
     }
 
-    // tslint:disable-next-line:max-line-length
-    public static create<T extends object, U>(o: T | null = null, properties?: { [P in keyof U]: TypedPropertyDescriptor<U[P]> }): T & U {
-        return Object.create(o, properties || {});
+    public static create(o?: null): Record<any, any>;
+    public static create<T extends object | null, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
+    public static create(o = null, properties: any = {}) {
+        return Object.create(o, properties);
     }
 
     public static clear<T extends object>(target: T): Partial<T> {
@@ -92,7 +95,7 @@ export class Obj {
         return Obj.stringify(arg).slice(8, -1);
     }
 
-    public static wrap<T>(value: T): Wrap<T> {
+    public static wrap<T>(value: T): object & Wrap<T> {
         return Var.isObject(value) ? value : Object(value);
     }
 
