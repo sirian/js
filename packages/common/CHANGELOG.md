@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0](https://github.com/sirian/js/compare/@sirian/common@5.1.0...@sirian/common@5.2.0) (2019-08-15)
+
+
+### Features
+
+* **common:** Fn.tryAsync ([dc539f5](https://github.com/sirian/js/commit/dc539f5))
+
+
+
+
+
 # [5.1.0](https://github.com/sirian/js/compare/@sirian/common@5.0.1...@sirian/common@5.1.0) (2019-08-11)
 
 

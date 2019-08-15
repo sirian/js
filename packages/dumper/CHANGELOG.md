@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/sirian/js/compare/@sirian/dumper@0.2.17...@sirian/dumper@0.3.0) (2019-08-15)
+
+
+### Bug Fixes
+
+* **dumper:** deps ([2a280fb](https://github.com/sirian/js/commit/2a280fb))
+
+
+### Features
+
+* **dumper:** Dump class ([b278c75](https://github.com/sirian/js/commit/b278c75))
+
+
+
+
+
 ## [0.2.17](https://github.com/sirian/js/compare/@sirian/dumper@0.2.16...@sirian/dumper@0.2.17) (2019-08-11)
 
 **Note:** Version bump only for package @sirian/dumper
