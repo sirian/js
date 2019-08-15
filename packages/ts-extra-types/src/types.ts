@@ -20,7 +20,7 @@ export type Wrap<T> =
     T extends boolean ? Boolean :
     T extends bigint ? BigInt :
     T extends object ? T :
-    never;
+    T;
 
 export type AnyFunc = Func | Ctor | CallableFunction | NewableFunction;
 export type AnyType = Primitive | AnyFunc | NotFunc;
