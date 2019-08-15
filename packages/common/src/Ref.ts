@@ -12,8 +12,9 @@ export interface ProtoChainOptions {
 export class Ref {
     public static getPrototype(target: any) {
         if (!Var.isNullable(target)) {
-            return Reflect.getPrototypeOf(Obj.wrap(target));
+            target = Obj.wrap(target);
         }
+        return Reflect.getPrototypeOf(target);
     }
 
     public static setPrototype(target: object, proto: object | null) {
@@ -29,7 +30,7 @@ export class Ref {
     }
 
     public static ownKeys<T>(target: T) {
-        return Var.isPrimitive(target)
+        return Var.isNullable(target)
                ? []
                : Reflect.ownKeys(Obj.wrap(target)) as Array<keyof T>;
     }

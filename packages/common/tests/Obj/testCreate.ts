@@ -1,4 +1,3 @@
-import {Args} from "@sirian/ts-extra-types";
 import {Obj} from "../../src";
 
 describe("Obj.create", () => {
@@ -6,7 +5,7 @@ describe("Obj.create", () => {
 
     class Foo {}
 
-    const data: Array<[Args<typeof Obj.create>, object]> = [
+    const data: Array<[any[], object]> = [
         [[], empty],
 
         [[null], empty],

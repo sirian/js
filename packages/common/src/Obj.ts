@@ -70,7 +70,7 @@ export class Obj {
         return Obj.pick(target, [...keys] as Array<keyof T>) as T;
     }
 
-    public static create<U>(o?: null): Record<any, any>;
+    public static create(o?: null): Record<any, any>;
     public static create<T extends object | null, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
     public static create(o = null, properties: any = {}) {
         return Object.create(o, properties);
