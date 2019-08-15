@@ -3,14 +3,6 @@ import {And, If, Not} from "./logic";
 
 export type Primitive = boolean | bigint | number | string | symbol | null | undefined | void;
 
-export type PrimitiveWrapper<T> =
-    T extends number ? typeof Number :
-    T extends string ? typeof String :
-    T extends symbol ? typeof Symbol :
-    T extends boolean ? typeof Boolean :
-    T extends bigint ? typeof BigInt :
-    never;
-
 export type Widen<T> =
     T extends null ? T :
     T extends boolean ? boolean :
@@ -21,9 +13,14 @@ export type Widen<T> =
     T;
 
 export type Wrap<T> =
-    T extends null | undefined | void ? object :
-    T extends Primitive ? PrimitiveWrapper<T>["prototype"] :
-    T;
+    T extends null | undefined ? Record<any, any> :
+    T extends number ? Number :
+    T extends string ? String :
+    T extends symbol ? Symbol :
+    T extends boolean ? Boolean :
+    T extends bigint ? BigInt :
+    T extends object ? T :
+    never;
 
 export type AnyFunc = Func | Ctor | CallableFunction | NewableFunction;
 export type AnyType = Primitive | AnyFunc | NotFunc;
