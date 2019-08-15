@@ -15,6 +15,12 @@
             "path": "../common"
         },
         {
+            "path": "../decorators"
+        },
+        {
+            "path": "../error"
+        },
+        {
             "path": "../ts-extra-types"
         }
     ]
