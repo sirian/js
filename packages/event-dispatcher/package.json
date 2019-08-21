@@ -1,7 +1,7 @@
 {
     "name": "@sirian/event-dispatcher",
     "description": "",
-    "version": "4.3.19",
+    "version": "4.3.21",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,11 +17,11 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^5.1.0",
-        "@sirian/disposer": "^1.6.17",
-        "@sirian/error": "^2.1.9",
-        "@sirian/ts-extra-types": "^3.48.6",
-        "@sirian/xpromise": "^2.4.8"
+        "@sirian/common": "^5.2.0",
+        "@sirian/disposer": "^1.7.1",
+        "@sirian/error": "^2.1.10",
+        "@sirian/ts-extra-types": "^3.48.7",
+        "@sirian/xpromise": "^2.4.9"
     },
     "scripts": {},
     "publishConfig": {
