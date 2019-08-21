@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.49.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.7...@sirian/ts-extra-types@3.49.0) (2019-08-21)
+
+
+### Features
+
+* **ts-extra-types:** AwaitedArray ([8dac154](https://github.com/sirian/js/commit/8dac154))
+
+
+
+
+
 ## [3.48.7](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.6...@sirian/ts-extra-types@3.48.7) (2019-08-15)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

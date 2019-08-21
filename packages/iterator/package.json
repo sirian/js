@@ -1,7 +1,7 @@
 {
     "name": "@sirian/iterator",
     "description": "",
-    "version": "1.12.18",
+    "version": "1.12.19",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,7 +21,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^5.2.0",
-        "@sirian/ts-extra-types": "^3.48.7"
+        "@sirian/common": "^5.3.0",
+        "@sirian/ts-extra-types": "^3.49.0"
     }
 }
