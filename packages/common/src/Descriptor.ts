@@ -9,41 +9,86 @@ export enum DescriptorType {
     ACCESSOR = "ACCESSOR",
 }
 
-export class Descriptor<T extends AccessorPropertyDescriptor | DataPropertyDescriptor> {
-    protected desc: T;
+export type DescriptorWrapper<T, K extends keyof T> = {
+    get?(object: T, parent: () => T[K]): T[K];
+    set?(object: T, value: T[K], parent: (value: T[K]) => void): T[K];
+};
 
-    constructor(desc: T) {
-        this.desc = desc;
-        if (!Descriptor.isDescriptor(desc)) {
-            throw new Error(`Expected descriptor, given ${desc}`);
-        }
+export class Descriptor {
+    public static wrap<T, K extends keyof T>(target: T, key: K, wrapper: DescriptorWrapper<T, K>) {
+        const desc = Ref.descriptor(target, key);
+        const {get, set} = wrapper;
+
+        const descriptor = Descriptor.extend(desc, {
+            get(this: T) {
+                const parent = () => Descriptor.read(desc, this);
+                return get ? get(this, parent) : parent();
+            },
+            set(this: T, value: T[K]) {
+                const object = this;
+                const parent = (v: T[K]) => Descriptor.write(desc, this, key, v);
+
+                if (set) {
+                    set(object, value, parent);
+                } else {
+                    parent(value);
+                }
+            },
+        });
+
+        Ref.define(target, key, descriptor);
+
+        return descriptor;
     }
 
-    public static from<T, K extends keyof T>(target: T, key: K): Descriptor<TypedPropertyDescriptor<T[K]>> {
-        const desc = Ref.ownDescriptor(target, key);
+    public static extend<T>(desc: TypedPropertyDescriptor<T>, data: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+    public static extend(desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
+    public static extend(desc: PropertyDescriptor = {}, newDesc: PropertyDescriptor = {}) {
+        const {
+            configurable = true,
+            enumerable = false,
+            writable = true,
+            get,
+            set,
+            value,
+        } = desc;
 
-        if (!desc) {
-            throw new Error(`Descriptor ${target}[${key}] not found`);
+        if (Descriptor.isAccessorDescriptor(newDesc)) {
+            desc = {get, set};
+        } else if (Descriptor.isDataDescriptor(newDesc)) {
+            desc = {writable, value};
         }
 
-        return new Descriptor(desc);
+        return {
+            configurable,
+            enumerable,
+            ...desc,
+            ...newDesc,
+        };
     }
 
     public static read<T>(desc: TypedPropertyDescriptor<T>, obj: any): T;
-    public static read(desc: PropertyDescriptor, obj: any): any;
+    public static read(desc: PropertyDescriptor | undefined, obj: any): any;
 
-    public static read(desc: any, obj: any) {
-        const type = Descriptor.getDescriptorType(desc);
-
-        switch (type) {
-            case DescriptorType.ACCESSOR:
-                const getter = desc.get;
-                return getter ? getter.call(obj) : void 0;
-            case DescriptorType.DATA:
-                return desc.value;
+    public static read(desc: PropertyDescriptor | undefined, obj: any) {
+        if (desc) {
+            const {get, value} = desc;
+            return get ? Ref.apply(get, obj) : value;
         }
+    }
 
-        throw new Error(`Expected descriptor, given ${desc}`);
+    public static write<T, K extends keyof T>(desc: TypedPropertyDescriptor<T[K]>, object: T, key: K, value: T[K]): void;
+    public static write<T>(desc: TypedPropertyDescriptor<T>, object: any, key: PropertyKey, value: T): void;
+    public static write(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any): void;
+    public static write(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any) {
+        if (!Descriptor.isAccessorDescriptor(desc)) {
+            Ref.define(object, key, Descriptor.extend(desc, {value}));
+            return;
+        }
+        const setter = desc.set;
+        if (setter) {
+            Ref.apply(setter, object, [value]);
+        }
     }
 
     public static isDescriptor(d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor {

@@ -1,4 +1,4 @@
-import {Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
+import {Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
 import {Obj, TypedPropertyDescriptorMap} from "./Obj";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -98,7 +98,6 @@ export class Ref {
 
     public static construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
     public static construct<F extends Newable>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
-
     public static construct(target: Function, args: any[] = [], newTarget?: Function) {
         const rest = newTarget ? [newTarget] : [];
         return Reflect.construct(target, args, ...rest);
@@ -136,29 +135,35 @@ export class Ref {
         return [...result];
     }
 
-    public static hasOwn<T, K extends keyof any>(target: T, key: K): target is Ensure<T, K> {
+    public static hasOwn<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
         return !Var.isNullable(target) && Object.prototype.hasOwnProperty.call(target, key);
     }
 
-    public static has<T, K extends keyof any>(target: T, key: K): target is Ensure<T, K> {
+    public static has<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
         return !Var.isNullable(target) && (key in Obj.wrap(target));
     }
 
-    public static hasMethod<T, K extends keyof any>(target: T, key: K): target is Record<K, Func> & T {
+    public static hasMethod<T, K extends PropertyKey>(target: T, key: K): target is Record<K, Func> & T {
         return Var.isNullable(target) ? false : Var.isFunction((target as any)[key]);
     }
 
-    public static get<T, K extends keyof any>(target: T, key: K) {
+    public static get<T, K extends keyof T>(target: T, key: K): T[K];
+    public static get<V, K extends PropertyKey>(target: { [P in K]: V }, key: K): V;
+    public static get(target: any, key: PropertyKey): any;
+    public static get(target: any, key: any) {
         if (!Var.isNullable(target)) {
-            return (target as any)[key] as Get<T, K>;
+            return target[key];
         }
     }
 
-    public static set<T, K extends keyof any>(target: T, key: K, value: Get<T, K, any>) {
-        return Var.isObjectOrFunction(target) ? Reflect.set(target, key, value) : false;
+    public static set<T, K extends keyof T>(target: T, key: K, value: T[K]): boolean;
+    public static set<V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
+    public static set(target: any, key: PropertyKey, value: any): boolean;
+    public static set(target: any, key: PropertyKey, value: any) {
+        return Var.isObjectOrFunction(target) && Reflect.set(target, key, value);
     }
 
-    public static delete<T, K extends keyof T>(target: T, key: K | keyof any) {
-        return Var.isObjectOrFunction(target) ? Reflect.deleteProperty(target, key) : false;
+    public static delete<T>(target: T, key: (keyof T) | PropertyKey) {
+        return Var.isObjectOrFunction(target) && Reflect.deleteProperty(target, key);
     }
 }
