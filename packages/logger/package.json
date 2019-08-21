@@ -20,7 +20,7 @@
         "@sirian/common": "^5.2.0",
         "@sirian/datetime": "^3.4.19",
         "@sirian/property-access": "^1.2.19",
-        "pretty-format": "^24.8.0"
+        "pretty-format": "^24.9.0"
     },
     "devDependencies": {
         "@types/pretty-format": "^20.0.1"
