@@ -1,13 +1,13 @@
 import {debounce} from "../../src";
 
-const data = [
-    [[1, 2, 3, 4], [4]],
-    [[1, 15, 21, 40], [1, 21, 40]],
-    [[0, 5, 10, 15, 20, 25], [25]],
-    [[10, 30, 50], [10, 30, 50]],
+const data: Array<[number[], Array<[number, number]>]> = [
+    [[1, 2, 3, 4], [[4, 11]]],
+    [[1, 15, 21, 40], [[1, 11], [21, 25], [40, 50]]],
+    [[0, 5, 10, 15, 20, 25], [[10, 10], [25, 25]]],
+    [[10, 30, 50], [[10, 20], [30, 40], [50, 60]]],
 ];
 
-test.each(data)("%j %j", (timeouts: number[], expected: number[]) => {
+test.each(data)("%j %j", (timeouts, expected) => {
     const delay = 10;
 
     class Foo {
@@ -31,5 +31,5 @@ test.each(data)("%j %j", (timeouts: number[], expected: number[]) => {
 
     jest.advanceTimersByTime(1000);
 
-    expect(f.calls).toEqual(expected.map((value) => [value, value + delay]));
+    expect(f.calls).toEqual(expected);
 });

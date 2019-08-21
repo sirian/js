@@ -1,7 +1,7 @@
 import {Fn} from "../../src";
 
 describe("Fn.stripArgs", () => {
-    const data = [
+    const data: Array<[any, any]> = [
         [[1], [1]],
         [[1, undefined], [1, undefined]],
         [[1, undefined, undefined], [1, undefined]],

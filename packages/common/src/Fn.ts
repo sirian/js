@@ -17,18 +17,17 @@ export class Fn {
         return fn(...argValues);
     }
 
-    public static stripArgs(fn: Function, args: any[]) {
+    public static stripArgs<A extends any[]>(fn: (...args: A) => any, args: A) {
         const required = fn.length;
-        const len = args.length;
 
-        let index = required - 1;
-        for (let i = index; i < len; i++) {
-            if (args[i] !== undefined) {
-                index = i;
+        while (args.length > required) {
+            if (args[args.length - 1] !== undefined) {
+                break;
             }
+            args.length--;
         }
 
-        return args.slice(0, index + 1);
+        return args;
     }
 
     public static bindArgs<K extends number, F extends Func>(fn: F, bind: { [P in K]: Get<Args<F>, P> }) {

@@ -17,6 +17,12 @@
         "array-type": [false, "array-simple"],
         "no-shadowed-variable": [true, {"class": false}],
         "new-parens": false,
-        "no-empty-interface": false
+        "no-empty-interface": false,
+        "max-line-length": {
+            "options": {
+                "ignore-pattern": "^import |^export {(.*?)}|class [a-zA-Z]+ implements |// |[a-z]<[A-Z]",
+                "limit": 140
+            }
+        }
     }
 }
