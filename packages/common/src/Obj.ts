@@ -96,7 +96,7 @@ export class Obj {
     }
 
     public static wrap<T>(value: T): object & Wrap<T> {
-        return Var.isObjectOrFunction(value) ? value : Object(value);
+        return Var.isObject(value) ? value : Object(value);
     }
 
     public static toPrimitive<T>(target: T): ToPrimitive<T> {

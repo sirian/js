@@ -1,4 +1,8 @@
-import {Awaited, AwaitedArray, Return} from "@sirian/ts-extra-types";
+import {Return} from "@sirian/ts-extra-types";
+
+type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+
+type AwaitedArray<T extends any[]> = { [P in keyof T]: Awaited<T[P]> };
 
 export type OnFulfilled<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
 export type OnReject<R> = undefined | null | ((reason: any) => R | PromiseLike<R>);
@@ -13,7 +17,7 @@ export interface IDeferred<T> {
     promise: PromiseLike<T>;
 }
 
-export interface PromiseReaction<T, R1 = any, R2 = any> {
+interface PromiseReaction<T, R1 = any, R2 = any> {
     promise: XPromise<R1 | R2>;
     onFulfilled: OnFulfilled<T, R1>;
     onRejected: OnReject<R2>;

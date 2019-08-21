@@ -1,4 +1,4 @@
-import {Func} from "./function";
+import {AnyFunc} from "./types";
 
 export interface Lengthwise<L extends number = number> {
     length: L;
@@ -20,6 +20,6 @@ export interface IterableValues<V = any> {
     values(): IterableIterator<V>;
 }
 
-export interface Thenable {
-    then: Func;
+export interface Thenable<F extends Function = AnyFunc> {
+    then: F;
 }

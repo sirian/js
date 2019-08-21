@@ -118,7 +118,7 @@ export class Var {
     }
 
     public static isPromiseLike(value: any): value is Thenable {
-        return Ref.hasMethod(value, "then");
+        return Var.isObjectOrFunction(value) && Ref.hasMethod(value, "then");
     }
 
     public static isObjectOrFunction(value: any): value is object {
@@ -134,7 +134,11 @@ export class Var {
     }
 
     public static isSubclassOf<A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> {
-        return Var.isFunction(a) && (Var.isEqual(a, b) ||  Var.isInstanceOf(a.prototype, b));
+        if (!Var.isFunction(a) || !Var.isFunction(b)) {
+            return false;
+        }
+
+        return Var.isInstanceOf(a.prototype, b) || Var.isEqual(a, b);
     }
 
     public static isSameType<T>(x: any, value: T): value is T {

@@ -1,29 +1,24 @@
 import {debounce} from "../../src";
 
-test("@debounce timeout", () => {
+const data = [0, 100, 500, 1000];
+
+test.each(data)("", (delay: number) => {
     let now = 0;
 
     jest.useFakeTimers();
-    jest.clearAllTimers();
-
-    const calls: Array<[number, number]> = [];
 
     class Foo {
-        @debounce({ms: (thisArg, [x]) => x})
-        public static foo(value: number) {
-            calls.push([now, value]);
+        @debounce(delay)
+        public static foo() {
+            expect(now).toBe(delay);
         }
     }
 
     setInterval(() => ++now, 1);
-    Foo.foo(3);
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    Foo.foo(5);
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    setTimeout(() => Foo.foo(3), 10);
+    Foo.foo();
 
-    jest.runTimersToTime(1000);
-    expect(setTimeout).toHaveBeenCalledTimes(3);
+    jest.advanceTimersByTime(delay);
 
-    expect(calls).toStrictEqual([[3, 5], [13, 3]]);
+    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), delay);
 });

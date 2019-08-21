@@ -6,10 +6,13 @@ test("", () => {
     let now = 0;
     setInterval(() => now++, 1);
     const calls: Array<[string, number]> = [];
-    const fn = (x: string) => calls.push([x, now]);
+    const fn = (x: string) => {
+        calls.push([x, now]);
+    };
 
     const debounced = Debouncer.debounce(fn, {
-        hasher: (obj, args) => args[0],
+        hasher: (x: string) => x,
+        ms: 200,
     });
 
     debounced("zoo");
@@ -21,8 +24,8 @@ test("", () => {
     jest.advanceTimersByTime(1000);
 
     expect(calls).toStrictEqual([
-        ["zoo", 300],
-        ["foo", 300],
-        ["bar", 400],
+        ["zoo", 200],
+        ["bar", 300],
+        ["foo", 350],
     ]);
 });

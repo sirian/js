@@ -1,69 +1,67 @@
-import {Ref, Var, XMap} from "@sirian/common";
-import {Func} from "@sirian/ts-extra-types";
+import {HybridMap, Var} from "@sirian/common";
+import {Args, Func, Return, ThisArg} from "@sirian/ts-extra-types";
 
-export interface IDebouncerOptions<A extends any[]> {
-    ms?: number | Func<number, [any, A]>;
-    hasher?: Func<any, [any, A]>;
+export interface IDebouncerOptions<A extends any[] = any[]> {
+    ms: number | Func<number, A>;
+    hasher?: Func<any, A>;
 }
 
-export class Debouncer<A extends any[]> {
-    protected fn: (...args: A) => any;
-    protected ms: IDebouncerOptions<A>["ms"];
-    protected hasher?: IDebouncerOptions<A>["hasher"];
-    protected hashMap: XMap<any, [any, A]>;
+export class Debouncer<F extends Func<void>> {
+    protected fn: F;
+    protected options: IDebouncerOptions<Args<F>>;
+    protected timeouts: HybridMap<any, Return<typeof setTimeout>>;
 
-    constructor(fn: (...args: A) => any, options: number | IDebouncerOptions<A> = {}) {
+    constructor(fn: F, options?: number | Partial<IDebouncerOptions<Args<F>>>) {
         this.fn = fn;
-        this.hashMap = new XMap();
+        this.timeouts = new HybridMap();
 
         if (Var.isNumber(options)) {
-            this.ms = options;
-        } else {
-            const {ms = 300, hasher} = options;
-            this.ms = ms;
-            this.hasher = hasher;
+            options = {ms: options};
         }
+
+        this.options = {
+            ms: 300,
+            ...options,
+        };
     }
 
-    public static debounce<A extends any[]>(fn: (...args: A) => any, options?: number | IDebouncerOptions<A>) {
+    public static debounce<F extends Func<void, any>>(fn: F, options?: number | Partial<IDebouncerOptions<Args<F>>>) {
         const debouncer = new Debouncer(fn, options);
 
-        return new Proxy(fn, {
-            apply: (target, thisArg, args) => {
-                return debouncer.apply(thisArg, args);
-            },
-        });
+        return function(this: ThisArg<F>, ...args: Args<F>) {
+            debouncer.apply(this, args);
+        } as F;
     }
 
-    protected apply(thisArg: any, args: A) {
+    protected apply(thisArg: ThisArg<F>, args: Args<F>) {
         const hashKey = this.getHashKey(thisArg, args);
-        const hashMap = this.hashMap;
+        const timeouts = this.timeouts;
 
-        if (!hashMap.has(hashKey)) {
-            const timeoutMs = this.resolveTimeout(thisArg, args);
-            setTimeout(() => this.resolve(hashKey), timeoutMs);
+        if (timeouts.has(hashKey)) {
+            const oldTimeoutId = timeouts.pick(hashKey);
+            clearTimeout(oldTimeoutId);
         }
 
-        hashMap.set(hashKey, [thisArg, args]);
+        const timeoutMs = this.resolveTimeout(thisArg, args);
+
+        const timeoutId = setTimeout(this.fn.bind(thisArg, ...args), timeoutMs);
+        timeouts.set(hashKey, timeoutId);
     }
 
-    protected resolve(hashKey: string) {
-        const [thisArg, args] = this.hashMap.pick(hashKey, true);
-        Ref.apply(this.fn, thisArg, args);
-    }
-
-    protected resolveTimeout(thisArg: any, args: A) {
-        const ms = this.ms;
+    protected resolveTimeout(thisArg: ThisArg<F>, args: Args<F>) {
+        const ms = this.options.ms;
 
         if (Var.isFunction(ms)) {
-            return ms(thisArg, args);
+            return ms.apply(thisArg, args);
         }
 
         return ms || 0;
     }
 
-    protected getHashKey(thisArg: any, args: A) {
-        const hasher = this.hasher;
-        return hasher ? hasher(thisArg, args) : thisArg;
+    protected getHashKey(thisArg: ThisArg<F>, args: Args<F>) {
+        const hasher = this.options.hasher;
+        if (hasher) {
+            return hasher.apply(thisArg, args);
+        }
     }
 }
