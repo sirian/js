@@ -1,13 +1,13 @@
 {
-    "name": "@sirian/logger",
+    "name": "@sirian/devtools",
     "description": "",
-    "version": "1.4.20",
+    "version": "1.0.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/logger",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/devtools",
     "license": "MIT",
     "files": [
         "build/"
@@ -18,12 +18,7 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^5.3.0",
-        "@sirian/datetime": "^3.4.20",
-        "@sirian/property-access": "^1.2.20",
-        "pretty-format": "^24.9.0"
-    },
-    "devDependencies": {
-        "@types/pretty-format": "^24.3.0"
+        "@sirian/ts-extra-types": "^3.49.0"
     },
     "scripts": {},
     "publishConfig": {
