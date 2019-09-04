@@ -23,7 +23,7 @@
         "pretty-format": "^24.9.0"
     },
     "devDependencies": {
-        "@types/pretty-format": "^20.0.1"
+        "@types/pretty-format": "^24.3.0"
     },
     "scripts": {},
     "publishConfig": {
