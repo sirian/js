@@ -1,12 +1,10 @@
 import {Tree} from "../../src";
 
-describe("getPath", () => {
+describe("Tree.getPath", () => {
     class Node {
-        public static id = 1;
-        public id: number;
+        public id: number = Math.random();
 
         constructor(public parent?: any) {
-            this.id = Node.id++;
         }
     }
 
@@ -35,8 +33,7 @@ describe("getPath", () => {
     ];
 
     test.each(data)("Tree.getPath(%o) === %o", (node, expected) => {
-        const path = Tree.getPath(node);
-        expect(path).toStrictEqual(expected);
+        expect(Tree.getPath(node)).toStrictEqual(expected);
         expect(Tree.getDepth(node)).toStrictEqual(expected.length - 1);
     });
 });
