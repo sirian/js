@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.50.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.49.0...@sirian/ts-extra-types@3.50.0) (2019-09-04)
+
+
+### Features
+
+* **ts-extra-types:** NodeDepth, NodePath ([7ba7c94](https://github.com/sirian/js/commit/7ba7c94))
+
+
+
+
+
 # [3.49.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.48.7...@sirian/ts-extra-types@3.49.0) (2019-08-21)
 
 
