@@ -1,10 +1,10 @@
 import {Ref, Str, Var} from "@sirian/common";
 import {Get, GetDeep, Tail} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
-import {Path, PathElement, PropertyPath} from "./PropertyPath";
+import {Path, PathElement, PathKey, PropertyPath} from "./PropertyPath";
 
 export type DeepType<T, P extends Path> =
-    P extends string | number ? Get<T, P, unknown> :
+    P extends PropertyKey ? Get<T, P, unknown> :
     P extends any[]
     ? {
         0: T
@@ -20,26 +20,35 @@ export const enum AccessType {
 
 export interface AccessInfo {
     type: AccessType;
-    key: string | number;
+    key: PathKey;
 }
 
 export class Property {
     public static readonly instance = new Property();
 
     public static read<T, P extends Path>(target: T, path: P) {
-        return this.instance.read(target, path);
+        return Property.instance.read(target, path);
     }
 
     public static write<T, P extends Path>(target: T, path: P, value: DeepType<T, P>) {
-        return this.instance.write(target, path, value);
+        return Property.instance.write(target, path, value);
+    }
+
+    public static modify<T, P extends Path>(target: T, path: P, fn: (value?: DeepType<T, P>) => DeepType<T, P>) {
+        Property.instance.modify(target, path, fn);
     }
 
     public static isReadable(target: object, path: Path) {
-        return this.instance.isReadable(target, path);
+        return Property.instance.isReadable(target, path);
     }
 
     public static isWritable(target: object, path: Path) {
-        return this.instance.isWritable(target, path);
+        return Property.instance.isWritable(target, path);
+    }
+
+    public modify<T, P extends Path>(target: T, path: P, fn: (value?: DeepType<T, P>) => DeepType<T, P>) {
+        const value = this.isReadable(target, path) ? this.read(target, path) : undefined;
+        return this.write(target, path, fn(value));
     }
 
     public read<T, P extends Path>(target: T, path: P): DeepType<T, P> {
@@ -47,7 +56,7 @@ export class Property {
 
         const props = this.readPropertiesUntil(target, pPath, pPath.length);
 
-        return props.pop() as DeepType<T, P>;
+        return props.pop();
     }
 
     public write<T, P extends Path>(target: T, path: P, value: DeepType<T, P>) {
@@ -104,7 +113,7 @@ export class Property {
         }
     }
 
-    protected getAccessInfo(target: any, pathPart: PathElement, methods: string[]) {
+    protected getAccessInfo(target: any, pathPart: PathElement, methods: string[]): AccessInfo {
         const key = pathPart.key;
 
         const access: AccessInfo = {
@@ -184,7 +193,7 @@ export class Property {
     }
 
     protected readPropertiesUntil(target: any, pPath: PropertyPath, lastIndex: number) {
-        if (!Var.isObjectOrFunction(target)) {
+        if (Var.isPrimitive(target)) {
             throw new UnexpectedTypeError(target, pPath, 0);
         }
 
@@ -194,7 +203,7 @@ export class Property {
             const pKey = pPath[i];
 
             target = this.readProperty(target, pKey);
-            if (i < pPath.length - 1 && !Var.isObjectOrFunction(target)) {
+            if (i < pPath.length - 1 && Var.isPrimitive(target)) {
                 throw new UnexpectedTypeError(target, pPath, i + 1);
             }
 

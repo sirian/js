@@ -1,12 +1,12 @@
 import {Var, XMap} from "@sirian/common";
 import {InvalidPropertyPathError} from "./Error";
 
-export type _Path = string | number;
+export type PathKey = string | number;
 
-export type Path = _Path | _Path[];
+export type Path = PathKey | PathKey[];
 
 export interface PathElement {
-    readonly key: string | number;
+    readonly key: PathKey;
     readonly asIndex: boolean;
 }
 
@@ -15,11 +15,10 @@ export class PropertyPath extends Array<PathElement> {
 
     constructor(arg: Path) {
         super();
-        const path = Var.stringify(arg);
-        const parts = PropertyPath.parse(path);
+        const parts = PropertyPath.parse(arg);
 
-        if (!path) {
-            const msg = `The property path should be non empty string. Given: ${path}`;
+        if (!parts.length) {
+            const msg = `The property path should be non empty. Given: ${arg}`;
             throw new InvalidPropertyPathError(msg);
         }
 
@@ -81,26 +80,20 @@ export class PropertyPath extends Array<PathElement> {
     }
 
     public static from<T extends PropertyPath>(path: T): T;
-
     public static from(path: Path): PropertyPath;
-
     public static from(path: PropertyPath | Path) {
         if (Var.isInstanceOf(path, PropertyPath)) {
-            return path as any;
+            return path;
         }
 
-        return this.cache.ensure(path) as any;
+        return this.cache.ensure(path);
     }
 
     public getKeys() {
-        return [...this].map((v) => v.key);
+        return this.map((v) => v.key);
     }
 
     public toString() {
-        const result: string[] = [];
-        for (const part of this) {
-            result.push(part.asIndex ? `[${part.key}]` : `.${part.key}`);
-        }
-        return result.join("");
+        return this.map(({asIndex, key}) => asIndex ? `[${key}]` : `.${key}`).join("");
     }
 }
