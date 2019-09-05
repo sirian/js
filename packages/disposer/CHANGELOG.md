@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.4](https://github.com/sirian/js/compare/@sirian/disposer@1.7.3...@sirian/disposer@1.7.4) (2019-09-05)
+
+**Note:** Version bump only for package @sirian/disposer
+
+
+
+
+
 ## [1.7.3](https://github.com/sirian/js/compare/@sirian/disposer@1.7.2...@sirian/disposer@1.7.3) (2019-09-04)
 
 **Note:** Version bump only for package @sirian/disposer

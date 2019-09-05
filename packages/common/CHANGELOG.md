@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.2](https://github.com/sirian/js/compare/@sirian/common@5.3.1...@sirian/common@5.3.2) (2019-09-05)
+
+
+### Bug Fixes
+
+* **common:** node Buffer handling ([3bbec07](https://github.com/sirian/js/commit/3bbec07))
+
+
+
+
+
 ## [5.3.1](https://github.com/sirian/js/compare/@sirian/common@5.3.0...@sirian/common@5.3.1) (2019-09-04)
 
 **Note:** Version bump only for package @sirian/common

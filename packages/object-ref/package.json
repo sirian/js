@@ -1,7 +1,7 @@
 {
     "name": "@sirian/object-ref",
     "description": "",
-    "version": "1.0.14",
+    "version": "1.0.15",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,8 +17,8 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^5.3.1",
-        "@sirian/shared-store": "^1.2.3"
+        "@sirian/common": "^5.3.2",
+        "@sirian/shared-store": "^1.2.4"
     },
     "scripts": {},
     "publishConfig": {
