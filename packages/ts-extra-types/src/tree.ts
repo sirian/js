@@ -7,6 +7,7 @@ export type NodePath<T, K = "parent"> =
         0: T[]
         1: Cons<T, NodePath<T[K]>>;
     }[IfExact<T, T[K], 0, 1>]
-    : [T];
+    : T extends object ? [T]
+    : [];
 
 export type NodeDepth<T, K = "parent"> = Length<Tail<NodePath<T, K>>>;

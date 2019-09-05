@@ -30,4 +30,9 @@ describe("", () => {
             expect(view.getInt8(i)).toBe(expected);
         }
     });
+
+    test("", () => {
+        const b = Buffer.from([1, 2, 3]);
+        expect(TypedArr.create(Uint8Array, b)).toStrictEqual(new Uint8Array([1, 2, 3]));
+    });
 });

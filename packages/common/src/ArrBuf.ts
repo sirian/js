@@ -23,10 +23,17 @@ export class ArrBuf {
         }
 
         if (ArrBuf.isView(arg)) {
-            return arg.buffer;
+            const buffer = arg.buffer;
+            const offset = arg.byteOffset || 0;
+            const byteLength = arg.byteLength || 0;
+            return buffer.slice(offset, offset + byteLength);
         }
 
         throw new Error("Expected ArrayBuffer or DataView");
+    }
+
+    public static isBufferLike(arg: any): arg is ArrayBufferLike {
+        return Var.isObject(arg) && Var.isNumber(arg.byteLength) && Var.isFunction(arg.slice);
     }
 
     public static isEqual(t1: ArrBufTarget, t2: ArrBufTarget) {
