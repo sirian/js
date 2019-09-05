@@ -45,7 +45,7 @@ export abstract class AbstractTimeout {
         }
 
         if (dispose) {
-            Disposer.for(this).dispose();
+            Disposer.dispose(this);
         }
         return this;
     }
