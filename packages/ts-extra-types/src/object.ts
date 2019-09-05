@@ -124,7 +124,7 @@ export type ObjectZip<K extends PropertyKey[], V extends any[]> =
         0: Record<ArrayElementOf<K>, ArrayElementOf<V>>;
         1: (V extends [] ? Partial<Record<K[0], V[0]>> : Record<K[0], V[0]>)
             & ObjectZip<Tail<K>, Tail<V>>
-    }[Required<K> extends [any, ...any[]] ? 1 : 0];
+    }[K extends [any, ...any[]] ? 1 : 0];
 
 export type Assign<T, S extends any[]> =
     {
