@@ -70,7 +70,7 @@ export class Ref {
     }
 
     public static define<T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
-    public static define(t: object, k: PropertyKey, d: PropertyDescriptor): boolean;
+    public static define(t: object, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): boolean;
     public static define(t: object, k: PropertyKey, d: PropertyDescriptor) {
         return Reflect.defineProperty(t, k, d);
     }
