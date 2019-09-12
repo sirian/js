@@ -16,10 +16,16 @@
     },
     "references": [
         {
+            "path": "../common"
+        },
+        {
             "path": "../disposer"
         },
         {
             "path": "../ts-extra-types"
+        },
+        {
+            "path": "../xpromise"
         }
     ]
 }

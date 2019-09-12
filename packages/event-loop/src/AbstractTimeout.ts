@@ -1,14 +1,11 @@
-import {Disposer} from "@sirian/disposer";
 import {Args, Ctor, Instance} from "@sirian/ts-extra-types";
 
-export type TimeoutCallback = () => any;
+export type TaskCallback = () => any;
 
 export abstract class AbstractTimeout {
-    protected started: boolean;
-    protected callback: TimeoutCallback;
+    protected callback?: TaskCallback;
 
-    protected constructor(callback: TimeoutCallback) {
-        this.started = false;
+    protected constructor(callback?: TaskCallback) {
         this.callback = callback;
     }
 
@@ -21,44 +18,24 @@ export abstract class AbstractTimeout {
         return timeout.start();
     }
 
-    public isStarted() {
-        return this.started;
-    }
+    public abstract isActive(): boolean;
 
-    public start() {
-        if (!this.started && !this.isDisposed()) {
-            this.started = true;
-            this.doStart();
-        }
+    public abstract start(): this;
 
-        return this;
-    }
-
-    public isDisposed() {
-        return Disposer.isDisposed(this);
-    }
-
-    public stop(dispose: boolean = false) {
-        if (this.started) {
-            this.started = false;
-            this.doStop();
-        }
-
-        if (dispose) {
-            Disposer.dispose(this);
-        }
-        return this;
-    }
+    public abstract clear(): this;
 
     public restart() {
-        return this.stop().start();
+        return this.clear().start();
     }
 
-    public dispose() {
-        this.stop(true);
+    public setCallback(callback?: TaskCallback) {
+        this.callback = callback;
+        if (!callback) {
+            this.clear();
+        }
     }
 
-    protected abstract doStart(): void;
-
-    protected abstract doStop(): void;
+    protected handle() {
+        return this.callback && this.callback();
+    }
 }

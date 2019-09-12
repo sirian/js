@@ -1,12 +1,7 @@
-import {Return} from "@sirian/ts-extra-types";
-import {AbstractTimeout, TimeoutCallback} from "./AbstractTimeout";
-
-export type IntervalId = Return<typeof setInterval>;
+import {AbstractTimeout, TaskCallback} from "./AbstractTimeout";
 
 export class Interval extends AbstractTimeout {
-    public static readonly active = new Map<IntervalId, Interval>();
-
-    protected id?: IntervalId;
+    protected id?: any;
     protected ms: number;
 
     constructor(ms: number, callback: () => any) {
@@ -14,26 +9,27 @@ export class Interval extends AbstractTimeout {
         this.ms = ms;
     }
 
-    public static set(ms: number, callback: TimeoutCallback) {
+    public static set(ms: number, callback: TaskCallback) {
         return setInterval(callback, ms);
     }
 
-    public static clear(id: IntervalId) {
-        Interval.active.delete(id);
-        return clearInterval(id);
+    public static clear(id?: any) {
+        clearInterval(id);
     }
 
-    protected handle() {
-        return this.callback();
+    public start(ms: number = this.ms) {
+        this.id = this.id || Interval.set(this.ms, () => this.handle());
+
+        return this;
     }
 
-    protected doStart() {
-        this.id = Interval.set(this.ms, () => this.handle());
-        Interval.active.set(this.id, this);
+    public isActive() {
+        return !!this.id;
     }
 
-    protected doStop() {
-        const id = this.id!;
-        Interval.clear(id);
+    public clear() {
+        Interval.clear(this.id);
+        delete this.id;
+        return this;
     }
 }
