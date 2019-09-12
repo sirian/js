@@ -1,5 +1,5 @@
 import {Ctor, Func} from "./function";
-import {ArrayElementOf, Head, Tail} from "./tuple";
+import {ArrayValueOf, Head, Tail} from "./tuple";
 
 export type If<C extends boolean, T, F = never, D = never> =
     boolean extends C ? D :
@@ -17,14 +17,14 @@ export type IfFalse<C extends boolean, T, F = never> = If<Not<C>, T, F>;
 export type Every<T extends boolean[]> =
     T extends [] ? true :
     {
-        0: ArrayElementOf<T>;
+        0: ArrayValueOf<T>;
         1: And<T[0], Every<Tail<T>>>
     }[T extends [any, ...any[]] ? 1 : 0];
 
 export type Some<T extends boolean[]> =
     T extends [] ? false :
     {
-        0: ArrayElementOf<T>;
+        0: ArrayValueOf<T>;
         1: Or<T[0], Some<Tail<T>>>;
     }[T extends [any, ...any[]] ? 1 : 0];
 
