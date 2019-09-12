@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.4.0](https://github.com/sirian/js/compare/@sirian/common@5.3.2...@sirian/common@5.4.0) (2019-09-12)
+
+
+### Features
+
+* Var.isAsyncIterable, Var.isIterable ([5d3658a](https://github.com/sirian/js/commit/5d3658a))
+
+
+
+
+
 ## [5.3.2](https://github.com/sirian/js/compare/@sirian/common@5.3.1...@sirian/common@5.3.2) (2019-09-05)
 
 

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.3.25](https://github.com/sirian/js/compare/@sirian/event-dispatcher@4.3.24...@sirian/event-dispatcher@4.3.25) (2019-09-12)
+
+**Note:** Version bump only for package @sirian/event-dispatcher
+
+
+
+
+
 ## [4.3.24](https://github.com/sirian/js/compare/@sirian/event-dispatcher@4.3.23...@sirian/event-dispatcher@4.3.24) (2019-09-05)
 
 **Note:** Version bump only for package @sirian/event-dispatcher

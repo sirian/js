@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.51.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.50.1...@sirian/ts-extra-types@3.51.0) (2019-09-12)
+
+
+### Features
+
+* NonEmptyTuple ([2b6f25f](https://github.com/sirian/js/commit/2b6f25f))
+
+
+
+
+
 ## [3.50.1](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.50.0...@sirian/ts-extra-types@3.50.1) (2019-09-05)
 
 **Note:** Version bump only for package @sirian/ts-extra-types
