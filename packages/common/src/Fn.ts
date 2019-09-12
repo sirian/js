@@ -42,7 +42,7 @@ export class Fn {
                 mergedArgs[i] = args.shift();
             }
 
-            return fn.apply(this, mergedArgs as Args<F>) as Return<F>;
+            return Ref.apply(fn, this, mergedArgs as Args<F>) as Return<F>;
         };
     }
 

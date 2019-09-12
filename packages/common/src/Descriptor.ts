@@ -15,7 +15,9 @@ export type DescriptorWrapper<T, V> = {
 };
 
 export class Descriptor {
-    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V> {
+    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
+    public static wrap<T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
+    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) {
         const desc = Ref.descriptor(target, key);
         const {get, set} = wrapper;
 
