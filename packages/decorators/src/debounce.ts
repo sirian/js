@@ -8,15 +8,11 @@ export const debounce = Decorator.forMethod(<A extends any[]>(options: number | 
         if (!desc) {
             throw new DecorateError("@debounce requires descriptor");
         }
-        const map = new XMap((obj) => {
-            const fn = Descriptor.read(desc, obj);
-            return Debouncer.debounce(fn.bind(obj), options);
-        });
 
-        return Descriptor.extend(desc, {
-            get() {
-                return map.ensure(this);
-            },
-        });
+        const map = new XMap((fn) => Debouncer.debounce(fn, options));
+
+        return Descriptor.wrap(target, key, {
+            get: (object, parent) => map.ensure(parent()),
+        }) as any;
     };
 });

@@ -1,4 +1,4 @@
-import {HybridMap} from "@sirian/common";
+import {HybridMap, Ref} from "@sirian/common";
 import {Args, Func, Return, ThisArg} from "@sirian/ts-extra-types";
 
 export interface IMemoizerOptions<A extends any[]> {
@@ -20,9 +20,7 @@ export class Memoizer<F extends Func> {
         const memoizer = new Memoizer(fn, opts);
 
         return new Proxy(fn, {
-            apply(target, thisArg, args) {
-                return memoizer.get(thisArg, args);
-            },
+            apply: (target, thisArg, args) => memoizer.get(thisArg, args),
         });
     }
 
@@ -31,13 +29,13 @@ export class Memoizer<F extends Func> {
 
         const hashKey = this.getHashKey(thisArg, args);
 
-        return map.ensure(hashKey, () => this.fn.apply(thisArg, args));
+        return map.ensure(hashKey, () => Ref.apply(this.fn, thisArg, args));
     }
 
     protected getHashKey(thisArg: ThisArg<F>, args: Args<F>) {
         const hasher = this.options.hasher;
         if (hasher) {
-            return hasher.apply(thisArg, args);
+            return Ref.apply(hasher, thisArg, args);
         }
     }
 }
