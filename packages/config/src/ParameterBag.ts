@@ -1,13 +1,15 @@
 import {Entries, Obj, Ref, Var, XSet} from "@sirian/common";
 import {ParameterCircularReferenceError, ParameterNotFoundError} from "./Error";
 
-export class ParameterBag {
+export class ParameterBag<T extends Record<any, any>> {
     protected resolving = new XSet();
-    protected parameters: Record<string, any> = {};
+    protected parameters: Partial<T> = {};
     protected resolved = false;
 
-    constructor(params: Record<string, any> = {}) {
-        this.add(params);
+    constructor(params?: T) {
+        if (params) {
+            this.add(params);
+        }
     }
 
     public resolve() {
@@ -24,21 +26,26 @@ export class ParameterBag {
         return this;
     }
 
-    public add(parameters: Record<string, any>) {
+    public add<U extends Record<any, any>>(parameters: U): ParameterBag<T & U> {
         Obj.assign(this.parameters, parameters);
-        return this;
+        return this as ParameterBag<T & U>;
     }
 
-    public has(key: string) {
+    public has(key: PropertyKey) {
         return Ref.hasOwn(this.parameters, key);
     }
 
-    public get(key: string) {
+    public get<K extends keyof T>(key: K) {
         if (!this.has(key)) {
             throw new ParameterNotFoundError(key);
         }
 
-        return this.parameters[key];
+        return this.parameters[key] as T[K];
+    }
+
+    public delete(key: PropertyKey) {
+        Ref.delete(this.parameters, key);
+        return this;
     }
 
     public resolveString(value: string): string {
@@ -55,7 +62,7 @@ export class ParameterBag {
 
             resolving.add(key);
 
-            let resolved = this.get(key);
+            let resolved: any = this.get(key);
 
             if (!Var.isString(resolved) && !Var.isNumeric(resolved)) {
                 throw new Error("A string value must be composed of strings/numbers, "
@@ -71,8 +78,7 @@ export class ParameterBag {
         });
     }
 
-    public resolveValue<T>(value: T): T;
-    public resolveValue(value: any) {
+    public resolveValue(value: any): any {
         if (Var.isString(value) && value.length > 2) {
             return this.resolveString(value);
         }
@@ -85,6 +91,25 @@ export class ParameterBag {
             return Entries
                 .from(value)
                 .map((k, v) => [this.resolveValue(k), this.resolveValue(v)])
+                .toObject();
+        }
+
+        return value;
+    }
+
+    public escapeValue(value: any): any {
+        if (Var.isString(value)) {
+            return value.replace(/%/g, "%%");
+        }
+
+        if (Var.isArray(value)) {
+            return value.map((v) => this.escapeValue(v));
+        }
+
+        if (Var.isObject(value)) {
+            Entries
+                .from(value)
+                .map((k, v) => [k, this.escapeValue(v)])
                 .toObject();
         }
 

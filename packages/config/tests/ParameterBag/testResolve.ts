@@ -6,7 +6,8 @@ describe("ParameterBag.resolve", () => {
         const p = new ParameterBag({
             foo: "f",
             bar: "b%foo%",
-            zoo: "z%bar%%foo%%bar%",
+            baz: 42,
+            zoo: "z%bar%%foo%%bar% %baz%",
         });
 
         p.resolve();
@@ -14,7 +15,7 @@ describe("ParameterBag.resolve", () => {
         const expected = {
             foo: "f",
             bar: "bf",
-            zoo: "zbffbf",
+            zoo: "zbffbf 42",
         };
 
         for (const [k, v] of Obj.entries(expected)) {
