@@ -14,8 +14,7 @@ export class ArrBuf {
 
     public static getBuffer(arg: ArrBufTarget) {
         if (Var.isPrimitive(arg)) {
-            const bytes = Unicode.stringToBytes(Var.stringify(arg));
-            return bytes.buffer;
+            return Unicode.stringToBytes(arg).buffer;
         }
 
         if (ArrBuf.isBuffer(arg)) {
@@ -24,8 +23,8 @@ export class ArrBuf {
 
         if (ArrBuf.isView(arg)) {
             const buffer = arg.buffer;
-            const offset = arg.byteOffset || 0;
-            const byteLength = arg.byteLength || 0;
+            const offset = arg.byteOffset;
+            const byteLength = arg.byteLength;
             return buffer.slice(offset, offset + byteLength);
         }
 
@@ -81,7 +80,7 @@ export class ArrBuf {
     }
 
     public static align(source: ArrBufTarget, bytesPerElement: number) {
-        const buffer = this.getBuffer(source);
+        const buffer = ArrBuf.getBuffer(source);
 
         const elements = Math.ceil(buffer.byteLength / bytesPerElement);
 

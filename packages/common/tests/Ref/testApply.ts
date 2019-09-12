@@ -3,7 +3,7 @@ import {Ref} from "../../src";
 describe("Ref.apply", () => {
     function mock(this: any, ...args: any) {
         const fn = jest.fn();
-        fn.apply(this, [this, args]);
+        Ref.apply(fn, this, [this, args]);
         return fn;
     }
 

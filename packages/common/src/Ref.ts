@@ -70,7 +70,7 @@ export class Ref {
     }
 
     public static define<T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
-    public static define(t: object, k: PropertyKey, d: PropertyDescriptor): boolean;
+    public static define(t: object, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): boolean;
     public static define(t: object, k: PropertyKey, d: PropertyDescriptor) {
         return Reflect.defineProperty(t, k, d);
     }
@@ -143,7 +143,7 @@ export class Ref {
         return !Var.isNullable(target) && (key in Obj.wrap(target));
     }
 
-    public static hasMethod<T, K extends PropertyKey>(target: T, key: K): target is Record<K, Func> & T {
+    public static hasMethod<T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> {
         return Var.isNullable(target) ? false : Var.isFunction((target as any)[key]);
     }
 

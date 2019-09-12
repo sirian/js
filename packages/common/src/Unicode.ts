@@ -1,11 +1,13 @@
+import {Var} from "./Var";
+
 export class Unicode {
     public static getSymbols(str: string) {
-        return [...String(str)];
+        return [...Var.stringify(str)];
     }
 
     public static getGraphemes(str: string): string[] {
         const re = /(\P{M}\p{M}*)/gu;
-        return String(str).match(re) || [];
+        return Var.stringify(str).match(re) || [];
     }
 
     public static isUTF8(source: string) {
@@ -17,6 +19,7 @@ export class Unicode {
     }
 
     public static stringToBytes(str: string) {
+        str = Var.stringify(str);
         const length = str.length;
         const resArr = [];
 
@@ -34,8 +37,9 @@ export class Unicode {
                 nextCode = str.charCodeAt(i);
 
                 if (nextCode >= 0xDC00 && nextCode <= 0xDFFF) {
-                    point = (point - 0xD800) * 0x400 + nextCode - 0xDC00 + 0x10000;
                     ++i;
+
+                    point = (point - 0xD800) * 0x400 + nextCode - 0xDC00 + 0x10000;
 
                     if (point > 0xFFFF) {
                         resArr.push(

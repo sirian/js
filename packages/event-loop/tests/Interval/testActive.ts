@@ -7,26 +7,22 @@ describe("Interval.active", () => {
 
         const t = Interval.create(5, fn);
 
-        expect(t.isStarted()).toBe(false);
-        expect(Interval.active.size).toBe(0);
+        expect(t.isActive()).toBe(false);
 
         t.start();
 
-        expect(t.isStarted()).toBe(true);
-        expect(Interval.active.size).toBe(1);
+        expect(t.isActive()).toBe(true);
         for (let i = 1; i < 20; i++) {
             jest.advanceTimersByTime(1);
-            expect(t.isStarted()).toBe(true);
-            expect(Interval.active.size).toBe(1);
+            expect(t.isActive()).toBe(true);
             expect(fn).toHaveBeenCalledTimes(Math.floor(i / 5));
         }
 
-        t.stop();
+        t.clear();
 
         fn.mockReset();
 
-        expect(t.isStarted()).toBe(false);
-        expect(Interval.active.size).toBe(0);
+        expect(t.isActive()).toBe(false);
 
         jest.advanceTimersByTime(100);
         expect(fn).toHaveBeenCalledTimes(0);

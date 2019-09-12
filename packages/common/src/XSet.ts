@@ -4,6 +4,7 @@ export class XSet<T> extends Set<T> {
     }
 
     public first() {
+        this[Symbol.iterator]();
         for (const x of this) {
             return x;
         }

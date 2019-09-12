@@ -5,10 +5,14 @@ import {Overwrite} from "./object";
 import {Cons, DropLast, Head, LastElement, Length, Tail} from "./tuple";
 import {NotFunc, Primitive} from "./types";
 
-export type Ctor<TInstance = any, TArgs extends any[] = any[]> = new(...args: TArgs) => TInstance;
+export type Ctor<T = any, A extends any[] = any[]> = new(...args: A) => T;
 export type Ctor0<T = any> = Ctor<T, []>;
 export type Ctor1<T = any, A = any> = Ctor<T, [A]>;
 export type Ctor2<T = any, A = any, B = any> = Ctor<T, [A, B]>;
+
+export type WithMethod<M extends PropertyKey, R = any, A extends any[] = any[]> = { [P in M]: Func<R, A> };
+
+export type Creatable<T = any, A extends any[] = any[]> = WithMethod<"create", T, A>;
 
 export type Newable<T = any> = Overwrite<NewableFunction, { prototype: T }>;
 
@@ -95,12 +99,12 @@ export type Compose<T extends Func, U extends Func1<any, Return<T>>> = Func<Retu
 export type ValidPipe<Fns extends Func[], Expected extends any[] = any[]> =
     {
         0: Head<Fns> extends Func<infer R>
-           ? Cons<(...args: Expected) => any, ValidPipe<Tail<Fns>, [R]>>
+           ? Cons<Func<any, Expected>, ValidPipe<Tail<Fns>, [R]>>
            : never
         1: [];
     }[Fns extends [any, ...any[]] ? 0 : 1];
 
 export type Pipe<Fns extends ValidPipe<Fns1>, Fns1 extends Func[] = Fns> =
     LastElement<Fns> extends Func<infer R>
-    ? (...args: Args<Head<Fns>>) => R
+    ? Func<R, Args<Head<Fns>>>
     : never;

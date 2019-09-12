@@ -17,10 +17,10 @@
         "jest": "^24.9.0",
         "lerna": "^3.16.4",
         "rimraf": "^3.0.0",
-        "ts-jest": "^24.0.2",
+        "ts-jest": "^24.1.0",
         "ts-node": "^8.3.0",
-        "tslint": "^5.19.0",
-        "typescript": "^3.6.2"
+        "tslint": "^5.20.0",
+        "typescript": "^3.6.3"
     },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build:all",

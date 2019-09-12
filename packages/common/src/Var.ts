@@ -48,7 +48,7 @@ export class Var {
     }
 
     public static isType<V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> {
-        const type = typeof v;
+        const type: any = typeof v;
         return Var.isArray(types) ? Var.isSome(type, types) : type === types;
     }
 
@@ -84,7 +84,7 @@ export class Var {
         return "symbol" === typeof value;
     }
 
-    public static isFunction<T extends any>(value: T): value is Extract<T, AnyFunc> {
+    public static isFunction<T extends any>(value: T): value is Function & Extract<T, AnyFunc> {
         return "function" === typeof value;
     }
 
@@ -92,7 +92,7 @@ export class Var {
         if (!Var.isFunction(value)) {
             return false;
         }
-        const p: any = new Proxy(value, {construct: () => ({})});
+        const p: any = new Proxy(value as any, {construct: () => ({})});
 
         try {
             return new p() && true;
@@ -134,7 +134,7 @@ export class Var {
     }
 
     public static isSubclassOf<A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> {
-        return Var.isFunction(a) && (Var.isEqual(a, b) ||  Var.isInstanceOf(a.prototype, b));
+        return Var.isFunction(a) && (Var.isEqual(a, b) || Var.isInstanceOf(a.prototype, b));
     }
 
     public static isSameType<T>(x: any, value: T): value is T {
@@ -152,7 +152,7 @@ export class Var {
         return x >= min && x <= max;
     }
 
-    public static isArray(value: any): value is unknown[] {
+    public static isArray(value: any): value is any[] {
         return Array.isArray(value);
     }
 
@@ -203,6 +203,14 @@ export class Var {
         }
 
         return Str.stringify(value);
+    }
+
+    public static isAsyncIterable(value: any): value is AsyncIterable<any> {
+        return Ref.hasMethod(value, Symbol.asyncIterator);
+    }
+
+    public static isIterable(value: any): value is Iterable<any> {
+        return Ref.hasMethod(value, Symbol.iterator);
     }
 
     public static isEqual(x: any, y: any) {

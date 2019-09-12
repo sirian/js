@@ -1,4 +1,4 @@
-import {AccessorPropertyDescriptor, DataPropertyDescriptor} from "@sirian/ts-extra-types";
+import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Ref} from "./Ref";
 import {Var} from "./Var";
@@ -9,13 +9,15 @@ export enum DescriptorType {
     ACCESSOR = "ACCESSOR",
 }
 
-export type DescriptorWrapper<T, K extends keyof T> = {
-    get?(object: T, parent: () => T[K]): T[K];
-    set?(object: T, value: T[K], parent: (value: T[K]) => void): T[K];
+export type DescriptorWrapper<T, V> = {
+    get?(object: T, parent: () => V): V;
+    set?(object: T, value: V, parent: (value: V) => void): V;
 };
 
 export class Descriptor {
-    public static wrap<T, K extends keyof T>(target: T, key: K, wrapper: DescriptorWrapper<T, K>) {
+    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
+    public static wrap<T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
+    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) {
         const desc = Ref.descriptor(target, key);
         const {get, set} = wrapper;
 
@@ -24,9 +26,9 @@ export class Descriptor {
                 const parent = () => Descriptor.read(desc, this);
                 return get ? get(this, parent) : parent();
             },
-            set(this: T, value: T[K]) {
+            set(this: T, value: V) {
                 const object = this;
-                const parent = (v: T[K]) => Descriptor.write(desc, this, key, v);
+                const parent = (v: V) => Descriptor.write(desc, this, key, v);
 
                 if (set) {
                     set(object, value, parent);
@@ -41,7 +43,7 @@ export class Descriptor {
         return descriptor;
     }
 
-    public static extend<T>(desc: TypedPropertyDescriptor<T>, data: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+    public static extend<D extends TypedPropertyDescriptor<any>>(desc: D, data: D): D;
     public static extend(desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
     public static extend(desc: PropertyDescriptor = {}, newDesc: PropertyDescriptor = {}) {
         const {
