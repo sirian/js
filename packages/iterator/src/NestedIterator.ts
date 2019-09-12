@@ -1,12 +1,12 @@
+import {Var} from "@sirian/common";
 import {AbstractTransformIterator} from "./AbstractTransformIterator";
-import {Iter} from "./Iter";
 import {RecursiveContext} from "./RecursiveIterator";
 
 export class NestedIterator<V> extends AbstractTransformIterator<V, RecursiveContext<V>> {
     protected transform(value: V) {
         return {
             value,
-            hasChildren: () => Iter.isIterable(value) || Iter.isAsyncIterable(value),
+            hasChildren: () => Var.isIterable(value) || Var.isAsyncIterable(value),
             getChildren: (): NestedIterator<V> => new NestedIterator(value as any),
         };
     }
