@@ -1,6 +1,6 @@
 import {XSet} from "../../src";
 
-describe("", () => {
+describe("XSet.toArray", () => {
     const data = [
         [[], []],
         [[1, 2, 1], [1, 2]],

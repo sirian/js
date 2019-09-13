@@ -1,7 +1,7 @@
 import {XMap} from "../../src";
 
-describe("", () => {
-    test("", () => {
+describe("XMap.ensure", () => {
+    test("XMap.ensure", () => {
         let x = 0;
         const m = new XMap<string, any>((k) => [k, ++x]);
 
