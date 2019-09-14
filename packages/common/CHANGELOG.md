@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.5.0](https://github.com/sirian/js/compare/@sirian/common@5.4.0...@sirian/common@5.5.0) (2019-09-14)
+
+
+### Features
+
+* **common:** XWeakSet ([2f38955](https://github.com/sirian/js/commit/2f38955))
+
+
+
+
+
 # [5.4.0](https://github.com/sirian/js/compare/@sirian/common@5.3.2...@sirian/common@5.4.0) (2019-09-12)
 
 
