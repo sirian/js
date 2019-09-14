@@ -1,9 +1,9 @@
 import {Obj} from "@sirian/common";
-import {ParameterBag} from "../../src";
+import {ResolvableParameterBag} from "../../src";
 
-describe("ParameterBag.resolve", () => {
-    test("ParameterBag.resolve", () => {
-        const p = new ParameterBag({
+describe("ResolvableParameterBag.resolve", () => {
+    test("ResolvableParameterBag.resolve", () => {
+        const p = new ResolvableParameterBag({
             foo: "f",
             bar: "b%foo%",
             baz: 42,
