@@ -1,6 +1,6 @@
 import {XSet} from "../../src";
 
-describe("", () => {
+describe("XSet.first", () => {
     test("XSet.first", () => {
         const set = new XSet();
 

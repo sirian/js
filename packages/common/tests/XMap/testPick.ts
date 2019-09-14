@@ -1,6 +1,6 @@
 import {XMap} from "../../src";
 
-describe("", () => {
+describe("XMap.pick", () => {
     test("XMap.pick correctly returns value and delete key", () => {
         const m = new XMap();
         expect(m.has("foo")).toBe(false);

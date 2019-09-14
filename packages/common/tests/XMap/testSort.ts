@@ -1,6 +1,6 @@
 import {XMap} from "../../src";
 
-describe("", () => {
+describe("XMap.sort", () => {
     test("XMap.sort by value", () => {
         const map = new XMap([
             ["foo", 1],

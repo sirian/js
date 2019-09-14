@@ -17,3 +17,4 @@ export * from "./Var";
 export * from "./XMap";
 export * from "./XSet";
 export * from "./XWeakMap";
+export * from "./XWeakSet";

@@ -29,7 +29,7 @@ export class Arr {
     }
 
     public static intersect<T>(array: T[], ...arrays: T[][]): T[] {
-        const sets = arrays.map((arr) => new Set(arr));
+        const sets = arrays.map((arr) => new XSet(arr));
 
         return array.filter((value) => sets.every((set) => set.has(value)));
     }

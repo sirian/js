@@ -18,7 +18,9 @@ export class XWeakMap<K extends object, V> extends WeakMap<K, V> {
         return XMap.ensure(this, key, initializer || this.initializer!);
     }
 
-    public pick(key: K) {
-        return XMap.pick(this, key);
+    public pick(key: K, strict: true): V;
+    public pick(key: K, strict?: boolean): V | undefined;
+    public pick(key: K, strict = false) {
+        return XMap.pick(this, key, strict);
     }
 }
