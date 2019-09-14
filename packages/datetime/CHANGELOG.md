@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.4.24](https://github.com/sirian/js/compare/@sirian/datetime@3.4.23...@sirian/datetime@3.4.24) (2019-09-14)
+
+**Note:** Version bump only for package @sirian/datetime
+
+
+
+
+
 ## [3.4.23](https://github.com/sirian/js/compare/@sirian/datetime@3.4.22...@sirian/datetime@3.4.23) (2019-09-12)
 
 **Note:** Version bump only for package @sirian/datetime
