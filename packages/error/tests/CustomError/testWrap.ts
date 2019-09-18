@@ -1,34 +1,23 @@
 import {CustomError} from "../../src";
 
-test("wrap Error instance returns itself", () => {
-    const e = new Error("foo");
-    expect(CustomError.wrap(e)).toBe(e);
-});
+describe("CustomError.wrap", () => {
+    test("wrap Error instance returns itself", () => {
+        const e = new Error("foo");
+        expect(CustomError.wrap(e)).toBe(e);
+    });
 
-test("", () => {
-    const e = CustomError.wrap({name: "Foo"});
-    expect(e).toBeInstanceOf(CustomError);
-    expect(e.name).toBe("Foo");
-    expect(e.message).toBe("");
-});
+    const data: Array<[any, string, string]> = [
+        [{}, "CustomError", ""],
+        [{name: "Foo"}, "Foo", ""],
+        [{message: "bar"}, "CustomError", "bar"],
+        [{name: "Foo", message: "bar"}, "Foo", "bar"],
+        [{name: "", message: ""}, "", ""],
+    ];
 
-test("", () => {
-    const e = CustomError.wrap({message: "bar"});
-    expect(e).toBeInstanceOf(CustomError);
-    expect(e.name).toBe("CustomError");
-    expect(e.message).toBe("bar");
-});
-
-test("", () => {
-    const e = CustomError.wrap({name: "Foo", message: "bar"});
-    expect(e).toBeInstanceOf(CustomError);
-    expect(e.name).toBe("Foo");
-    expect(e.message).toBe("bar");
-});
-
-test("", () => {
-    const e = CustomError.wrap({name: "", message: ""});
-    expect(e).toBeInstanceOf(CustomError);
-    expect(e.name).toBe("");
-    expect(e.message).toBe("");
+    test.each(data)("CustomError.wrap(%p) === {name: %p, message: %p}", (error, name, message) => {
+        const e = CustomError.wrap(error);
+        expect(e).toBeInstanceOf(CustomError);
+        expect(e.name).toBe(name);
+        expect(e.message).toBe(message);
+    });
 });

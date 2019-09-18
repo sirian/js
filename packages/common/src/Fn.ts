@@ -56,11 +56,12 @@ export class Fn {
 
     public static async tryAsync<T>(fn: () => T): Promise<T | void>;
     public static async tryAsync<T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): Promise<T | R>;
-    public static async tryAsync(fn: Func0, onError?: Func1) {
+    public static async tryAsync(fn: Func0, onError?: any) {
         try {
-            return await fn();
+            const result = fn();
+            return Var.isPromiseLike(result) ? await result : result;
         } catch (error) {
-            return Var.isFunction(onError) ? await onError(error) : onError;
+            return Var.isFunction(onError) ? onError(error) : onError;
         }
     }
 
@@ -72,5 +73,11 @@ export class Fn {
         } catch (error) {
             return Var.isFunction(onError) ? onError(error) : onError;
         }
+    }
+
+    public static callableClass<T extends object, K extends keyof T>(method: K, ctor: T): T & T[K] {
+        return new Proxy(ctor, {
+            apply: (target: any, thisArg, args) => target[method](...args),
+        }) as T & T[K];
     }
 }

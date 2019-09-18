@@ -1,41 +1,44 @@
 import {Disposer} from "../../src";
 
-test("", () => {
-    const foo = {};
-    const dfoo = Disposer.for(foo);
+describe("callback", () => {
+    test("", () => {
+        const foo = {};
+        const dfoo = Disposer.for(foo);
 
-    const results: number[] = [];
-    dfoo.addCallback(() => results.push(1));
-    dfoo.addCallback(() => results.push(2));
+        const results: number[] = [];
+        dfoo.addCallback(() => results.push(1));
+        dfoo.addCallback(() => results.push(2));
 
-    expect(results).toStrictEqual([]);
+        expect(results).toStrictEqual([]);
 
-    dfoo.dispose();
+        dfoo.dispose();
 
-    expect(results).toStrictEqual([1, 2]);
+        expect(results).toStrictEqual([1, 2]);
 
-    dfoo.dispose();
+        dfoo.dispose();
 
-    expect(results).toStrictEqual([1, 2]);
-});
+        expect(results).toStrictEqual([1, 2]);
+    });
 
-test("throws", () => {
-    const foo = {};
+    test("throws", async () => {
+        const foo = {};
 
-    const results: any[] = [];
+        const results: any[] = [];
 
-    Disposer.for(foo)
-        .addCallback(() => results.push(1))
-        .addCallback(() => { throw new Error("bar"); })
-        .addCallback(() => results.push(2))
-    ;
+        Disposer.for(foo)
+            .addCallback(() => results.push(1))
+            .addCallback(() => { throw new Error("foo"); })
+            .addCallback(() => results.push(2))
+            .addCallback(() => results.push(3))
+        ;
 
-    expect(results).toStrictEqual([]);
-    expect(Disposer.isDisposed(foo)).toBe(false);
+        expect(results).toStrictEqual([]);
+        expect(Disposer.isDisposed(foo)).toBe(false);
 
-    Disposer.dispose(foo);
+        expect(() => Disposer.dispose(foo)).not.toThrow();
+        expect(Disposer.isDisposed(foo)).toBe(true);
+        expect(results).toStrictEqual([1, 2, 3]);
+        expect(Disposer.for(foo).lastError).toStrictEqual(new Error("foo"));
+    });
 
-    expect(Disposer.isDisposed(foo)).toBe(true);
-    expect(results).toStrictEqual([1, 2]);
-    expect(Disposer.for(foo).errors).toStrictEqual([new Error("bar")]);
 });

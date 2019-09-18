@@ -19,7 +19,7 @@
     },
     "references": [
         {
-            "path": "../common"
+            "path": "../error"
         },
         {
             "path": "../ts-extra-types"

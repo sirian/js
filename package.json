@@ -18,7 +18,7 @@
         "lerna": "^3.16.4",
         "rimraf": "^3.0.0",
         "ts-jest": "^24.1.0",
-        "ts-node": "^8.3.0",
+        "ts-node": "^8.4.1",
         "tslint": "^5.20.0",
         "typescript": "^3.6.3"
     },
@@ -40,7 +40,7 @@
         "test": "yarn test:jest && lerna run test --parallel",
         "test:clean": "yarn test:jest --clearCache",
         "test:jest": "jest --config jest.config.json",
-        "test:watch": "yarn test:jest --watch",
+        "test:watch": "yarn test:jest --watch --maxWorkers=2",
         "lerna:publish": "lerna publish --from-git --yes --conventional-commits --yes"
     },
     "husky": {
