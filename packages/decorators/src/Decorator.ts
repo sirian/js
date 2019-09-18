@@ -44,19 +44,19 @@ export type DecoratorFactory<T extends DecoratorType> = (...args: any) => Decora
 
 export class Decorator {
     public static forClass<F extends DecoratorFactory<DecoratorType.CLASS>>(callback: F) {
-        return this.create(DecoratorType.CLASS, callback);
+        return Decorator.create(DecoratorType.CLASS, callback);
     }
 
     public static forMethod<F extends DecoratorFactory<DecoratorType.METHOD>>(callback: F) {
-        return this.create(DecoratorType.METHOD, callback);
+        return Decorator.create(DecoratorType.METHOD, callback);
     }
 
     public static forParameter<F extends DecoratorFactory<DecoratorType.PARAMETER>>(callback: F) {
-        return this.create(DecoratorType.PARAMETER, callback);
+        return Decorator.create(DecoratorType.PARAMETER, callback);
     }
 
     public static forProperty<F extends DecoratorFactory<DecoratorType.PROPERTY>>(callback: F) {
-        return this.create(DecoratorType.PROPERTY, callback);
+        return Decorator.create(DecoratorType.PROPERTY, callback);
     }
 
     public static create<T extends DecoratorType, F extends DecoratorFactory<T>>(type: T, callback: F) {
