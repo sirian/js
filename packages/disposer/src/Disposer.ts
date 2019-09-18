@@ -1,75 +1,66 @@
-import {Ref, XSet} from "@sirian/common";
+import {XSet, XWeakMap, XWeakSet} from "@sirian/common";
 import {SharedStore} from "@sirian/shared-store";
-import {Return} from "@sirian/ts-extra-types";
+import {OverloadedArgs, Return} from "@sirian/ts-extra-types";
 
-export type DisposeCallback = () => void;
+export type DisposeCallback = (target: object) => void;
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
 
 declare function clearTimeout(timeoutId: any): void;
 
 // Ordered
-enum DisposeState {
-    INITIAL = 0,
-    EXECUTE_CALLBACKS = 1,
-    DISPOSE_CHILDREN = 2,
-    DISPOSED = 3,
+const enum DisposeState {
+    INITIAL,
+    EXECUTE_CALLBACKS,
+    DISPOSE_CHILDREN,
+    DISPOSED,
 }
 
 export class Disposer {
     public readonly children: XSet<object>;
-    public readonly errors: any[] = [];
-
+    public readonly target: object;
+    public lastError?: any;
     protected state: DisposeState;
-    protected callbacks: DisposeCallback[];
+    protected callbacks: XSet<DisposeCallback>;
     protected timeoutId?: Return<typeof setTimeout>;
 
-    constructor() {
+    protected applied: XWeakSet<DisposeCallback>;
+
+    constructor(target: object) {
         this.state = DisposeState.INITIAL;
         this.children = new XSet();
-        this.callbacks = [];
+        this.callbacks = new XSet();
+        this.target = target;
+        this.applied = new XWeakSet();
     }
 
-    public static get store() {
+    public static get disposers() {
         return SharedStore.get({
             key: "disposer",
-            init: () => ({
-                disposers: new WeakMap<object, Disposer>(),
-                targets: new WeakMap<Disposer, object>(),
-            }),
+            init: () => new XWeakMap<object, Disposer>(),
         });
     }
 
-    protected static get disposers() {
-        return this.store.disposers;
+    protected static get callbacks(this: any) {
+        delete this.callbacks;
+        return this.callbacks = new XSet<DisposeCallback>();
     }
 
-    public get target() {
-        return Disposer.store.targets.get(this);
-    }
-
-    public static addCallback(target: object, callback: DisposeCallback) {
-        Disposer.for(target).addCallback(callback);
+    public static addCallback(callback: DisposeCallback): void;
+    public static addCallback(target: object, callback: DisposeCallback): void;
+    public static addCallback(...args: OverloadedArgs<typeof Disposer["addCallback"]>) {
+        switch (args.length) {
+            case 2:
+                Disposer.for(args[0]).addCallback(args[1]);
+                break;
+            case 1:
+                Disposer.callbacks.add(args[0]);
+                break;
+        }
     }
 
     public static setTimeout<T extends object>(object: T, ms: number) {
         Disposer.for(object).setTimeout(ms);
-    }
-
-    public static once<F extends (...args: any[]) => any>(fn: F) {
-        const {proxy, revoke} = Proxy.revocable(fn, {
-            apply(target, thisArg, args) {
-                try {
-                    return Ref.apply(fn, thisArg, args);
-                } finally {
-                    Disposer.dispose(proxy);
-                }
-            },
-        });
-
-        Disposer.for(proxy).addSource(fn).addCallback(revoke);
-
-        return proxy;
     }
 
     public static addChild(target: object, ...children: [object, ...object[]]) {
@@ -91,14 +82,11 @@ export class Disposer {
     }
 
     public static for(target: object) {
-        const store = Disposer.store;
-        const disposers = store.disposers;
-
+        const disposers = this.disposers;
         if (!disposers.has(target)) {
-            const disposer = new Disposer();
+            const disposer = new Disposer(target);
             disposers.set(target, disposer);
             disposers.set(disposer, disposer);
-            store.targets.set(disposer, target);
         }
 
         return disposers.get(target)!;
@@ -125,18 +113,18 @@ export class Disposer {
     }
 
     public addCallback(callback: DisposeCallback) {
-
         if (this.state > DisposeState.EXECUTE_CALLBACKS) {
+            // noinspection JSIgnoredPromiseFromCall
             this.applyCallback(callback);
         } else {
-            this.callbacks.push(callback);
+            this.callbacks.add(callback);
         }
 
         return this;
     }
 
     public addChild(...children: [object, ...object[]]) {
-        if (this.state >= DisposeState.DISPOSE_CHILDREN) {
+        if (this.state > DisposeState.DISPOSE_CHILDREN) {
             Disposer.dispose(...children);
         } else {
             this.children.add(...children);
@@ -160,32 +148,26 @@ export class Disposer {
         this.clearTimeout();
 
         this.state = DisposeState.EXECUTE_CALLBACKS;
-        this.applyCallbacks();
+        Disposer.callbacks.forEach((fn) => this.applyCallback(fn));
+        this.callbacks.forEach((fn) => this.applyCallback(fn));
+        this.callbacks.clear();
 
         this.state = DisposeState.DISPOSE_CHILDREN;
-        this.disposeChildren();
+        this.children.forEach((child) => Disposer.dispose(child));
+        this.children.clear();
 
         this.state = DisposeState.DISPOSED;
-
     }
 
-    protected disposeChildren() {
-        Disposer.dispose(...this.children);
-        this.children.clear();
-    }
-
-    protected applyCallbacks() {
-        const callbacks = this.callbacks;
-        while (callbacks.length) {
-            this.applyCallback(callbacks.shift()!);
+    protected async applyCallback(callback: DisposeCallback) {
+        if (this.applied.has(callback)) {
+            return;
         }
-    }
-
-    protected applyCallback(callback: DisposeCallback) {
+        this.applied.add(callback);
         try {
-            callback();
+            callback(this.target);
         } catch (e) {
-            this.errors.push(e);
+            this.lastError = e;
         }
     }
 }
