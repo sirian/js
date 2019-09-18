@@ -1,5 +1,4 @@
-import {Var} from "@sirian/common";
-import {callableClass} from "@sirian/decorators";
+import {Fn, Var} from "@sirian/common";
 
 export interface DumpOptions {
     snapshot?: boolean;
@@ -45,7 +44,7 @@ export type TypedDumpOptions<T> =
     T extends string ? DumpOptions :
     never;
 
-export const Dump = callableClass("var", class Dump<T extends string> {
+export const Dump = Fn.callableClass("var", class Dump<T extends string> {
     public target: any;
     public options: TypedDumpOptions<T>;
     public type: T;
