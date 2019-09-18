@@ -13,10 +13,7 @@ export class SharedStore {
     public static get<T>(key: any, init: () => T): T;
     public static get(opts: any, fn?: Func) {
         if (fn) {
-            return SharedStore.get({
-                key: opts,
-                init: fn,
-            });
+            opts = {key: opts, init: fn};
         }
 
         const {
@@ -26,16 +23,8 @@ export class SharedStore {
             init,
         } = opts;
 
-        if (!target[propertyKey]) {
-            target[propertyKey] = new HybridMap();
-        }
+        target[propertyKey] = target[propertyKey] || new HybridMap();
 
-        const map = target[propertyKey] as HybridMap<any, any>;
-
-        if (!map.has(key)) {
-            map.set(key, init());
-        }
-
-        return map.get(key)!;
+        return target[propertyKey].ensure(key, init);
     }
 }
