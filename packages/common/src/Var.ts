@@ -6,7 +6,6 @@ import {
     Instance,
     Newable,
     Primitive,
-    Thenable,
     TypeName,
     XTypeName,
     XTypeNameOf,
@@ -117,7 +116,7 @@ export class Var {
         return Var.isType(value, ["number", "string"]) && !Var.isEqualNaN(value - parseFloat(value));
     }
 
-    public static isPromiseLike(value: any): value is Thenable {
+    public static isPromiseLike(value: any): value is PromiseLike<any> {
         return Ref.hasMethod(value, "then");
     }
 

@@ -1,5 +1,6 @@
 export * from "./Arr";
 export * from "./ArrBuf";
+export * from "./BiMap";
 export * from "./Descriptor";
 export * from "./Fn";
 export * from "./Json";

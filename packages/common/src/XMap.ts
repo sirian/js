@@ -19,7 +19,6 @@ export class XMap<K = any, V = any> extends Map<K, V> {
 
     constructor(initializer?: XMapInitializer<K, V>);
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
-
     constructor(...args: any[]) {
         const [src, initializer] = XMap.parseArgs(args);
         super(src);
