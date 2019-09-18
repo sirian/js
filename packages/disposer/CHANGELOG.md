@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/sirian/js/compare/@sirian/disposer@1.7.6...@sirian/disposer@1.8.0) (2019-09-18)
+
+
+### Features
+
+* **disposer:** global callbacks ([edaf45c](https://github.com/sirian/js/commit/edaf45c))
+
+
+
+
+
 ## [1.7.6](https://github.com/sirian/js/compare/@sirian/disposer@1.7.5...@sirian/disposer@1.7.6) (2019-09-14)
 
 **Note:** Version bump only for package @sirian/disposer
