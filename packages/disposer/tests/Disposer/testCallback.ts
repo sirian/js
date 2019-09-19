@@ -25,9 +25,14 @@ describe("callback", () => {
 
         const results: any[] = [];
 
-        Disposer.for(foo)
+        const onError = jest.fn();
+        Disposer.events.once("error", onError);
+
+        const err = new Error("foo");
+
+        const disposer = Disposer.for(foo)
             .addCallback(() => results.push(1))
-            .addCallback(() => { throw new Error("foo"); })
+            .addCallback(() => { throw err; })
             .addCallback(() => results.push(2))
             .addCallback(() => results.push(3))
         ;
@@ -38,7 +43,7 @@ describe("callback", () => {
         expect(() => Disposer.dispose(foo)).not.toThrow();
         expect(Disposer.isDisposed(foo)).toBe(true);
         expect(results).toStrictEqual([1, 2, 3]);
-        expect(Disposer.for(foo).lastError).toStrictEqual(new Error("foo"));
+        expect(onError).toHaveBeenCalledWith(err, foo, disposer);
     });
 
 });

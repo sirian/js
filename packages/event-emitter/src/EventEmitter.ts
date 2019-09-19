@@ -30,8 +30,13 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
         return this;
     }
 
+    public getListeners<K extends keyof T>(event: K) {
+        const listeners = this.map.get(event) as ListenerSet<T[K]> | undefined;
+        return listeners ? listeners.all() : [];
+    }
+
     public emit<K extends keyof T>(event: K, ...args: T[K]) {
-        const listeners = this.map.get(event);
+        const listeners = this.map.get(event) as ListenerSet<T[K]> | undefined;
         if (!listeners) {
             return;
         }
@@ -42,7 +47,7 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
                 listeners.delete(callback);
             }
             try {
-                callback(event, ...args);
+                callback(...args);
             } catch (e) {
                 this.onError(e, event, args, obj);
                 if (!passive) {
