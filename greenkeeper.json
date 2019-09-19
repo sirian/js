@@ -14,6 +14,7 @@
                 "packages/dumper/package.json",
                 "packages/error/package.json",
                 "packages/event-dispatcher/package.json",
+                "packages/event-emitter/package.json",
                 "packages/event-loop/package.json",
                 "packages/expression-language/package.json",
                 "packages/filesystem/package.json",

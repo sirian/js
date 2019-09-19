@@ -82,7 +82,7 @@ export class Disposer {
     }
 
     public static for(target: object) {
-        const disposers = this.disposers;
+        const disposers = Disposer.disposers;
         if (!disposers.has(target)) {
             const disposer = new Disposer(target);
             disposers.set(target, disposer);
