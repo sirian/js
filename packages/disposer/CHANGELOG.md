@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/sirian/js/compare/@sirian/disposer@1.8.0...@sirian/disposer@1.8.1) (2019-09-19)
+
+
+### Bug Fixes
+
+* **disposer:** Disposer.disposers ([fb70493](https://github.com/sirian/js/commit/fb70493))
+
+
+
+
+
 # [1.8.0](https://github.com/sirian/js/compare/@sirian/disposer@1.7.6...@sirian/disposer@1.8.0) (2019-09-18)
 
 
