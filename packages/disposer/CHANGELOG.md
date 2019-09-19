@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/sirian/js/compare/@sirian/disposer@1.8.1...@sirian/disposer@1.9.0) (2019-09-19)
+
+
+### Features
+
+* **disposer:** events ([b21fea4](https://github.com/sirian/js/commit/b21fea4))
+
+
+
+
+
 ## [1.8.1](https://github.com/sirian/js/compare/@sirian/disposer@1.8.0...@sirian/disposer@1.8.1) (2019-09-19)
 
 
