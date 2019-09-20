@@ -1,7 +1,7 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If, Not} from "./logic";
 import {ArrayValueOf, IsEmptyTuple, IsOpenTuple, NonEmptyTuple, Tail, TupleKeyOf} from "./tuple";
-import {IfExact, IfNever, IsExtends, IsWide} from "./types";
+import {IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
 export type EntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
@@ -43,6 +43,7 @@ export type Expand<T> = { [P in ExpandKey<keyof T>]?: unknown } & T;
 export type MyPick<T, K extends keyof any> = Pick<T, Extract<keyof T, ExpandKey<K>>>;
 export type MyOmit<T, K extends keyof any> = IfNever<K, T, Pick<T, Exclude<keyof T, ExpandKey<K>>>>;
 
+export type ExactTypedKeyOf<T, Condition> = { [K in keyof T]: IsExact<T[K], Condition> extends true ? K : never }[keyof T];
 export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition ? K : never }[keyof T];
 export type PickTyped<T, Condition> = Pick<T, TypedKeyOf<T, Condition>>;
 export type OmitTyped<T, Condition> = Omit<T, TypedKeyOf<T, Condition>>;
