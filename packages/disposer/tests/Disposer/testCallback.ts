@@ -20,13 +20,30 @@ describe("callback", () => {
         expect(results).toStrictEqual([1, 2]);
     });
 
+    test("add callback inside another callback", () => {
+        const o = {};
+        const actual: number[] = [];
+
+        Disposer.for(o).addCallback(() => {
+            actual.push(1);
+            Disposer.for(o).addCallback(() => {
+                actual.push(2);
+            });
+            actual.push(3);
+        });
+
+        Disposer.for(o).dispose();
+
+        expect(actual).toStrictEqual([1, 2, 3]);
+    });
+
     test("throws", async () => {
         const foo = {};
 
         const results: any[] = [];
 
         const onError = jest.fn();
-        Disposer.events.once("error", onError);
+        Disposer.once("error", onError);
 
         const err = new Error("foo");
 
