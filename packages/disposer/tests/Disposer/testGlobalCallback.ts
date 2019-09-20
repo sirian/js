@@ -3,7 +3,7 @@ import {Disposer} from "../../src";
 describe("Disposer.addCallback", () => {
     test("Disposer.addCallback", () => {
         const fn = jest.fn();
-        Disposer.events.addListener("dispose", fn);
+        Disposer.addListener("dispose", fn);
 
         const o1 = {};
         const o2 = {};
@@ -21,6 +21,6 @@ describe("Disposer.addCallback", () => {
         expect(fn).toHaveBeenCalledTimes(2);
         expect(fn).toHaveBeenLastCalledWith(o2, d2);
 
-        Disposer.events.removeListener("dispose", fn);
+        Disposer.removeListener("dispose", fn);
     });
 });

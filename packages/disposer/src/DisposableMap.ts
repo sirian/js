@@ -5,6 +5,12 @@ export class DisposableMap<K = any, V = any> extends BiMap<K, V> {
     constructor() {
         super();
         const listener = (target: any) => {
+            if (target === this) {
+                Disposer.removeListener("dispose", listener);
+                this.clear();
+                return;
+            }
+
             this.delete(target);
             const keys = this.reverse.get(target);
             if (keys) {
@@ -12,7 +18,6 @@ export class DisposableMap<K = any, V = any> extends BiMap<K, V> {
             }
         };
 
-        Disposer.events.addListener("dispose", listener);
-        Disposer.addCallback(this, () => Disposer.events.removeListener("dispose", listener));
+        Disposer.addListener("dispose", listener);
     }
 }
