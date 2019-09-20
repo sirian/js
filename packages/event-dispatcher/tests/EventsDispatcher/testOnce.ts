@@ -1,21 +1,21 @@
-import {Event, EventsDispatcher} from "../../src";
+import {EventsDispatcher} from "../../src";
 
-describe("EventDispatcher.once", () => {
-    const dispatcher = new EventsDispatcher();
+describe("EventsDispatcher.once", () => {
+    test("EventsDispatcher.once", () => {
+        const dispatcher = new EventsDispatcher();
 
-    test("EventDispatcher.once", () => {
-        const fn = jest.fn();
-        dispatcher.once("foo", fn);
+        const foo1 = jest.fn(() => dispatcher.dispatch("foo"));
+        const foo2 = jest.fn(() => dispatcher.dispatch("bar"));
+        const bar = jest.fn(() => dispatcher.dispatch("foo"));
 
-        expect(fn).toHaveBeenCalledTimes(0);
-        expect(dispatcher.hasListeners("foo")).toBe(true);
+        dispatcher.once("foo", foo1);
+        dispatcher.once("foo", foo2);
+        dispatcher.once("bar", bar);
 
-        dispatcher.dispatchSync("foo", new Event());
-        expect(fn).toHaveBeenCalledTimes(1);
-        expect(dispatcher.hasListeners("foo")).toBe(false);
+        dispatcher.dispatch("foo");
 
-        dispatcher.dispatchSync("foo", new Event());
-        expect(fn).toHaveBeenCalledTimes(1);
-        expect(dispatcher.hasListeners("foo")).toBe(false);
+        expect(foo1).toHaveBeenCalledTimes(1);
+        expect(foo2).toHaveBeenCalledTimes(1);
+        expect(bar).toHaveBeenCalledTimes(1);
     });
 });

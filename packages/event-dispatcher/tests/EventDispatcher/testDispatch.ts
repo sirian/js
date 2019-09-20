@@ -6,24 +6,14 @@ test("Test async dispatch", async () => {
     const data: any[] = [];
 
     dispatcher.addListener(() => data.push(1));
-    dispatcher.addListener({
-        callback: async () => {
-            await void 0;
-            data.push(2);
-        },
+    dispatcher.addListener(() => Promise.resolve().then(() => data.push(2)), {
         passive: true,
     });
     dispatcher.addListener(() => data.push(3));
     dispatcher.addListener(async () => data.push(4));
     dispatcher.addListener(async () => data.push(5));
-    dispatcher.addListener(async () => {
-        await void 0;
-        data.push(6);
-    });
-    dispatcher.addListener(async () => {
-        await void 0;
-        data.push(7);
-    });
+    dispatcher.addListener(() => Promise.resolve().then(() => data.push(6)));
+    dispatcher.addListener(() => Promise.resolve().then(() => data.push(7)));
 
     const event = new Event();
     const promise = dispatcher.dispatch(event);

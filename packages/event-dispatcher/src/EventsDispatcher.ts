@@ -1,98 +1,73 @@
-import {Arr, Var, XMap} from "@sirian/common";
-import {Disposer} from "@sirian/disposer";
+import {XMap} from "@sirian/common";
+import {ListenerObj, ListenerOptions} from "@sirian/event-emitter";
+import {ExactTypedKeyOf} from "@sirian/ts-extra-types";
 import {XPromise} from "@sirian/xpromise";
 import {Event} from "./Event";
-import {EventDispatcher} from "./EventDispatcher";
-import {EventListener, TEventListener} from "./EventListener";
+import {EventDispatcher, EventDispatcherListener} from "./EventDispatcher";
 
-export class EventsDispatcher<T extends Record<string, Event> = Record<string, Event>> {
-    protected dispatchers: XMap<keyof T, EventDispatcher>;
+export type EventsDispatcherEventMap = Record<string, Event>;
+
+export class EventsDispatcher<T extends EventsDispatcherEventMap = Record<string, Event>> {
+    protected map: XMap<keyof T, EventDispatcher>;
 
     constructor() {
-        this.dispatchers = new XMap(() => new EventDispatcher());
+        this.map = new XMap(() => new EventDispatcher());
     }
 
-    public dispatchSync<K extends keyof T>(eventName: K | K[], event: T[K]) {
-        for (const name of Arr.cast(eventName)) {
-            const dispatcher = this.getDispatcher(name);
+    public dispatchSync<K extends keyof T>(eventName: K, event: T[K]) {
+        const dispatcher = this.getDispatcher(eventName);
 
-            if (dispatcher) {
-                dispatcher.dispatchSync(event);
-            }
+        if (dispatcher) {
+            dispatcher.dispatchSync(event);
         }
+
         return event;
     }
 
-    public dispatch<K extends keyof T>(eventName: K | K[], event: T[K]): XPromise<T[K]> {
-        const names = Arr.cast(eventName);
-
-        let result: XPromise<T[K]> = XPromise.resolve();
-
-        for (const name of names) {
-            const dispatcher = this.getDispatcher(name);
-
-            if (dispatcher) {
-                result = result.then(() => dispatcher.dispatch(event));
-            }
-        }
-
-        return result;
+    public dispatch<K extends ExactTypedKeyOf<T, Event>>(eventName: K): XPromise<Event>;
+    public dispatch<K extends keyof T>(eventName: K, event: T[K]): XPromise<T[K]>;
+    public dispatch(eventName: string, event?: any) {
+        const dispatcher = this.getDispatcher(eventName);
+        const ev = event || new Event();
+        return dispatcher ? dispatcher.dispatch(ev) : XPromise.resolve(ev);
     }
 
-    public getListeners<K extends keyof T>(eventName: K): Array<EventListener<T[K]>> {
+    public getListeners<K extends keyof T>(eventName: K): Array<ListenerObj<[T[K]]>> {
         const dispatcher = this.getDispatcher(eventName);
 
-        if (!dispatcher) {
-            return [];
-        }
-
-        return dispatcher.getListeners();
+        return dispatcher ? dispatcher.all() : [];
     }
 
     public hasListeners(eventName: string) {
-        return this.dispatchers.has(eventName);
+        return this.map.has(eventName);
     }
 
-    public addListener<K extends keyof T>(eventName: K | K[], listener: TEventListener<T[K]>) {
-        for (const name of Arr.cast(eventName)) {
-            const dispatcher = this.dispatchers.ensure(name) as EventDispatcher<T[K]>;
-            const eventListener = dispatcher.addListener(listener);
-            Disposer.addCallback(eventListener, () => this.removeListener(name, listener));
-        }
-
+    public addListener<K extends keyof T>(eventName: K, listener: EventDispatcherListener<T[K]>, opts?: ListenerOptions) {
+        const dispatcher = this.map.ensure(eventName) as EventDispatcher<T[K]>;
+        dispatcher.addListener(listener, opts);
         return this;
     }
 
-    public once<K extends keyof T>(eventName: K | K[], listener: TEventListener<T[K]>) {
-        if (Var.isFunction(listener)) {
-            listener = {
-                callback: listener,
-            };
-        }
-        listener.limit = 1;
-
-        this.addListener(eventName, listener);
-
+    public once<K extends keyof T>(eventName: K, listener: EventDispatcherListener<T[K]>, opts?: ListenerOptions) {
+        this.addListener(eventName, listener, {...opts, limit: 1});
         return this;
     }
 
-    public removeListener<K extends keyof T>(eventName: K, listener: TEventListener<T[K]>) {
+    public removeListener<K extends keyof T>(eventName: K, listener: EventDispatcherListener<T[K]>) {
         const dispatcher = this.getDispatcher(eventName)!;
 
-        if (!dispatcher) {
-            return this;
-        }
+        if (dispatcher) {
+            dispatcher.removeListener(listener);
 
-        dispatcher.removeListener(listener);
-
-        if (!dispatcher.hasListeners()) {
-            this.dispatchers.delete(eventName);
+            if (!dispatcher.hasListeners()) {
+                this.map.delete(eventName);
+            }
         }
 
         return this;
     }
 
     protected getDispatcher<K extends keyof T>(key: K): EventDispatcher<T[K]> | undefined {
-        return this.dispatchers.get(key);
+        return this.map.get(key);
     }
 }

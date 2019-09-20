@@ -1,33 +1,45 @@
+import {Var} from "@sirian/common";
+import {ListenerCallback, ListenerObj, ListenerSet} from "@sirian/event-emitter";
 import {XPromise} from "@sirian/xpromise";
-import {DispatchError} from "./DispatchError";
-import {DispatchQueue} from "./DispatchQueue";
 import {Event} from "./Event";
-import {Listenable} from "./Listenable";
 
-export class EventDispatcher<E extends Event = any> extends Listenable<E> {
+export type EventDispatcherListener<E extends Event> = ListenerCallback<[E]>;
+
+export class EventDispatcher<E extends Event = any> extends ListenerSet<[E]> {
     public dispatchSync(event: E) {
-        const promise = this.doDispatch(event, false);
-
-        if (promise.isPending()) {
-            throw new DispatchError("Internal error - dispatchSync() returned pending XPromise");
+        for (const obj of this.all()) {
+            this.doDispatch(obj, event);
         }
-
-        if (promise.isRejected()) {
-            throw promise.getValue();
-        }
-
         return event;
     }
 
-    public dispatch(event: E): XPromise<E> {
-        return this.doDispatch(event, true);
-    }
-
-    protected doDispatch(event: E, async: boolean) {
-        return DispatchQueue.dispatch({
-            async,
-            event,
-            listeners: this.listeners,
+    public dispatch(event: E) {
+        return new XPromise<E>(async (resolve, reject) => {
+            const listeners = this.all();
+            try {
+                for (const obj of listeners) {
+                    const result = this.doDispatch(obj, event);
+                    if (!obj.passive && Var.isPromiseLike(result)) {
+                        await result;
+                    }
+                }
+                resolve(event);
+            } catch (e) {
+                reject(e);
+            }
         });
     }
+
+    protected doDispatch(obj: ListenerObj<[E]>, event: E) {
+        if (event.isPropagationStopped()) {
+            return;
+        }
+
+        if (!obj.passive) {
+            return this.applyListener(obj.callback, [event]);
+        }
+
+        return XPromise.wrap(() => this.applyListener(obj.callback, [event]));
+    }
+
 }
