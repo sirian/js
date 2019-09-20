@@ -1,14 +1,14 @@
 import {ListenerObj, ListenerOptions, ListenerSet} from "./ListenerSet";
 
-export type EventEmitterEvents = Record<string, any[]>;
+export type EventEmitterEventMap = Record<string, any[]>;
 
-export type EventEmitterCallback<T extends EventEmitterEvents, K extends keyof T> = (...args: T[K]) => any;
+export type EventEmitterCallback<T extends EventEmitterEventMap, K extends keyof T> = (...args: T[K]) => any;
 
-export interface EventEmitterInit<T extends EventEmitterEvents> {
+export interface EventEmitterInit<T extends EventEmitterEventMap> {
     onError: <K extends keyof T>(error: any, event: K, args: T[K], listener: ListenerObj<T[K]>) => void;
 }
 
-export class EventEmitter<T extends EventEmitterEvents = any> {
+export class EventEmitter<T extends EventEmitterEventMap = any> {
     protected map: Map<keyof T, ListenerSet>;
     protected onError: EventEmitterInit<T>["onError"];
 
@@ -26,7 +26,7 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
         if (!map.has(event)) {
             map.set(event, new ListenerSet());
         }
-        map.get(event)!.add(listener, opts);
+        map.get(event)!.addListener(listener, opts);
         return this;
     }
 
@@ -46,9 +46,9 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
             const {passive, callback} = obj;
 
             try {
-                listeners.applyListener(callback, args);
+                listeners.applyListener(callback, [...args] as T[K]);
             } catch (e) {
-                this.onError(e, event, args, obj);
+                this.onError(e, event, [...args] as T[K], obj);
                 if (!passive) {
                     throw e;
                 }
@@ -62,7 +62,7 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
 
     public hasListener<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>) {
         const {map} = this;
-        return map.has(event) && map.get(event)!.has(listener);
+        return map.has(event) && map.get(event)!.hasListener(listener);
     }
 
     public hasListeners(event?: keyof T): boolean;
@@ -77,7 +77,7 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
     public removeListener<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>) {
         const set = this.map.get(event);
         if (set) {
-            set.delete(listener);
+            set.removeListener(listener);
             if (!set.size) {
                 this.map.delete(event);
             }

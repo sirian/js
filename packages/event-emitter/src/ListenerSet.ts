@@ -3,12 +3,12 @@ export type ListenerCallback<A extends any[] = any> = (...args: A) => any;
 export interface ListenerOptions {
     priority?: number;
     passive?: boolean;
-    times?: number;
     limit?: number;
 }
 
 export interface ListenerObj<A extends any[]> extends Required<ListenerOptions> {
     callback: ListenerCallback<A>;
+    times: number;
 }
 
 export class ListenerSet<A extends any[] = any> {
@@ -26,7 +26,11 @@ export class ListenerSet<A extends any[] = any> {
         return this.map.size;
     }
 
-    public add(callback: ListenerCallback<A>, opts?: ListenerOptions) {
+    public once(callback: ListenerCallback<A>, opts?: ListenerOptions) {
+        return this.addListener(callback, {...opts, limit: 1});
+    }
+
+    public addListener(callback: ListenerCallback<A>, opts?: ListenerOptions) {
         const obj = this.map.get(callback) || ({} as any);
 
         Object.assign(obj, {
@@ -47,29 +51,30 @@ export class ListenerSet<A extends any[] = any> {
         return this;
     }
 
-    public get(listener: ListenerCallback<A>) {
+    public getListener(listener: ListenerCallback<A>) {
         return this.map.get(listener);
     }
 
-    public has(listener: ListenerCallback<A>) {
+    public hasListener(listener: ListenerCallback<A>) {
         return this.map.has(listener);
     }
 
     public all() {
         if (this.dirty) {
-            this.sort();
+            this.dirty = false;
+            this.listeners.sort((a, b) => b.priority - a.priority);
         }
 
         return this.listeners.slice();
     }
 
-    public clear() {
+    public removeListeners() {
         this.map.clear();
         this.dirty = false;
         return this;
     }
 
-    public delete(callback: ListenerCallback<A>) {
+    public removeListener(callback: ListenerCallback<A>) {
         if (this.map.has(callback)) {
             const index = this.listeners.findIndex((obj) => obj.callback === callback);
             this.listeners.splice(index, 1);
@@ -83,30 +88,32 @@ export class ListenerSet<A extends any[] = any> {
         yield* this.all();
     }
 
-    public sort() {
-        this.dirty = false;
-        this.listeners.sort((a, b) => b.priority - a.priority);
-    }
-
     public applyListener(callback: ListenerCallback<A>, args: A) {
-        const obj = this.get(callback);
+        const obj = this.getListener(callback);
 
         if (!obj) {
             return;
         }
 
-        const {limit, times} = obj;
+        const {limit} = obj;
 
-        if (limit && times >= limit) {
-            return;
-        }
+        if (limit) {
+            if (obj.times < limit) {
+                obj.times++;
+            }
 
-        obj.times++;
-
-        if (limit && obj.times >= limit) {
-            this.delete(callback);
+            if (obj.times >= limit) {
+                this.removeListener(obj.callback);
+            }
+            if (obj.times > limit) {
+                return;
+            }
         }
 
         return callback(...args);
+    }
+
+    public hasListeners() {
+        return this.size > 0;
     }
 }

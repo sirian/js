@@ -8,21 +8,21 @@ describe("Listenable", () => {
     const l2 = () => 2;
     const l3 = () => 3;
 
-    const data: Array<["add" | "delete", [ListenerCallback, ListenerOptions?], ListenerCallback[]]> = [
-        ["add", [l1], [l1]],
-        ["add", [l1], [l1]],
-        ["add", [l2], [l1, l2]],
-        ["add", [l2, {priority: 10}], [l2, l1]],
-        ["add", [l3, {priority: 5}], [l2, l3, l1]],
-        ["add", [l1, {priority: 7, passive: true}], [l2, l1, l3]],
-        ["delete", [l1], [l2, l3]],
-        ["add", [l1, {priority: 100}], [l1, l2, l3]],
-        ["delete", [l3], [l1, l2]],
-        ["delete", [l2], [l1]],
-        ["delete", [l1], []],
+    const data: Array<["addListener" | "removeListener", [ListenerCallback, ListenerOptions?], ListenerCallback[]]> = [
+        ["addListener", [l1], [l1]],
+        ["addListener", [l1], [l1]],
+        ["addListener", [l2], [l1, l2]],
+        ["addListener", [l2, {priority: 10}], [l2, l1]],
+        ["addListener", [l3, {priority: 5}], [l2, l3, l1]],
+        ["addListener", [l1, {priority: 7, passive: true}], [l2, l1, l3]],
+        ["removeListener", [l1], [l2, l3]],
+        ["addListener", [l1, {priority: 100}], [l1, l2, l3]],
+        ["removeListener", [l3], [l1, l2]],
+        ["removeListener", [l2], [l1]],
+        ["removeListener", [l1], []],
     ];
 
-    test.each(data)("%s => %p", <K extends "add" | "delete">(method: K, args: Args<ListenerSet[K]>, expected: ListenerCallback[]) => {
+    test.each(data)("%s => %p", <K extends "addListener" | "removeListener">(method: K, args: Args<ListenerSet[K]>, expected: ListenerCallback[]) => {
         const [callback, opts] = args;
 
         target[method](callback, opts);
@@ -30,7 +30,7 @@ describe("Listenable", () => {
         expect(target.size).toBe(expected.length);
 
         if (expected.includes(callback)) {
-            expect(target.get(callback)).toStrictEqual({
+            expect(target.getListener(callback)).toStrictEqual({
                 limit: 0,
                 times: 0,
                 priority: 0,
@@ -45,7 +45,7 @@ describe("Listenable", () => {
         expect(listeners).toStrictEqual(expected);
 
         for (const fn of [l1, l2, l3]) {
-            expect(target.has(fn)).toBe(expected.includes(fn));
+            expect(target.hasListener(fn)).toBe(expected.includes(fn));
         }
     });
 });

@@ -12,7 +12,6 @@ describe("EventEmitter.once", () => {
         e.once("bar", bar);
 
         e.emit("foo");
-        e.emit("bar");
 
         expect(foo1).toHaveBeenCalledTimes(1);
         expect(foo2).toHaveBeenCalledTimes(1);
