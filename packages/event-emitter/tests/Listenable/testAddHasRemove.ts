@@ -31,7 +31,8 @@ describe("Listenable", () => {
 
         if (expected.includes(callback)) {
             expect(target.get(callback)).toStrictEqual({
-                once: false,
+                limit: 0,
+                times: 0,
                 priority: 0,
                 passive: false,
                 callback,

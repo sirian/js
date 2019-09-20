@@ -1,9 +1,10 @@
 export type ListenerCallback<A extends any[] = any> = (...args: A) => any;
 
 export interface ListenerOptions {
-    once?: boolean;
     priority?: number;
     passive?: boolean;
+    times?: number;
+    limit?: number;
 }
 
 export interface ListenerObj<A extends any[]> extends Required<ListenerOptions> {
@@ -29,9 +30,10 @@ export class ListenerSet<A extends any[] = any> {
         const obj = this.map.get(callback) || ({} as any);
 
         Object.assign(obj, {
-            once: false,
             priority: 0,
             passive: false,
+            times: 0,
+            limit: 0,
             callback,
         }, opts);
 
@@ -84,5 +86,27 @@ export class ListenerSet<A extends any[] = any> {
     public sort() {
         this.dirty = false;
         this.listeners.sort((a, b) => b.priority - a.priority);
+    }
+
+    public applyListener(callback: ListenerCallback<A>, args: A) {
+        const obj = this.get(callback);
+
+        if (!obj) {
+            return;
+        }
+
+        const {limit, times} = obj;
+
+        if (limit && times >= limit) {
+            return;
+        }
+
+        obj.times++;
+
+        if (limit && obj.times >= limit) {
+            this.delete(callback);
+        }
+
+        return callback(...args);
     }
 }

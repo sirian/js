@@ -37,29 +37,27 @@ export class EventEmitter<T extends EventEmitterEvents = any> {
 
     public emit<K extends keyof T>(event: K, ...args: T[K]) {
         const listeners = this.map.get(event) as ListenerSet<T[K]> | undefined;
+
         if (!listeners) {
             return;
         }
 
         for (const obj of listeners.all()) {
-            const {once, passive, callback} = obj;
-            if (once) {
-                listeners.delete(callback);
-            }
+            const {passive, callback} = obj;
+
             try {
-                callback(...args);
+                listeners.applyListener(callback, args);
             } catch (e) {
                 this.onError(e, event, args, obj);
                 if (!passive) {
                     throw e;
                 }
-                // noinspection JSIgnoredPromiseFromCall
             }
         }
     }
 
     public once<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>, opts?: ListenerOptions) {
-        return this.addListener(event, listener, {...opts, once: true});
+        return this.addListener(event, listener, {...opts, limit: 1});
     }
 
     public hasListener<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>) {
