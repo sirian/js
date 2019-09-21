@@ -31,22 +31,22 @@ export class EventEmitter<T extends EventEmitterEventMap = any> {
     }
 
     public getListeners<K extends keyof T>(event: K) {
-        const listeners = this.map.get(event) as ListenerSet<T[K]> | undefined;
-        return listeners ? listeners.all() : [];
+        const set = this.map.get(event) as ListenerSet<T[K]> | undefined;
+        return set ? set.all() : [];
     }
 
     public emit<K extends keyof T>(event: K, ...args: T[K]) {
-        const listeners = this.map.get(event) as ListenerSet<T[K]> | undefined;
+        const set = this.map.get(event) as ListenerSet<T[K]> | undefined;
 
-        if (!listeners) {
+        if (!set) {
             return;
         }
 
-        for (const obj of listeners.all()) {
+        for (const obj of set.all()) {
             const {passive, callback} = obj;
 
             try {
-                listeners.applyListener(callback, [...args] as T[K]);
+                set.applyListener(callback, [...args] as T[K]);
             } catch (e) {
                 this.onError(e, event, [...args] as T[K], obj);
                 if (!passive) {
