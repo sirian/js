@@ -1,6 +1,5 @@
 import {XSet, XWeakSet} from "@sirian/common";
 import {StaticEventEmitter} from "@sirian/event-emitter";
-import {SharedStore} from "@sirian/shared-store";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerMap} from "./DisposerMap";
 
@@ -24,9 +23,11 @@ export type DisposerEvents = {
 };
 
 export class Disposer extends StaticEventEmitter {
+    protected static map = new DisposerMap();
 
     public readonly children: XSet<object>;
     public readonly target: object;
+
     protected state: DisposeState;
     protected callbacks: Set<DisposeCallback>;
     protected timeoutId?: Return<typeof setTimeout>;
@@ -39,13 +40,6 @@ export class Disposer extends StaticEventEmitter {
         this.callbacks = new XSet();
         this.target = target;
         this.applied = new XWeakSet();
-    }
-
-    public static getDisposers(this: any) {
-        return this.disposers = this.disposers || SharedStore.get({
-            key: "disposer",
-            init: () => new DisposerMap(),
-        });
     }
 
     public static addCallback(target: object, callback: DisposeCallback) {
@@ -61,7 +55,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static isDisposed(target: object) {
-        if (!Disposer.getDisposers().has(target)) {
+        if (!Disposer.map.has(target)) {
             return false;
         }
 
@@ -69,7 +63,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static dispose(...targets: object[]) {
-        const disposers = Disposer.getDisposers();
+        const disposers = Disposer.map;
         for (const target of targets) {
             const disposer = disposers.get(target);
             if (disposer) {
@@ -79,11 +73,11 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static has(target: object) {
-        return Disposer.getDisposers().has(target);
+        return Disposer.map.has(target);
     }
 
     public static for(target: object) {
-        return Disposer.getDisposers().ensure(target);
+        return Disposer.map.ensure(target);
     }
 
     public setTimeout(ms: number) {

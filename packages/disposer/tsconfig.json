@@ -18,9 +18,6 @@
             "path": "../event-emitter"
         },
         {
-            "path": "../shared-store"
-        },
-        {
             "path": "../ts-extra-types"
         }
     ]

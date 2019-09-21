@@ -21,6 +21,9 @@
             "path": "../error"
         },
         {
+            "path": "../event-emitter"
+        },
+        {
             "path": "../ts-extra-types"
         },
         {
