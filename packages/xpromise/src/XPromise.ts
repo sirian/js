@@ -6,6 +6,11 @@ export type OnFinally = undefined | null | (() => any);
 export type Resolver<T> = (value?: T | PromiseLike<T>) => void;
 export type Rejector = (reason?: any) => void;
 export type PromiseExecutor<T> = (resolve: Resolver<T>, reject: Rejector) => void;
+export type AllSettled<T extends any[]> = {
+    [P in keyof T]:
+    { status: PromiseStatus.FULFILLED, value: Awaited<T[P]> } |
+    { status: PromiseStatus.REJECTED, reason: any }
+};
 
 export interface IDeferred<T> {
     resolve: Resolver<T>;
@@ -72,12 +77,13 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     public static all<T extends any[]>(promises: T) {
         return this.create<AwaitedArray<T>>((resolve, reject) => {
             const length = promises.length;
+
             if (!length) {
                 return resolve([] as any);
             }
 
             let fulfilledCount = 0;
-            const results: Partial<AwaitedArray<T>> = [] as any;
+            const results = [] as Partial<AwaitedArray<T>>;
 
             for (let i = 0; i < length; i++) {
                 const promise = promises[i];
@@ -120,35 +126,29 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     // }
 
     public static allSettled<T extends any[]>(promises: T) {
-        return this.create<{
-            [P in keyof T]:
-            { status: PromiseStatus.FULFILLED, value: Awaited<T[P]> } |
-            { status: PromiseStatus.REJECTED, reason: any }
-        }>((resolve) => {
-            const wrapped = Array.from(promises, (promise) => {
-                return this.resolve(promise).then(
-                    (value: any) => ({status: PromiseStatus.FULFILLED, value}),
-                    (reason: any) => ({status: PromiseStatus.REJECTED, reason}),
-                );
-            });
+        return this.wrap(() => {
+            const wrapped = Array.from(promises, (promise) => this.resolve(promise).then(
+                (value) => ({status: PromiseStatus.FULFILLED, value}),
+                (reason) => ({status: PromiseStatus.REJECTED, reason}),
+            ));
 
-            resolve(XPromise.all(wrapped) as any);
-        });
+            return XPromise.all(wrapped);
+        }) as XPromise<AllSettled<T>>;
     }
 
     public static race<T extends any[]>(promises: T) {
-        return this.create<Awaited<T[number]>>((resolve, reject) => {
+        return this.create((resolve, reject) => {
             if (!promises.length) {
                 return resolve([] as any);
             }
             for (const promise of promises) {
                 this.resolve(promise).then(resolve, reject);
             }
-        });
+        }) as XPromise<Awaited<T[number]>>;
     }
 
-    public static wrap<F extends () => any>(fn: F) {
-        return XPromise.create<Awaited<Return<F>>>((resolve) => resolve(fn()));
+    public static wrap<R>(fn: () => R | PromiseLike<R>) {
+        return XPromise.create<R>((resolve) => resolve(fn()));
     }
 
     public setTimeout(ms?: number) {
@@ -240,11 +240,9 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public reject(reason?: any) {
-        if (this.resolved) {
-            return;
+        if (!this.resolved) {
+            this.settleRejected(reason);
         }
-
-        this.settleRejected(reason);
     }
 
     protected settleFulfilled(value?: T | PromiseLike<T>) {
@@ -320,26 +318,22 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     protected react(reaction: PromiseReaction<T>) {
-        const promise = reaction.promise;
+        const {promise, onFulfilled, onRejected} = reaction;
         const value = this.value;
 
         try {
             if (this.isFulfilled()) {
-                const fn = reaction.onFulfilled;
-
-                if ("function" !== typeof fn) {
+                if ("function" !== typeof onFulfilled) {
                     promise.settleFulfilled(value);
                 } else {
-                    promise.doResolve(fn(value));
+                    promise.doResolve(onFulfilled(value));
                 }
             }
             if (this.isRejected()) {
-                const fn = reaction.onRejected;
-
-                if ("function" !== typeof fn) {
+                if ("function" !== typeof onRejected) {
                     promise.settleRejected(value);
                 } else {
-                    promise.doResolve(fn(value));
+                    promise.doResolve(onRejected(value));
                 }
             }
         } catch (e) {
