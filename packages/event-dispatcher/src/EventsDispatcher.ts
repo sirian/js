@@ -18,7 +18,11 @@ export class EventsDispatcher<T extends EventsDispatcherEventMap = Record<string
         const dispatcher = this.getDispatcher(eventName);
 
         if (dispatcher) {
-            dispatcher.dispatchSync(event);
+            try {
+                dispatcher.dispatchSync(event);
+            } finally {
+                this.afterDispatch(eventName);
+            }
         }
 
         return event;
@@ -28,8 +32,12 @@ export class EventsDispatcher<T extends EventsDispatcherEventMap = Record<string
     public dispatch<K extends keyof T>(eventName: K, event: T[K]): XPromise<T[K]>;
     public dispatch(eventName: string, event?: any) {
         const dispatcher = this.getDispatcher(eventName);
+        if (!dispatcher) {
+            return XPromise.resolve();
+        }
         const ev = event || new Event();
-        return dispatcher ? dispatcher.dispatch(ev) : XPromise.resolve(ev);
+        return dispatcher.dispatch(ev)
+            .finally(() => this.afterDispatch(eventName));
     }
 
     public getListeners<K extends keyof T>(eventName: K): Array<ListenerObj<[T[K]]>> {
@@ -58,10 +66,7 @@ export class EventsDispatcher<T extends EventsDispatcherEventMap = Record<string
 
         if (dispatcher) {
             dispatcher.removeListener(listener);
-
-            if (!dispatcher.hasListeners()) {
-                this.map.delete(eventName);
-            }
+            this.afterDispatch(eventName);
         }
 
         return this;
@@ -69,5 +74,13 @@ export class EventsDispatcher<T extends EventsDispatcherEventMap = Record<string
 
     protected getDispatcher<K extends keyof T>(key: K): EventDispatcher<T[K]> | undefined {
         return this.map.get(key);
+    }
+
+    protected afterDispatch(eventName: keyof T) {
+        const map = this.map;
+        const dispatcher = map.get(eventName);
+        if (dispatcher && !dispatcher.hasListeners()) {
+            map.delete(eventName);
+        }
     }
 }
