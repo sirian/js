@@ -1,5 +1,5 @@
 import {XSet, XWeakSet} from "@sirian/common";
-import {StaticEventEmitter} from "@sirian/event-emitter";
+import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerMap} from "./DisposerMap";
 
@@ -9,33 +9,28 @@ declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...a
 
 declare function clearTimeout(timeoutId: any): void;
 
-// Ordered
-const enum DisposeState {
-    INITIAL,
-    EXECUTE_CALLBACKS,
-    DISPOSE_CHILDREN,
-    DISPOSED,
-}
-
 export type DisposerEvents = {
     dispose: [object, Disposer];
+    disposed: [object, Disposer];
     error: [any, object, Disposer];
 };
 
 export class Disposer extends StaticEventEmitter {
-    protected static map = new DisposerMap();
+    public static readonly emitter = new EventEmitter<DisposerEvents>();
+
+    protected static readonly map = new DisposerMap();
 
     public readonly children: XSet<object>;
     public readonly target: object;
 
-    protected state: DisposeState;
+    protected disposed: boolean;
     protected callbacks: Set<DisposeCallback>;
     protected timeoutId?: Return<typeof setTimeout>;
     protected applied: XWeakSet<DisposeCallback>;
 
     constructor(target: object) {
         super();
-        this.state = DisposeState.INITIAL;
+        this.disposed = false;
         this.children = new XSet();
         this.callbacks = new XSet();
         this.target = target;
@@ -54,12 +49,14 @@ export class Disposer extends StaticEventEmitter {
         Disposer.for(target).addChild(...children);
     }
 
-    public static isDisposed(target: object) {
-        if (!Disposer.map.has(target)) {
-            return false;
+    public static addSource(target: object, ...sources: [object, ...object[]]) {
+        for (const source of sources) {
+            Disposer.for(source).addChild(target);
         }
+    }
 
-        return Disposer.for(target).isDisposed();
+    public static isDisposed(target: object) {
+        return Disposer.map.has(target) && Disposer.for(target).isDisposed();
     }
 
     public static dispose(...targets: object[]) {
@@ -91,17 +88,15 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public clearTimeout() {
-        if (this.timeoutId) {
-            clearTimeout(this.timeoutId);
-        }
+        clearTimeout(this.timeoutId);
     }
 
     public isDisposed() {
-        return DisposeState.INITIAL !== this.state;
+        return this.disposed;
     }
 
     public addCallback(callback: DisposeCallback) {
-        if (this.state >= DisposeState.EXECUTE_CALLBACKS) {
+        if (this.isDisposed()) {
             this.applyCallback(callback);
         } else {
             this.callbacks.add(callback);
@@ -111,7 +106,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public addChild(...children: [object, ...object[]]) {
-        if (this.state >= DisposeState.DISPOSE_CHILDREN) {
+        if (this.disposed) {
             Disposer.dispose(...children);
         } else {
             this.children.add(...children);
@@ -121,56 +116,44 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public addSource(...sources: [object, ...object[]]) {
-        for (const source of sources) {
-            Disposer.addChild(source, this);
-        }
-
+        Disposer.addSource(this, ...sources);
         return this;
     }
 
     public dispose() {
-        if (DisposeState.INITIAL !== this.state) {
+        if (this.disposed) {
             return;
         }
+        this.disposed = true;
 
         this.clearTimeout();
 
-        this.state = DisposeState.EXECUTE_CALLBACKS;
-        this.applyCallbacks();
+        this.applyCallback(() => Disposer.emit("dispose", this.target, this));
 
-        this.state = DisposeState.DISPOSE_CHILDREN;
-        this.disposeChildren();
+        const {callbacks, children} = this;
 
-        this.state = DisposeState.DISPOSED;
-    }
+        callbacks.forEach((callback) => this.applyCallback(callback));
+        callbacks.clear();
 
-    protected applyCallbacks() {
-        Disposer.emit("dispose", this.target, this);
-        for (const fn of this.callbacks) {
-            this.applyCallback(fn);
-        }
-        this.callbacks.clear();
+        Disposer.dispose(...children);
+        children.clear();
+
+        this.applyCallback(() => Disposer.emit("disposed", this.target, this));
     }
 
     protected applyCallback(callback: DisposeCallback) {
-        if (this.applied.has(callback)) {
+        const {target, applied} = this;
+
+        if (applied.has(callback)) {
             return;
         }
 
-        this.applied.add(callback);
-        const {target} = this;
+        applied.add(callback);
 
         try {
             callback(target);
         } catch (e) {
             Disposer.emit("error", e, target, this);
         }
-    }
-
-    protected disposeChildren() {
-        for (const child of this.children) {
-            Disposer.dispose(child);
-        }
-        this.children.clear();
     }
 }
