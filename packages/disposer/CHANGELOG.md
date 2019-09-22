@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/sirian/js/compare/@sirian/disposer@1.10.1...@sirian/disposer@1.11.0) (2019-09-22)
+
+
+### Features
+
+* **disposer:** events: dispose, disposed ([06e918f](https://github.com/sirian/js/commit/06e918f))
+
+
+
+
+
 ## [1.10.1](https://github.com/sirian/js/compare/@sirian/disposer@1.10.0...@sirian/disposer@1.10.1) (2019-09-21)
 
 **Note:** Version bump only for package @sirian/disposer
