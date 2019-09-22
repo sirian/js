@@ -1,4 +1,4 @@
-import {Obj, Ref} from "@sirian/common";
+import {Obj, Ref, XMap, XWeakMap} from "@sirian/common";
 import {ArrayValueOf, Ctor, UnionToIntersection} from "@sirian/ts-extra-types";
 
 export type UCtor = Ctor<object>;
@@ -15,24 +15,20 @@ export type Mixified<C extends Ctor, M extends MixinFn[]> =
     : never;
 
 export class Mixin {
-    protected static readonly wrappers = new WeakMap<MixinFn, MixinFn>();
-    protected static readonly applied = new WeakMap<object, MixinFn>();
-    protected static readonly caches = new WeakMap<object, Map<object, Ctor>>();
+    protected static readonly wrappers = new XWeakMap<MixinFn, MixinFn>();
+    protected static readonly applied = new XWeakMap<object, MixinFn>();
+    protected static readonly caches = new XWeakMap((superclass) => new XMap((mixin) => mixin(superclass)));
 
-    public static create<M extends MixinFn>(mixin: M) {
+    public static   create<M extends MixinFn>(mixin: M) {
         const bare = Mixin.createBareMixin(mixin);
 
-        const wrappers = [
-            Mixin.cache,
-            Mixin.deduplicate,
-            Mixin.hasInstanceWrapper,
-        ];
+        const {cache, deduplicate, hasInstanceWrapper} = Mixin;
 
-        return wrappers.reduce((m: MixinFn, wrapper) => wrapper(m), bare) as M;
+        return hasInstanceWrapper(deduplicate(cache(bare)));
     }
 
     public static createConstructable<M extends MixinFn>(mixin: M) {
-        const m = this.create(mixin);
+        const m = Mixin.create(mixin);
 
         const ctor = Mixin.applyMixin(class {}, m);
 
@@ -55,43 +51,18 @@ export class Mixin {
     public static has<M extends MixinFn>(object: object, mixin: M): object is MixinInstance<M> {
         const unwrapped = Mixin.unwrap(mixin);
 
-        for (const o of Ref.getPrototypes(object)) {
-            if (Mixin.applied.get(o) === unwrapped) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    protected static constructableWrapper<M extends MixinFn>(m: M) {
-
+        return Ref.getPrototypes(object).some((o) => Mixin.applied.get(o) === unwrapped);
     }
 
     protected static cache(mixin: MixinFn) {
-        return Mixin.wrap(mixin, (superclass) => {
-            const caches = Mixin.caches;
-
-            if (!caches.has(superclass)) {
-                caches.set(superclass, new Map());
-            }
-
-            const cache = caches.get(superclass)!;
-
-            if (!cache.has(mixin)) {
-                cache.set(mixin, mixin(superclass));
-            }
-
-            return cache.get(mixin)! as any;
-        });
+        return Mixin.wrap(mixin, (superclass) => Mixin.caches.ensure(superclass).ensure(mixin) as any);
     }
 
     protected static deduplicate(mixin: MixinFn) {
         return Mixin.wrap(mixin, (superclass) => {
-            if (Mixin.has(superclass.prototype, mixin)) {
-                return superclass;
-            }
-            return mixin(superclass);
+            return Mixin.has(superclass.prototype, mixin)
+                   ? superclass
+                   : mixin(superclass);
         });
     }
 
@@ -114,9 +85,7 @@ export class Mixin {
     }
 
     protected static unwrap(mixin: MixinFn) {
-        const wrapper = Mixin.wrappers.get(mixin);
-
-        return (wrapper || mixin);
+        return Mixin.wrappers.get(mixin) || mixin;
     }
 
     protected static hasInstanceWrapper<M extends MixinFn>(mixin: M) {
