@@ -1,7 +1,6 @@
-import {XSet, XWeakSet} from "@sirian/common";
+import {XMap, XSet, XWeakSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
-import {DisposerMap} from "./DisposerMap";
 
 export type DisposeCallback = (target: object) => void;
 
@@ -18,7 +17,7 @@ export type DisposerEvents = {
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
 
-    protected static readonly disposers = new DisposerMap();
+    public static readonly disposers = new XMap<object, Disposer>();
 
     public readonly children: XSet<object>;
     public readonly target: object;
@@ -38,19 +37,19 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static addCallback(target: object, callback: DisposeCallback) {
-        Disposer.for(target).addCallback(callback);
+        return Disposer.for(target).addCallback(callback);
     }
 
     public static setTimeout<T extends object>(object: T, ms: number) {
-        Disposer.for(object).setTimeout(ms);
+        return Disposer.for(object).setTimeout(ms);
     }
 
     public static addChild(target: object, ...children: [object, ...object[]]) {
-        Disposer.for(target).addChild(...children);
+        return Disposer.for(target).addChild(...children);
     }
 
     public static addSource(target: object, ...sources: [object, ...object[]]) {
-        sources.forEach((source) => Disposer.addChild(source, target));
+        return Disposer.for(target).addSource(...sources);
     }
 
     public static isDisposed(target: object) {
@@ -66,7 +65,14 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static for(target: object) {
-        return Disposer.disposers.ensure(target);
+        const disposers = this.disposers;
+        if (!disposers.has(target)) {
+            const disposer = new Disposer(target);
+            disposers
+                .set(target, disposer)
+                .set(disposer, disposer);
+        }
+        return disposers.get(target)!;
     }
 
     public setTimeout(ms: number) {
@@ -108,7 +114,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public addSource(...sources: [object, ...object[]]) {
-        Disposer.addSource(this, ...sources);
+        sources.forEach((source) => Disposer.for(source).addChild(this.target));
         return this;
     }
 
