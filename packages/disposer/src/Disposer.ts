@@ -1,7 +1,6 @@
-import {XSet, XWeakSet} from "@sirian/common";
+import {XMap, XSet, XWeakSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
-import {DisposerMap} from "./DisposerMap";
 
 export type DisposeCallback = (target: object) => void;
 
@@ -18,7 +17,7 @@ export type DisposerEvents = {
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
 
-    protected static readonly map = new DisposerMap();
+    public static readonly disposers = new XMap<object, Disposer>();
 
     public readonly children: XSet<object>;
     public readonly target: object;
@@ -38,43 +37,42 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static addCallback(target: object, callback: DisposeCallback) {
-        Disposer.for(target).addCallback(callback);
+        return Disposer.for(target).addCallback(callback);
     }
 
     public static setTimeout<T extends object>(object: T, ms: number) {
-        Disposer.for(object).setTimeout(ms);
+        return Disposer.for(object).setTimeout(ms);
     }
 
     public static addChild(target: object, ...children: [object, ...object[]]) {
-        Disposer.for(target).addChild(...children);
+        return Disposer.for(target).addChild(...children);
     }
 
     public static addSource(target: object, ...sources: [object, ...object[]]) {
-        for (const source of sources) {
-            Disposer.for(source).addChild(target);
-        }
+        return Disposer.for(target).addSource(...sources);
     }
 
     public static isDisposed(target: object) {
-        return Disposer.map.has(target) && Disposer.for(target).isDisposed();
+        return Disposer.disposers.has(target) && Disposer.for(target).isDisposed();
     }
 
     public static dispose(...targets: object[]) {
-        const disposers = Disposer.map;
-        for (const target of targets) {
-            const disposer = disposers.get(target);
-            if (disposer) {
-                disposer.dispose();
-            }
-        }
+        targets.forEach((target) => Disposer.for(target).dispose());
     }
 
     public static has(target: object) {
-        return Disposer.map.has(target);
+        return Disposer.disposers.has(target);
     }
 
     public static for(target: object) {
-        return Disposer.map.ensure(target);
+        const disposers = this.disposers;
+        if (!disposers.has(target)) {
+            const disposer = new Disposer(target);
+            disposers
+                .set(target, disposer)
+                .set(disposer, disposer);
+        }
+        return disposers.get(target)!;
     }
 
     public setTimeout(ms: number) {
@@ -116,7 +114,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public addSource(...sources: [object, ...object[]]) {
-        Disposer.addSource(this, ...sources);
+        sources.forEach((source) => Disposer.for(source).addChild(this.target));
         return this;
     }
 
@@ -127,18 +125,17 @@ export class Disposer extends StaticEventEmitter {
         this.disposed = true;
 
         this.clearTimeout();
-
-        this.applyCallback(() => Disposer.emit("dispose", this.target, this));
+        Disposer.emit("dispose", this.target, this);
 
         const {callbacks, children} = this;
 
         callbacks.forEach((callback) => this.applyCallback(callback));
         callbacks.clear();
 
-        Disposer.dispose(...children);
+        children.forEach(Disposer.dispose);
         children.clear();
 
-        this.applyCallback(() => Disposer.emit("disposed", this.target, this));
+        Disposer.emit("disposed", this.target, this);
     }
 
     protected applyCallback(callback: DisposeCallback) {
