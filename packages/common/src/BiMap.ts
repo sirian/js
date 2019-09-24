@@ -22,6 +22,10 @@ export class BiMap<K = any, V = any> extends XMap<K, V> {
         return super.delete(key);
     }
 
+    public hasValue(value: V) {
+        return this.reverse.has(value);
+    }
+
     public set(key: K, value: V): this {
         if (this.has(key)) {
             const old = this.get(key)!;

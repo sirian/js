@@ -1,29 +1,36 @@
 import {XMap, XSet, XWeakSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
+import {CallbackSet} from "./CallbackSet";
 
-export type DisposeCallback = (target: object) => void;
+export type DisposeCallback = (target: object, disposer: Disposer) => void;
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
 
 declare function clearTimeout(timeoutId: any): void;
 
+export interface DisposeErrorDetails {
+    callback: DisposeCallback;
+    target: object;
+    disposer: Disposer;
+}
+
 export type DisposerEvents = {
     dispose: [object, Disposer];
     disposed: [object, Disposer];
-    error: [any, object, Disposer];
+    error: [any, DisposeErrorDetails];
 };
 
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
 
     public static readonly disposers = new XMap<object, Disposer>();
-
-    public readonly children: XSet<object>;
     public readonly target: object;
 
+    protected children?: XSet<object>;
     protected disposed: boolean;
-    protected callbacks: Set<DisposeCallback>;
+    protected before: CallbackSet;
+    protected after: CallbackSet;
     protected timeoutId?: Return<typeof setTimeout>;
     protected applied: XWeakSet<DisposeCallback>;
 
@@ -31,13 +38,18 @@ export class Disposer extends StaticEventEmitter {
         super();
         this.disposed = false;
         this.children = new XSet();
-        this.callbacks = new XSet();
+        this.before = new CallbackSet(this);
+        this.after = new CallbackSet(this);
         this.target = target;
         this.applied = new XWeakSet();
     }
 
-    public static addCallback(target: object, callback: DisposeCallback) {
-        return Disposer.for(target).addCallback(callback);
+    public static onDispose(target: object, callback: DisposeCallback) {
+        return Disposer.for(target).onDispose(callback);
+    }
+
+    public static onDisposed(target: object, callback: DisposeCallback) {
+        return Disposer.for(target).onDisposed(callback);
     }
 
     public static setTimeout<T extends object>(object: T, ms: number) {
@@ -57,7 +69,9 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static dispose(...targets: object[]) {
-        targets.forEach((target) => Disposer.for(target).dispose());
+        for (const target of targets) {
+            Disposer.for(target).dispose();
+        }
     }
 
     public static has(target: object) {
@@ -65,13 +79,15 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static for(target: object) {
-        const disposers = this.disposers;
+        const disposers = Disposer.disposers;
+
         if (!disposers.has(target)) {
             const disposer = new Disposer(target);
             disposers
                 .set(target, disposer)
                 .set(disposer, disposer);
         }
+
         return disposers.get(target)!;
     }
 
@@ -93,28 +109,31 @@ export class Disposer extends StaticEventEmitter {
         return this.disposed;
     }
 
-    public addCallback(callback: DisposeCallback) {
-        if (this.isDisposed()) {
-            this.applyCallback(callback);
-        } else {
-            this.callbacks.add(callback);
-        }
+    public onDispose(callback: DisposeCallback) {
+        this.before.add(callback);
+        return this;
+    }
+
+    public onDisposed(callback: DisposeCallback) {
+        this.after.add(callback);
 
         return this;
     }
 
     public addChild(...children: [object, ...object[]]) {
-        if (this.disposed) {
-            Disposer.dispose(...children);
-        } else {
+        if (this.children) {
             this.children.add(...children);
+        } else {
+            Disposer.dispose(...children);
         }
 
         return this;
     }
 
     public addSource(...sources: [object, ...object[]]) {
-        sources.forEach((source) => Disposer.for(source).addChild(this.target));
+        for (const source of sources) {
+            Disposer.for(source).addChild(this.target);
+        }
         return this;
     }
 
@@ -125,32 +144,19 @@ export class Disposer extends StaticEventEmitter {
         this.disposed = true;
 
         this.clearTimeout();
+        const {children} = this;
+
         Disposer.emit("dispose", this.target, this);
 
-        const {callbacks, children} = this;
+        this.before.apply();
 
-        callbacks.forEach((callback) => this.applyCallback(callback));
-        callbacks.clear();
+        if (children) {
+            delete this.children;
+            Disposer.dispose(...children);
+        }
 
-        children.forEach(Disposer.dispose);
-        children.clear();
+        this.after.apply();
 
         Disposer.emit("disposed", this.target, this);
-    }
-
-    protected applyCallback(callback: DisposeCallback) {
-        const {target, applied} = this;
-
-        if (applied.has(callback)) {
-            return;
-        }
-
-        applied.add(callback);
-
-        try {
-            callback(target);
-        } catch (e) {
-            Disposer.emit("error", e, target, this);
-        }
     }
 }

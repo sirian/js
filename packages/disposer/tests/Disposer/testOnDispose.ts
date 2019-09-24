@@ -6,8 +6,8 @@ describe("callback", () => {
         const dfoo = Disposer.for(foo);
 
         const results: number[] = [];
-        dfoo.addCallback(() => results.push(1));
-        dfoo.addCallback(() => results.push(2));
+        dfoo.onDispose(() => results.push(1));
+        dfoo.onDispose(() => results.push(2));
 
         expect(results).toStrictEqual([]);
 
@@ -24,9 +24,9 @@ describe("callback", () => {
         const o = {};
         const actual: number[] = [];
 
-        Disposer.for(o).addCallback(() => {
+        Disposer.for(o).onDispose(() => {
             actual.push(1);
-            Disposer.for(o).addCallback(() => {
+            Disposer.for(o).onDispose(() => {
                 actual.push(2);
             });
             actual.push(3);
@@ -47,11 +47,13 @@ describe("callback", () => {
 
         const err = new Error("foo");
 
+        const errCallback = () => { throw err; };
+
         const disposer = Disposer.for(foo)
-            .addCallback(() => results.push(1))
-            .addCallback(() => { throw err; })
-            .addCallback(() => results.push(2))
-            .addCallback(() => results.push(3))
+            .onDisposed(() => results.push(3))
+            .onDispose(() => results.push(1))
+            .onDispose(errCallback)
+            .onDispose(() => results.push(2))
         ;
 
         expect(results).toStrictEqual([]);
@@ -60,7 +62,7 @@ describe("callback", () => {
         expect(() => Disposer.dispose(foo)).not.toThrow();
         expect(Disposer.isDisposed(foo)).toBe(true);
         expect(results).toStrictEqual([1, 2, 3]);
-        expect(onError).toHaveBeenCalledWith(err, foo, disposer);
+        expect(onError).toHaveBeenCalledWith(err, {callback: errCallback, target: foo, disposer});
     });
 
 });
