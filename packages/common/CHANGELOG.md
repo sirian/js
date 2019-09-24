@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.7.0](https://github.com/sirian/js/compare/@sirian/common@5.6.1...@sirian/common@5.7.0) (2019-09-24)
+
+
+### Features
+
+* **common:** XSet.pickAll, XSet.insert ([2961971](https://github.com/sirian/js/commit/2961971))
+
+
+
+
+
 ## [5.6.1](https://github.com/sirian/js/compare/@sirian/common@5.6.0...@sirian/common@5.6.1) (2019-09-21)
 
 **Note:** Version bump only for package @sirian/common

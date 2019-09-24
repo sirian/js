@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sirian/js/compare/@sirian/disposer@1.11.1...@sirian/disposer@2.0.0) (2019-09-24)
+
+
+### Bug Fixes
+
+* **disposer:** Disposer.for ([e99dbbe](https://github.com/sirian/js/commit/e99dbbe))
+
+
+### Features
+
+* **disposer:** disposer.onDispose, disposer.onDisposed ([4aa482d](https://github.com/sirian/js/commit/4aa482d))
+
+
+### BREAKING CHANGES
+
+* **disposer:** disposer.addCallback renamed to disposer.onDispose
+
+
+
+
+
 ## [1.11.1](https://github.com/sirian/js/compare/@sirian/disposer@1.11.0...@sirian/disposer@1.11.1) (2019-09-23)
 
 **Note:** Version bump only for package @sirian/disposer
