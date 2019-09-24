@@ -36,6 +36,15 @@ export class XSet<T> extends Set<T> {
         return this;
     }
 
+    public insert(value: T) {
+        if (this.has(value)) {
+            return false;
+        }
+
+        this.add(value);
+        return true;
+    }
+
     public pick(value: T, strict: true): T;
     public pick(value: T, strict?: boolean): T | undefined;
     public pick(value: T, strict = false) {
@@ -44,5 +53,11 @@ export class XSet<T> extends Set<T> {
 
     public toArray(): T[] {
         return [...this];
+    }
+
+    public pickAll() {
+        const result = [...this];
+        this.clear();
+        return result;
     }
 }

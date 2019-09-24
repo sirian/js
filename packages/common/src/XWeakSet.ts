@@ -13,4 +13,13 @@ export class XWeakSet<T extends object> extends WeakSet<T> {
     public pick(value: T, strict = false) {
         return XSet.pick(this, value, strict);
     }
+
+    public insert(value: T) {
+        if (this.has(value)) {
+            return false;
+        }
+
+        this.add(value);
+        return true;
+    }
 }
