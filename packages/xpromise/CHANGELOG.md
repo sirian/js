@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.4.15](https://github.com/sirian/js/compare/@sirian/xpromise@2.4.14...@sirian/xpromise@2.4.15) (2019-09-25)
+
+**Note:** Version bump only for package @sirian/xpromise
+
+
+
+
+
 ## [2.4.14](https://github.com/sirian/js/compare/@sirian/xpromise@2.4.13...@sirian/xpromise@2.4.14) (2019-09-21)
 
 **Note:** Version bump only for package @sirian/xpromise
