@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/sirian/js/compare/@sirian/xproxy@1.4.1...@sirian/xproxy@1.5.0) (2019-09-27)
+
+
+### Features
+
+* **xproxy:** XProxy.get ([0d2a5f7](https://github.com/sirian/js/commit/0d2a5f7))
+
+
+
+
+
 ## [1.4.1](https://github.com/sirian/js/compare/@sirian/xproxy@1.4.0...@sirian/xproxy@1.4.1) (2019-09-27)
 
 **Note:** Version bump only for package @sirian/xproxy
