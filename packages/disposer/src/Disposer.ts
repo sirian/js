@@ -56,11 +56,11 @@ export class Disposer extends StaticEventEmitter {
         return Disposer.for(object).setTimeout(ms);
     }
 
-    public static addChild(target: object, ...children: [object, ...object[]]) {
+    public static addChild(target: object, ...children: object[]) {
         return Disposer.for(target).addChild(...children);
     }
 
-    public static addSource(target: object, ...sources: [object, ...object[]]) {
+    public static addSource(target: object, ...sources: object[]) {
         return Disposer.for(target).addSource(...sources);
     }
 
@@ -89,6 +89,12 @@ export class Disposer extends StaticEventEmitter {
         }
 
         return disposers.get(target)!;
+    }
+
+    public static link(...targets: any[]) {
+        for (const target of targets) {
+            Disposer.addChild(target, ...targets);
+        }
     }
 
     public setTimeout(ms: number) {
@@ -120,17 +126,21 @@ export class Disposer extends StaticEventEmitter {
         return this;
     }
 
-    public addChild(...children: [object, ...object[]]) {
+    public addChild(...children: object[]) {
+        const unique = new XSet(children);
+
+        unique.delete(this);
+
         if (this.children) {
-            this.children.add(...children);
+            this.children.add(...unique);
         } else {
-            Disposer.dispose(...children);
+            Disposer.dispose(...unique);
         }
 
         return this;
     }
 
-    public addSource(...sources: [object, ...object[]]) {
+    public addSource(...sources: object[]) {
         for (const source of sources) {
             Disposer.for(source).addChild(this.target);
         }

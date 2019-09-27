@@ -6,21 +6,28 @@ export type TrapArgs<T, P extends ProxyTrap> = Args<XProxyTraps<T>[P]>;
 export type TrapReturn<T, P extends ProxyTrap> = Return<XProxyTraps<T>[P]>;
 export type TrapFunc<T, P extends ProxyTrap> = (...args: TrapArgs<T, P>) => TrapReturn<T, P>;
 
-export interface XProxyInit<T> {
+export type XProxyFactory<T extends object> = (xProxy: XProxy<T>) => T;
+export type XProxyInit<T extends object> = XProxyFactory<T> | {
     target?: T;
-    factory?: () => T;
-}
+    factory?: XProxyFactory<T>;
+};
 
 export class XProxy<T extends object> {
+    protected static readonly map = new WeakMap<object, XProxy<any>>();
+
     public readonly proxy: T;
 
     protected target?: T;
-    protected factory?: () => T;
+    protected factory?: XProxyFactory<T>;
     protected revoked = false;
 
-    protected constructor(fakeTarget: object, init: XProxyInit<T>) {
-        this.target = init.target;
-        this.factory = init.factory;
+    protected constructor(fakeTarget: object, init: XProxyInit<T> = {}) {
+        if ("function" === typeof init) {
+            this.factory = init;
+        } else {
+            this.target = init.target;
+            this.factory = init.factory;
+        }
 
         const handler: ProxyHandler<T> = {};
 
@@ -34,15 +41,31 @@ export class XProxy<T extends object> {
             handler[trapName] = (...args: any) => this.handle(trapName, args);
         }
 
-        this.proxy = new Proxy(fakeTarget as any, handler);
+        this.proxy = new Proxy(fakeTarget as T, handler);
+
+        XProxy.map.set(this.proxy, this);
     }
 
     public static forObject<T extends object>(init: XProxyInit<T> = {}) {
-        return new XProxy({}, init);
+        return new XProxy({}, init).proxy;
     }
 
     public static forFunction<T extends AnyFunc>(init: XProxyInit<T> = {}) {
-        return new XProxy(() => {}, init);
+        return new XProxy(function() {}, init).proxy;
+    }
+
+    public static find<T extends object>(proxy?: T) {
+        return XProxy.map.get(proxy as any) as XProxy<T> | undefined;
+    }
+
+    public static revoke<T extends object>(proxy: T | XProxy<T>) {
+        const xProxy = XProxy.find(proxy);
+        return xProxy && xProxy.revoke();
+    }
+
+    public static isRevoked<T extends object>(proxy?: T) {
+        const xProxy = XProxy.find(proxy);
+        return xProxy ? xProxy.isRevoked() : false;
     }
 
     public setFactory(factory: () => T) {
@@ -54,6 +77,9 @@ export class XProxy<T extends object> {
 
     public setTarget(target: T) {
         if (!this.revoked) {
+            if (!target || "object" !== typeof target && "function" !== typeof target) {
+                throw new XProxyError(`Invalid XProxy target '${target}'`);
+            }
             this.target = target;
         }
 
@@ -71,7 +97,7 @@ export class XProxy<T extends object> {
     }
 
     public removeTarget() {
-        this.target = undefined;
+        delete this.target;
     }
 
     public getTarget() {
@@ -82,22 +108,17 @@ export class XProxy<T extends object> {
         if (!this.target) {
             const factory = this.factory;
             if ("function" !== typeof factory) {
-                throw new XProxyError("XProxy factory 'undefined' is not a function");
+                throw new XProxyError(`XProxy factory '${factory}' is not a function`);
             }
-            this.target = factory();
-        }
-        const {target} = this;
-
-        if (target && "object" === typeof this.target || "function" === typeof this.target) {
-            return target;
+            this.setTarget(factory(this));
         }
 
-        throw new XProxyError(`Invalid XProxy target '${target}'`);
+        return this.target;
     }
 
     protected handle<P extends ProxyTrap>(trapName: P, args: TrapArgs<T, P>): TrapReturn<T, P> {
         if (this.revoked) {
-            throw new XProxyError("Cannot perform 'get' on a xProxy that has been revoked");
+            throw new XProxyError(`Cannot perform '${trapName}' on a xProxy that has been revoked`);
         }
         args[0] = this.ensureTarget();
         return (Reflect[trapName] as TrapFunc<T, P>)(...args);
