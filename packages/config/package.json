@@ -1,7 +1,7 @@
 {
     "name": "@sirian/config",
     "description": "",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -18,7 +18,7 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^5.7.0",
-        "@sirian/error": "^2.1.16",
+        "@sirian/error": "^2.1.17",
         "@sirian/ts-extra-types": "^3.52.0"
     },
     "scripts": {},
