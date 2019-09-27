@@ -6,7 +6,7 @@ export class AggregateError<T = any> extends CustomError {
     constructor(errors: Iterable<T>, message: string = "") {
         super(message);
 
-        this.errors = [...errors];
+        this.errors = Array.from(errors);
     }
 
     public* [Symbol.iterator]() {
