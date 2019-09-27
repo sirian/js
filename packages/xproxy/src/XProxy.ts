@@ -54,18 +54,14 @@ export class XProxy<T extends object> {
         return new XProxy(function() {}, init).proxy;
     }
 
-    public static find<T extends object>(proxy?: T) {
-        return XProxy.map.get(proxy as any) as XProxy<T> | undefined;
-    }
+    public static get<T extends object>(proxy: T) {
+        const xProxy = XProxy.map.get(proxy as any);
 
-    public static revoke<T extends object>(proxy: T | XProxy<T>) {
-        const xProxy = XProxy.find(proxy);
-        return xProxy && xProxy.revoke();
-    }
+        if (!xProxy) {
+            throw new XProxyError(`XProxy not found for ${proxy}`);
+        }
 
-    public static isRevoked<T extends object>(proxy?: T) {
-        const xProxy = XProxy.find(proxy);
-        return xProxy ? xProxy.isRevoked() : false;
+        return xProxy as XProxy<T>;
     }
 
     public setFactory(factory: () => T) {
