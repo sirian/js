@@ -1,7 +1,7 @@
 {
     "name": "@sirian/filesystem",
     "description": "",
-    "version": "1.7.29",
+    "version": "1.7.30",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,10 +17,10 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^5.7.0",
-        "@sirian/iterator": "^1.12.26",
-        "@sirian/ts-extra-types": "^3.52.0",
-        "@sirian/xpromise": "^2.4.16",
+        "@sirian/common": "^5.7.1",
+        "@sirian/iterator": "^1.12.27",
+        "@sirian/ts-extra-types": "^3.52.1",
+        "@sirian/xpromise": "^2.4.17",
         "@types/node": "^12.7.8"
     },
     "scripts": {},
