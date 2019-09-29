@@ -15,6 +15,11 @@ import {XSet} from "./XSet";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 
+export interface SnapshotOptions {
+    maxDepth?: number;
+    stopAt?: object;
+}
+
 export class Obj {
     public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
     public static values = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
@@ -49,25 +54,32 @@ export class Obj {
         return target;
     }
 
-    public static snapshot<T extends object>(target: T, options: ProtoChainOptions = {}) {
-        const keys = new XSet<string>(Obj.keys(target));
+    public static snapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
+        const keys = new XSet(Obj.keys(target) as Array<keyof T>);
 
         const opts = {
             stopAt: Object.prototype,
             ...options,
         };
-        for (const x of Ref.getPrototypes(target, opts)) {
+
+        const protoOpts: ProtoChainOptions = {
+            self: true,
+            stopAt: opts.stopAt,
+            maxDepth: opts.maxDepth,
+        };
+
+        for (const x of Ref.getPrototypes(target, protoOpts)) {
             for (const [key, desc] of Obj.entries(Ref.ownDescriptors(x))) {
                 if ("__proto__" === key) {
                     continue;
                 }
                 if (Var.isFunction(desc.get)) {
-                    keys.add(key);
+                    keys.add(key as keyof T);
                 }
             }
         }
 
-        return Obj.pick(target, [...keys] as Array<keyof T>) as T;
+        return Obj.pick(target, [...keys]);
     }
 
     public static create(o?: null): Record<any, any>;
@@ -80,13 +92,11 @@ export class Obj {
         if (Var.isArray(target)) {
             target.length = 0;
         }
-        // tslint:disable-next-line:forin
-        for (const prop in target) {
-            // noinspection JSUnfilteredForInLoop
-            if (Ref.hasOwn(target, prop)) {
-                Ref.delete(target, prop);
-            }
+
+        for (const key of Ref.ownKeys(target)) {
+            Ref.delete(target, key);
         }
+
         return target as Partial<T>;
     }
 

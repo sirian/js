@@ -1,83 +1,27 @@
-import {Fn, Var} from "@sirian/common";
+import {CloneOptions, Cloner} from "@sirian/clone";
+import {CtorArgs} from "@sirian/ts-extra-types";
 
 export interface DumpOptions {
-    snapshot?: boolean;
-
-    [id: string]: any;
+    cloner: Cloner;
+    clone: Partial<CloneOptions>;
 }
 
-export interface ObjectDumpOptions extends DumpOptions {
+export class Dump<T = any> {
+    public target: T;
+    public options: DumpOptions;
+    public snapshot: T;
 
-}
-
-export interface JSONDumpOptions extends DumpOptions {
-    indent?: string | number;
-    replacer?: (number | string)[];
-}
-
-export interface SprintfDumpOptions extends DumpOptions {
-    format?: string;
-    maxLen?: number;
-}
-
-export interface NumberDumpOptions extends SprintfDumpOptions {
-
-}
-
-export interface StringDumpOptions extends SprintfDumpOptions {
-
-}
-
-export interface ArrayDumpOptions extends DumpOptions {
-
-}
-
-export interface FunctionDumpOptions extends ObjectDumpOptions {
-
-}
-
-export type TypedDumpOptions<T> =
-    T extends "number" ? NumberDumpOptions :
-    T extends "string" ? StringDumpOptions :
-    T extends "json" ? JSONDumpOptions :
-    T extends "var" ? DumpOptions :
-    T extends string ? DumpOptions :
-    never;
-
-export const Dump = Fn.callableClass("var", class Dump<T extends string> {
-    public target: any;
-    public options: TypedDumpOptions<T>;
-    public type: T;
-
-    constructor(target: any, type: T, options: TypedDumpOptions<T>) {
+    constructor(target: any, options: Partial<DumpOptions> = {}) {
         this.target = target;
-        this.type = type;
-        this.options = options;
-    }
+        this.options = {
+            cloner: Cloner.defaultCloner,
+            clone: {},
+            ...options,
+        };
 
-    public static var(target: any, options?: DumpOptions): Dump<any>;
-    public static var<T extends string>(target: any, type: T, options?: TypedDumpOptions<T>): Dump<T>;
-    public static var(target: any, type: any = "var", options: DumpOptions = {}) {
-        if (Var.isObject(type)) {
-            options = type;
-            type = "var";
-        }
-        return new Dump(target, type, options);
+        const {clone, cloner} = this.options;
+        this.snapshot = cloner.clone(target, clone);
     }
+}
 
-    public static function(target: any, options: FunctionDumpOptions) {
-        return Dump.var(target, "function", options);
-    }
-
-    public static json(target: any, options: JSONDumpOptions) {
-        return Dump.var(target, "json", options);
-    }
-
-    public static number(target: any, options: NumberDumpOptions) {
-        return Dump.var(target, "number", options);
-    }
-
-    public static string(target: any, options: StringDumpOptions) {
-        return Dump.var(target, "string", options);
-    }
-});
+export const dump = (...args: CtorArgs<typeof Dump>) => new Dump(...args);
