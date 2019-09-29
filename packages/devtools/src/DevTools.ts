@@ -1,4 +1,3 @@
-import {Arr} from "@sirian/common";
 import {IDevToolsFormatter} from "./DevToolsFormatter";
 
 declare global {
@@ -9,21 +8,23 @@ declare global {
 
 export class DevTools {
     public static getFormatters(win = window) {
-        return win.devtoolsFormatters = (win.devtoolsFormatters || []);
+        return win.devtoolsFormatters || [];
     }
 
     public static addFormatter(formatter: IDevToolsFormatter, win = window) {
-        this.getFormatters(win).push(formatter);
-        return DevTools;
+        const formatters = [...this.getFormatters(win), formatter];
+        formatters.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+        return DevTools.setFormatters(formatters);
     }
 
     public static removeFormatter(formatter: IDevToolsFormatter, win = window) {
-        Arr.removeItem(this.getFormatters(win), formatter);
+        const formatters = this.getFormatters(win).filter((f) => f !== formatter);
+        DevTools.setFormatters(formatters, win);
         return DevTools;
     }
 
     public static setFormatters(formatters: IDevToolsFormatter[], win = window) {
-        win.devtoolsFormatters = formatters;
+        win.devtoolsFormatters = Array.from(formatters);
         return DevTools;
     }
 }

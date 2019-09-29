@@ -1,4 +1,4 @@
-// import {Arr, Str} from "@sirian/common";
+// import {Arr, Str, XSet} from "@sirian/common";
 //
 // export class JML {
 //     public readonly tagName: string;
@@ -8,7 +8,7 @@
 //
 //     constructor(tagName: string) {
 //         this.tagName = JML.normalizeTagName(tagName);
-//         this.classes = new Set<string>();
+//         this.classes = new XSet<string>();
 //         this.children = [];
 //     }
 //
