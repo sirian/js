@@ -4,9 +4,10 @@ import {Disposer} from "./Disposer";
 export class DisposableMap<K = any, V = any> extends BiMap<K, V> {
     constructor() {
         super();
+
         const listener = (target: any) => {
             if (target === this) {
-                Disposer.removeListener("dispose", listener);
+                Disposer.removeListener("disposed", listener);
                 this.clear();
                 return;
             }
@@ -18,6 +19,6 @@ export class DisposableMap<K = any, V = any> extends BiMap<K, V> {
             }
         };
 
-        Disposer.addListener("dispose", listener);
+        Disposer.addListener("disposed", listener);
     }
 }
