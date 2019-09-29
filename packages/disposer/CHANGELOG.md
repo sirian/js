@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/sirian/js/compare/@sirian/disposer@2.1.2...@sirian/disposer@2.2.0) (2019-09-29)
+
+
+### Features
+
+* **disposer:** isDisposing, isDisposedFully ([bd90590](https://github.com/sirian/js/commit/bd90590))
+
+
+
+
+
 ## [2.1.2](https://github.com/sirian/js/compare/@sirian/disposer@2.1.1...@sirian/disposer@2.1.2) (2019-09-29)
 
 **Note:** Version bump only for package @sirian/disposer
