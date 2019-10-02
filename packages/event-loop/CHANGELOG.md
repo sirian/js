@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/sirian/js/compare/@sirian/event-loop@1.3.27...@sirian/event-loop@1.4.0) (2019-10-02)
+
+
+### Bug Fixes
+
+* **event-loop:** typings ([31caa9e](https://github.com/sirian/js/commit/31caa9e))
+
+
+### Features
+
+* **event-loop:** Immediate, NextTick refactored ([8e46bdf](https://github.com/sirian/js/commit/8e46bdf))
+
+
+
+
+
 ## [1.3.27](https://github.com/sirian/js/compare/@sirian/event-loop@1.3.26...@sirian/event-loop@1.3.27) (2019-10-02)
 
 **Note:** Version bump only for package @sirian/event-loop
