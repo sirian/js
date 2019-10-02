@@ -1,42 +1,27 @@
-import {Return} from "@sirian/ts-extra-types";
-import {Deferred} from "@sirian/xpromise";
-import {AbstractTimeout, TaskCallback} from "./AbstractTimeout";
+import {AsyncTask} from "./AsyncTask";
+import {TaskCallback} from "./TaskQueue";
 
-export type TimeoutId = Return<typeof setTimeout>;
-
-export class Timeout<T = any> extends AbstractTimeout {
-    protected id?: TimeoutId;
+export class Timeout extends AsyncTask {
     protected ms: number;
-    protected defer: Deferred<T>;
 
-    constructor(ms: number, callback: () => T) {
+    constructor(ms: number, callback: TaskCallback) {
         super(callback);
         this.ms = ms;
-        this.defer = new Deferred();
     }
 
-    public static set(ms: number, callback: TaskCallback) {
-        return setTimeout(callback, ms);
-    }
-
-    public static clear(id?: TimeoutId) {
-        clearTimeout(id);
-    }
-
-    public start(ms: number = this.ms) {
-        this.ms = ms;
-        this.id = this.id || Timeout.set(ms, () => this.handle());
+    public start() {
+        this.id = this.id || setTimeout(() => this.handle(), this.ms);
         return this;
     }
 
-    public isActive() {
-        return !!this.id;
+    public restart(ms: number = this.ms) {
+        this.ms = ms;
+        return super.restart();
     }
 
     public clear() {
-        Timeout.clear(this.id);
-        delete this.id;
-        return this;
+        clearTimeout(this.id);
+        return super.clear();
     }
 
     protected handle() {
