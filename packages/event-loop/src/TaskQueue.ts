@@ -1,6 +1,3 @@
-import {Fn, XMap} from "@sirian/common";
-import {Func0} from "@sirian/ts-extra-types";
-
 export type TaskCallback = () => any;
 
 interface Task {
@@ -10,13 +7,13 @@ interface Task {
 
 export class TaskQueue {
     protected static lastId: number = 0;
-    protected tasks: XMap<number, Task> = new XMap();
+    protected tasks: Map<number, Task> = new Map();
 
     protected scheduled: boolean;
     protected running: boolean;
-    protected schedule: (callback: Func0) => void;
+    protected schedule: (callback: () => void) => void;
 
-    constructor(schedule: (callback: Func0) => void) {
+    constructor(schedule: (callback: () => void) => void) {
         this.scheduled = false;
         this.running = false;
         this.schedule = schedule;
@@ -50,11 +47,16 @@ export class TaskQueue {
     protected run() {
         this.scheduled = false;
         this.running = true;
-        const ids = [...this.tasks.keys()];
+
+        const tasks = this.tasks;
+
+        const ids = [...tasks.keys()];
         for (const id of ids) {
-            const task = this.tasks.pick(id);
+            const task = tasks.get(id);
+            tasks.delete(id);
             if (task && !task.canceled) {
-                Fn.try(task.fn);
+                const fn = task.fn;
+                (async () => fn())();
             }
         }
         this.running = false;
