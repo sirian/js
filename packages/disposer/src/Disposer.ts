@@ -29,7 +29,7 @@ export class Disposer extends StaticEventEmitter {
 
     protected children?: XSet<object>;
     protected disposed: boolean;
-    protected disposing: boolean;
+    protected disposedFully: boolean;
     protected before: CallbackSet;
     protected after: CallbackSet;
     protected timeoutId?: Return<typeof setTimeout>;
@@ -38,7 +38,7 @@ export class Disposer extends StaticEventEmitter {
     constructor(target: object) {
         super();
         this.disposed = false;
-        this.disposing = false;
+        this.disposedFully = false;
         this.children = new XSet();
         this.before = new CallbackSet(this);
         this.after = new CallbackSet(this);
@@ -71,11 +71,11 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static isDisposedFully(target: object) {
-        return Disposer.isDisposed(target) && Disposer.for(target).isDisposedFully();
+        return Disposer.disposers.has(target) && Disposer.for(target).isDisposedFully();
     }
 
     public static isDisposing(target: object) {
-        return Disposer.isDisposed(target) && Disposer.for(target).isDisposing();
+        return Disposer.disposers.has(target) && Disposer.for(target).isDisposing();
     }
 
     public static dispose(...targets: object[]) {
@@ -126,11 +126,11 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public isDisposing() {
-        return this.disposing;
+        return this.disposed && !this.disposedFully;
     }
 
     public isDisposedFully() {
-        return this.disposed && !this.disposing;
+        return this.disposedFully;
     }
 
     public onDispose(callback: DisposeCallback) {
@@ -170,7 +170,6 @@ export class Disposer extends StaticEventEmitter {
             return;
         }
         this.disposed = true;
-        this.disposing = true;
 
         this.clearTimeout();
         const {children} = this;
@@ -185,7 +184,7 @@ export class Disposer extends StaticEventEmitter {
         }
 
         this.after.apply();
-        this.disposing = false;
+        this.disposedFully = true;
         Disposer.emit("disposed", this.target, this);
     }
 }
