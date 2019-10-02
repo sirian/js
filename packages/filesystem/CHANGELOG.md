@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.32](https://github.com/sirian/js/compare/@sirian/filesystem@1.7.31...@sirian/filesystem@1.7.32) (2019-10-02)
+
+**Note:** Version bump only for package @sirian/filesystem
+
+
+
+
+
 ## [1.7.31](https://github.com/sirian/js/compare/@sirian/filesystem@1.7.30...@sirian/filesystem@1.7.31) (2019-09-29)
 
 **Note:** Version bump only for package @sirian/filesystem

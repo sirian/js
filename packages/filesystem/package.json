@@ -1,7 +1,7 @@
 {
     "name": "@sirian/filesystem",
     "description": "",
-    "version": "1.7.31",
+    "version": "1.7.32",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -20,7 +20,7 @@
         "@sirian/common": "^5.7.2",
         "@sirian/iterator": "^1.12.28",
         "@sirian/ts-extra-types": "^3.52.1",
-        "@sirian/xpromise": "^2.4.17",
+        "@sirian/xpromise": "^2.4.18",
         "@types/node": "^12.7.9"
     },
     "scripts": {},
