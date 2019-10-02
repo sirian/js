@@ -4,7 +4,7 @@ import {TaskCallback} from "./TaskQueue";
 export class Timeout extends AsyncTask {
     protected ms: number;
 
-    constructor(ms: number, callback: TaskCallback) {
+    constructor(ms: number, callback?: TaskCallback) {
         super(callback);
         this.ms = ms;
     }

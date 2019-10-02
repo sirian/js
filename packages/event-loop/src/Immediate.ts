@@ -1,10 +1,10 @@
 import {AsyncTask} from "./AsyncTask";
-import {TaskCallback, TaskQueue} from "./TaskQueue";
-
-declare const setImmediate: (callback: TaskCallback) => any;
+import {TaskQueue} from "./TaskQueue";
 
 export class Immediate<T = any> extends AsyncTask {
     protected static readonly tasks = new TaskQueue((callback) => {
+        const {setImmediate, MessageChannel} = globalThis as any;
+
         if ("function" === typeof setImmediate) {
             setImmediate(callback);
             return;

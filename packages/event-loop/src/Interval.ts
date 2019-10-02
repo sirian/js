@@ -4,21 +4,13 @@ import {TaskCallback} from "./TaskQueue";
 export class Interval extends AsyncTask {
     protected ms: number;
 
-    constructor(ms: number, callback: () => any) {
+    constructor(ms: number, callback?: TaskCallback) {
         super(callback);
         this.ms = ms;
     }
 
-    public static set(ms: number, callback: TaskCallback) {
-        return setInterval(callback, ms);
-    }
-
-    public static clear(id?: any) {
-        clearInterval(id);
-    }
-
     public start(ms: number = this.ms) {
-        this.id = this.id || Interval.set(this.ms, () => this.handle());
+        this.id = this.id || setInterval(() => this.handle(), this.ms);
 
         return this;
     }
@@ -29,7 +21,7 @@ export class Interval extends AsyncTask {
     }
 
     public clear() {
-        Interval.clear(this.id);
+        clearInterval(this.id);
         delete this.id;
         return this;
     }
