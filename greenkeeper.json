@@ -22,6 +22,7 @@
                 "packages/format/package.json",
                 "packages/iterator/package.json",
                 "packages/logger/package.json",
+                "packages/lz-string/package.json",
                 "packages/merge/package.json",
                 "packages/mixin/package.json",
                 "packages/object-ref/package.json",
