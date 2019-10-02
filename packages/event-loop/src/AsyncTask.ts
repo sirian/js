@@ -2,7 +2,7 @@ import {TaskCallback} from "./TaskQueue";
 
 export abstract class AsyncTask {
     protected callback?: TaskCallback;
-    protected id?: number;
+    protected id?: any;
 
     constructor(callback?: TaskCallback) {
         this.callback = callback;
