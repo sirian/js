@@ -7,7 +7,7 @@
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/process",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/event-loop",
     "license": "MIT",
     "files": [
         "build/"
@@ -20,10 +20,5 @@
     "publishConfig": {
         "access": "public"
     },
-    "dependencies": {
-        "@sirian/common": "^5.7.2",
-        "@sirian/disposer": "^2.2.1",
-        "@sirian/ts-extra-types": "^3.52.1",
-        "@sirian/xpromise": "^2.4.18"
-    }
+    "dependencies": {}
 }

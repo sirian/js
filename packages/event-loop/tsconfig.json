@@ -14,18 +14,5 @@
         "tsBuildInfoFile": "../../tmp/event-loop.tsbuildinfo",
         "declarationDir": "build/types"
     },
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../disposer"
-        },
-        {
-            "path": "../ts-extra-types"
-        },
-        {
-            "path": "../xpromise"
-        }
-    ]
+    "references": []
 }

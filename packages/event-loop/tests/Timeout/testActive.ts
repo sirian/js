@@ -2,18 +2,24 @@ import {Timeout} from "../../src";
 
 describe("Timeout.active", () => {
     test("", async () => {
-        const t = Timeout.create(1, () => {
-            expect(t.isActive()).toBe(false);
-        });
+        jest.useFakeTimers();
 
+        const fn = jest.fn();
+        const t = Timeout.create(11, fn);
+
+        expect(fn).not.toHaveBeenCalled();
         expect(t.isActive()).toBe(false);
 
         t.start();
 
-        expect(t.isActive()).toBe(true);
+        for (let i = 0; i < 10; i++) {
+            jest.advanceTimersByTime(1);
+            expect(fn).not.toHaveBeenCalled();
+            expect(t.isActive()).toBe(true);
+        }
 
-        await new Promise((r) => setTimeout(r, 1));
-
+        jest.advanceTimersByTime(1);
+        expect(fn).toHaveBeenCalled();
         expect(t.isActive()).toBe(false);
     });
 });

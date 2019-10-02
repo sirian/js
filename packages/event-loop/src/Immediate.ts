@@ -1,46 +1,37 @@
-import {AbstractTimeout, TaskCallback} from "./AbstractTimeout";
-import {AutoAdapter} from "./ImmediateAdapter";
+import {AsyncTask} from "./AsyncTask";
+import {TaskCallback, TaskQueue} from "./TaskQueue";
 
-export interface ImmediateAdapter<T = any> {
-    set: (fn: TaskCallback) => T;
-    clear: (id: T) => void;
-}
+declare const setImmediate: (callback: TaskCallback) => any;
 
-export class Immediate<T = any> extends AbstractTimeout {
-    public static adapter = new AutoAdapter();
+export class Immediate<T = any> extends AsyncTask {
+    protected static readonly tasks = new TaskQueue((callback) => {
+        if ("function" === typeof setImmediate) {
+            setImmediate(callback);
+            return;
+        }
 
-    protected id?: any;
-    protected adapter: ImmediateAdapter;
+        if ("function" === typeof MessageChannel) {
+            const {port1, port2} = new MessageChannel();
+            port1.onmessage = callback;
+            port2.postMessage("");
+            return;
+        }
 
-    constructor(callback: TaskCallback, adapter: ImmediateAdapter<T>) {
-        super(callback);
-        this.adapter = adapter || Immediate.adapter;
-    }
-
-    public static set(ms: number, callback: TaskCallback) {
-        return setInterval(callback, ms);
-    }
-
-    public static clear(id?: any) {
-        clearInterval(id);
-    }
+        return setTimeout(callback);
+    });
 
     public start() {
-        if (!this.id) {
-            this.id = this.adapter.set(() => {
-                this.clear();
-                return this.callback && this.callback();
-            });
-        }
+        this.id = this.id || Immediate.tasks.add(() => this.handle());
         return this;
-    }
-
-    public isActive() {
-        return !!this.id;
     }
 
     public clear() {
-        this.adapter.clear(this.id);
-        return this;
+        Immediate.tasks.clear(this.id);
+        return super.clear();
+    }
+
+    protected handle() {
+        this.clear();
+        return super.handle();
     }
 }

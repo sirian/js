@@ -1,7 +1,7 @@
-import {AbstractTimeout, TaskCallback} from "./AbstractTimeout";
+import {AsyncTask} from "./AsyncTask";
+import {TaskCallback} from "./TaskQueue";
 
-export class Interval extends AbstractTimeout {
-    protected id?: any;
+export class Interval extends AsyncTask {
     protected ms: number;
 
     constructor(ms: number, callback: () => any) {
@@ -23,8 +23,9 @@ export class Interval extends AbstractTimeout {
         return this;
     }
 
-    public isActive() {
-        return !!this.id;
+    public restart(ms: number = this.ms) {
+        this.ms = ms;
+        return super.restart();
     }
 
     public clear() {
