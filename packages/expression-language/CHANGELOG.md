@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.31](https://github.com/sirian/js/compare/@sirian/expression-language@1.1.30...@sirian/expression-language@1.1.31) (2019-10-08)
+
+**Note:** Version bump only for package @sirian/expression-language
+
+
+
+
+
 ## [1.1.30](https://github.com/sirian/js/compare/@sirian/expression-language@1.1.29...@sirian/expression-language@1.1.30) (2019-09-29)
 
 **Note:** Version bump only for package @sirian/expression-language
