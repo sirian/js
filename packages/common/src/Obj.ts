@@ -8,7 +8,6 @@ import {
     ToPrimitive,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {Fn} from "./Fn";
 import {ProtoChainOptions, Ref} from "./Ref";
 import {Var} from "./Var";
 import {XSet} from "./XSet";
@@ -24,7 +23,10 @@ export class Obj {
     public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
     public static values = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
     public static entries = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
-    public static stringify = Fn.withThis(Object.prototype.toString);
+
+    public static stringify(v: any) {
+        return Object.prototype.toString.call(v);
+    }
 
     public static assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
 

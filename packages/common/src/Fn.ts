@@ -4,10 +4,8 @@ import {Ref} from "./Ref";
 import {Var} from "./Var";
 
 export class Fn {
-    public static stringify = Fn.withThis(Function.prototype.toString);
-
-    public static withThis<R, A extends any[], T = any>(fn: (this: T, ...args: A) => R): (thisArg: T, ...args: A) => R {
-        return (thisArg, ...args) => Ref.apply(fn, thisArg, args);
+    public static stringify(v: any) {
+        return Function.prototype.toString.call(v);
     }
 
     public static execute(code: string, args: Record<string, any> = {}) {
