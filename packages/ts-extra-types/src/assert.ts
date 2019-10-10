@@ -12,10 +12,8 @@ export type AssertNotExtends<T extends T1, U, T1 = ValidateNotExtends<T, U>> = t
 
 export type AssertExact<T extends TU,
     U extends UT,
-    T1 = T,
-    U1 = U,
-    TU = ValidateExact<T1, U1, "U">,
-    UT = ValidateExact<U1, T1, "T">,
+    TU = ValidateExact<T, U, "U">,
+    UT = ValidateExact<U, T, "T">,
     > = IsExact<T, U>;
 
 type ValidateExact<T, U, Z> =

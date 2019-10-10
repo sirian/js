@@ -3,10 +3,13 @@ import {AssertExact, DeepRequire} from "../../src";
 type Test = [
     AssertExact<{}, DeepRequire<{}>>,
     AssertExact<{ x: number }, DeepRequire<{ x?: number }>>,
-    AssertExact<{ x: number }, DeepRequire<{ x?: number }>>,
-    AssertExact<{ x: number | null }, DeepRequire<{ x?: number | null }>>,
-    AssertExact<{ x: number | null | undefined }, DeepRequire<{ x: number | null | undefined }>>,
-    AssertExact<{ x: number | null }, DeepRequire<{ x?: number | null | undefined }>>,
-    AssertExact<{ x: number | undefined }, DeepRequire<{ x: number | undefined }>>,
-    AssertExact<{ x: number }, DeepRequire<{ x?: number | undefined }>>
+    AssertExact<{ x: number }, DeepRequire<{ x: number }>>,
+    AssertExact<{ x: number, y: { z: number } }, DeepRequire<{ x?: number, y?: { z?: number } }>>,
+    AssertExact<{ x: number, y: { z: number } }, DeepRequire<{ x?: number, y: { z?: number } }>>,
+    AssertExact<{ x: number, y: { z: number } }, DeepRequire<{ x?: number, y?: { z: number } }>>,
+
+    AssertExact<[], DeepRequire<[]>>,
+    AssertExact<[1], DeepRequire<[1]>>,
+    AssertExact<[1], DeepRequire<[1?]>>,
+    AssertExact<[1, 2, [3, 4], 5], DeepRequire<[1?, 2?, [3?, 4?]?, 5?]>>,
 ];

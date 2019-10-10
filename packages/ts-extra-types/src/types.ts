@@ -23,9 +23,10 @@ export type Wrap<T> =
     T;
 
 export type AnyFunc = Func | Ctor | CallableFunction | NewableFunction;
-export type AnyType = Primitive | AnyFunc | NotFunc;
+export type AnyType = Primitive | AnyFunc | ObjectOnly;
 
-export type NotFunc = Primitive | any[] | object & { caller?: never };
+export type NotFunc = Primitive | ObjectOnly;
+export type ObjectOnly = any[] | object & { caller?: never };
 
 export type TypeName = "function" | "object" | "string" | "number" | "boolean" | "symbol" | "bigint" | "undefined";
 export type XTypeName = TypeName | "null" | "array";
@@ -99,8 +100,8 @@ export type ToPrimitive<T> =
 export type UnionToIntersection<U> =
     (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
-export type DeepReadonly<T> = {
-    readonly [P in keyof T]: DeepReadonly<T[P]>;
+export type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
 };
 
 export type DeepRequire<T> = {
