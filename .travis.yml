@@ -11,7 +11,7 @@ before_install:
     - export PATH=`yarn global bin`:$PATH
 
 install:
-    - yarn install --pure-lockfile
+    - yarn install --frozen-lockfile
 
 before_script:
     - yarn --version
@@ -28,7 +28,7 @@ before_deploy:
 
 deploy:
     provider: script
-    script: "git checkout -- . && yarn lerna:publish"
+    script: "yarn lerna:publish"
     skip_cleanup: true
     on:
         node: "12"
