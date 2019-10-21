@@ -6,12 +6,15 @@ const Buf = buf.Buffer;
 delete buf.Buffer;
 
 import {Base64 as JSBase64} from "js-base64";
-import {Base64, IBase64Engine} from "../src";
+import {Base64} from "../src";
 
-type Engine = Pick<IBase64Engine, "encode" | "decode">;
+interface IBase64 {
+    encode: (value: string) => string;
+    decode: (value: string) => string;
+}
 
 (() => {
-    const engines: Record<string, Engine> = {
+    const engines: Record<string, IBase64> = {
         "Buffer": {
             encode: (x) => Buffer.from(x).toString("base64"),
             decode: (x) => Buffer.from(x, "base64").toString(),
@@ -26,7 +29,7 @@ type Engine = Pick<IBase64Engine, "encode" | "decode">;
 
     const str64 = Buf.from(str).toString("base64");
 
-    function testEngine(N: number, b64Engine: Engine) {
+    function testEngine(N: number, b64Engine: IBase64) {
         if ("function" === typeof gc) {
             gc();
         }

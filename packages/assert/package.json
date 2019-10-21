@@ -1,13 +1,13 @@
 {
-    "name": "@sirian/filesystem",
+    "name": "@sirian/assert",
     "description": "",
-    "version": "1.7.33",
+    "version": "1.0.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/filesystem",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/assert",
     "license": "MIT",
     "files": [
         "build/"
@@ -16,17 +16,11 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "sideEffects": false,
-    "dependencies": {
-        "@sirian/common": "^5.7.3",
-        "@sirian/iterator": "^1.12.29",
-        "@sirian/ts-extra-types": "^3.52.1",
-        "@sirian/xpromise": "^2.4.18"
-    },
     "scripts": {},
     "publishConfig": {
         "access": "public"
     },
-    "devDependencies": {
-        "@types/node": "^12.7.11"
+    "dependencies": {
+        "@sirian/error": "^2.1.18"
     }
 }

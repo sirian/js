@@ -69,7 +69,12 @@ export class Base64 {
 
     public decode(b64: string, asString = true) {
         const length = b64.length;
-        const placeHolders = this.placeHoldersCount(b64);
+
+        if (length % 4 > 0) {
+            throw new Error(`Invalid string "${asString}". Length must be a multiple of 4`);
+        }
+
+        const placeHolders = "=" === b64[length - 2] ? 2 : ("=" === b64[length - 1] ? 1 : 0);
 
         const byteLength = (length * 3 / 4) - placeHolders;
         const bytes = new Uint8Array(byteLength);
@@ -79,7 +84,16 @@ export class Base64 {
 
         let L = 0;
 
-        const rev = (index: number) => this.rev(b64[index]);
+        const rev = (index: number) => {
+            const char = b64[index];
+            if (char === "-") {
+                return 62;
+            }
+            if (char === "_") {
+                return 63;
+            }
+            return chars.indexOf(char);
+        };
 
         let i = 0;
 
@@ -120,55 +134,21 @@ export class Base64 {
         return asString ? Unicode.bytesToString(bytes) : bytes;
     }
 
-    protected rev(char: string) {
-        if (char === "-") {
-            return 62;
-        }
-        if (char === "_") {
-            return 63;
-        }
-        return chars.indexOf(char);
-    }
-
-    protected placeHoldersCount(b64: string) {
-        const len = b64.length;
-
-        if (len % 4 > 0) {
-            throw new Error("Invalid string. Length must be a multiple of 4");
-        }
-
-        // the number of equal signs (place holders)
-        // if there are two placeholders, than the two characters before it
-        // represent one byte
-        // if there is only one, then the three characters before it represent 2 bytes
-        // this is just a cheap hack to not do indexOf twice
-        if ("=" === b64[len - 2]) {
-            return 2;
-        }
-
-        return "=" === b64[len - 1] ? 1 : 0;
-    }
-
-    protected tripletToBase64(num: number) {
-        return "".concat(
-            chars[0x3F & (num >> 18)],
-            chars[0x3F & (num >> 12)],
-            chars[0x3F & (num >> 6)],
-            chars[0x3F & (num)],
-        );
-    }
-
     protected encodeChunk(uint8: Uint8Array, start: number, end: number) {
         const output = [];
 
         for (let i = start; i < end; i += 3) {
-            const tmp =
-                +(uint8[i] << 16)
-                + (uint8[i + 1] << 8)
-                + (uint8[i + 2]);
+            const num = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
 
-            output.push(this.tripletToBase64(tmp));
+            const chunk = ""
+                + chars[0x3F & (num >> 18)]
+                + chars[0x3F & (num >> 12)]
+                + chars[0x3F & (num >> 6)]
+                + chars[0x3F & (num)];
+
+            output.push(chunk);
         }
+
         return output.join("");
     }
 }
