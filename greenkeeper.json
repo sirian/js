@@ -2,6 +2,7 @@
     "groups": {
         "default": {
             "packages": [
+                "packages/assert/package.json",
                 "packages/base64/package.json",
                 "packages/clone/package.json",
                 "packages/common/package.json",
