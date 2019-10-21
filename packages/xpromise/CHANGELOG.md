@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sirian/js/compare/@sirian/xpromise@2.4.18...@sirian/xpromise@2.5.0) (2019-10-21)
+
+
+### Features
+
+* typescript@3.7 ([3282ae0](https://github.com/sirian/js/commit/3282ae06e69eee6bbeb91fef7ee6681fa1a4e912))
+
+
+
+
+
 ## [2.4.18](https://github.com/sirian/js/compare/@sirian/xpromise@2.4.17...@sirian/xpromise@2.4.18) (2019-10-02)
 
 **Note:** Version bump only for package @sirian/xpromise
