@@ -1,0 +1,18 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build/cjs",
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/assert.tsbuildinfo",
+        "declarationDir": "build/types"
+    },
+    "references": [
+        {
+            "path": "../error"
+        }
+    ]
+}
