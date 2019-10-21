@@ -28,7 +28,7 @@ before_deploy:
 
 deploy:
     provider: script
-    script: "yarn lerna:publish"
+    script: "git checkout -- . && yarn lerna:publish"
     skip_cleanup: true
     on:
         node: "12"
