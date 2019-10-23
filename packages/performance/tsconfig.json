@@ -1,0 +1,18 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "include": [
+        "src"
+    ],
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "build/cjs",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "module": "commonjs",
+        "tsBuildInfoFile": "../../tmp/performance.tsbuildinfo",
+        "declarationDir": "build/types"
+    },
+    "references": []
+}
