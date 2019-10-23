@@ -31,6 +31,7 @@
                 "packages/property-access/package.json",
                 "packages/random/package.json",
                 "packages/shared-store/package.json",
+                "packages/timer/package.json",
                 "packages/tree/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/workflow/package.json",
