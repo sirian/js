@@ -1,3 +1,4 @@
+import {performance} from "@sirian/performance";
 import {TimerPeriod} from "./TimerPeriod";
 
 export interface TimerOptions {
@@ -14,7 +15,7 @@ export class Timer {
         this.starts = [];
         this.periods = [];
         this.options = {
-            now: Date.now,
+            now: performance.now,
             ...options,
         };
     }

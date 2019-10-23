@@ -19,5 +19,8 @@
     "scripts": {},
     "publishConfig": {
         "access": "public"
+    },
+    "dependencies": {
+        "@sirian/performance": "^1.1.0"
     }
 }
