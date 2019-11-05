@@ -6,6 +6,9 @@
     "compilerOptions": {
         "rootDir": "src",
         "outDir": "build/cjs",
+        "types": [
+            "node"
+        ],
         "lib": [
             "esnext",
             "dom"
@@ -14,9 +17,5 @@
         "tsBuildInfoFile": "../../tmp/timer.tsbuildinfo",
         "declarationDir": "build/types"
     },
-    "references": [
-        {
-            "path": "../performance"
-        }
-    ]
+    "references": []
 }
