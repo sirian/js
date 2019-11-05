@@ -26,6 +26,7 @@
                 "packages/lz-string/package.json",
                 "packages/merge/package.json",
                 "packages/mixin/package.json",
+                "packages/object-meta/package.json",
                 "packages/object-ref/package.json",
                 "packages/parser/package.json",
                 "packages/performance/package.json",
