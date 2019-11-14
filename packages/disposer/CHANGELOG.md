@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/sirian/js/compare/@sirian/disposer@2.2.3...@sirian/disposer@2.2.4) (2019-11-14)
+
+
+### Bug Fixes
+
+* **disposer:** WeakMap ([06f700e](https://github.com/sirian/js/commit/06f700e7fcb6925bb5f8281fbdf87984f0f0ad36))
+
+
+
+
+
 ## [2.2.3](https://github.com/sirian/js/compare/@sirian/disposer@2.2.2...@sirian/disposer@2.2.3) (2019-10-21)
 
 **Note:** Version bump only for package @sirian/disposer
