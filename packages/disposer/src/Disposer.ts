@@ -1,4 +1,4 @@
-import {XMap, XSet, XWeakSet} from "@sirian/common";
+import {XSet, XWeakMap, XWeakSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {CallbackSet} from "./CallbackSet";
@@ -24,7 +24,7 @@ export type DisposerEvents = {
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
 
-    public static readonly disposers = new XMap<object, Disposer>();
+    public static readonly disposers = new XWeakMap<object, Disposer>();
     public readonly target: object;
 
     protected children?: XSet<object>;
