@@ -29,10 +29,6 @@ export class PropertyPath extends Array<PathElement> {
         return Array;
     }
 
-    public get last() {
-        return this[this.length - 1];
-    }
-
     public static parse(path: Path): PathElement[] {
         if (Var.isArray(path)) {
             return path.map((key) => ({
@@ -87,6 +83,10 @@ export class PropertyPath extends Array<PathElement> {
         }
 
         return this.cache.ensure(path);
+    }
+
+    public get last() {
+        return this[this.length - 1];
     }
 
     public getKeys() {

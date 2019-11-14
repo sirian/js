@@ -12,13 +12,13 @@ export class CloneValidator {
         this.map = new Map();
     }
 
-    protected get maxDepth() {
-        return this.options.maxDepth || 0;
-    }
-
     public static validate(src: any, clone: any, options: Partial<CloneOptions> = {}) {
         const validator = new CloneValidator();
         validator.validate(src, clone, options);
+    }
+
+    protected get maxDepth() {
+        return this.options.maxDepth || 0;
     }
 
     public validate(src: any, clone: any, options: Partial<CloneOptions> = {}) {

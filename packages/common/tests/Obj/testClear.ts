@@ -4,9 +4,9 @@ describe("Obj.clear", () => {
     class Foo {
         public y = 1;
 
-        get x() { return 1; }
-
         public static foo() {}
+
+        get x() { return 1; }
 
         public z() {}
     }
