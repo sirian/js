@@ -24,6 +24,7 @@
                 "packages/iterator/package.json",
                 "packages/logger/package.json",
                 "packages/lz-string/package.json",
+                "packages/lzf/package.json",
                 "packages/merge/package.json",
                 "packages/mixin/package.json",
                 "packages/object-meta/package.json",
