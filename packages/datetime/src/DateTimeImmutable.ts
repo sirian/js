@@ -37,48 +37,6 @@ export class DateTimeImmutable implements IDateTime {
         this.date = new Date(ms);
     }
 
-    public get year() {
-        return this.date.getUTCFullYear();
-    }
-
-    public get month() {
-        return 1 + this.date.getUTCMonth();
-    }
-
-    public get day() {
-        return this.date.getUTCDate();
-    }
-
-    public get hour() {
-        return this.date.getUTCHours();
-    }
-
-    public get minute() {
-        return this.date.getUTCMinutes();
-    }
-
-    public get second() {
-        return this.date.getUTCSeconds();
-    }
-
-    public get ms() {
-        return this.date.getUTCMilliseconds();
-    }
-
-    public get timestampSec() {
-        const sec = this.timestampMs / 1000;
-
-        return Math.trunc(sec);
-    }
-
-    public get timestampMs() {
-        return this.date.getTime();
-    }
-
-    public get timeZoneOffset() {
-        return this.date.getTimezoneOffset();
-    }
-
     public static parse(str: string) {
         return DateTimeParser.parse(str);
     }
@@ -122,6 +80,48 @@ export class DateTimeImmutable implements IDateTime {
 
     public static from<T>(this: new(value: DateArg) => T, value: DateArg) {
         return new this(value);
+    }
+
+    public get year() {
+        return this.date.getUTCFullYear();
+    }
+
+    public get month() {
+        return 1 + this.date.getUTCMonth();
+    }
+
+    public get day() {
+        return this.date.getUTCDate();
+    }
+
+    public get hour() {
+        return this.date.getUTCHours();
+    }
+
+    public get minute() {
+        return this.date.getUTCMinutes();
+    }
+
+    public get second() {
+        return this.date.getUTCSeconds();
+    }
+
+    public get ms() {
+        return this.date.getUTCMilliseconds();
+    }
+
+    public get timestampSec() {
+        const sec = this.timestampMs / 1000;
+
+        return Math.trunc(sec);
+    }
+
+    public get timestampMs() {
+        return this.date.getTime();
+    }
+
+    public get timeZoneOffset() {
+        return this.date.getTimezoneOffset();
     }
 
     public daysInMonth() {

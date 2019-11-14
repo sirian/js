@@ -54,10 +54,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    get promise() {
-        return this;
-    }
-
     public static create<T>(executor?: PromiseExecutor<T>) {
         return new this<T>(executor);
     }
@@ -149,6 +145,10 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
     public static wrap<R>(fn: () => R | PromiseLike<R>) {
         return XPromise.create<R>((resolve) => resolve(fn()));
+    }
+
+    get promise() {
+        return this;
     }
 
     public setTimeout(ms?: number) {

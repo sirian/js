@@ -1,13 +1,13 @@
 {
-    "name": "@sirian/filesystem",
+    "name": "@sirian/lzf",
     "description": "",
-    "version": "1.8.0",
+    "version": "1.0.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/filesystem",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/lzf",
     "license": "MIT",
     "files": [
         "build/"
@@ -16,17 +16,11 @@
     "module": "build/esm/index.js",
     "types": "build/types/index.d.ts",
     "sideEffects": false,
-    "dependencies": {
-        "@sirian/common": "^5.7.4",
-        "@sirian/iterator": "^1.12.30",
-        "@sirian/ts-extra-types": "^3.53.0",
-        "@sirian/xpromise": "^2.5.0"
-    },
     "scripts": {},
     "publishConfig": {
         "access": "public"
     },
-    "devDependencies": {
-        "@types/node": "^12.12.7"
+    "dependencies": {
+        "@sirian/common": "^5.7.4"
     }
 }
