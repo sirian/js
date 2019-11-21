@@ -1,4 +1,4 @@
-import {XSet, XWeakMap, XWeakSet} from "@sirian/common";
+import {Ref, XSet, XWeakSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {CallbackSet} from "./CallbackSet";
@@ -23,10 +23,8 @@ export type DisposerEvents = {
 
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
-
-    public static readonly disposers = new XWeakMap<object, Disposer>();
+    public static readonly symbol: unique symbol = Symbol.for("disposer");
     public readonly target: object;
-
     protected children?: XSet<object>;
     protected disposed: boolean;
     protected disposedFully: boolean;
@@ -37,12 +35,12 @@ export class Disposer extends StaticEventEmitter {
 
     constructor(target: object) {
         super();
+        this.target = target;
         this.disposed = false;
         this.disposedFully = false;
         this.children = new XSet();
         this.before = new CallbackSet(this);
         this.after = new CallbackSet(this);
-        this.target = target;
         this.applied = new XWeakSet();
     }
 
@@ -67,15 +65,15 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static isDisposed(target: object) {
-        return Disposer.disposers.has(target) && Disposer.for(target).isDisposed();
+        return Disposer.has(target) && Disposer.for(target).isDisposed();
     }
 
     public static isDisposedFully(target: object) {
-        return Disposer.disposers.has(target) && Disposer.for(target).isDisposedFully();
+        return Disposer.has(target) && Disposer.for(target).isDisposedFully();
     }
 
     public static isDisposing(target: object) {
-        return Disposer.disposers.has(target) && Disposer.for(target).isDisposing();
+        return Disposer.has(target) && Disposer.for(target).isDisposing();
     }
 
     public static dispose(...targets: object[]) {
@@ -85,20 +83,26 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static has(target: object) {
-        return Disposer.disposers.has(target);
+        return Ref.hasOwn(target, Disposer.symbol);
     }
 
     public static for(target: object) {
-        const disposers = Disposer.disposers;
+        const symbol = Disposer.symbol;
 
-        if (!disposers.has(target)) {
+        if (!Disposer.has(target)) {
             const disposer = new Disposer(target);
-            disposers
-                .set(target, disposer)
-                .set(disposer, disposer);
+            const desc: TypedPropertyDescriptor<Disposer> = {
+                configurable: true,
+                writable: false,
+                enumerable: false,
+                value: disposer,
+            };
+
+            Ref.define(target, symbol, desc);
+            Ref.define(disposer, symbol, desc);
         }
 
-        return disposers.get(target)!;
+        return (target as any)[symbol];
     }
 
     public static link(...targets: any[]) {
@@ -145,7 +149,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public addChild(...children: object[]) {
-        const unique = new XSet(children);
+        const unique = new XSet(children.map(Disposer.for));
 
         unique.delete(this);
 
@@ -160,7 +164,7 @@ export class Disposer extends StaticEventEmitter {
 
     public addSource(...sources: object[]) {
         for (const source of sources) {
-            Disposer.for(source).addChild(this.target);
+            Disposer.for(source).addChild(this);
         }
         return this;
     }
