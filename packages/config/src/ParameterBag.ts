@@ -1,10 +1,11 @@
 import {Obj, Ref, Var} from "@sirian/common";
+import {ParameterNotFoundError} from "./Error";
 
-export class ParameterBag<T extends object> {
-    protected params!: T;
+export class ParameterBag<T extends Record<string | number, any>> {
+    protected params: Partial<T>;
 
-    constructor(params?: T) {
-        this.params = {} as any;
+    constructor(params: Partial<T> = {}) {
+        this.params = {};
         this.set(params);
     }
 
@@ -29,15 +30,19 @@ export class ParameterBag<T extends object> {
         return Ref.hasOwn(this.params, key);
     }
 
-    public get<K extends keyof T>(key: K, defaultValue?: T[K] | undefined): T[K] | undefined;
-    public get<K extends keyof T>(key: K, defaultValue: T[K]): T[K];
+    public get<K extends keyof T>(key: K): T[K];
+    public get<K extends keyof T>(key: K, defaultValue?: T[K]): T[K];
     public get<K extends keyof T>(key: K, defaultValue?: T[K]) {
         if (!this.has(key)) {
+            if (undefined === defaultValue) {
+                throw new ParameterNotFoundError(key);
+            }
             return defaultValue;
         }
 
         const value = this.params[key];
-        return undefined === value ? defaultValue : value;
+
+        return undefined !== value ? value : defaultValue;
     }
 
     public ensure<K extends keyof T>(key: K, init: () => T[K]) {
