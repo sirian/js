@@ -1,46 +1,38 @@
 import {ParameterBag, ParameterNotFoundError} from "../../src";
 
 describe("ParameterBag.get", () => {
-    const o: any = {
+    const o: Record<string, any> = {
         n: null,
         u: undefined,
-        x: 1,
-        y: "foo",
+        f: false,
+        s: "",
+        z: 0,
     };
-    const p = new ParameterBag(o);
 
-    test("ParameterBag.get parameter with value=null", () => {
-        expect(p.get("n")).toBe(null);
-        expect(p.get("n", null)).toBe(null);
-        expect(p.get("n", undefined)).toBe(null);
-        expect(p.get("n", 1)).toBe(null);
-    });
+    const defaultValue = {};
 
-    test("ParameterBag.get parameter with value=1", () => {
-        expect(p.get("x")).toBe(1);
-        expect(p.get("x", null)).toBe(1);
-        expect(p.get("x", undefined)).toBe(1);
-        expect(p.get("x", 2)).toBe(1);
-    });
+    const data: Array<[keyof typeof o, any, any, any, any]> = [
+        ["n", null, null, null, null],
+        ["u", undefined, null, undefined, defaultValue],
+        ["f", false, false, false, false],
+        ["s", "", "", "", ""],
+        ["z", 0, 0, 0, 0],
+    ];
 
-    test("ParameterBag.get parameter with value='foo'", () => {
-        expect(p.get("y")).toBe("foo");
-        expect(p.get("y", null)).toBe("foo");
-        expect(p.get("y", undefined)).toBe("foo");
-        expect(p.get("y", 3)).toBe("foo");
-    });
+    describe.each(data)("ParameterBag.get(%s)", (key, a, b, c, d) => {
+        const p = new ParameterBag(o);
 
-    test("ParameterBag.get parameter with value=undefined", () => {
-        expect(p.get("u")).toBe(undefined);
-        expect(p.get("u", null)).toBe(null);
-        expect(p.get("u", undefined)).toBe(undefined);
-        expect(p.get("u", 3)).toBe(3);
+        test(`ParameterBag.get(${key}) = ${a}`, () => expect(p.get(key)).toBe(a));
+        test(`ParameterBag.get(${key}, null) = ${b}`, () => expect(p.get(key, null)).toBe(b));
+        test(`ParameterBag.get(${key}, undefined) = ${c}`, () => expect(p.get(key, undefined)).toBe(c));
+        test(`ParameterBag.get(${key}, defaultValue) = ${d}`, () => expect(p.get(key, defaultValue)).toBe(d));
     });
 
     test("ParameterBag.get non existent parameter", () => {
-        expect(() => p.get("z")).toThrow(ParameterNotFoundError);
-        expect(p.get("z", null)).toBe(null);
-        expect(() => p.get("z", undefined)).toThrow(ParameterNotFoundError);
-        expect(p.get("z", 3)).toBe(3);
+        const p = new ParameterBag(o);
+        expect(() => p.get("404")).toThrow(ParameterNotFoundError);
+        expect(p.get("404", null)).toBe(null);
+        expect(() => p.get("404", undefined)).toThrow(ParameterNotFoundError);
+        expect(p.get("404", defaultValue)).toBe(defaultValue);
     });
 });
