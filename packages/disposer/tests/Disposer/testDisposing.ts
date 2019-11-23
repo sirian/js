@@ -2,13 +2,13 @@ import {Disposer} from "../../src";
 
 describe("Disposer.isDisposing", () => {
     test("Disposer.isDisposing", () => {
-        Disposer.on("dispose", (target, d) => {
+        Disposer.on("dispose", (d) => {
             expect(d.isDisposing()).toBe(true);
             expect(d.isDisposed()).toBe(true);
             expect(d.isDisposedFully()).toBe(false);
         });
 
-        Disposer.on("disposed", (target, d) => {
+        Disposer.on("disposed", (d) => {
             expect(d.isDisposing()).toBe(false);
             expect(d.isDisposed()).toBe(true);
             expect(d.isDisposedFully()).toBe(true);

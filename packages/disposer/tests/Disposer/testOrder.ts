@@ -37,8 +37,8 @@ describe("Disposer", () => {
         const calls: string[] = [];
         const names = new XWeakMap(getNames(obj));
 
-        Disposer.on("dispose", (t: any) => calls.push("^" + names.get(t)));
-        Disposer.on("disposed", (t: any) => calls.push("$" + names.get(t)));
+        Disposer.on("dispose", (d) => calls.push("^" + names.get(d.target)));
+        Disposer.on("disposed", (d) => calls.push("$" + names.get(d.target)));
         const target = prop.split(".").reduce((o: any, key) => o[key], obj);
 
         Disposer.dispose(target);
