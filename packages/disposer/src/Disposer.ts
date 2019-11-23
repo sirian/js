@@ -1,4 +1,4 @@
-import {Ref, XSet, XWeakSet} from "@sirian/common";
+import {Ref, XSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerCallbackSet} from "./DisposerCallbackSet";
@@ -12,7 +12,7 @@ declare function clearTimeout(timeoutId: any): void;
 export type DisposerEvents = {
     dispose: [Disposer];
     disposed: [Disposer];
-    error: [any, Disposer, DisposeCallback];
+    error: [any, Disposer, DisposeCallback?];
 };
 
 export class Disposer extends StaticEventEmitter {
@@ -26,7 +26,6 @@ export class Disposer extends StaticEventEmitter {
     protected before: DisposerCallbackSet;
     protected after: DisposerCallbackSet;
     protected timeoutId?: Return<typeof setTimeout>;
-    protected applied: XWeakSet<DisposeCallback>;
 
     constructor(target: object) {
         super();
@@ -37,7 +36,6 @@ export class Disposer extends StaticEventEmitter {
         this.sources = new XSet();
         this.before = new DisposerCallbackSet(this);
         this.after = new DisposerCallbackSet(this);
-        this.applied = new XWeakSet();
     }
 
     public static onDispose(target: object, callback: DisposeCallback) {
@@ -98,7 +96,7 @@ export class Disposer extends StaticEventEmitter {
             Ref.define(disposer, symbol, desc);
         }
 
-        return (target as any)[symbol];
+        return (target as any)[symbol] as Disposer;
     }
 
     public static link(...targets: any[]) {
@@ -149,7 +147,15 @@ export class Disposer extends StaticEventEmitter {
         if (this.disposed) {
             Disposer.dispose(...disposers);
         } else {
-            this.children.add(...disposers);
+            for (const disposer of disposers) {
+                if (disposer.disposed) {
+                    continue;
+                }
+
+                this.children.add(disposer);
+                disposer.sources.add(this);
+            }
+
         }
 
         return this;
@@ -180,7 +186,13 @@ export class Disposer extends StaticEventEmitter {
 
         this.before.apply();
 
-        Disposer.dispose(...children);
+        for (const child of children) {
+            try {
+                child.dispose();
+            } catch (e) {
+                Disposer.emit("error", e, child);
+            }
+        }
 
         this.after.apply();
         this.disposedFully = true;
