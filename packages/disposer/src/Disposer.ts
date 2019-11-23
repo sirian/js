@@ -145,7 +145,7 @@ export class Disposer extends StaticEventEmitter {
     public addChild(...children: object[]) {
         const disposers = children.map((child) => Disposer.for(child));
         if (this.disposed) {
-            Disposer.dispose(...disposers);
+            disposers.forEach((d) => d.dispose());
         } else {
             for (const disposer of disposers) {
                 if (disposer.disposed) {
