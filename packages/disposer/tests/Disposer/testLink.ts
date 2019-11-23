@@ -4,7 +4,7 @@ describe("Disposer.link", () => {
     test("Disposer.link", () => {
 
         const stack: any[] = [];
-        Disposer.on("dispose", (target) => stack.push(target));
+        Disposer.on("dispose", (d) => stack.push(d.target));
 
         let x = 0;
         const o1 = {x: x++};

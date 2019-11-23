@@ -3,19 +3,19 @@ import {Disposer} from "../../src";
 describe("callback", () => {
     test("", () => {
         const foo = {};
-        const dfoo = Disposer.for(foo);
+        const d = Disposer.for(foo);
 
         const results: number[] = [];
-        dfoo.onDispose(() => results.push(1));
-        dfoo.onDispose(() => results.push(2));
+        d.onDispose(() => results.push(1));
+        d.onDispose(() => results.push(2));
 
         expect(results).toStrictEqual([]);
 
-        dfoo.dispose();
+        d.dispose();
 
         expect(results).toStrictEqual([1, 2]);
 
-        dfoo.dispose();
+        d.dispose();
 
         expect(results).toStrictEqual([1, 2]);
     });
@@ -62,7 +62,7 @@ describe("callback", () => {
         expect(() => Disposer.dispose(foo)).not.toThrow();
         expect(Disposer.isDisposed(foo)).toBe(true);
         expect(results).toStrictEqual([1, 2, 3]);
-        expect(onError).toHaveBeenCalledWith(err, {callback: errCallback, target: foo, disposer});
+        expect(onError).toHaveBeenCalledWith(err, disposer, errCallback);
     });
 
 });

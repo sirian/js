@@ -4,21 +4,21 @@ describe("", () => {
     const foo = {};
     const bar = {};
 
-    const dfoo = Disposer.for(foo);
-    const dbar = Disposer.for(bar);
+    const dFoo = Disposer.for(foo);
+    const dBar = Disposer.for(bar);
 
-    dbar.addSource(foo);
+    dBar.addSource(foo);
 
     test("", () => {
-        expect(dfoo.isDisposed()).toBe(false);
-        expect(dbar.isDisposed()).toBe(false);
+        expect(dFoo.isDisposed()).toBe(false);
+        expect(dBar.isDisposed()).toBe(false);
     });
 
     test("", () => {
-        dfoo.dispose();
+        dFoo.dispose();
 
-        expect(dfoo.isDisposed()).toBe(true);
-        expect(dbar.isDisposed()).toBe(true);
+        expect(dFoo.isDisposed()).toBe(true);
+        expect(dBar.isDisposed()).toBe(true);
     });
 
     test("", () => {
@@ -34,7 +34,7 @@ describe("", () => {
         const zoo = {};
         const dzoo = Disposer.for(zoo);
         expect(dzoo.isDisposed()).toBe(false);
-        dzoo.addSource(dfoo);
+        dzoo.addSource(dFoo);
         expect(dzoo.isDisposed()).toBe(true);
     });
 });

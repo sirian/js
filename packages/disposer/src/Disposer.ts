@@ -1,35 +1,30 @@
 import {Ref, XSet, XWeakSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
-import {CallbackSet} from "./CallbackSet";
+import {DisposerCallbackSet} from "./DisposerCallbackSet";
 
-export type DisposeCallback = (target: object, disposer: Disposer) => void;
+export type DisposeCallback = (disposer: Disposer) => void;
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
 
 declare function clearTimeout(timeoutId: any): void;
 
-export interface DisposeErrorDetails {
-    callback: DisposeCallback;
-    target: object;
-    disposer: Disposer;
-}
-
 export type DisposerEvents = {
-    dispose: [object, Disposer];
-    disposed: [object, Disposer];
-    error: [any, DisposeErrorDetails];
+    dispose: [Disposer];
+    disposed: [Disposer];
+    error: [any, Disposer, DisposeCallback];
 };
 
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
     public static readonly symbol: unique symbol = Symbol.for("disposer");
     public readonly target: object;
-    protected children?: XSet<object>;
+    protected children: XSet<Disposer>;
+    protected sources: XSet<Disposer>;
     protected disposed: boolean;
     protected disposedFully: boolean;
-    protected before: CallbackSet;
-    protected after: CallbackSet;
+    protected before: DisposerCallbackSet;
+    protected after: DisposerCallbackSet;
     protected timeoutId?: Return<typeof setTimeout>;
     protected applied: XWeakSet<DisposeCallback>;
 
@@ -39,8 +34,9 @@ export class Disposer extends StaticEventEmitter {
         this.disposed = false;
         this.disposedFully = false;
         this.children = new XSet();
-        this.before = new CallbackSet(this);
-        this.after = new CallbackSet(this);
+        this.sources = new XSet();
+        this.before = new DisposerCallbackSet(this);
+        this.after = new DisposerCallbackSet(this);
         this.applied = new XWeakSet();
     }
 
@@ -149,14 +145,11 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public addChild(...children: object[]) {
-        const unique = new XSet(children.map(Disposer.for));
-
-        unique.delete(this);
-
-        if (this.children) {
-            this.children.add(...unique);
+        const disposers = children.map((child) => Disposer.for(child));
+        if (this.disposed) {
+            Disposer.dispose(...disposers);
         } else {
-            Disposer.dispose(...unique);
+            this.children.add(...disposers);
         }
 
         return this;
@@ -174,21 +167,23 @@ export class Disposer extends StaticEventEmitter {
             return;
         }
         this.disposed = true;
-
         this.clearTimeout();
-        const {children} = this;
 
-        Disposer.emit("dispose", this.target, this);
+        const sources = this.sources.pickAll();
+        const children = this.children.pickAll();
+
+        for (const source of sources) {
+            source.children.delete(this);
+        }
+
+        Disposer.emit("dispose", this);
 
         this.before.apply();
 
-        if (children) {
-            delete this.children;
-            Disposer.dispose(...children);
-        }
+        Disposer.dispose(...children);
 
         this.after.apply();
         this.disposedFully = true;
-        Disposer.emit("disposed", this.target, this);
+        Disposer.emit("disposed", this);
     }
 }
