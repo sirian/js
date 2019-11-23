@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.7](https://github.com/sirian/js/compare/@sirian/disposer@2.2.6...@sirian/disposer@2.2.7) (2019-11-23)
+
+
+### Bug Fixes
+
+* **disposer:** memory leak ([428c15d](https://github.com/sirian/js/commit/428c15d116815c30fa2f07143fddd9fb23be8de3))
+
+
+
+
+
 ## [2.2.6](https://github.com/sirian/js/compare/@sirian/disposer@2.2.5...@sirian/disposer@2.2.6) (2019-11-23)
 
 

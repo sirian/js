@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.46](https://github.com/sirian/js/compare/@sirian/workflow@1.2.45...@sirian/workflow@1.2.46) (2019-11-23)
+
+**Note:** Version bump only for package @sirian/workflow
+
+
+
+
+
 ## [1.2.45](https://github.com/sirian/js/compare/@sirian/workflow@1.2.44...@sirian/workflow@1.2.45) (2019-11-23)
 
 **Note:** Version bump only for package @sirian/workflow
