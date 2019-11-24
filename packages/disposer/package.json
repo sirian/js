@@ -24,5 +24,8 @@
     "scripts": {},
     "publishConfig": {
         "access": "public"
+    },
+    "devDependencies": {
+        "ts-jest": "^24.2.0"
     }
 }

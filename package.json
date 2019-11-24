@@ -15,9 +15,9 @@
         "coveralls": "^3.0.8",
         "husky": "^3.1.0",
         "jest": "^24.9.0",
-        "lerna": "3.16.1",
+        "lerna": "^3.19.0",
         "rimraf": "^3.0.0",
-        "ts-jest": "^24.1.0",
+        "ts-jest": "^24.2.0",
         "ts-node": "^8.5.2",
         "tslint": "^5.20.1",
         "typescript": "^3.7.2"
