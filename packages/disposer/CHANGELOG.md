@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/sirian/js/compare/@sirian/disposer@2.2.7...@sirian/disposer@2.3.0) (2019-11-24)
+
+
+### Features
+
+* **disposer:** Disposer 'created' event ([4c39e05](https://github.com/sirian/js/commit/4c39e05401ebee16a1ee133b678b0820444fe610))
+
+
+
+
+
 ## [2.2.7](https://github.com/sirian/js/compare/@sirian/disposer@2.2.6...@sirian/disposer@2.2.7) (2019-11-23)
 
 
