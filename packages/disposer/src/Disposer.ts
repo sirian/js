@@ -10,14 +10,17 @@ declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...a
 declare function clearTimeout(timeoutId: any): void;
 
 export type DisposerEvents = {
+    created: [Disposer];
     dispose: [Disposer];
     disposed: [Disposer];
     error: [any, Disposer, DisposeCallback?];
 };
 
+export const disposerSymbol: unique symbol = Symbol.for("disposer");
+
 export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
-    public static readonly symbol: unique symbol = Symbol.for("disposer");
+
     public readonly target: object;
     protected children: XSet<Disposer>;
     protected sources: XSet<Disposer>;
@@ -76,27 +79,27 @@ export class Disposer extends StaticEventEmitter {
         }
     }
 
-    public static has(target: object) {
-        return Ref.hasOwn(target, Disposer.symbol);
+    public static has(target: object): target is Record<typeof disposerSymbol, Disposer> {
+        return Ref.hasOwn(target, disposerSymbol);
     }
 
     public static for(target: object) {
-        const symbol = Disposer.symbol;
-
-        if (!Disposer.has(target)) {
-            const disposer = new Disposer(target);
-            const desc: TypedPropertyDescriptor<Disposer> = {
-                configurable: true,
-                writable: false,
-                enumerable: false,
-                value: disposer,
-            };
-
-            Ref.define(target, symbol, desc);
-            Ref.define(disposer, symbol, desc);
+        if (Disposer.has(target)) {
+            return target[disposerSymbol];
         }
 
-        return (target as any)[symbol] as Disposer;
+        const disposer = new Disposer(target);
+        const desc: TypedPropertyDescriptor<Disposer> = {
+            configurable: true,
+            writable: false,
+            enumerable: false,
+            value: disposer,
+        };
+
+        Ref.define(target, disposerSymbol, desc);
+        Ref.define(disposer, disposerSymbol, desc);
+        Disposer.emit("created", disposer);
+        return disposer;
     }
 
     public static link(...targets: any[]) {
@@ -146,16 +149,15 @@ export class Disposer extends StaticEventEmitter {
         const disposers = children.map((child) => Disposer.for(child));
         if (this.disposed) {
             disposers.forEach((d) => d.dispose());
-        } else {
-            for (const disposer of disposers) {
-                if (disposer.disposed) {
-                    continue;
-                }
-
-                this.children.add(disposer);
-                disposer.sources.add(this);
+            return this;
+        }
+        for (const disposer of disposers) {
+            if (disposer.disposed) {
+                continue;
             }
 
+            this.children.add(disposer);
+            disposer.sources.add(this);
         }
 
         return this;

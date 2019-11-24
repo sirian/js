@@ -1,4 +1,4 @@
-import {Entries} from "../../src/Entries";
+import {Entries} from "../../src";
 
 describe("Entries.from", () => {
     const data: Array<[any, any]> = [
@@ -11,7 +11,7 @@ describe("Entries.from", () => {
         [[1, 2], [[0, 1], [1, 2]]],
         [{x: 1}, [["x", 1]]],
         [{x: undefined}, [["x", undefined]]],
-        [[1, , 3], [[0, 1], [1, undefined], [2, 3]]],
+        [[1, , 3], [[0, 1], [1, undefined], [2, 3]]], // tslint:disable-line:no-sparse-arrays
     ];
 
     test.each(data)("Entries.from(%O) === %O", (value, expected) => {

@@ -18,6 +18,7 @@
         "no-shadowed-variable": [true, {"class": false}],
         "new-parens": false,
         "no-empty-interface": false,
+        "no-sparse-arrays": true,
         "max-line-length": {
             "options": {
                 "ignore-pattern": "^import |^export {(.*?)}|class [a-zA-Z]+ implements |// |[a-z]<[A-Z]",
