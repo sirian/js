@@ -41,7 +41,7 @@
         "test:clean": "yarn test:jest --clearCache",
         "test:jest": "jest --config jest.config.json",
         "test:watch": "yarn test:jest --watch --maxWorkers=2",
-        "lerna:publish": "yarn lerna publish --from-git --conventional-commits --yes"
+        "lerna:publish": "yarn lerna publish --conventional-commits --yes"
     },
     "husky": {
         "hooks": {
