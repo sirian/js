@@ -42,6 +42,9 @@
         "test:watch": "yarn test:jest --watch --maxWorkers=2",
         "lerna:publish": "yarn lerna publish --conventional-commits --yes"
     },
+    "resolutions": {
+        "mocha": "4.0.*"
+    },
     "husky": {
         "hooks": {
             "pre-commit": "yarn build:reset && yarn lint"
