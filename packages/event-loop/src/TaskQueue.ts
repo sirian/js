@@ -7,40 +7,37 @@ interface Task {
 
 export class TaskQueue {
     protected static lastId: number = 0;
-    protected tasks: Map<number, Task> = new Map();
+    protected tasks: Record<string, Task> = {};
 
     protected scheduled: boolean;
     protected running: boolean;
-    protected schedule: (callback: () => void) => void;
+    protected scheduler: (callback: () => void) => void;
 
-    constructor(schedule: (callback: () => void) => void) {
+    constructor(scheduler: (callback: () => void) => void) {
         this.scheduled = false;
         this.running = false;
-        this.schedule = schedule;
+        this.scheduler = scheduler;
     }
 
     public add(callback: TaskCallback) {
         const id = ++TaskQueue.lastId;
-        this.tasks.set(id, {
+        this.tasks[id] = {
             fn: callback,
             canceled: false,
-        });
+        };
         if (!this.scheduled) {
             this.scheduled = true;
-            this.schedule(() => this.run());
+            this.scheduler(() => this.run());
         }
         return id;
     }
 
-    public clear(id: any) {
-        if (this.running) {
-            const task = this.tasks.get(id);
-            if (task) {
-                task.canceled = true;
-            }
-        } else {
-            this.tasks.delete(id);
+    public cancel(id: any) {
+        const task = this.tasks[id];
+        if (task) {
+            task.canceled = true;
         }
+        delete this.tasks[id];
         return this;
     }
 
@@ -50,13 +47,13 @@ export class TaskQueue {
 
         const tasks = this.tasks;
 
-        const ids = [...tasks.keys()];
-        for (const id of ids) {
-            const task = tasks.get(id);
-            tasks.delete(id);
-            if (task && !task.canceled) {
-                const fn = task.fn;
-                (async () => fn())();
+        const apply = async (fn: TaskCallback) => fn();
+
+        const entries = Object.entries(tasks);
+        for (const [id, {canceled, fn}] of entries) {
+            delete tasks[id];
+            if (!canceled) {
+                apply(fn);
             }
         }
         this.running = false;

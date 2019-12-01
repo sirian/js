@@ -29,6 +29,6 @@ describe("NextTick.start", () => {
 
         await EventLoop.waitTimeout(0);
 
-        expect(ids).toStrictEqual([1, 3, 4, 8, 2, 7, 11, 31, 21]);
+        expect(ids).toStrictEqual([1, 2, 3, 4, 7, 8, 11, 21, 31]);
     });
 });

@@ -7,14 +7,14 @@ describe("Interval.active", () => {
 
         const t = Interval.create(5, fn);
 
-        expect(t.isActive()).toBe(false);
+        expect(t.isScheduled()).toBe(false);
 
         t.start();
 
-        expect(t.isActive()).toBe(true);
+        expect(t.isScheduled()).toBe(true);
         for (let i = 1; i < 20; i++) {
             jest.advanceTimersByTime(1);
-            expect(t.isActive()).toBe(true);
+            expect(t.isScheduled()).toBe(true);
             expect(fn).toHaveBeenCalledTimes(Math.floor(i / 5));
         }
 
@@ -22,7 +22,7 @@ describe("Interval.active", () => {
 
         fn.mockReset();
 
-        expect(t.isActive()).toBe(false);
+        expect(t.isScheduled()).toBe(false);
 
         jest.advanceTimersByTime(100);
         expect(fn).toHaveBeenCalledTimes(0);

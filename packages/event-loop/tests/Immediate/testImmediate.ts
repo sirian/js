@@ -36,19 +36,22 @@ describe("Immediate", () => {
 
     test("", () => {
         jest.useFakeTimers();
-        const ids: number[] = [];
+        const ids: any[] = [];
+
+        let immCounter = 0;
+        let fooCounter = 0;
         const imm = Immediate.start(() => {
-            imm.start();
-            ids.push(1);
-            setImmediate(() => {
-                ids.push(2);
-                imm.clear();
-            });
+            ids.push(++immCounter);
+            if (immCounter < 3) {
+                imm.start();
+            }
+            setImmediate(() => ids.push("foo" + ++fooCounter));
         });
         setImmediate(() => {
-            ids.push(3);
+            ids.push("bar1");
+            setImmediate(() => ids.push("bar2"));
         });
         jest.runAllImmediates();
-        expect(ids).toStrictEqual([1, 3, 1, 2, 2]);
+        expect(ids).toStrictEqual([1, "bar1", 2, "foo1", "bar2", 3, "foo2", "foo3"]);
     });
 });

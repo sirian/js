@@ -8,18 +8,18 @@ describe("Timeout.active", () => {
         const t = Timeout.create(11, fn);
 
         expect(fn).not.toHaveBeenCalled();
-        expect(t.isActive()).toBe(false);
+        expect(t.isScheduled()).toBe(false);
 
         t.start();
 
         for (let i = 0; i < 10; i++) {
             jest.advanceTimersByTime(1);
             expect(fn).not.toHaveBeenCalled();
-            expect(t.isActive()).toBe(true);
+            expect(t.isScheduled()).toBe(true);
         }
 
         jest.advanceTimersByTime(1);
         expect(fn).toHaveBeenCalled();
-        expect(t.isActive()).toBe(false);
+        expect(t.isScheduled()).toBe(false);
     });
 });

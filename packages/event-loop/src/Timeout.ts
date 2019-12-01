@@ -3,15 +3,11 @@ import {TaskCallback} from "./TaskQueue";
 
 export class Timeout extends AsyncTask {
     protected ms: number;
+    protected timeoutId: any;
 
     constructor(ms: number, callback?: TaskCallback) {
         super(callback);
         this.ms = ms;
-    }
-
-    public start() {
-        this.id = this.id || setTimeout(() => this.handle(), this.ms);
-        return this;
     }
 
     public restart(ms: number = this.ms) {
@@ -19,13 +15,11 @@ export class Timeout extends AsyncTask {
         return super.restart();
     }
 
-    public clear() {
-        clearTimeout(this.id);
-        return super.clear();
+    protected clearTask() {
+        clearTimeout(this.timeoutId);
     }
 
-    protected handle() {
-        this.clear();
-        return super.handle();
+    protected startTask(callback: TaskCallback) {
+        this.timeoutId = setTimeout(callback, this.ms);
     }
 }
