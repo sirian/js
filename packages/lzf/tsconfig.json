@@ -10,9 +10,5 @@
         "tsBuildInfoFile": "../../tmp/lzf.tsbuildinfo",
         "declarationDir": "build/types"
     },
-    "references": [
-        {
-            "path": "../common"
-        }
-    ]
+    "references": []
 }

@@ -20,7 +20,5 @@
     "publishConfig": {
         "access": "public"
     },
-    "dependencies": {
-        "@sirian/common": "^5.7.4"
-    }
+    "dependencies": {}
 }
