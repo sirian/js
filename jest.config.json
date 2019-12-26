@@ -21,8 +21,10 @@
     "coveragePathIgnorePatterns": [
         "/node_modules/"
     ],
+    "maxWorkers": 4,
     "globals": {
         "ts-jest": {
+            "isolatedModules": true,
             "tsConfig": "./tsconfig.test.json"
         }
     }
