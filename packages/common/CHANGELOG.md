@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.5](https://github.com/sirian/js/compare/@sirian/common@5.7.4...@sirian/common@5.7.5) (2019-12-26)
+
+
+### Bug Fixes
+
+* **common:** BiMap fixed ([725f1bd](https://github.com/sirian/js/commit/725f1bdab6f0c1cf4cdac4c3694c54119c2dd1c9))
+
+
+
+
+
 ## [5.7.4](https://github.com/sirian/js/compare/@sirian/common@5.7.3...@sirian/common@5.7.4) (2019-10-21)
 
 **Note:** Version bump only for package @sirian/common
