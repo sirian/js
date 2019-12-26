@@ -33,14 +33,17 @@ export class BiMap<K = any, V = any> extends XMap<K, V> {
                 this.unregister(key, old);
             }
         }
+        this.reverse.ensure(value).add(key);
         return super.set(key, value);
     }
 
     protected unregister(key: K, value: V) {
-        const keys = this.reverse.get(value)!;
-        keys.delete(key);
-        if (!keys.size) {
-            this.reverse.delete(value);
+        const keys = this.reverse.get(value);
+        if (keys) {
+            keys.delete(key);
+            if (!keys.size) {
+                this.reverse.delete(value);
+            }
         }
     }
 }
