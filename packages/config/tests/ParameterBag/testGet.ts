@@ -5,6 +5,7 @@ describe("ParameterBag.get", () => {
         n: null,
         u: undefined,
         f: false,
+        t: true,
         s: "",
         z: 0,
     };
@@ -34,5 +35,24 @@ describe("ParameterBag.get", () => {
         expect(p.get("404", null)).toBe(null);
         expect(() => p.get("404", undefined)).toThrow(ParameterNotFoundError);
         expect(p.get("404", defaultValue)).toBe(defaultValue);
+    });
+});
+
+describe("ParameterBag.getInt", () => {
+    const data: Array<[any, number]> = [
+        [false, 0],
+        [null, 0],
+        ["", 0],
+        ["0", 0],
+        ["1", 1],
+        ["-1e1", -10],
+        ["1.4", 1],
+        ["-1.4", -1],
+        ["0xFF", 255],
+    ];
+
+    const p = new ParameterBag();
+    test.each(data)("ParameterBag.getInt(_, %p) === %p", (value, expected) => {
+        expect(p.getInt("x", value)).toBe(expected);
     });
 });

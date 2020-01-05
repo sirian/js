@@ -31,8 +31,8 @@ export class ParameterBag<T extends Record<string | number, any>> {
     }
 
     public get<K extends keyof T>(key: K): T[K];
-    public get<K extends keyof T>(key: K, defaultValue?: T[K]): T[K];
-    public get<K extends keyof T>(key: K, defaultValue?: T[K]) {
+    public get<K extends keyof T, U>(key: K, defaultValue?: U): T[K] | U;
+    public get(key: keyof T, defaultValue?: any) {
         if (!this.has(key)) {
             if (undefined === defaultValue) {
                 throw new ParameterNotFoundError(key);
@@ -43,6 +43,48 @@ export class ParameterBag<T extends Record<string | number, any>> {
         const value = this.params[key];
 
         return undefined !== value ? value : defaultValue;
+    }
+
+    public getString(key: keyof T, defaultValue?: any) {
+        const v = this.get(key, defaultValue);
+        switch (v) {
+            case true:
+                return "1";
+            case false:
+            case null:
+            case undefined:
+                return "";
+            default:
+                return "" + v;
+        }
+    }
+
+    public getAlpha(key: keyof T, defaultValue?: string): string {
+        return this.getString(key, defaultValue).replace(/[^a-z]/gi, "");
+    }
+
+    public getAlnum(key: keyof T, defaultValue?: string): string {
+        return this.getString(key, defaultValue).replace(/[^a-z0-9]/gi, "");
+    }
+
+    public getDigits(key: keyof T, defaultValue?: string): string {
+        return this.getString(key, defaultValue).replace(/[^0-9]/g, "");
+    }
+
+    public getNumber(key: keyof T, defaultValue?: number): number {
+        return +this.getString(key, defaultValue);
+    }
+
+    public getFloat(key: keyof T, defaultValue?: number): number {
+        return parseFloat(this.getString(key, defaultValue));
+    }
+
+    public getInt(key: keyof T, defaultValue?: number): number {
+        return Math.trunc(this.getNumber(key, defaultValue));
+    }
+
+    public getBool(key: keyof T, defaultValue?: boolean) {
+        return !!this.get(key, defaultValue);
     }
 
     public ensure<K extends keyof T>(key: K, init: () => T[K]) {
