@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/sirian/js/compare/@sirian/config@1.2.10...@sirian/config@1.3.0) (2020-01-05)
+
+
+### Features
+
+* **config:** ParameterBag.getInt, getBool, getNumber, getDigits, etc ([b1e3289](https://github.com/sirian/js/commit/b1e3289c17881abc9c2a6197861cfd713dcf32ff))
+
+
+
+
+
 ## [1.2.10](https://github.com/sirian/js/compare/@sirian/config@1.2.9...@sirian/config@1.2.10) (2019-12-26)
 
 **Note:** Version bump only for package @sirian/config
