@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.31](https://github.com/sirian/js/compare/@sirian/random@1.2.30...@sirian/random@1.2.31) (2019-12-26)
+
+**Note:** Version bump only for package @sirian/random
+
+
+
+
+
 ## [1.2.30](https://github.com/sirian/js/compare/@sirian/random@1.2.29...@sirian/random@1.2.30) (2019-10-21)
 
 **Note:** Version bump only for package @sirian/random
