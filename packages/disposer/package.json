@@ -26,6 +26,6 @@
         "access": "public"
     },
     "devDependencies": {
-        "ts-jest": "^24.2.0"
+        "ts-jest": "^25.0.0"
     }
 }

@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-    - '12'
+    - '13'
 cache:
     yarn: true
     directories:
@@ -31,5 +31,5 @@ deploy:
     script: "yarn lerna:publish"
     skip_cleanup: true
     on:
-        node: "12"
+        node: "13"
         branch: "release"

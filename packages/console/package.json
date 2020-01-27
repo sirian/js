@@ -37,7 +37,7 @@
         "error-stack-parser": "^2.0.4"
     },
     "devDependencies": {
-        "@types/node": "^12.12.12"
+        "@types/node": "^13.5.0"
     },
     "scripts": {},
     "publishConfig": {

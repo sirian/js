@@ -15,7 +15,7 @@ describe("Obj.toPrimitive", () => {
         [Object.assign(Object(3), {[Symbol.toPrimitive]: () => 10}), 10],
     ];
 
-    test.each(data)("Obj.toPrimitive(%p) === %p", (x, expected) => {
+    test.each(data)("Obj.toPrimitive(%o) === %o", (x, expected) => {
         expect(Obj.toPrimitive(x)).toBe(expected);
     });
 
