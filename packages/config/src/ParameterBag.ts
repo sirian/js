@@ -84,7 +84,17 @@ export class ParameterBag<T extends Record<string | number, any>> {
     }
 
     public getBool(key: keyof T, defaultValue?: boolean) {
-        return !!this.get(key, defaultValue);
+        const value = this.get(key, defaultValue);
+        switch (typeof value) {
+            case "boolean":
+                return value;
+            case "number":
+                return 1 === value;
+            case "string":
+                return /^(true|1|y|yes|on)$/i.test(value);
+            default:
+                return false
+        }
     }
 
     public ensure<K extends keyof T>(key: K, init: () => T[K]) {

@@ -12,6 +12,7 @@ before_install:
 
 install:
     - yarn install --pure-lockfile
+    - yarn audit
 
 before_script:
     - yarn --version
