@@ -1,6 +1,7 @@
 export function lzfCompress(bytes?: Uint8Array | null) {
+    const ByteArray = Uint8Array;
     if (bytes == null || !bytes.length) {
-        return new Uint8Array();
+        return new ByteArray();
     }
 
     const HLOG = 16;
@@ -22,6 +23,17 @@ export function lzfCompress(bytes?: Uint8Array | null) {
     let hval = FRST(bytes, ip);
     let op = 1;
     let lit = 0;
+
+    const fill = () => {
+        ++lit;
+        output[op++] = bytes[ip++];
+
+        if (lit === LZF_MAX_LIT) {
+            output[op - lit - 1] = (lit - 1) & 255; /* stop run */
+            lit = 0;
+            op++; /* start run */
+        }
+    };
 
     while (ip < inputLen - 2) {
         hval = NEXT(hval, bytes, ip);
@@ -65,7 +77,8 @@ export function lzfCompress(bytes?: Uint8Array | null) {
 
             output[op++] = off & 255;
 
-            lit = 0; op++; /* start run */
+            lit = 0;
+            op++; /* start run */
 
             ip += len + 1;
 
@@ -83,31 +96,19 @@ export function lzfCompress(bytes?: Uint8Array | null) {
             hval = NEXT(hval, bytes, ip);
             htab[IDX(hval)] = ip++;
         } else {
-            ++lit;
-            output[op++] = bytes[ip++];
-
-            if (lit === LZF_MAX_LIT) {
-                output[op - lit - 1] = (lit - 1) & 255; /* stop run */
-                lit = 0; op++; /* start run */
-            }
+            fill();
         }
     }
 
     while (ip < inputLen) {
-        ++lit;
-        output[op++] = bytes[ip++];
-
-        if (lit === LZF_MAX_LIT) {
-            output[op - lit - 1] = (lit - 1) & 255; /* stop run */
-            lit = 0; op++; /* start run */
-        }
+        fill();
     }
 
     if (lit !== 0) {
         output[op - lit - 1] = (lit - 1) & 255; /* stop run */
     }
 
-    const res = new Uint8Array(output.length);
+    const res = new ByteArray(output.length);
     res.set(output);
     return res;
 }
