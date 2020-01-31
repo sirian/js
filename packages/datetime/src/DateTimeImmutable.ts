@@ -78,7 +78,12 @@ export class DateTimeImmutable implements IDateTime {
         return modMonth === 1 ? (this.isLeapYear(year) ? 29 : 28) : (31 - modMonth % 7 % 2);
     }
 
-    public static from<T>(this: new(value: DateArg) => T, value: DateArg) {
+    public static create<T extends IDateTime>(this: new(value: DateArg) => T, value: DateArg = "now") {
+        return new this(value);
+    }
+
+    /** @deprecated */
+    public static from<T extends IDateTime>(this: new(value: DateArg) => T, value: DateArg = "now") {
         return new this(value);
     }
 

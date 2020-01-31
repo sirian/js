@@ -20,12 +20,12 @@ test.each(data)("DateTime.from(%o) === %o", (value, expected) => {
     const ts = date.getTime();
     const dt = new DateTime(value);
 
-    expect(DateTime.from(expected).timestampMs).toBe(ts);
-    expect(DateTime.from(date).timestampMs).toBe(ts);
-    expect(DateTime.from(dt).timestampMs).toBe(ts);
-    expect(DateTime.from(dt.toString()).timestampMs).toBe(ts);
-    expect(DateTime.from(dt.timestampMs).timestampMs).toBe(ts);
-    expect(DateTime.from(ts).timestampMs).toBe(ts);
+    expect(DateTime.create(expected).timestampMs).toBe(ts);
+    expect(DateTime.create(date).timestampMs).toBe(ts);
+    expect(DateTime.create(dt).timestampMs).toBe(ts);
+    expect(DateTime.create(dt.toString()).timestampMs).toBe(ts);
+    expect(DateTime.create(dt.timestampMs).timestampMs).toBe(ts);
+    expect(DateTime.create(ts).timestampMs).toBe(ts);
     expect(dt.year).toBe(date.getUTCFullYear());
     expect(dt.month).toBe(date.getUTCMonth() + 1);
     expect(dt.day).toBe(date.getUTCDate());

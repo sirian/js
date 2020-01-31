@@ -22,7 +22,7 @@ export class DateTimePeriod {
         this.interval = new DateTimeInterval(init.interval);
         this.limit = Var.isNumber(init.limit) ? Math.max(0, init.limit) : 1 / 0;
 
-        const nextDate = DateTime.from(0).add(this.interval);
+        const nextDate = DateTime.create(0).add(this.interval);
         this.direction = Math.sign(nextDate.timestampMs);
     }
 
@@ -65,7 +65,7 @@ export class DateTimePeriod {
             }
 
             yield date;
-            date = DateTime.from(date).add(interval);
+            date = DateTime.create(date).add(interval);
         }
     }
 }

@@ -22,6 +22,7 @@ export class DateTimeParser {
         if ("now" === text.toLowerCase()) {
             return Date.now();
         }
+
         const str = this.normalizeISO(text);
 
         return Date.parse(str);
