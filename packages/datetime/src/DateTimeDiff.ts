@@ -44,7 +44,7 @@ export class DateTimeDiff {
         }
         if (days < 0) {
             const daysInLastFullMonth = DateTime
-                .from(`${m2.year}-${m2.month}`)
+                .create(`${m2.year}-${m2.month}`)
                 .sub({months: -1})
                 .daysInMonth();
 

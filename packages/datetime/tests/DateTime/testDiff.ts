@@ -15,7 +15,7 @@ describe("", () => {
 
     test.each(data)(`DateTime("2000-01-31T23:30:00Z").add(%p) === %p`, (i: Partial<IDateInterval>, expected = i) => {
         const d1 = new DateTime("2000-01-31T23:30:00Z");
-        const d2 = DateTime.from(d1).add(i);
+        const d2 = DateTime.create(d1).add(i);
 
         const it = new DateTimeInterval(expected);
 
