@@ -73,7 +73,7 @@ export class Descriptor {
     public static read(desc: PropertyDescriptor | undefined, obj: any): any;
 
     public static read(desc: PropertyDescriptor | undefined, obj: any) {
-        if (desc) {
+        if (desc && !Var.isNullable(obj)) {
             const {get, value} = desc;
             return get ? Ref.apply(get, obj) : value;
         }
