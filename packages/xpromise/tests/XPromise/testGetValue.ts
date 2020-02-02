@@ -1,26 +1,34 @@
 import {XPromise} from "../../src";
 
 describe("XPromise.getValue", () => {
-    const expectError = (p: XPromise) => {
-        expect(() => p.getValue()).toThrow(new Error("XPromise is not settled yet"));
+    const pendingError = new Error("XPromise is not settled yet");
+
+    const expectError = (p: XPromise, error) => {
+        expect(() => p.getValue()).toThrow(error);
     };
 
     test("XPromise.resolve(T).getValue() === T", () => {
         expect(XPromise.resolve(3).getValue()).toBe(3);
     });
 
-    test("XPromise.reject(T).getValue() === T", () => {
-        const err = new Error();
-        expect(XPromise.reject(err).getValue()).toBe(err);
+    test("XPromise.reject(T).getValue() throws T", () => {
+        const err = new Error("Custom error");
+        expectError(XPromise.reject(err), err);
     });
 
     test("new XPromise().getValue() throws", () => {
-        expectError(new XPromise());
+        expectError(new XPromise(), pendingError);
+        expectError(XPromise.create(), pendingError);
     });
 
-    test("XPromise.resolve(promise).getValue() throws", () => {
-        expectError(XPromise.resolve(Promise.resolve()));
-        expectError(XPromise.resolve(Promise.reject()));
+    test("XPromise.resolve(native promise).getValue() throws", () => {
+        expectError(XPromise.resolve(Promise.resolve(1)), pendingError);
+        expectError(XPromise.resolve(Promise.reject()), pendingError);
+    });
+
+    test("XPromise.resolve(pending promise).getValue() throws", () => {
+        expectError(XPromise.resolve(new Promise(() => {})), pendingError);
+        expectError(XPromise.resolve(new XPromise()), pendingError);
     });
 
     test("(await XPromise.resolve(resloved<T>)).getValue() === T", async () => {
@@ -31,15 +39,22 @@ describe("XPromise.getValue", () => {
     });
 
     test("(await XPromise.resolve(rejected<T>)).getValue() === T", async () => {
-        const error = new Error();
+        const error = new Error("Foo");
         const promise = Promise.reject(error);
         const p1 = XPromise.resolve(promise);
-        await promise.catch(() => void 0);
 
-        expect(p1.getValue()).toBe(error);
-        const p2 = XPromise.resolve(promise);
-        expectError(p2);
+        expectError(p1, pendingError);
+
         await promise.catch(() => void 0);
-        expect(p2.getValue()).toBe(error);
+        expectError(p1, error);
+
+        const p2 = XPromise.resolve(promise);
+        const p3 = XPromise.resolve(p1);
+        expectError(p2, pendingError);
+        expectError(p3, error);
+
+        await promise.catch(() => 3);
+        expectError(p2, error);
+        expectError(p3, error);
     });
 });
