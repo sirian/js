@@ -70,6 +70,31 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         return this.create((resolve, reject) => reject(reason));
     }
 
+    // public static any<T extends any[]>(promises: T) {
+    //     return this.create<AwaitedArray<T>>((resolve, reject) => {
+    //         const length = promises.length;
+    //         if (!length) {
+    //             return resolve([] as any);
+    //         }
+    //
+    //         let rejectedCount = 0;
+    //         const errors: Partial<AwaitedArray<T>> = [] as any;
+    //
+    //         for (let i = 0; i < length; i++) {
+    //             const promise = promises[i];
+    //
+    //             const onRejected = (error: any) => {
+    //                 errors[i] = error;
+    //                 if (++rejectedCount === length) {
+    //                     reject(new AggregateError(errors));
+    //                 }
+    //             };
+    //
+    //             this.resolve(promise).then(resolve, onRejected);
+    //         }
+    //     });
+    // }
+
     public static all<T extends any[]>(promises: T) {
         return this.create<AwaitedArray<T>>((resolve, reject) => {
             const length = promises.length;
@@ -95,31 +120,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             }
         });
     }
-
-    // public static any<T extends any[]>(promises: T) {
-    //     return this.create<AwaitedArray<T>>((resolve, reject) => {
-    //         const length = promises.length;
-    //         if (!length) {
-    //             return resolve([] as any);
-    //         }
-    //
-    //         let rejectedCount = 0;
-    //         const errors: Partial<AwaitedArray<T>> = [] as any;
-    //
-    //         for (let i = 0; i < length; i++) {
-    //             const promise = promises[i];
-    //
-    //             const onRejected = (error: any) => {
-    //                 errors[i] = error;
-    //                 if (++rejectedCount === length) {
-    //                     reject(new AggregateError(errors));
-    //                 }
-    //             };
-    //
-    //             this.resolve(promise).then(resolve, onRejected);
-    //         }
-    //     });
-    // }
 
     public static allSettled<T extends any[]>(promises: T) {
         return this.wrap(() => {
@@ -207,10 +207,14 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public getValue() {
-        if (this.isPending()) {
-            throw new Error("XPromise is not settled yet");
+        switch (this.status) {
+            case PromiseStatus.REJECTED:
+                throw this.value;
+            case PromiseStatus.FULFILLED:
+                return this.value;
+            default:
+                throw new Error("XPromise is not settled yet");
         }
-        return this.value;
     }
 
     public then<R1 = T, R2 = never>(onFulfilled?: OnFulfilled<T, R1>, onRejected?: OnReject<R2>) {
