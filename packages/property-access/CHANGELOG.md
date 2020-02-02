@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.13](https://github.com/sirian/js/compare/@sirian/property-access@1.3.12...@sirian/property-access@1.3.13) (2020-02-02)
+
+**Note:** Version bump only for package @sirian/property-access
+
+
+
+
+
 ## [1.3.12](https://github.com/sirian/js/compare/@sirian/property-access@1.3.11...@sirian/property-access@1.3.12) (2019-12-26)
 
 **Note:** Version bump only for package @sirian/property-access

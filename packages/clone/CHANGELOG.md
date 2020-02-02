@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.35](https://github.com/sirian/js/compare/@sirian/clone@1.4.34...@sirian/clone@1.4.35) (2020-02-02)
+
+**Note:** Version bump only for package @sirian/clone
+
+
+
+
+
 ## [1.4.34](https://github.com/sirian/js/compare/@sirian/clone@1.4.33...@sirian/clone@1.4.34) (2019-12-26)
 
 **Note:** Version bump only for package @sirian/clone
