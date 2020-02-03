@@ -19,7 +19,7 @@ before_script:
 
 script:
     - yarn ci:build
-    - lerna updated
+    - lerna updated -l
 
 before_deploy:
     - git config --global user.email ${GITHUB_EMAIL}
