@@ -93,7 +93,7 @@ export class ParameterBag<T extends Record<string | number, any>> {
             case "string":
                 return /^(true|1|y|yes|on)$/i.test(value);
             default:
-                return false
+                return false;
         }
     }
 
