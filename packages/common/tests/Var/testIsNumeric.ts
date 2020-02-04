@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isNumeric} from "../../src";
 
 describe("", () => {
     const validData = ["-10",
@@ -58,6 +58,6 @@ describe("", () => {
     ];
 
     test.each(data)("Var.isNumeric(%o) === %o", (value, expected) => {
-        expect(Var.isNumeric(value)).toBe(expected);
+        expect(isNumeric(value)).toBe(expected);
     });
 });

@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isPromiseLike} from "@sirian/common";
 import {ListenerCallback, ListenerObj, ListenerSet} from "@sirian/event-emitter";
 import {XPromise} from "@sirian/xpromise";
 import {Event} from "./Event";
@@ -19,7 +19,7 @@ export class EventDispatcher<E extends Event = any> extends ListenerSet<[E]> {
             try {
                 for (const obj of listeners) {
                     const result = this.doDispatch(obj, event);
-                    if (!obj.passive && Var.isPromiseLike(result)) {
+                    if (!obj.passive && isPromiseLike(result)) {
                         await result;
                     }
                 }

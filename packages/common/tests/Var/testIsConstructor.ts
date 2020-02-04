@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isConstructor} from "../../src";
 
 describe("Fn", () => {
     function Foo() {}
@@ -32,6 +32,6 @@ describe("Fn", () => {
     ];
 
     test.each(data)("Var.isConstructor(%O) === %p", (value, expected) => {
-        expect(Var.isConstructor(value)).toBe(expected);
+        expect(isConstructor(value)).toBe(expected);
     });
 });

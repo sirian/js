@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isArray, isNullable, isString, Var} from "@sirian/common";
 import {InvalidArgumentError, LogicError} from "../Error";
 import {IParameterInit, Parameter} from "./Parameter";
 
@@ -33,8 +33,8 @@ export class Option<T = any> extends Parameter<T> {
 
     public static resolveArgs<T>(args: any): IOptionInit<T> {
         const [a1, a2, a3] = args;
-        if (Var.isString(a1)) {
-            if (Var.isString(a2)) {
+        if (isString(a1)) {
+            if (isString(a2)) {
                 return {name: a1, shortcut: a2, ...a3};
             } else {
                 return {name: a1, ...a2};
@@ -44,11 +44,11 @@ export class Option<T = any> extends Parameter<T> {
     }
 
     public static parseShortcuts(shortcut?: string | string[]) {
-        if (Var.isNullable(shortcut)) {
+        if (isNullable(shortcut)) {
             return [];
         }
 
-        const shortcuts = Var.isArray(shortcut) ? shortcut : shortcut.split("|");
+        const shortcuts = isArray(shortcut) ? shortcut : shortcut.split("|");
 
         const result = new Set<string>();
 
@@ -120,7 +120,7 @@ export class Option<T = any> extends Parameter<T> {
                 return [];
             }
 
-            if (!Var.isArray(defaultValue)) {
+            if (!isArray(defaultValue)) {
                 throw new LogicError("A default value for an multiple option must be an array.");
             }
         }

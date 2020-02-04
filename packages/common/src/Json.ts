@@ -1,5 +1,5 @@
 import {JSONValue} from "@sirian/ts-extra-types";
-import {Var} from "./Var";
+import {isSome, Var} from "./Var";
 
 export class Json {
     public static stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
@@ -19,7 +19,7 @@ export class Json {
             return null;
         }
 
-        if (Var.isSome(text, [undefined, "", "undefined"])) {
+        if (isSome(text, [undefined, "", "undefined"])) {
             return undefined;
         }
 

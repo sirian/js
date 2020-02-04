@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isInstanceOf} from "@sirian/common";
 import {Mixin} from "../../src";
 
 describe("", () => {
@@ -9,7 +9,7 @@ describe("", () => {
     test("instance of MixinFn should be instanceof MixinFn", () => {
         const obj = new Timestampable();
         expect(obj).toBeInstanceOf(Timestampable);
-        expect(Var.isInstanceOf(obj, Timestampable)).toBe(true);
+        expect(isInstanceOf(obj, Timestampable)).toBe(true);
         expect(Mixin.has(obj, Timestampable)).toBe(true);
     });
 

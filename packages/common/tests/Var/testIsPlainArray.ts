@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isPlainArray} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -14,6 +14,6 @@ describe("", () => {
     test.each(data)("Var.isPlainArray(%s) === %o", (code, expected) => {
         const value = Util.eval(code);
 
-        expect(Var.isPlainArray(value)).toBe(expected);
+        expect(isPlainArray(value)).toBe(expected);
     });
 });

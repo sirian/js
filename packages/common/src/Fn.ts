@@ -1,7 +1,7 @@
-import {Args, Drop, Func, Func0, Func1, Get, Return} from "@sirian/ts-extra-types";
+import {Args, Drop, Func, Func0, Func1, Get, InverseTypeGuard, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Ref} from "./Ref";
-import {Var} from "./Var";
+import {isFunction, isPromiseLike} from "./Var";
 
 export class Fn {
     public static stringify(v: any) {
@@ -57,9 +57,9 @@ export class Fn {
     public static async tryAsync(fn: Func0, onError?: any) {
         try {
             const result = fn();
-            return Var.isPromiseLike(result) ? await result : result;
+            return isPromiseLike(result) ? await result : result;
         } catch (error) {
-            return Var.isFunction(onError) ? onError(error) : onError;
+            return isFunction(onError) ? onError(error) : onError;
         }
     }
 
@@ -69,7 +69,7 @@ export class Fn {
         try {
             return fn();
         } catch (error) {
-            return Var.isFunction(onError) ? onError(error) : onError;
+            return isFunction(onError) ? onError(error) : onError;
         }
     }
 
@@ -77,5 +77,11 @@ export class Fn {
         return new Proxy(ctor, {
             apply: (target: any, thisArg, args) => target[method](...args),
         }) as T & T[K];
+    }
+
+    public static inverse<F extends Func>(fn: F) {
+        return function(this: any, ...args) {
+            return !Ref.apply(fn, this, args);
+        } as InverseTypeGuard<F>;
     }
 }

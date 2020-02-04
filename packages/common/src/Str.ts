@@ -1,7 +1,7 @@
 import {Obj} from "./Obj";
 import {Rgx} from "./Rgx";
 import {Unicode} from "./Unicode";
-import {Var} from "./Var";
+import {isFunction, isString, Var} from "./Var";
 
 export const enum StrSide {
     LEFT = "left",
@@ -56,8 +56,8 @@ export class Str {
     }
 
     public static isEqual(a?: string, b?: string, sensitive = true) {
-        return Var.isString(a)
-            && Var.isString(b)
+        return isString(a)
+            && isString(b)
             && (sensitive ? a === b : a.toUpperCase() === b.toUpperCase());
     }
 
@@ -164,7 +164,7 @@ export class Str {
 
         return str.replace(re, (key) => {
             const v = pairs[key];
-            return Var.isFunction(v) ? v(key) : v;
+            return isFunction(v) ? v(key) : v;
         });
     }
 

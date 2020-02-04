@@ -1,9 +1,9 @@
-import {Var} from "./Var";
+import {isArray, isEqual} from "./Var";
 import {XSet} from "./XSet";
 
 export class Arr {
     public static removeItem<T>(array: T[], value: T, limit?: number) {
-        return Arr.remove(array, (item) => Var.isEqual(item, value), limit);
+        return Arr.remove(array, (item) => isEqual(item, value), limit);
     }
 
     public static remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
@@ -44,7 +44,7 @@ export class Arr {
     }
 
     public static cast<T>(value: T | T[]): T[] {
-        return Var.isArray(value) ? value : [value];
+        return isArray(value) ? value : [value];
     }
 
     public static removeDuplicates<T>(array: T[]) {

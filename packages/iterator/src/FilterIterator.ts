@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isFunction} from "@sirian/common";
 import {BaseIterator} from "./BaseIterator";
 import {Filter, IFilterCallback} from "./Filter";
 import {AnyIterable} from "./Iter";
@@ -9,7 +9,7 @@ export class FilterIterator<V> extends BaseIterator<V> {
 
     constructor(target: AnyIterable<V>, filter: Filter<V>) {
         super();
-        this.callback = Var.isFunction(filter) ? filter : filter.test.bind(filter);
+        this.callback = isFunction(filter) ? filter : filter.test.bind(filter);
         this.target = target;
     }
 

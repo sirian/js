@@ -1,4 +1,4 @@
-// import {Arr, Obj, Var} from "@sirian/common";
+// import {Arr, Obj, Var,isNull,isUndefined,isNullable,getXType,isXType,isType,isSome,isNumber,isBigInt,isBoolean,isString,isPropertyKey,isPrimitive,isSymbol,isFunction,isConstructor,isTruthy,isFalsy,isObject,isNumeric,isPromiseLike,isObjectOrFunction,isInstanceOf,isEqualNaN,isSubclassOf,isSameType,isBetween,isArray,isArrayLike,isPlain,isPlainArray,isRegExp,stringify,isAsyncIterable,isIterable,isEqual,isPlainObject} from "@sirian/common";
 // import {LogRecord} from "../LogRecord";
 // import {TagToken} from "../parser/token";
 // import {ConsoleFormatter, ConsoleFormatterInit} from "./ConsoleFormatter";

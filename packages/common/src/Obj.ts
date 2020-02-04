@@ -9,7 +9,7 @@ import {
     Wrap,
 } from "@sirian/ts-extra-types";
 import {ProtoChainOptions, Ref} from "./Ref";
-import {Var} from "./Var";
+import {isArray, isFunction, isNullable, isObjectOrFunction, isPrimitive} from "./Var";
 import {XSet} from "./XSet";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -33,7 +33,7 @@ export class Obj {
     public static assign(target: any, ...sources: any[]) {
         const keys = new XSet(Obj.keys(target));
         for (const source of sources) {
-            if (Var.isNullable(source)) {
+            if (isNullable(source)) {
                 continue;
             }
             keys.add(...Obj.keys(source));
@@ -75,7 +75,7 @@ export class Obj {
                 if ("__proto__" === key) {
                     continue;
                 }
-                if (Var.isFunction(desc.get)) {
+                if (isFunction(desc.get)) {
                     keys.add(key as keyof T);
                 }
             }
@@ -91,7 +91,7 @@ export class Obj {
     }
 
     public static clear<T extends object>(target: T): Partial<T> {
-        if (Var.isArray(target)) {
+        if (isArray(target)) {
             target.length = 0;
         }
 
@@ -108,11 +108,11 @@ export class Obj {
     }
 
     public static wrap<T>(value: T): object & Wrap<T> {
-        return Var.isObjectOrFunction(value) ? value : Object(value);
+        return isObjectOrFunction(value) ? value : Object(value);
     }
 
     public static toPrimitive<T>(target: T): ToPrimitive<T> {
-        if (Var.isPrimitive(target)) {
+        if (isPrimitive(target)) {
             return target as ToPrimitive<T>;
         }
 

@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isObject} from "@sirian/common";
 
 export class Transition<S extends string = any> {
     public readonly name: string;
@@ -20,7 +20,7 @@ export class Transition<S extends string = any> {
     }
 
     protected normalize(value: S | Iterable<S>) {
-        if (Var.isObject(value)) {
+        if (isObject(value)) {
             return [...value];
         }
 

@@ -1,4 +1,4 @@
-import {Descriptor, DescriptorType, Obj, Ref, Var} from "@sirian/common";
+import {Descriptor, DescriptorType, isEqual, isPrimitive, Obj, Ref} from "@sirian/common";
 import {CloneOptions, Cloner, ValidateError} from "./index";
 
 export class CloneValidator {
@@ -35,13 +35,13 @@ export class CloneValidator {
     }
 
     protected assertEqual(src: any, clone: any) {
-        if (!Var.isEqual(src, clone)) {
+        if (!isEqual(src, clone)) {
             throw new Error(`Values mismatch. Expected ${src}, given ${clone} `);
         }
     }
 
     protected assertNotEqual(src: any, clone: any) {
-        if (Var.isEqual(src, clone)) {
+        if (isEqual(src, clone)) {
             throw new Error(`Values equal, but should not. Given ${clone} `);
         }
     }
@@ -55,7 +55,7 @@ export class CloneValidator {
             throw new Error(`Types mismatch. Expected ${type1}, given ${type2}`);
         }
 
-        if (Var.isPrimitive(src) || Var.isPrimitive(clone) || !this.cloner.supports(src)) {
+        if (isPrimitive(src) || isPrimitive(clone) || !this.cloner.supports(src)) {
             return this.assertEqual(src, clone);
         }
 
@@ -84,7 +84,7 @@ export class CloneValidator {
     protected validateStructure(src: object, clone: object) {
         const stack = this.stack;
 
-        if (stack.length > this.maxDepth || Var.isEqual(src, clone)) {
+        if (stack.length > this.maxDepth || isEqual(src, clone)) {
             return;
         }
 
@@ -120,10 +120,10 @@ export class CloneValidator {
 
         switch (type1) {
             case DescriptorType.ACCESSOR:
-                if (!Var.isEqual(desc1!.get, desc2!.get)) {
+                if (!isEqual(desc1!.get, desc2!.get)) {
                     throw new Error(`Descriptor "get" mismatch`);
                 }
-                if (!Var.isEqual(desc1!.set, desc2!.set)) {
+                if (!isEqual(desc1!.set, desc2!.set)) {
                     throw new Error(`Descriptor "set" mismatch`);
                 }
                 break;
@@ -137,7 +137,7 @@ export class CloneValidator {
         for (const k of ["writable", "configurable", "enumerable"] as const) {
             const v1 = desc1![k];
             const v2 = desc2![k];
-            if (!Var.isEqual(v1, v2)) {
+            if (!isEqual(v1, v2)) {
                 throw new Error(`Descriptor "${k}" mismatch. Expected ${v1}, given ${v2}`);
             }
         }

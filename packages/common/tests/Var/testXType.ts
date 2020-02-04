@@ -1,5 +1,5 @@
 import {XTypeName} from "@sirian/ts-extra-types";
-import {Var} from "../../src";
+import {getXType} from "../../src";
 
 describe("Var.xtype", () => {
     const data: Array<[any, XTypeName]> = [
@@ -17,6 +17,6 @@ describe("Var.xtype", () => {
     ];
 
     test.each(data)("Var.xtype(%o) === %o", (value, expected) => {
-        expect(Var.getXType(value)).toBe(expected);
+        expect(getXType(value)).toBe(expected);
     });
 });

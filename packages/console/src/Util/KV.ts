@@ -1,4 +1,4 @@
-import {Obj, Ref, Var} from "@sirian/common";
+import {isArray, isNullable, isString, Obj, Ref} from "@sirian/common";
 import {IterableEntries, IterableKeys, IterableValues, ObjEntryOf, ObjKeyOf, ObjValueOf} from "@sirian/ts-extra-types";
 
 type KVValues<T> =
@@ -21,14 +21,14 @@ type KVKeys<T> =
 
 export class KV {
     public static values<T>(value: T): KVValues<T> {
-        if (Var.isNullable(value)) {
+        if (isNullable(value)) {
             return [] as KVValues<T>;
         }
         if (Ref.hasMethod(value, "values")) {
             return [...value.values()] as KVValues<T>;
         }
 
-        if (Var.isArray(value)) {
+        if (isArray(value)) {
             return [...value] as KVValues<T>;
         }
 
@@ -36,10 +36,10 @@ export class KV {
     }
 
     public static keys<T>(value: T): KVKeys<T> {
-        if (Var.isNullable(value)) {
+        if (isNullable(value)) {
             return [] as KVKeys<T>;
         }
-        if (Var.isString(value)) {
+        if (isString(value)) {
             return KV.keys([...value]) as KVKeys<T>;
         }
 
@@ -51,10 +51,10 @@ export class KV {
     }
 
     public static entries<T>(value: T): KVEntries<T> {
-        if (Var.isNullable(value)) {
+        if (isNullable(value)) {
             return [] as KVEntries<T>;
         }
-        if (Var.isString(value)) {
+        if (isString(value)) {
             return KV.entries([...value]) as KVEntries<T>;
         }
         if (Ref.hasMethod(value, "entries")) {
@@ -65,7 +65,7 @@ export class KV {
     }
 
     public static size<T>(value: T) {
-        if (Var.isNullable(value)) {
+        if (isNullable(value)) {
             return 0;
         }
         if (Ref.has(value, "length")) {

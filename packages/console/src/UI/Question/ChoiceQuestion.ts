@@ -1,4 +1,4 @@
-import {Str, Var} from "@sirian/common";
+import {isArray, Str, Var} from "@sirian/common";
 import {InvalidArgumentError} from "../../Error";
 import {KV, StrUtil} from "../../Util";
 import {AbstractQuestion, IQuestionOptions} from "./AbstractQuestion";
@@ -15,7 +15,7 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
             const choices = this.getChoices();
             const autocomplete = [];
 
-            if (!Var.isArray(choices)) {
+            if (!isArray(choices)) {
                 const keys = KV.keys(choices);
                 autocomplete.push(...keys);
             }

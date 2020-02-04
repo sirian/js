@@ -1,4 +1,4 @@
-import {Var} from "./Var";
+import {isNullable, isRegExp, isString, Var} from "./Var";
 import {XSet} from "./XSet";
 
 const escapeRe = /[|\\{}()[\]^$+*?.]/g;
@@ -13,7 +13,7 @@ export class Rgx {
     public static create(pattern: string | RegExp, flags?: string): RegExp;
 
     public static create(pattern: string, options: string | Partial<RgxInit> = "") {
-        if (Var.isString(options)) {
+        if (isString(options)) {
             return Rgx.create(pattern, {flags: options});
         }
 
@@ -21,9 +21,9 @@ export class Rgx {
 
         const resFlags = new XSet<string>();
 
-        if (!Var.isNullable(flags)) {
+        if (!isNullable(flags)) {
             resFlags.add(...flags);
-        } else if (Var.isRegExp(pattern)) {
+        } else if (isRegExp(pattern)) {
             resFlags.add(...pattern.flags);
         }
 
@@ -31,7 +31,7 @@ export class Rgx {
             resFlags.add(...addFlags);
         }
 
-        const source = Var.isRegExp(pattern) ? pattern.source : pattern;
+        const source = isRegExp(pattern) ? pattern.source : pattern;
 
         return new RegExp(source, resFlags.toArray().join(""));
     }

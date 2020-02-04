@@ -1,4 +1,4 @@
-import {Obj, Ref, Var} from "@sirian/common";
+import {isPropertyKey, Obj, Ref} from "@sirian/common";
 import {ParameterNotFoundError} from "./Error";
 
 export class ParameterBag<T extends Record<string | number, any>> {
@@ -17,7 +17,7 @@ export class ParameterBag<T extends Record<string | number, any>> {
     public set(params?: Partial<T>): this;
     public set<K extends keyof T>(key: K, value: T[K]): this;
     public set(paramsOrKey: any, value?: any) {
-        if (Var.isPropertyKey(paramsOrKey)) {
+        if (isPropertyKey(paramsOrKey)) {
             this.params[paramsOrKey as keyof T] = value;
         } else {
             Obj.assign(this.params, paramsOrKey);

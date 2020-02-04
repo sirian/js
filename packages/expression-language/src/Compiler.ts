@@ -1,4 +1,4 @@
-import {Obj, Str, Var} from "@sirian/common";
+import {isArray, isObject, isPrimitive, isString, Obj, Str} from "@sirian/common";
 import {IExpressionFunction} from "./IExpressionFunction";
 import {Node} from "./nodes";
 
@@ -55,15 +55,15 @@ export class Compiler {
     }
 
     public repr<T>(value: T) {
-        if (Var.isString(value)) {
+        if (isString(value)) {
             return this.string(value);
         }
 
-        if (Var.isPrimitive(value)) {
+        if (isPrimitive(value)) {
             return this.raw(value);
         }
 
-        if (Var.isArray(value)) {
+        if (isArray(value)) {
             this.raw("[");
             let first = false;
 
@@ -80,7 +80,7 @@ export class Compiler {
             return this;
         }
 
-        if (Var.isObject(value)) {
+        if (isObject(value)) {
             this.raw("{");
             let first = false;
 

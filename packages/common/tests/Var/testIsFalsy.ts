@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isFalsy, isTruthy} from "../../src";
 
 describe("Var.isFalsy", () => {
     const falsy = [-0, 0, 0.0, 0n, "", NaN, false, null, undefined];
@@ -10,12 +10,12 @@ describe("Var.isFalsy", () => {
     ];
 
     test.each(falsy)("Var.isFalsy(%o) === false", (value) => {
-        expect(Var.isFalsy(value)).toBe(true);
-        expect(Var.isTruthy(value)).toBe(false);
+        expect(isFalsy(value)).toBe(true);
+        expect(isTruthy(value)).toBe(false);
     });
 
     test.each(truthy)("Var.isFalsy(%o) === true", (value) => {
-        expect(Var.isFalsy(value)).toBe(false);
-        expect(Var.isTruthy(value)).toBe(true);
+        expect(isFalsy(value)).toBe(false);
+        expect(isTruthy(value)).toBe(true);
     });
 });

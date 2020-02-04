@@ -1,4 +1,4 @@
-import {Obj, Ref, Var} from "@sirian/common";
+import {isString, Obj, Ref} from "@sirian/common";
 import {SharedStore} from "@sirian/shared-store";
 
 export class ObjectRef {
@@ -30,7 +30,7 @@ export class ObjectRef {
         const ctor = Ref.getConstructor(obj);
         if (ctor) {
             const name = ctor.name;
-            if (Var.isString(name) && name) {
+            if (isString(name) && name) {
                 return name;
             }
         }

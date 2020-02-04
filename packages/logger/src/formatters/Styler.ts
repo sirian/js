@@ -1,4 +1,4 @@
-import {Obj, Ref, Str, Var} from "@sirian/common";
+import {isObject, Obj, Ref, Str, Var} from "@sirian/common";
 import {StyleInit} from "./StyleStack";
 
 export class Styler {
@@ -10,7 +10,7 @@ export class Styler {
     }
 
     public static normalizeStyle(style?: string | Record<string, string | number>): string {
-        if (!Var.isObject(style)) {
+        if (!isObject(style)) {
             return Var.stringify(style);
         }
 

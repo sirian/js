@@ -66,6 +66,11 @@ export type Predicate<T = any> = (value: T) => boolean;
 
 export type TypeGuard<U extends V = any, V = any, R extends any[] = any[]> = (arg: V, ...rest: R) => arg is U;
 
+export type InverseTypeGuard<F extends Func> =
+    F extends TypeGuard<infer U, infer V, infer R> ? TypeGuard<Exclude<V, U>, V, R> :
+    F extends Func<any, infer A, infer T> ? Func<boolean, A, T> :
+    never;
+
 export type GuardedType<T extends Func> = T extends TypeGuard<infer R> ? R : never;
 
 export type IsExact<X, Y> = And<IsExtendsStrict<X, Y>, IsExtendsStrict<Y, X>>;

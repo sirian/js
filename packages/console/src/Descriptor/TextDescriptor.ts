@@ -1,4 +1,4 @@
-import {Arr, Var} from "@sirian/common";
+import {Arr, isArray, Var} from "@sirian/common";
 import {CommandDefinition} from "../Command";
 import {Formatter} from "../Formatter";
 import {Argument, InputDefinition, Option} from "../Input";
@@ -15,7 +15,7 @@ export class TextDescriptor extends Descriptor {
             argument.getDescription(),
         ];
 
-        if (Var.isArray(defaultValue) || StrUtil.width(defaultValue)) {
+        if (isArray(defaultValue) || StrUtil.width(defaultValue)) {
             desc.push(`<comment> [default: ${this.formatDefaultValue(defaultValue)}]</comment>`);
         }
 
@@ -27,7 +27,7 @@ export class TextDescriptor extends Descriptor {
 
         const desc = [option.getDescription()];
 
-        if (option.acceptValue() && undefined !== defaultValue && (!Var.isArray(defaultValue) || defaultValue.length)) {
+        if (option.acceptValue() && undefined !== defaultValue && (!isArray(defaultValue) || defaultValue.length)) {
             desc.push(`<comment> [default: ${this.formatDefaultValue(defaultValue)}]</comment>`);
         }
 
@@ -239,7 +239,7 @@ export class TextDescriptor extends Descriptor {
     }
 
     protected formatDefaultValue(defaultValue: undefined | string | string[]) {
-        if (Var.isArray(defaultValue)) {
+        if (isArray(defaultValue)) {
             defaultValue = defaultValue.map((value) => Formatter.escape(value));
             return JSON.stringify(defaultValue).replace(/\\\\/g, "\\");
         } else {
