@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isRegExp} from "@sirian/common";
 import {File} from "@sirian/filesystem";
 import {IFilter} from "@sirian/iterator";
 import {Glob} from "./Glob";
@@ -7,7 +7,7 @@ export class FilenameFilter implements IFilter<File> {
     protected patterns: RegExp[];
 
     constructor(patterns: Array<string | RegExp>) {
-        this.patterns = patterns.map((pattern) => Var.isRegExp(pattern) ? pattern : Glob.toRegex(pattern));
+        this.patterns = patterns.map((pattern) => isRegExp(pattern) ? pattern : Glob.toRegex(pattern));
     }
 
     public test(file: File) {

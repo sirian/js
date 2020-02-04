@@ -1,5 +1,5 @@
 import {Cloner} from "@sirian/clone";
-import {Obj, Ref, Var} from "@sirian/common";
+import {isPlainObject, Obj, Ref} from "@sirian/common";
 
 export interface MergeOptions {
     clone?: boolean;
@@ -34,7 +34,7 @@ export class Merge {
     protected static doMerge(target: any, source: any, options: Required<MergeOptions>) {
         const {clone, cloner, maxDepth, allowAdd} = options;
 
-        if (!Var.isPlainObject(source)) {
+        if (!isPlainObject(source)) {
             if (clone) {
                 source = cloner.clone(source);
             }
@@ -55,7 +55,7 @@ export class Merge {
             const value = target[key];
             const newValue = source[key];
 
-            if (maxDepth > 0 && Var.isPlainObject(value) && Var.isPlainObject(newValue)) {
+            if (maxDepth > 0 && isPlainObject(value) && isPlainObject(newValue)) {
                 const childOptions = {...options};
                 childOptions.maxDepth--;
 

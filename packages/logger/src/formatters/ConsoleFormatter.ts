@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isInstanceOf, Var} from "@sirian/common";
 import {LogRecord} from "../LogRecord";
 import {FormatContext} from "./FormatContext";
 import {LineFormatter, LineFormatterInit} from "./LineFormatter";
@@ -23,7 +23,7 @@ export class ConsoleFormatter extends LineFormatter {
         const args = [];
 
         for (const v of values) {
-            if (Var.isInstanceOf(v, Placeholder)) {
+            if (isInstanceOf(v, Placeholder)) {
                 const type = v.type;
                 const value = v.value;
 

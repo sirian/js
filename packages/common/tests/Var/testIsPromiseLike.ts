@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isPromiseLike} from "../../src";
 
 describe("", () => {
     const data: Array<[any, boolean]> = [
@@ -13,6 +13,6 @@ describe("", () => {
     ];
 
     test.each(data)("Var.isPromiseLike(%o) === %o", (value, expected) => {
-        expect(Var.isPromiseLike(value)).toBe(expected);
+        expect(isPromiseLike(value)).toBe(expected);
     });
 });

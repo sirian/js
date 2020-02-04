@@ -1,6 +1,6 @@
 import {Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
 import {Obj, TypedPropertyDescriptorMap} from "./Obj";
-import {Var} from "./Var";
+import {isConstructor, isFunction, isNullable, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Var";
 import {XSet} from "./XSet";
 
 export interface ProtoChainOptions {
@@ -11,7 +11,7 @@ export interface ProtoChainOptions {
 
 export class Ref {
     public static getPrototype(target: any) {
-        if (!Var.isNullable(target)) {
+        if (!isNullable(target)) {
             target = Obj.wrap(target);
         }
         return Reflect.getPrototypeOf(target);
@@ -22,15 +22,15 @@ export class Ref {
     }
 
     public static ownNames<T>(target: T) {
-        return Ref.ownKeys(target).filter(Var.isString) as Array<Extract<keyof T, string>>;
+        return Ref.ownKeys(target).filter(function(value) { return isString(value); }) as Array<Extract<keyof T, string>>;
     }
 
     public static ownSymbols<S extends symbol>(target: { [P in S]: any }) {
-        return Ref.ownKeys(target).filter(Var.isSymbol);
+        return Ref.ownKeys(target).filter(function(value) { return isSymbol(value); });
     }
 
     public static ownKeys<T>(target: T) {
-        return Var.isNullable(target)
+        return isNullable(target)
                ? []
                : Reflect.ownKeys(Obj.wrap(target)) as Array<keyof T>;
     }
@@ -78,22 +78,22 @@ export class Ref {
     public static getConstructor<T extends any>(target: T): Newable<T> | undefined {
         const ctor = target && target.constructor;
 
-        if (Var.isConstructor(ctor)) {
+        if (isConstructor(ctor)) {
             return ctor;
         }
     }
 
     public static isWritable(target: any, property: PropertyKey) {
-        if (Var.isNullable(target)) {
+        if (isNullable(target)) {
             return false;
         }
 
         const desc = Ref.descriptor(target, property);
         if (!desc) {
-            return Var.isPrimitive(target) || Object.isExtensible(target);
+            return isPrimitive(target) || Object.isExtensible(target);
         }
 
-        return desc.writable || Var.isFunction(desc.set);
+        return desc.writable || isFunction(desc.set);
     }
 
     public static construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
@@ -115,14 +115,14 @@ export class Ref {
 
         let current: any = target;
 
-        while (!Var.isNullable(current)) {
+        while (!isNullable(current)) {
             if (maxDepth && result.size >= maxDepth) {
                 break;
             }
             if (result.has(current) || stopAt === current) {
                 break;
             }
-            if (!Var.isPrimitive(current)) {
+            if (!isPrimitive(current)) {
                 result.add(current);
             }
             current = Ref.getPrototype(current);
@@ -136,22 +136,22 @@ export class Ref {
     }
 
     public static hasOwn<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-        return !Var.isNullable(target) && Object.prototype.hasOwnProperty.call(target, key);
+        return !isNullable(target) && Object.prototype.hasOwnProperty.call(target, key);
     }
 
     public static has<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-        return !Var.isNullable(target) && (key in Obj.wrap(target));
+        return !isNullable(target) && (key in Obj.wrap(target));
     }
 
     public static hasMethod<T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> {
-        return Var.isNullable(target) ? false : Var.isFunction((target as any)[key]);
+        return isNullable(target) ? false : isFunction((target as any)[key]);
     }
 
     public static get<T, K extends keyof T>(target: T, key: K): T[K];
     public static get<V, K extends PropertyKey>(target: { [P in K]: V }, key: K): V;
     public static get(target: any, key: PropertyKey): any;
     public static get(target: any, key: any) {
-        if (!Var.isNullable(target)) {
+        if (!isNullable(target)) {
             return target[key];
         }
     }
@@ -160,10 +160,10 @@ export class Ref {
     public static set<V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
     public static set(target: any, key: PropertyKey, value: any): boolean;
     public static set(target: any, key: PropertyKey, value: any) {
-        return Var.isObjectOrFunction(target) && Reflect.set(target, key, value);
+        return isObjectOrFunction(target) && Reflect.set(target, key, value);
     }
 
     public static delete<T>(target: T, key: (keyof T) | PropertyKey) {
-        return Var.isObjectOrFunction(target) && Reflect.deleteProperty(target, key);
+        return isObjectOrFunction(target) && Reflect.deleteProperty(target, key);
     }
 }

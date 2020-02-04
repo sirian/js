@@ -1,11 +1,11 @@
 import {Unicode} from "./Unicode";
-import {Var} from "./Var";
+import {isEqual, isFunction, isInstanceOf, isNumber, isObject, isPrimitive} from "./Var";
 
 export type ArrBufTarget = ArrayBufferLike | ArrayBufferView | string;
 
 export class ArrBuf {
     public static isBuffer(value: any): value is ArrayBuffer {
-        return Var.isInstanceOf(value, ArrayBuffer);
+        return isInstanceOf(value, ArrayBuffer);
     }
 
     public static isView(arg: any): arg is ArrayBufferView {
@@ -13,7 +13,7 @@ export class ArrBuf {
     }
 
     public static getBuffer(arg: ArrBufTarget) {
-        if (Var.isPrimitive(arg)) {
+        if (isPrimitive(arg)) {
             return Unicode.stringToBytes(arg).buffer;
         }
 
@@ -32,14 +32,14 @@ export class ArrBuf {
     }
 
     public static isBufferLike(arg: any): arg is ArrayBufferLike {
-        return Var.isObject(arg) && Var.isNumber(arg.byteLength) && Var.isFunction(arg.slice);
+        return isObject(arg) && isNumber(arg.byteLength) && isFunction(arg.slice);
     }
 
     public static isEqual(t1: ArrBufTarget, t2: ArrBufTarget) {
         const buf1 = ArrBuf.getBuffer(t1);
         const buf2 = ArrBuf.getBuffer(t2);
 
-        if (Var.isEqual(buf1, buf2)) {
+        if (isEqual(buf1, buf2)) {
             return true;
         }
 

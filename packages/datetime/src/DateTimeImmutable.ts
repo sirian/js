@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isInstanceOf, isString} from "@sirian/common";
 import {DateTimeDiff} from "./DateTimeDiff";
 import {DateTimeFormatter} from "./DateTimeFormatter";
 import {DateTimeInterval} from "./DateTimeInterval";
@@ -26,9 +26,9 @@ export class DateTimeImmutable implements IDateTime {
 
     constructor(value: DateArg = "now") {
         let ms: number;
-        if (Var.isInstanceOf(value, DateTimeImmutable)) {
+        if (isInstanceOf(value, DateTimeImmutable)) {
             ms = value.timestampMs;
-        } else if (Var.isString(value)) {
+        } else if (isString(value)) {
             ms = DateTimeParser.parse(value);
         } else {
             ms = +value;

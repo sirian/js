@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isPlainObject} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -19,6 +19,6 @@ describe("", () => {
     test.each(data)("Var.isPlainObject(%s) === %o", (code, expected) => {
         const value = Util.eval(code);
 
-        expect(Var.isPlainObject(value)).toBe(expected);
+        expect(isPlainObject(value)).toBe(expected);
     });
 });

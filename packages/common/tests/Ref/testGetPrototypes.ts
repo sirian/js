@@ -1,4 +1,4 @@
-import {Ref, Var} from "../../src";
+import {isObjectOrFunction, Ref} from "../../src";
 
 describe("Ref.getPrototypes", () => {
     class Foo {}
@@ -32,7 +32,7 @@ describe("Ref.getPrototypes", () => {
     ];
 
     for (const [target, chain] of data) {
-        if (Var.isObjectOrFunction(target)) {
+        if (isObjectOrFunction(target)) {
             chain.unshift(target);
         }
     }

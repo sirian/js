@@ -1,4 +1,4 @@
-import {Obj, Ref, Var} from "@sirian/common";
+import {isPlainObject, isPrimitive, Obj, Ref} from "@sirian/common";
 import {Instance} from "@sirian/ts-extra-types";
 import {cloneSymbol} from "./Cloneable";
 import {CloneContext} from "./CloneContext";
@@ -85,10 +85,10 @@ export class Cloner implements ICloner<any> {
     }
 
     public supports(value: any) {
-        if (Var.isPrimitive(value)) {
+        if (isPrimitive(value)) {
             return true;
         }
-        if (Var.isPlainObject(value)) {
+        if (isPlainObject(value)) {
             return true;
         }
 

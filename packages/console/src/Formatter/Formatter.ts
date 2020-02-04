@@ -1,4 +1,4 @@
-import {Arr, sprintf, Var} from "@sirian/common";
+import {Arr, isArray, sprintf, Var} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
 import {TTYStyle} from "../TTY";
 import {KV, StrUtil} from "../Util";
@@ -132,7 +132,7 @@ export class Formatter {
     public setStyle(name: string, style: FormatterStyle | TTYStyle[]) {
         name = this.normalizeStyleName(name);
 
-        if (Var.isArray(style)) {
+        if (isArray(style)) {
             style = new FormatterStyle(style);
         }
 

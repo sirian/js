@@ -1,4 +1,4 @@
-import {Json, Var} from "@sirian/common";
+import {isNumber, isString, Json, Var} from "@sirian/common";
 import {DateTime} from "@sirian/datetime";
 import prettyFormat from "pretty-format";
 import {LogRecord} from "../LogRecord";
@@ -41,7 +41,7 @@ export class LineFormatter extends LogFormatter {
     }
 
     public static pretty(value: any, options?: prettyFormat.OptionsReceived): string {
-        if (Var.isString(value) || Var.isNumber(value)) {
+        if (isString(value) || isNumber(value)) {
             return Var.stringify(value);
         }
         return prettyFormat(value, options);
@@ -52,7 +52,7 @@ export class LineFormatter extends LogFormatter {
 
         let tokens: TokenStream;
 
-        if (!Var.isString(message)) {
+        if (!isString(message)) {
             args.unshift(message);
             tokens = [];
         } else {

@@ -1,4 +1,4 @@
-import {Var, XMap} from "@sirian/common";
+import {isArray, isInstanceOf, isNumber, isNumeric, XMap} from "@sirian/common";
 import {InvalidPropertyPathError} from "./Error";
 
 export type PathKey = string | number;
@@ -30,14 +30,14 @@ export class PropertyPath extends Array<PathElement> {
     }
 
     public static parse(path: Path): PathElement[] {
-        if (Var.isArray(path)) {
+        if (isArray(path)) {
             return path.map((key) => ({
                 key,
-                asIndex: Var.isNumber(key),
+                asIndex: isNumber(key),
             }));
         }
 
-        if (Var.isNumber(path)) {
+        if (isNumber(path)) {
             return [{
                 key: path,
                 asIndex: true,
@@ -61,7 +61,7 @@ export class PropertyPath extends Array<PathElement> {
             const asIndex = index !== undefined;
 
             parts.push({
-                key: asIndex ? (Var.isNumeric(index) ? +index : index) : key,
+                key: asIndex ? (isNumeric(index) ? +index : index) : key,
                 asIndex,
             });
 
@@ -78,7 +78,7 @@ export class PropertyPath extends Array<PathElement> {
     public static from<T extends PropertyPath>(path: T): T;
     public static from(path: Path): PropertyPath;
     public static from(path: PropertyPath | Path) {
-        if (Var.isInstanceOf(path, PropertyPath)) {
+        if (isInstanceOf(path, PropertyPath)) {
             return path;
         }
 

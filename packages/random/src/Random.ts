@@ -1,4 +1,4 @@
-import {Num, Var} from "@sirian/common";
+import {isArray, Num} from "@sirian/common";
 import {IterableEntries} from "@sirian/ts-extra-types";
 import {NativeMathSource} from "./NativeMathSource";
 
@@ -18,7 +18,7 @@ export class Random {
     public pick<K, V>(target: IterableEntries<[K, V]>): [K, V];
 
     public pick(target: string[] | IterableEntries) {
-        if (!Var.isArray(target)) {
+        if (!isArray(target)) {
             const entries = [...target.entries()];
             const [/*index*/, entry] = this.pick(entries);
             return entry;

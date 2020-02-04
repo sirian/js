@@ -1,4 +1,4 @@
-import {Descriptor, Var} from "@sirian/common";
+import {Descriptor, isConstructor, isObjectOrFunction, isString, isSymbol} from "@sirian/common";
 import {Args, Return} from "@sirian/ts-extra-types";
 
 export enum DecoratorType {
@@ -99,14 +99,14 @@ export class Decorator {
 
         switch (len) {
             case 1:
-                return DecoratorType.CLASS === type && Var.isConstructor(a1);
+                return DecoratorType.CLASS === type && isConstructor(a1);
             case 2:
             case 3:
-                if (!Var.isObjectOrFunction(a1)) {
+                if (!isObjectOrFunction(a1)) {
                     return false;
                 }
 
-                if (!Var.isString(a2) && !Var.isSymbol(a2)) {
+                if (!isString(a2) && !isSymbol(a2)) {
                     return false;
                 }
 

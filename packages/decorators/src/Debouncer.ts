@@ -1,4 +1,4 @@
-import {Ref, Var, XMap} from "@sirian/common";
+import {isFunction, isNumber, Ref, XMap} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 
 export interface IDebouncerOptions<A extends any[]> {
@@ -16,7 +16,7 @@ export class Debouncer<A extends any[]> {
         this.fn = fn;
         this.hashMap = new XMap();
 
-        if (Var.isNumber(options)) {
+        if (isNumber(options)) {
             this.ms = options;
         } else {
             const {ms = 300, hasher} = options;
@@ -53,7 +53,7 @@ export class Debouncer<A extends any[]> {
     protected resolveTimeout(thisArg: any, args: A) {
         const ms = this.ms;
 
-        if (Var.isFunction(ms)) {
+        if (isFunction(ms)) {
             return ms(thisArg, args);
         }
 

@@ -1,4 +1,4 @@
-import {Obj, Ref, Var, XMap} from "@sirian/common";
+import {isObject, isPrimitive, Obj, Ref, XMap} from "@sirian/common";
 import {cloneSymbol} from "./Cloneable";
 import {CloneError} from "./CloneError";
 import {Cloner, ICloneHandler} from "./Cloner";
@@ -60,7 +60,7 @@ export class CloneContext {
         }
 
         const value = descriptor.value;
-        if (!Var.isPrimitive(value)) {
+        if (!isPrimitive(value)) {
             descriptor.value = this.clone(value);
         }
 
@@ -68,7 +68,7 @@ export class CloneContext {
     }
 
     protected doClone<T>(src: T): T {
-        if (!Var.isObject(src) || this.depth > this.maxDepth) {
+        if (!isObject(src) || this.depth > this.maxDepth) {
             return src;
         }
 
@@ -104,7 +104,7 @@ export class CloneContext {
     }
 
     protected initStub<T extends object>(stub: T, src: T, handler?: ICloneHandler<T>) {
-        if (!Var.isObject(stub) || src === stub) {
+        if (!isObject(stub) || src === stub) {
             return;
         }
 
