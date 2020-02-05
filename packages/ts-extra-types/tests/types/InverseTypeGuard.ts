@@ -1,4 +1,4 @@
-import {AssertExact, Func, InverseTypeGuard, TypeGuard} from "../../src";
+import {AssertExact, InverseTypeGuard, TypeGuard} from "../../src";
 
 type X = number | "foo" | "bar";
 
@@ -8,5 +8,5 @@ type Test = [
     AssertExact<InverseTypeGuard<TypeGuard<X, X>>, (value: number | "foo" | "bar") => value is never>,
     AssertExact<TypeGuard<never>, (value: number | string) => value is never>,
     AssertExact<InverseTypeGuard<TypeGuard<number, number | string>>, (value: number | string) => value is string>,
-    AssertExact<InverseTypeGuard<Func<number, [boolean, string]>>, (x: boolean, y: string) => boolean>
+    AssertExact<InverseTypeGuard<(x: boolean, y: string) => boolean>, (x: boolean, y: string) => boolean>
 ];
