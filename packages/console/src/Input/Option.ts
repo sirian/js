@@ -1,4 +1,4 @@
-import {isArray, isNullable, isString, Var} from "@sirian/common";
+import {isArray, isNullish, isString, Var} from "@sirian/common";
 import {InvalidArgumentError, LogicError} from "../Error";
 import {IParameterInit, Parameter} from "./Parameter";
 
@@ -44,7 +44,7 @@ export class Option<T = any> extends Parameter<T> {
     }
 
     public static parseShortcuts(shortcut?: string | string[]) {
-        if (isNullable(shortcut)) {
+        if (isNullish(shortcut)) {
             return [];
         }
 

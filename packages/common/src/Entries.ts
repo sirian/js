@@ -1,13 +1,13 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Ref} from "./Ref";
-import {isNullable, isString} from "./Var";
+import {isNullish, isString} from "./Var";
 
 export class Entries<T extends Entry> {
     protected items: T[];
 
     public constructor(entries: Iterable<T | undefined | null> = []) {
-        this.items = Array.from(entries).filter((x) => !isNullable(x)) as T[];
+        this.items = Array.from(entries).filter((x) => !isNullish(x)) as T[];
     }
 
     public static from<E extends Entry>(value: IterableEntries<E>): Entries<E>;

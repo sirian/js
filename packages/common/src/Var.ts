@@ -23,14 +23,16 @@ export const isUndefined = (value: any): value is undefined => {
     return undefined === value;
 };
 
-export const isNullable = (value: any): value is null | undefined => {
-    return null === value || undefined === value;
-};
+export const isNullish = (value: any): value is null | undefined => null === value || undefined === value;
+
+/** @deprecated */
+export const isNullable = isNullish;
 
 export const getXType = <T>(value: T): XTypeNameOf<T> => {
     if (null === value) {
         return "null" as XTypeNameOf<T>;
     }
+
     if (isArray(value)) {
         return "array" as XTypeNameOf<T>;
     }
@@ -195,7 +197,7 @@ export const isRegExp = (value: any): value is RegExp => {
 };
 
 export const stringify = (value: any) => {
-    if (isNullable(value) || isSymbol(value)) {
+    if (isNullish(value) || isSymbol(value)) {
         return "";
     }
 
@@ -241,10 +243,14 @@ export const isPlainObject = (x: any) => {
     return !ctor || !isFunction(ctor) || ctor.prototype !== x;
 };
 
+export const coalesce = <T>(...values: T[]) => values.find((v) => null !== v && undefined !== v) as Exclude<T, null | undefined>;
+
 export const Var = {
+    coalesce,
     isNull,
     isUndefined,
     isNullable,
+    isNullish,
     getXType,
     isXType,
     isType,

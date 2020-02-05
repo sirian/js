@@ -9,7 +9,7 @@ import {
     Wrap,
 } from "@sirian/ts-extra-types";
 import {ProtoChainOptions, Ref} from "./Ref";
-import {isArray, isFunction, isNullable, isObjectOrFunction, isPrimitive} from "./Var";
+import {isArray, isFunction, isNullish, isObjectOrFunction, isPrimitive} from "./Var";
 import {XSet} from "./XSet";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -33,7 +33,7 @@ export class Obj {
     public static assign(target: any, ...sources: any[]) {
         const keys = new XSet(Obj.keys(target));
         for (const source of sources) {
-            if (isNullable(source)) {
+            if (isNullish(source)) {
                 continue;
             }
             keys.add(...Obj.keys(source));

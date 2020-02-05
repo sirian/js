@@ -1,7 +1,7 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Ref} from "./Ref";
-import {isNullable, isPlainObject} from "./Var";
+import {isNullish, isPlainObject} from "./Var";
 
 export enum DescriptorType {
     NONE = "NONE",
@@ -73,7 +73,7 @@ export class Descriptor {
     public static read(desc: PropertyDescriptor | undefined, obj: any): any;
 
     public static read(desc: PropertyDescriptor | undefined, obj: any) {
-        if (desc && !isNullable(obj)) {
+        if (desc && !isNullish(obj)) {
             const {get, value} = desc;
             return get ? Ref.apply(get, obj) : value;
         }

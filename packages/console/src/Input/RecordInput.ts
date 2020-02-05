@@ -1,4 +1,4 @@
-import {Arr, isNullable, isNumber} from "@sirian/common";
+import {Arr, isNullish, isNumber} from "@sirian/common";
 import {InvalidArgumentError, InvalidOptionError} from "../Error";
 import {KV} from "../Util";
 import {Input} from "./Input";
@@ -119,7 +119,7 @@ export class RecordInput extends Input {
 
         const option = definition.getOption(name);
 
-        if (isNullable(value)) {
+        if (isNullish(value)) {
             if (option.isValueRequired()) {
                 throw new InvalidOptionError(`The "--${name}" option requires a value.`);
             }

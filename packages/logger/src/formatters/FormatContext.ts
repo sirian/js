@@ -1,4 +1,4 @@
-import {isNullable, isNumber} from "@sirian/common";
+import {isNullish, isNumber} from "@sirian/common";
 import {Property} from "@sirian/property-access";
 import {StyleStack} from "./StyleStack";
 
@@ -34,7 +34,7 @@ export class FormatContext {
     }
 
     public getArgument(path?: string | number): any {
-        if (isNullable(path)) {
+        if (isNullish(path)) {
             path = this.argIndex++;
         }
 

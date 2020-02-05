@@ -1,12 +1,12 @@
 import {Primitive} from "@sirian/ts-extra-types";
-import {isNullable, Obj} from "../../src";
+import {isNullish, Obj} from "../../src";
 
 describe("Obj.toPrimitive", () => {
     const primitives: Primitive[] = [1, true, "foo", Symbol.iterator, Symbol(), undefined, null];
 
     const data: Array<[any, Primitive]> = [
         ...primitives.map<[any, Primitive]>((x) => [x, x]),
-        ...primitives.filter((x) => !isNullable(x)).map<[any, Primitive]>((x) => [Object(x), x]),
+        ...primitives.filter((x) => !isNullish(x)).map<[any, Primitive]>((x) => [Object(x), x]),
         [{[Symbol.toPrimitive]: () => 3}, 3],
         [{[Symbol.toPrimitive]: () => "foo"}, "foo"],
         [{[Symbol.toPrimitive]: () => "foo", valueOf: () => "bar"}, "foo"],

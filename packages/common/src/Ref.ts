@@ -1,6 +1,6 @@
 import {Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
 import {Obj, TypedPropertyDescriptorMap} from "./Obj";
-import {isConstructor, isFunction, isNullable, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Var";
+import {isConstructor, isFunction, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Var";
 import {XSet} from "./XSet";
 
 export interface ProtoChainOptions {
@@ -11,7 +11,7 @@ export interface ProtoChainOptions {
 
 export class Ref {
     public static getPrototype(target: any) {
-        if (!isNullable(target)) {
+        if (!isNullish(target)) {
             target = Obj.wrap(target);
         }
         return Reflect.getPrototypeOf(target);
@@ -30,7 +30,7 @@ export class Ref {
     }
 
     public static ownKeys<T>(target: T) {
-        return isNullable(target)
+        return isNullish(target)
                ? []
                : Reflect.ownKeys(Obj.wrap(target)) as Array<keyof T>;
     }
@@ -84,7 +84,7 @@ export class Ref {
     }
 
     public static isWritable(target: any, property: PropertyKey) {
-        if (isNullable(target)) {
+        if (isNullish(target)) {
             return false;
         }
 
@@ -115,7 +115,7 @@ export class Ref {
 
         let current: any = target;
 
-        while (!isNullable(current)) {
+        while (!isNullish(current)) {
             if (maxDepth && result.size >= maxDepth) {
                 break;
             }
@@ -136,22 +136,22 @@ export class Ref {
     }
 
     public static hasOwn<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-        return !isNullable(target) && Object.prototype.hasOwnProperty.call(target, key);
+        return !isNullish(target) && Object.prototype.hasOwnProperty.call(target, key);
     }
 
     public static has<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-        return !isNullable(target) && (key in Obj.wrap(target));
+        return !isNullish(target) && (key in Obj.wrap(target));
     }
 
     public static hasMethod<T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> {
-        return isNullable(target) ? false : isFunction((target as any)[key]);
+        return isNullish(target) ? false : isFunction((target as any)[key]);
     }
 
     public static get<T, K extends keyof T>(target: T, key: K): T[K];
     public static get<V, K extends PropertyKey>(target: { [P in K]: V }, key: K): V;
     public static get(target: any, key: PropertyKey): any;
     public static get(target: any, key: any) {
-        if (!isNullable(target)) {
+        if (!isNullish(target)) {
             return target[key];
         }
     }

@@ -1,4 +1,4 @@
-import {isNullable, isRegExp, isString, Var} from "./Var";
+import {isNullish, isRegExp, isString, Var} from "./Var";
 import {XSet} from "./XSet";
 
 const escapeRe = /[|\\{}()[\]^$+*?.]/g;
@@ -21,7 +21,7 @@ export class Rgx {
 
         const resFlags = new XSet<string>();
 
-        if (!isNullable(flags)) {
+        if (!isNullish(flags)) {
             resFlags.add(...flags);
         } else if (isRegExp(pattern)) {
             resFlags.add(...pattern.flags);
