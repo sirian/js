@@ -1,4 +1,4 @@
-import {Args, Drop, Func, Func0, Func1, Get, InverseTypeGuard, Return} from "@sirian/ts-extra-types";
+import {Args, Drop, Func, Func0, Func1, Get, InversePredicate, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
 import {Ref} from "./Ref";
 import {isFunction, isPromiseLike} from "./Var";
@@ -82,6 +82,6 @@ export class Fn {
     public static inverse<F extends Func>(fn: F) {
         return function(this: any, ...args) {
             return !Ref.apply(fn, this, args);
-        } as InverseTypeGuard<F>;
+        } as InversePredicate<F>;
     }
 }
