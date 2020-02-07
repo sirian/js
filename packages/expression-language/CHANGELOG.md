@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/sirian/js/compare/@sirian/expression-language@1.1.34...@sirian/expression-language@1.2.0) (2020-02-07)
+
+
+### Features
+
+* **common:** Extract Var.methods to constants ([f07f89d](https://github.com/sirian/js/commit/f07f89da11f2a6f4d3a3e64517abb9c755963042))
+
+
+
+
+
 ## [1.1.34](https://github.com/sirian/js/compare/@sirian/expression-language@1.1.33...@sirian/expression-language@1.1.34) (2020-02-02)
 
 **Note:** Version bump only for package @sirian/expression-language

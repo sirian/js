@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.54.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.53.0...@sirian/ts-extra-types@3.54.0) (2020-02-07)
+
+
+### Features
+
+* **common:** Extract Var.methods to constants ([f07f89d](https://github.com/sirian/js/commit/f07f89da11f2a6f4d3a3e64517abb9c755963042))
+* **ts-extra-types:** InverseTypeGuard ([5eb917c](https://github.com/sirian/js/commit/5eb917c6f662c093ff23daa2b4767e522eb758b1))
+
+
+
+
+
 # [3.53.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.52.1...@sirian/ts-extra-types@3.53.0) (2019-10-21)
 
 

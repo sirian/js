@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/sirian/js/compare/@sirian/filesystem@1.8.7...@sirian/filesystem@1.9.0) (2020-02-07)
+
+
+### Features
+
+* **common:** coalesce function ([f813833](https://github.com/sirian/js/commit/f81383390d2dc76cf2948ee32237fd39cc3ed35a))
+* **common:** Extract Var.methods to constants ([f07f89d](https://github.com/sirian/js/commit/f07f89da11f2a6f4d3a3e64517abb9c755963042))
+
+
+
+
+
 ## [1.8.7](https://github.com/sirian/js/compare/@sirian/filesystem@1.8.6...@sirian/filesystem@1.8.7) (2020-02-02)
 
 **Note:** Version bump only for package @sirian/filesystem
