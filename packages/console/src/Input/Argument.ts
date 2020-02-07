@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isArray, isString} from "@sirian/common";
 import {LogicError} from "../Error";
 import {IParameterInit, Parameter} from "./Parameter";
 
@@ -14,7 +14,7 @@ export class Argument<T = any> extends Parameter<T> {
 
     constructor(...args: any[]) {
         const options: IArgumentInit<T> =
-            Var.isString(args[0])
+            isString(args[0])
             ? {name: args[0], ...args[1]}
             : {...args[0]};
 
@@ -54,7 +54,7 @@ export class Argument<T = any> extends Parameter<T> {
                 return [];
             }
 
-            if (!Var.isArray(defaultValue)) {
+            if (!isArray(defaultValue)) {
                 throw new LogicError("A default value for an multiple argument must be an array.");
             }
         }

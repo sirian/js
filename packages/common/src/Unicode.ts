@@ -1,13 +1,13 @@
-import {Var} from "./Var";
+import {stringifyVar} from "./Var";
 
 export class Unicode {
     public static getSymbols(str: string) {
-        return [...Var.stringify(str)];
+        return [...(stringifyVar(str))];
     }
 
     public static getGraphemes(str: string): string[] {
         const re = /(\P{M}\p{M}*)/gu;
-        return Var.stringify(str).match(re) || [];
+        return stringifyVar(str).match(re) || [];
     }
 
     public static isUTF8(source: string) {
@@ -19,7 +19,7 @@ export class Unicode {
     }
 
     public static stringToBytes(str: string) {
-        str = Var.stringify(str);
+        str = stringifyVar(str);
         const length = str.length;
         const resArr = [];
 

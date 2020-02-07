@@ -1,4 +1,14 @@
-import {Entries, Obj, Ref, Var} from "@sirian/common";
+import {
+    Entries,
+    isNumeric,
+    isPlain,
+    isPlainArray,
+    isPlainObject,
+    isString,
+    Obj,
+    Ref,
+    stringifyVar,
+} from "@sirian/common";
 import {ParameterBagError, ParameterCircularReferenceError, ParameterNotFoundError} from "./Error";
 import {ParameterBag} from "./ParameterBag";
 import {StrictObject} from "./StrictObject";
@@ -12,11 +22,11 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
 
     public escape<V>(value: V): V;
     public escape(value: any): any {
-        if (Var.isString(value)) {
+        if (isString(value)) {
             return value.replace(/%/g, "%%");
         }
 
-        if (Var.isPlain(value)) {
+        if (isPlain(value)) {
             for (const [k, v] of Obj.entries(value)) {
                 value[k] = this.escape(v);
             }
@@ -27,10 +37,10 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
 
     public unescape<V>(value: V): V;
     public unescape(value: any) {
-        if (Var.isString(value)) {
+        if (isString(value)) {
             return value.replace(/%%/g, "%");
         }
-        if (Var.isPlain(value)) {
+        if (isPlain(value)) {
             for (const [k, v] of Obj.entries(value)) {
                 value[k] = this.unescape(v);
             }
@@ -79,12 +89,12 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
 
             let resolved: any = this.get(key);
 
-            if (!Var.isString(resolved) && !Var.isNumeric(resolved)) {
+            if (!isString(resolved) && !isNumeric(resolved)) {
                 throw new ParameterBagError("A string value must be composed of strings/numbers, "
                     + `but found parameter "${key}" of type ${typeof resolved} inside string value "${value}".`);
             }
-            resolved = Var.stringify(resolved);
-            resolving.push(Var.stringify(key));
+            resolved = stringifyVar(resolved);
+            resolving.push(stringifyVar(key));
             try {
                 return this.resolved ? resolved : this.resolveString(resolved, resolving);
             } finally {
@@ -95,15 +105,15 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
 
     public resolveValue<V>(value: V, resolving?: string[]): V;
     public resolveValue(value: any, resolving: string[] = []) {
-        if (Var.isString(value) && value.length > 2) {
+        if (isString(value) && value.length > 2) {
             return this.resolveString(value, resolving);
         }
 
-        if (Var.isPlainArray(value)) {
+        if (isPlainArray(value)) {
             return value.map((v) => this.resolveValue(v, resolving));
         }
 
-        if (Var.isPlainObject(value)) {
+        if (isPlainObject(value)) {
             return Entries
                 .from(value)
                 .map((k, v) => [

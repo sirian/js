@@ -1,4 +1,4 @@
-import {Arr, Str, Var} from "@sirian/common";
+import {Arr, Str, stringifyVar} from "@sirian/common";
 import {Formatter, FormatterStyleDefinition} from "../Formatter";
 import {Output} from "../Output";
 import {StrUtil} from "../Util";
@@ -42,7 +42,7 @@ export class Block {
         const output = this.output;
         const formatter = output.getFormatter();
 
-        const type = Var.stringify(options.type);
+        const type = stringifyVar(options.type);
         const typeWidth = type ? StrUtil.width(type) + 1 : 0;
 
         const maxMessageWidth = Math.max(

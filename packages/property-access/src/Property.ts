@@ -1,4 +1,4 @@
-import {Ref, Str, Var} from "@sirian/common";
+import {hasMethod, isInstanceOf, isObjectOrFunction, isPrimitive, isPropWritable, Str} from "@sirian/common";
 import {Get, GetDeep, Tail} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
 import {Path, PathElement, PathKey, PropertyPath} from "./PropertyPath";
@@ -76,7 +76,7 @@ export class Property {
 
             prop = this.readProperty(prop, part);
 
-            if (!Var.isObjectOrFunction(prop)) {
+            if (!isObjectOrFunction(prop)) {
                 throw new UnexpectedTypeError(prop, pPath, i + 1);
             }
         }
@@ -91,7 +91,7 @@ export class Property {
             this.readPropertiesUntil(target, pPath, pPath.length);
             return true;
         } catch (e) {
-            if (Var.isInstanceOf(e, PropertyAccessError)) {
+            if (isInstanceOf(e, PropertyAccessError)) {
                 return false;
             }
             throw e;
@@ -104,9 +104,9 @@ export class Property {
         try {
             const props = this.readPropertiesUntil(target, pPath, pPath.length - 1);
             const last = props[props.length - 1];
-            return Ref.isWritable(last, pPath.last.key);
+            return isPropWritable(last, pPath.last.key);
         } catch (error) {
-            if (Var.isInstanceOf(error, PropertyAccessError)) {
+            if (isInstanceOf(error, PropertyAccessError)) {
                 return false;
             }
             throw error;
@@ -131,7 +131,7 @@ export class Property {
         // }
 
         for (const method of methods) {
-            if (Ref.hasMethod(target, method)) {
+            if (hasMethod(target, method)) {
                 access.type = AccessType.METHOD;
                 access.key = method;
                 break;
@@ -193,7 +193,7 @@ export class Property {
     }
 
     protected readPropertiesUntil(target: any, pPath: PropertyPath, lastIndex: number) {
-        if (Var.isPrimitive(target)) {
+        if (isPrimitive(target)) {
             throw new UnexpectedTypeError(target, pPath, 0);
         }
 
@@ -203,7 +203,7 @@ export class Property {
             const pKey = pPath[i];
 
             target = this.readProperty(target, pKey);
-            if (i < pPath.length - 1 && Var.isPrimitive(target)) {
+            if (i < pPath.length - 1 && isPrimitive(target)) {
                 throw new UnexpectedTypeError(target, pPath, i + 1);
             }
 

@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isArrayLike} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -23,8 +23,7 @@ describe("", () => {
 
     test.each(data)("Var.isArrayLike(%s) === %o", (code, expected, expectedStrict) => {
         const value = Util.eval(code);
-        expect(Var.isArrayLike(value)).toBe(expectedStrict);
-        expect(Var.isArrayLike(value, true)).toBe(expectedStrict);
-        expect(Var.isArrayLike(value, false)).toBe(expected);
+        expect(isArrayLike(value, true)).toBe(expectedStrict);
+        expect(isArrayLike(value, false)).toBe(expected);
     });
 });

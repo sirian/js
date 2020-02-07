@@ -1,7 +1,7 @@
 import {Obj} from "./Obj";
 import {Rgx} from "./Rgx";
 import {Unicode} from "./Unicode";
-import {Var} from "./Var";
+import {isFunction, isString, stringifyVar} from "./Var";
 
 export const enum StrSide {
     LEFT = "left",
@@ -22,7 +22,7 @@ export class Str {
         const escapeCharRgx = Rgx.create(Rgx.escape(escapeChar), "g");
         const wrapCharRgx = Rgx.create(Rgx.escape(wrapChar), "g");
 
-        const escaped = Var.stringify(value)
+        const escaped = stringifyVar(value)
             .replace(escapeCharRgx, escapeChar + escapeChar)
             .replace(wrapCharRgx, escapeChar + wrapChar);
 
@@ -38,7 +38,7 @@ export class Str {
     }
 
     public static pad(str: any, maxLength: number, chars: string = " ", side: StrSide = StrSide.LEFT) {
-        str = Var.stringify(str);
+        str = stringifyVar(str);
         const length = str.length;
         const padLength = maxLength - length;
 
@@ -56,13 +56,13 @@ export class Str {
     }
 
     public static isEqual(a?: string, b?: string, sensitive = true) {
-        return Var.isString(a)
-            && Var.isString(b)
+        return isString(a)
+            && isString(b)
             && (sensitive ? a === b : a.toUpperCase() === b.toUpperCase());
     }
 
     public static repeat(chars: string, maxLength: number) {
-        chars = Var.stringify(chars);
+        chars = stringifyVar(chars);
 
         if (maxLength <= 0 || !chars) {
             return "";
@@ -82,7 +82,7 @@ export class Str {
     }
 
     public static trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
-        const str = Var.stringify(value);
+        const str = stringifyVar(value);
 
         const maskChars = Unicode.getSymbols(mask);
 
@@ -120,7 +120,7 @@ export class Str {
     }
 
     public static caseFirst(value: any, type: "lower" | "upper", locale: boolean = false) {
-        const str = Var.stringify(value);
+        const str = stringifyVar(value);
 
         if (!str) {
             return "";
@@ -147,7 +147,7 @@ export class Str {
     }
 
     public static replace(value: any, pairs: Record<string, string | ReplaceCallback>) {
-        const str = Var.stringify(value);
+        const str = stringifyVar(value);
 
         if (!str) {
             return str;
@@ -164,13 +164,13 @@ export class Str {
 
         return str.replace(re, (key) => {
             const v = pairs[key];
-            return Var.isFunction(v) ? v(key) : v;
+            return isFunction(v) ? v(key) : v;
         });
     }
 
     public static substringCount(str: string, substr: string) {
-        str = Var.stringify(str);
-        substr = Var.stringify(substr);
+        str = stringifyVar(str);
+        substr = stringifyVar(substr);
 
         if (!str || !substr) {
             return 0;
@@ -188,7 +188,7 @@ export class Str {
     }
 
     public static split(value: string, re: string | RegExp, limit: number = Number.MAX_SAFE_INTEGER) {
-        const str = Var.stringify(value);
+        const str = stringifyVar(value);
 
         if (limit <= 0) {
             return [];

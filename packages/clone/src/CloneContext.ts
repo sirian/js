@@ -1,4 +1,16 @@
-import {Obj, Ref, Var, XMap} from "@sirian/common";
+import {
+    getPrototype,
+    hasMethod,
+    hasProp,
+    isObject,
+    isPrimitive,
+    Obj,
+    ownDescriptor,
+    ownKeys,
+    Ref,
+    setPrototype,
+    XMap,
+} from "@sirian/common";
 import {cloneSymbol} from "./Cloneable";
 import {CloneError} from "./CloneError";
 import {Cloner, ICloneHandler} from "./Cloner";
@@ -34,25 +46,25 @@ export class CloneContext {
     }
 
     public cloneProperties<T extends object>(copy: T, src: T) {
-        for (const key of Ref.ownKeys(src)) {
+        for (const key of ownKeys(src)) {
             this.cloneProperty(copy, src, key);
         }
     }
 
     public addProperties<T extends object>(copy: T, src: T) {
-        for (const key of Ref.ownKeys(src)) {
+        for (const key of ownKeys(src)) {
             this.addProperty(copy, src, key);
         }
     }
 
     public addProperty<T extends object, K extends keyof T>(copy: T, src: T, key: K) {
-        if (!Ref.has(copy, key)) {
+        if (!hasProp(copy, key)) {
             this.cloneProperty(copy, src, key);
         }
     }
 
     public cloneProperty<T extends object, K extends keyof T>(copy: T, src: T, key: K) {
-        const descriptor = Ref.ownDescriptor(src, key);
+        const descriptor = ownDescriptor(src, key);
 
         if (!descriptor) {
             delete copy[key];
@@ -60,7 +72,7 @@ export class CloneContext {
         }
 
         const value = descriptor.value;
-        if (!Var.isPrimitive(value)) {
+        if (!isPrimitive(value)) {
             descriptor.value = this.clone(value);
         }
 
@@ -68,7 +80,7 @@ export class CloneContext {
     }
 
     protected doClone<T>(src: T): T {
-        if (!Var.isObject(src) || this.depth > this.maxDepth) {
+        if (!isObject(src) || this.depth > this.maxDepth) {
             return src;
         }
 
@@ -104,31 +116,31 @@ export class CloneContext {
     }
 
     protected initStub<T extends object>(stub: T, src: T, handler?: ICloneHandler<T>) {
-        if (!Var.isObject(stub) || src === stub) {
+        if (!isObject(stub) || src === stub) {
             return;
         }
 
-        if (Ref.hasMethod(handler, "init")) {
+        if (hasMethod(handler, "init")) {
             handler.init(stub, src, this);
         }
 
         this.addProperties(stub, src);
 
-        if (Ref.hasMethod(stub, cloneSymbol)) {
+        if (hasMethod(stub, cloneSymbol)) {
             stub[cloneSymbol]();
         }
     }
 
     protected createStub<T extends object>(src: T, handler?: ICloneHandler<T>): T {
-        const proto = Ref.getPrototype(src);
+        const proto = getPrototype(src);
 
-        if (!proto || !Ref.hasMethod(handler, "create")) {
+        if (!proto || !hasMethod(handler, "create")) {
             return Obj.create(proto) as T;
         }
 
         const stub = handler.create(src);
 
-        Ref.setPrototype(stub, proto);
+        setPrototype(stub, proto);
 
         return stub;
     }

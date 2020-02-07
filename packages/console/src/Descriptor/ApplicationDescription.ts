@@ -1,4 +1,4 @@
-import {Var, XMap} from "@sirian/common";
+import {stringifyVar, XMap} from "@sirian/common";
 import {Application} from "../Application";
 import {CommandDefinition} from "../Command";
 import {CommandNotFoundError} from "../Error";
@@ -90,10 +90,10 @@ export class ApplicationDescription {
             nsCommandNames.ensure(namespace).push(name);
         }
 
-        XMap.sort(nsCommandNames, ([k1], [k2]) => Var.stringify(k1).localeCompare(k2));
+        XMap.sort(nsCommandNames, ([k1], [k2]) => stringifyVar(k1).localeCompare(k2));
 
         for (const nsNames of nsCommandNames.values()) {
-            nsNames.sort((a, b) => Var.stringify(a).localeCompare(b));
+            nsNames.sort((a, b) => stringifyVar(a).localeCompare(b));
         }
 
         return nsCommandNames;

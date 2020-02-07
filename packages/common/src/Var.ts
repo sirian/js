@@ -5,241 +5,300 @@ import {
     ExtractByXTypeName,
     Instance,
     Newable,
+    Predicate,
     Primitive,
+    TypeGuard,
     TypeName,
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
-import {Num} from "./Num";
-import {Obj} from "./Obj";
-import {Ref} from "./Ref";
-import {Str} from "./Str";
+import {stringifyObj} from "./Obj";
+import {getPrototype, hasMethod, hasProp} from "./Ref";
 
-export class Var {
-    public static isNull(value: any): value is null {
-        return null === value;
+export const ifSatisfy = <T, P extends Predicate, O>(value: T, predicate: P, otherwise?: O) => {
+    return (predicate(value) ? value : otherwise) as P extends TypeGuard<infer U>
+                                                     ? (T extends U ? T : O)
+                                                     : P | O;
+};
+
+export const isNull = (value: any): value is null => {
+    return null === value;
+};
+
+export const isUndefined = (value: any): value is undefined => {
+    return undefined === value;
+};
+
+export const isNullish = (value: any): value is null | undefined => null === value || undefined === value;
+export const isNotNullish = <T>(value: T): value is Exclude<T, null | undefined> => !isNullish(value);
+
+export const getXType = <T>(value: T): XTypeNameOf<T> => {
+    if (null === value) {
+        return "null" as XTypeNameOf<T>;
     }
 
-    public static isUndefined(value: any): value is undefined {
-        return undefined === value;
+    if (isArray(value)) {
+        return "array" as XTypeNameOf<T>;
     }
 
-    public static isNullable(value: any): value is null | undefined {
-        return null === value || undefined === value;
+    return typeof value as XTypeNameOf<T>;
+};
+
+export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> => {
+    const type: any = getXType(v);
+
+    return isArray(types) ? isSome(type, types) : type === types;
+};
+
+export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> => {
+    const type: any = typeof v;
+    return isArray(types) ? isSome(type, types) : type === types;
+};
+
+export const isSome = <U>(value: any, values: U[]): value is U => {
+    return values.includes(value);
+};
+
+export const isNumber = (value: any): value is number => {
+    return "number" === typeof value;
+};
+
+export const isBigInt = (value: any): value is bigint => {
+    return "bigint" === typeof value;
+};
+
+export const isBoolean = (value: any): value is boolean => {
+    return "boolean" === typeof value;
+};
+
+export const isString = (value: any): value is string => {
+    return "string" === typeof value;
+};
+
+export const isPropertyKey = (value: any): value is PropertyKey => {
+    return isType(value, ["string", "number", "symbol"]);
+};
+
+export const isPrimitive = (value: any): value is Primitive => {
+    return !isObjectOrFunction(value);
+};
+
+export const isSymbol = (value: any): value is symbol => {
+    return "symbol" === typeof value;
+};
+
+export const isFunction = <T extends any>(value: T): value is Function & Extract<T, AnyFunc> => {
+    return "function" === typeof value;
+};
+
+export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
+    if (!isFunction(value)) {
+        return false;
     }
 
-    public static getXType<T>(value: T): XTypeNameOf<T>;
-    public static getXType(value: any) {
-        if (null === value) {
-            return "null";
+    const p: any = new Proxy(value, {
+        construct: (target) => target,
+    });
+
+    try {
+        return value === new p();
+    } catch (e) {
+        return false;
+    }
+};
+
+export const isTruthy = (a: any) => {
+    return !!a;
+};
+
+export const isFalsy = (a: any) => {
+    return !a;
+};
+
+export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> => {
+    return null !== value && "object" === typeof value;
+};
+
+export const isNumeric = (value: any): value is string | number => {
+    return isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
+};
+
+export const isPromiseLike = (value: any): value is PromiseLike<any> => {
+    return hasMethod(value, "then");
+};
+
+export const isObjectOrFunction = (value: any): value is object => {
+    return isObject(value) || isFunction(value);
+};
+
+export const isInstanceOf = <C extends Ctor | Newable>(obj: any, ctor: C): obj is Instance<C> => {
+    return isFunction(ctor) && (obj instanceof ctor);
+};
+
+export const isEqualNaN = (value: any): value is number => {
+    return value !== value;
+};
+
+export const isSubclassOf = <A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> => {
+    return isFunction(a) && (isEqual(a, b) || isInstanceOf(a.prototype, b));
+};
+
+export const isSameType = <T>(x: any, value: T): value is T => {
+    if (x === null || value === null) {
+        return x === value;
+    }
+    return typeof x === typeof value;
+};
+
+export const isBetween = <T extends string | number | bigint>(x: T, min: T, max: T) => {
+    if (!isSameType(x, min) || !isSameType(x, max)) {
+        return false;
+    }
+
+    return x >= min && x <= max;
+};
+
+export const isArray = (value: any): value is any[] => {
+    return Array.isArray(value);
+};
+
+export const isArrayLike = (value: any, strict: boolean = true): value is { length: number } => {
+    if (isString(value)) {
+        return true;
+    }
+    if (!isObject(value) || !hasProp(value, "length")) {
+        return false;
+    }
+
+    const length = value.length;
+
+    if (!strict) {
+        return isNumeric(length);
+    }
+
+    return isNumber(length) && !(length % 1) && length >= 0;
+};
+
+export const isPlain = (value: any) => {
+    return isPlainArray(value) || isPlainObject(value);
+};
+
+export const isPlainArray = (value: any): value is unknown[] => {
+    if (!isArray(value)) {
+        return false;
+    }
+
+    const proto = getPrototype(value);
+
+    if (!isArray(proto)) {
+        return false;
+    }
+
+    const nextProto = getPrototype(proto);
+
+    return !isArray(nextProto);
+};
+
+export const isRegExp = (value: any): value is RegExp => {
+    return isInstanceOf(value, RegExp);
+};
+
+export const stringifyVar = (value: any) => {
+    if (isNullish(value) || isSymbol(value)) {
+        return "";
+    }
+
+    return String(value);
+};
+
+export const isAsyncIterable = (value: any): value is AsyncIterable<any> => {
+    return hasMethod(value, Symbol.asyncIterator);
+};
+
+export const isIterable = (value: any): value is Iterable<any> => {
+    return hasMethod(value, Symbol.iterator);
+};
+
+export const isEqual = (x: any, y: any) => {
+    if (x === y) {
+        return true;
+    }
+
+    return isEqualNaN(x) && isEqualNaN(y);
+};
+
+export const isPlainObject = (x: any) => {
+    if (!isObject(x)) {
+        return false;
+    }
+    const prototype = getPrototype(x);
+
+    if (stringifyObj(x) !== "[object Object]") {
+        return !prototype;
+    }
+
+    if (!prototype) {
+        return true;
+    }
+
+    if (prototype !== Object.prototype) {
+        return false;
+    }
+
+    const ctor = x.constructor;
+
+    return !ctor || !isFunction(ctor) || ctor.prototype !== x;
+};
+
+export const coalesce = <T>(...values: T[]) => {
+    let result;
+    for (const value of values) {
+        result = value;
+        if (!isNullish(value)) {
+            break;
         }
-        if (Var.isArray(value)) {
-            return "array";
-        }
-
-        return typeof value;
     }
+    return result;
+};
 
-    public static isXType<V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> {
-        const type: any = Var.getXType(v);
-
-        return Var.isArray(types) ? Var.isSome(type, types) : type === types;
-    }
-
-    public static isType<V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> {
-        const type: any = typeof v;
-        return Var.isArray(types) ? Var.isSome(type, types) : type === types;
-    }
-
-    public static isSome<U>(value: any, values: U[]): value is U {
-        return values.includes(value);
-    }
-
-    public static isNumber(value: any): value is number {
-        return "number" === typeof value;
-    }
-
-    public static isBigInt(value: any): value is bigint {
-        return "bigint" === typeof value;
-    }
-
-    public static isBoolean(value: any): value is boolean {
-        return "boolean" === typeof value;
-    }
-
-    public static isString(value: any): value is string {
-        return "string" === typeof value;
-    }
-
-    public static isPropertyKey(value: any): value is PropertyKey {
-        return Var.isType(value, ["string", "number", "symbol"]);
-    }
-
-    public static isPrimitive(value: any): value is Primitive {
-        return !Var.isObjectOrFunction(value);
-    }
-
-    public static isSymbol(value: any): value is symbol {
-        return "symbol" === typeof value;
-    }
-
-    public static isFunction<T extends any>(value: T): value is Function & Extract<T, AnyFunc> {
-        return "function" === typeof value;
-    }
-
-    public static isConstructor<T>(value: T): value is Extract<T, Newable> {
-        if (!Var.isFunction(value)) {
-            return false;
-        }
-        const p: any = new Proxy(value as any, {construct: () => ({})});
-
-        try {
-            return new p() && true;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    public static isTruthy(a: any) {
-        return !!a;
-    }
-
-    public static isFalsy(a: any) {
-        return !a;
-    }
-
-    public static isObject<T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> {
-        return null !== value && "object" === typeof value;
-    }
-
-    public static isNumeric(value: any): value is string | number {
-        return Var.isType(value, ["number", "string"]) && !Var.isEqualNaN(value - parseFloat(value));
-    }
-
-    public static isPromiseLike(value: any): value is PromiseLike<any> {
-        return Ref.hasMethod(value, "then");
-    }
-
-    public static isObjectOrFunction(value: any): value is object {
-        return Var.isObject(value) || Var.isFunction(value);
-    }
-
-    public static isInstanceOf<C extends Ctor | Newable>(obj: any, ctor: C): obj is Instance<C> {
-        return Var.isFunction(ctor) && (obj instanceof ctor);
-    }
-
-    public static isEqualNaN(value: any): value is number {
-        return value !== value;
-    }
-
-    public static isSubclassOf<A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> {
-        return Var.isFunction(a) && (Var.isEqual(a, b) || Var.isInstanceOf(a.prototype, b));
-    }
-
-    public static isSameType<T>(x: any, value: T): value is T {
-        if (x === null || value === null) {
-            return x === value;
-        }
-        return typeof x === typeof value;
-    }
-
-    public static isBetween<T extends string | number | bigint>(x: T, min: T, max: T) {
-        if (!Var.isSameType(x, min) || !Var.isSameType(x, max)) {
-            return false;
-        }
-
-        return x >= min && x <= max;
-    }
-
-    public static isArray(value: any): value is any[] {
-        return Array.isArray(value);
-    }
-
-    public static isArrayLike(value: any, strict: boolean = true): value is { length: number } {
-        if (Var.isString(value)) {
-            return true;
-        }
-        if (!Var.isObject(value) || !Ref.has(value, "length")) {
-            return false;
-        }
-
-        const length = value.length;
-
-        if (!strict) {
-            return Var.isNumeric(length);
-        }
-
-        return Num.isInt(length) && length >= 0;
-    }
-
-    public static isPlain(value: any) {
-        return Var.isPlainArray(value) || Var.isPlainObject(value);
-    }
-
-    public static isPlainArray(value: any): value is unknown[] {
-        if (!Var.isArray(value)) {
-            return false;
-        }
-
-        const proto = Ref.getPrototype(value);
-
-        if (!Var.isArray(proto)) {
-            return false;
-        }
-
-        const nextProto = Ref.getPrototype(proto);
-
-        return !Var.isArray(nextProto);
-    }
-
-    public static isRegExp(value: any): value is RegExp {
-        return Var.isInstanceOf(value, RegExp);
-    }
-
-    public static stringify(value: any) {
-        if (Var.isNullable(value) || Var.isSymbol(value)) {
-            return "";
-        }
-
-        return Str.stringify(value);
-    }
-
-    public static isAsyncIterable(value: any): value is AsyncIterable<any> {
-        return Ref.hasMethod(value, Symbol.asyncIterator);
-    }
-
-    public static isIterable(value: any): value is Iterable<any> {
-        return Ref.hasMethod(value, Symbol.iterator);
-    }
-
-    public static isEqual(x: any, y: any) {
-        if (x === y) {
-            return true;
-        }
-
-        return Var.isEqualNaN(x) && Var.isEqualNaN(y);
-    }
-
-    public static isPlainObject(x: any) {
-        if (!Var.isObject(x)) {
-            return false;
-        }
-        const prototype = Ref.getPrototype(x);
-
-        if (Obj.getStringTag(x) !== "Object") {
-            return !prototype;
-        }
-
-        if (!prototype) {
-            return true;
-        }
-
-        if (prototype !== Object.prototype) {
-            return false;
-        }
-
-        const ctor = x.constructor;
-
-        return !ctor || !Var.isFunction(ctor) || ctor.prototype !== x;
-    }
-}
+export const Var = {
+    coalesce,
+    isNull,
+    isUndefined,
+    isNullable: isNullish,
+    isNullish,
+    getXType,
+    isXType,
+    isType,
+    isSome,
+    isNumber,
+    isBigInt,
+    isBoolean,
+    isString,
+    isPropertyKey,
+    isPrimitive,
+    isSymbol,
+    isFunction,
+    isConstructor,
+    isTruthy,
+    isFalsy,
+    isObject,
+    isNumeric,
+    isPromiseLike,
+    isObjectOrFunction,
+    isInstanceOf,
+    isEqualNaN,
+    isSubclassOf,
+    isSameType,
+    isBetween,
+    isArray,
+    isArrayLike,
+    isPlain,
+    isPlainArray,
+    isRegExp,
+    isAsyncIterable,
+    isIterable,
+    isEqual,
+    isPlainObject,
+    stringify: stringifyVar,
+};

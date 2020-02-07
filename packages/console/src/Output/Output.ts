@@ -1,4 +1,4 @@
-import {Arr, Var} from "@sirian/common";
+import {Arr, stringifyVar} from "@sirian/common";
 import {Writable} from "stream";
 import {RuntimeError} from "../Error";
 import {Formatter} from "../Formatter";
@@ -130,7 +130,7 @@ export abstract class Output {
         const formatter = this.getFormatter();
 
         for (let message of messages) {
-            message = Var.stringify(message);
+            message = stringifyVar(message);
 
             switch (options.type) {
                 case OutputType.PLAIN:

@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isNumber} from "@sirian/common";
 import {DateTime} from "./DateTime";
 import {DateTimeInterval, IDateInterval} from "./DateTimeInterval";
 
@@ -20,7 +20,7 @@ export class DateTimePeriod {
         this.start = init.start;
         this.end = init.end;
         this.interval = new DateTimeInterval(init.interval);
-        this.limit = Var.isNumber(init.limit) ? Math.max(0, init.limit) : 1 / 0;
+        this.limit = isNumber(init.limit) ? Math.max(0, init.limit) : 1 / 0;
 
         const nextDate = DateTime.create(0).add(this.interval);
         this.direction = Math.sign(nextDate.timestampMs);

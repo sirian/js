@@ -1,4 +1,4 @@
-import {Arr, Str, Unicode, Var} from "@sirian/common";
+import {Arr, Str, stringifyVar, Unicode} from "@sirian/common";
 
 export class StrUtil {
     public static stripTags(text: string) {
@@ -10,11 +10,11 @@ export class StrUtil {
     }
 
     public static width(str?: number | string | undefined) {
-        return Unicode.getGraphemes(Var.stringify(str)).length;
+        return Unicode.getGraphemes(stringifyVar(str)).length;
     }
 
     public static splitByWidth(str: string, width: number) {
-        str = Var.stringify(str);
+        str = stringifyVar(str);
         if (this.width(str) <= width) {
             return [str];
         }

@@ -1,4 +1,4 @@
-import {Ref} from "@sirian/common";
+import {hasOwn} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
@@ -22,7 +22,7 @@ export class BinaryNode extends Node<{ left: Node, right: Node }, { operator: st
         const {left, right} = this.nodes;
 
         const functions = BinaryNode.functions;
-        if (Ref.hasOwn(functions, operator)) {
+        if (hasOwn(functions, operator)) {
             compiler
                 .raw("(")
                 .raw(functions[operator])
@@ -37,7 +37,7 @@ export class BinaryNode extends Node<{ left: Node, right: Node }, { operator: st
         }
 
         const operators = BinaryNode.operatorAlias;
-        if (Ref.hasOwn(operators, operator)) {
+        if (hasOwn(operators, operator)) {
             operator = operators[operator];
         }
 

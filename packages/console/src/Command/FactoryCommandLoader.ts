@@ -1,4 +1,4 @@
-import {Obj, Ref} from "@sirian/common";
+import {hasOwn, Obj} from "@sirian/common";
 import {CommandNotFoundError} from "../Error";
 import {ICommandConstructor} from "./Command";
 import {ICommandLoader} from "./ICommandLoader";
@@ -12,7 +12,7 @@ export class FactoryCommandLoader implements ICommandLoader {
     }
 
     public has(name: string) {
-        return Ref.hasOwn(this.factories, name);
+        return hasOwn(this.factories, name);
     }
 
     public async get(name: string) {

@@ -1,7 +1,7 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
-import {Ref} from "./Ref";
-import {Var} from "./Var";
+import {getDescriptor, Ref} from "./Ref";
+import {isNotNullish, isPlainObject} from "./Var";
 
 export enum DescriptorType {
     NONE = "NONE",
@@ -18,7 +18,7 @@ export class Descriptor {
     public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
     public static wrap<T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
     public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) {
-        const desc = Ref.descriptor(target, key);
+        const desc = getDescriptor(target, key);
         const {get, set} = wrapper;
 
         const descriptor = Descriptor.extend(desc, {
@@ -73,7 +73,7 @@ export class Descriptor {
     public static read(desc: PropertyDescriptor | undefined, obj: any): any;
 
     public static read(desc: PropertyDescriptor | undefined, obj: any) {
-        if (desc && !Var.isNullable(obj)) {
+        if (desc && isNotNullish(obj)) {
             const {get, value} = desc;
             return get ? Ref.apply(get, obj) : value;
         }
@@ -106,7 +106,7 @@ export class Descriptor {
     }
 
     public static getDescriptorType(d: any) {
-        if (!Var.isPlainObject(d)) {
+        if (!isPlainObject(d)) {
             return DescriptorType.NONE;
         }
 

@@ -1,4 +1,4 @@
-import {Obj, Sprintf, Var} from "@sirian/common";
+import {isInstanceOf, isString, Obj, Sprintf} from "@sirian/common";
 import {FormatContext} from "@sirian/logger";
 import {LogRecord} from "../LogRecord";
 import {PlaceholderToken, TagToken, TokenStream} from "../parser/token";
@@ -66,15 +66,15 @@ export abstract class LogFormatter implements ILogFormatter {
         const ctx = new FormatContext(args);
 
         for (const token of tokens) {
-            if (Var.isString(token)) {
+            if (isString(token)) {
                 ctx.push(token);
             }
 
-            if (Var.isInstanceOf(token, PlaceholderToken)) {
+            if (isInstanceOf(token, PlaceholderToken)) {
                 this.processPlaceholderToken(ctx, token);
             }
 
-            if (Var.isInstanceOf(token, TagToken)) {
+            if (isInstanceOf(token, TagToken)) {
                 this.processTagToken(ctx, token);
             }
         }
@@ -97,7 +97,7 @@ export abstract class LogFormatter implements ILogFormatter {
     protected processPlaceholderToken(ctx: FormatContext, token: PlaceholderToken) {
         const value = ctx.getArgument(token.path);
 
-        if (Var.isInstanceOf(value, FormatContext)) {
+        if (isInstanceOf(value, FormatContext)) {
             ctx.push(...value.getFormatted());
             return;
         }

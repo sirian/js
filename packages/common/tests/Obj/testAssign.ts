@@ -1,4 +1,4 @@
-import {Obj} from "../../src";
+import {assign} from "../../src";
 
 const data: Array<[object, object[], object]> = [
     [{}, [], {}],
@@ -17,5 +17,5 @@ const data: Array<[object, object[], object]> = [
 ];
 
 test.each(data)("Obj.assign(%p, ...%p) === %p", (target, sources, expected) => {
-    expect(Obj.assign(target, ...sources)).toStrictEqual(expected);
+    expect(assign(target, ...sources)).toStrictEqual(expected);
 });

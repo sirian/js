@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isObject} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -18,6 +18,6 @@ describe("", () => {
     test.each(data)("Var.isObject(%s) === %o", (code, expected) => {
         const value = Util.eval(code);
 
-        expect(Var.isObject(value)).toBe(expected);
+        expect(isObject(value)).toBe(expected);
     });
 });

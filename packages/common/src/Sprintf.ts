@@ -2,7 +2,7 @@ import {Fn} from "./Fn";
 import {Json} from "./Json";
 import {Num} from "./Num";
 import {Obj} from "./Obj";
-import {Var} from "./Var";
+import {isFunction} from "./Var";
 
 interface Placeholder {
     placeholder: string;
@@ -203,7 +203,7 @@ export class Sprintf {
             throw new Error(`Formatter for "${type}" not found`);
         }
 
-        if (!/^[Tv]/.test(type) && Var.isFunction(arg)) {
+        if (!/^[Tv]/.test(type) && isFunction(arg)) {
             arg = arg();
         }
 

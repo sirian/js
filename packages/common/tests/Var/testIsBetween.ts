@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isBetween} from "../../src";
 
 describe("isBetween", () => {
     const e = 1e-10;
@@ -40,6 +40,6 @@ describe("isBetween", () => {
     ];
 
     test.each(data)("Var.isBetween(%o) === %o", (x, min, max, expected) => {
-        expect(Var.isBetween(x, min, max)).toBe(expected);
+        expect(isBetween(x, min, max)).toBe(expected);
     });
 });

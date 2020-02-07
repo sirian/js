@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isFunction} from "@sirian/common";
 import {DecorateError} from "./DecorateError";
 import {Decorator} from "./Decorator";
 import {IMemoizerOptions, Memoizer} from "./Memoizer";
@@ -7,7 +7,7 @@ export const memoize = Decorator.forMethod((options?: IMemoizerOptions<any>) => 
     return (target, key, descriptor) => {
         for (const k of ["get", "value"] as const) {
             const v = descriptor[k];
-            if (Var.isFunction(v)) {
+            if (isFunction(v)) {
                 return {
                     ...descriptor,
                     [k]: Memoizer.memoize(v, options),

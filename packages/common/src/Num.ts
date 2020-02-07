@@ -1,8 +1,8 @@
-import {Var} from "./Var";
+import {isEqualNaN, isNullish} from "./Var";
 
 export class Num {
     public static parse(value?: boolean | string | number | null, defaultValue: number = NaN): number {
-        if (Var.isNullable(value)) {
+        if (isNullish(value)) {
             return 0;
         }
 
@@ -12,7 +12,7 @@ export class Num {
             case "string":
                 const x = +value;
 
-                return Var.isEqualNaN(x) ? defaultValue : x;
+                return isEqualNaN(x) ? defaultValue : x;
             default:
                 return defaultValue;
         }

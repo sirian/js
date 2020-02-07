@@ -1,4 +1,4 @@
-import {Obj, Var} from "@sirian/common";
+import {isFunction, Obj} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 import {Compiler} from "./Compiler";
 import {IExpressionFunction} from "./IExpressionFunction";
@@ -21,7 +21,7 @@ export class ExpressionLanguage {
         this.functions = {};
 
         for (const [name, fn] of Obj.entries(init.functions || {})) {
-            this.functions[name] = Var.isFunction(fn) ? new SimpleExpressionFunction(fn) : fn;
+            this.functions[name] = isFunction(fn) ? new SimpleExpressionFunction(fn) : fn;
         }
 
         this.compiler = new Compiler(this.functions);

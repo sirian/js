@@ -1,5 +1,5 @@
 import {TypeName} from "@sirian/ts-extra-types";
-import {Var} from "../../src";
+import {isType} from "../../src";
 import {Util} from "../Util";
 
 describe("Var.isType", () => {
@@ -20,6 +20,6 @@ describe("Var.isType", () => {
     const data = Util.mergeData(trueData, falseData, false);
 
     test.each(data)("Var.isType(%O, %O) === %O", (value, types, expected) => {
-        expect(Var.isType(value, types)).toBe(expected);
+        expect(isType(value, types)).toBe(expected);
     });
 });

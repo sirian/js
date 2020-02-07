@@ -1,4 +1,4 @@
-import {Str, Var} from "@sirian/common";
+import {Str, stringifyVar} from "@sirian/common";
 import ErrorStackParser from "error-stack-parser";
 import {Formatter} from "../Formatter";
 import {ArgvInput, Input} from "../Input";
@@ -98,7 +98,7 @@ export class IO {
         let len = 0;
         let title = "";
 
-        const message = Var.stringify(e.message).trim();
+        const message = stringifyVar(e.message).trim();
 
         if ("" === message || output.isVerbose()) {
             title = `  [${e.name || e.constructor.name}]  `;

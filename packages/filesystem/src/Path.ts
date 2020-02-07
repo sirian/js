@@ -1,4 +1,4 @@
-import {ArrBuf, Str, Var} from "@sirian/common";
+import {ArrBuf, isNullish, Str} from "@sirian/common";
 import {PathLike} from "fs";
 import * as pathUtil from "path";
 import * as util from "util";
@@ -18,7 +18,7 @@ export class Path {
     }
 
     public static stringify(part: PathPart | PathLike) {
-        if (Var.isNullable(part)) {
+        if (isNullish(part)) {
             return "";
         }
 

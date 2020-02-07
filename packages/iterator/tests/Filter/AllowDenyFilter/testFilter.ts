@@ -1,6 +1,6 @@
-import {AllowDenyFilter, Filter} from "../../../src/Filter";
+import {AllowDenyFilter, FilterLike} from "../../../src/Filter";
 
-const data: Array<[Filter | Filter[], Filter | Filter[], boolean]> = [
+const data: Array<[FilterLike | FilterLike[], FilterLike | FilterLike[], boolean]> = [
     [[], [], true],
     [/foo/, [], true],
     [/bar/, [], false],

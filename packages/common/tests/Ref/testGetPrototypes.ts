@@ -1,4 +1,4 @@
-import {Ref, Var} from "../../src";
+import {getPrototypes, isObjectOrFunction} from "../../src";
 
 describe("Ref.getPrototypes", () => {
     class Foo {}
@@ -32,13 +32,13 @@ describe("Ref.getPrototypes", () => {
     ];
 
     for (const [target, chain] of data) {
-        if (Var.isObjectOrFunction(target)) {
+        if (isObjectOrFunction(target)) {
             chain.unshift(target);
         }
     }
 
     test.each(data)("Ref.getPrototypes(%p) === %p", (target, expected) => {
-        const chain = Ref.getPrototypes(target);
+        const chain = getPrototypes(target, {});
         expect(chain).toStrictEqual(expected);
     });
 

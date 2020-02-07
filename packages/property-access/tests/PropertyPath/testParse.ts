@@ -1,8 +1,8 @@
-import {Var} from "@sirian/common";
+import {isNumber} from "@sirian/common";
 import {Path, PathElement, PropertyPath} from "../../src";
 
 describe("PropertyPath.parse", () => {
-    function f(key: number | string, asIndex: boolean = Var.isNumber(key)): PathElement {
+    function f(key: number | string, asIndex: boolean = isNumber(key)): PathElement {
         return {key, asIndex};
     }
 

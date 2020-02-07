@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isFunction} from "@sirian/common";
 import {SyntaxError} from "./error";
 import {CallbackLexer, ILexer, LexerCallback} from "./lexer";
 import {Reader} from "./Reader";
@@ -31,7 +31,7 @@ export class LexerTokenizer<T extends TokenTypes = TokenTypes> {
     }
 
     public addHandler(handler: LexerCallback<T> | ILexer<T>) {
-        if (Var.isFunction(handler)) {
+        if (isFunction(handler)) {
             handler = new CallbackLexer(handler);
         }
 

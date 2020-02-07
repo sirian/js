@@ -1,4 +1,4 @@
-import {Arr, Var} from "@sirian/common";
+import {Arr, isArray, stringifyVar} from "@sirian/common";
 import {CommandDefinition} from "../Command";
 import {Formatter} from "../Formatter";
 import {Argument, InputDefinition, Option} from "../Input";
@@ -15,7 +15,7 @@ export class TextDescriptor extends Descriptor {
             argument.getDescription(),
         ];
 
-        if (Var.isArray(defaultValue) || StrUtil.width(defaultValue)) {
+        if (isArray(defaultValue) || StrUtil.width(defaultValue)) {
             desc.push(`<comment> [default: ${this.formatDefaultValue(defaultValue)}]</comment>`);
         }
 
@@ -27,7 +27,7 @@ export class TextDescriptor extends Descriptor {
 
         const desc = [option.getDescription()];
 
-        if (option.acceptValue() && undefined !== defaultValue && (!Var.isArray(defaultValue) || defaultValue.length)) {
+        if (option.acceptValue() && undefined !== defaultValue && (!isArray(defaultValue) || defaultValue.length)) {
             desc.push(`<comment> [default: ${this.formatDefaultValue(defaultValue)}]</comment>`);
         }
 
@@ -36,7 +36,7 @@ export class TextDescriptor extends Descriptor {
         const allowedValues = option.getAllowedValues();
 
         if (allowedValues.length) {
-            const str = allowedValues.map(Var.stringify).join(", ");
+            const str = allowedValues.map(stringifyVar).join(", ");
             desc.push(` (Allowed values: <comment>${str}</comment>)`);
         }
 
@@ -221,7 +221,7 @@ export class TextDescriptor extends Descriptor {
     }
 
     protected writeText(content: string | string[]) {
-        const str = Arr.cast(content).map(Var.stringify).join("");
+        const str = Arr.cast(content).map((v: any) => stringifyVar(v)).join("");
         this.write(str, true);
 
         return this;
@@ -235,11 +235,11 @@ export class TextDescriptor extends Descriptor {
         }
 
         const text = aliases.join("|");
-        return Var.stringify(`[${text}]`);
+        return stringifyVar(`[${text}]`);
     }
 
     protected formatDefaultValue(defaultValue: undefined | string | string[]) {
-        if (Var.isArray(defaultValue)) {
+        if (isArray(defaultValue)) {
             defaultValue = defaultValue.map((value) => Formatter.escape(value));
             return JSON.stringify(defaultValue).replace(/\\\\/g, "\\");
         } else {

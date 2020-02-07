@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isInstanceOf} from "@sirian/common";
 import {Predicate} from "@sirian/ts-extra-types";
 import {CloneError, Cloner} from "../../src";
 
@@ -18,7 +18,7 @@ describe("", () => {
 
     test("", () => {
         const clone = Cloner.cloneDeep(obj, {
-            bypass: (o) => Var.isInstanceOf(o, WeakMap) || Var.isInstanceOf(o, WeakSet),
+            bypass: (o) => isInstanceOf(o, WeakMap) || isInstanceOf(o, WeakSet),
         });
         expect(clone).toStrictEqual(obj);
         expect(clone).not.toBe(obj);
@@ -28,8 +28,8 @@ describe("", () => {
 
     const bypassErrors: Predicate[] = [
         () => false,
-        (o) => Var.isInstanceOf(o, WeakMap),
-        (o) => Var.isInstanceOf(o, WeakSet),
+        (o) => isInstanceOf(o, WeakMap),
+        (o) => isInstanceOf(o, WeakSet),
     ];
 
     test.each(bypassErrors)("", (bypass) => {

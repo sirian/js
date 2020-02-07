@@ -1,5 +1,5 @@
-import {Var} from "@sirian/common";
-import {FormatContext} from "../formatters/FormatContext";
+import {isObject} from "@sirian/common";
+import {FormatContext} from "../formatters";
 import {LogRecord} from "../LogRecord";
 import {ProcessingHandler, ProcessingHandlerInit} from "./ProcessingHandler";
 
@@ -13,7 +13,7 @@ export class CallbackHandler extends ProcessingHandler {
     protected callback: HandlerCallback;
 
     constructor(init: CallbackHandlerInit | HandlerCallback) {
-        if (Var.isObject(init)) {
+        if (isObject(init)) {
             super(init);
             this.callback = init.callback;
         } else {

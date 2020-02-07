@@ -9,7 +9,7 @@ export function lzfDecompress(bytes?: Uint8Array | null) {
     let ip = 0;
     let op = 0;
 
-    const throwError = () => {throw new Error("Invalid input");};
+    const throwError = () => {throw new Error("Invalid input"); };
 
     const inputLength = input.length;
     do {

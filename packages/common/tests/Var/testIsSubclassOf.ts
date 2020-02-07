@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {isSubclassOf} from "../../src";
 
 describe("Var.isSubclassOf", () => {
     class Foo extends Number {}
@@ -37,6 +37,6 @@ describe("Var.isSubclassOf", () => {
     ];
 
     test.each(data)("Var.isSubclassOf(%p, %p) === %p", (a, b, expected) => {
-        expect(Var.isSubclassOf(a, b)).toBe(expected);
+        expect(isSubclassOf(a, b)).toBe(expected);
     });
 });

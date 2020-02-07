@@ -1,7 +1,13 @@
-import {Args, Drop, Func, Func0, Func1, Get, Return} from "@sirian/ts-extra-types";
+import {Args, Drop, Func, Func0, Func1, Get, NegatePredicate, Return} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
-import {Ref} from "./Ref";
-import {Var} from "./Var";
+import {apply, Ref} from "./Ref";
+import {isFunction, isPromiseLike} from "./Var";
+
+export const negate = <F extends Func>(fn: F) => {
+    return function(this: any, ...args) {
+        return !apply(fn, this, args);
+    } as NegatePredicate<F>;
+};
 
 export class Fn {
     public static stringify(v: any) {
@@ -17,15 +23,13 @@ export class Fn {
 
     public static stripArgs<A extends any[]>(fn: (...args: A) => any, args: A) {
         const required = fn.length;
+        let length = args.length;
 
-        while (args.length > required) {
-            if (args[args.length - 1] !== undefined) {
-                break;
-            }
-            args.length--;
+        while (length > required && args[length - 1] === undefined) {
+            length--;
         }
 
-        return args;
+        return args.slice(0, length);
     }
 
     public static bindArgs<K extends number, F extends Func>(fn: F, bind: { [P in K]: Get<Args<F>, P> }) {
@@ -57,9 +61,9 @@ export class Fn {
     public static async tryAsync(fn: Func0, onError?: any) {
         try {
             const result = fn();
-            return Var.isPromiseLike(result) ? await result : result;
+            return isPromiseLike(result) ? await result : result;
         } catch (error) {
-            return Var.isFunction(onError) ? onError(error) : onError;
+            return isFunction(onError) ? onError(error) : onError;
         }
     }
 
@@ -69,7 +73,7 @@ export class Fn {
         try {
             return fn();
         } catch (error) {
-            return Var.isFunction(onError) ? onError(error) : onError;
+            return isFunction(onError) ? onError(error) : onError;
         }
     }
 

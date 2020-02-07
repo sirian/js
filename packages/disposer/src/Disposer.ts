@@ -1,4 +1,4 @@
-import {Ref, XSet} from "@sirian/common";
+import {hasOwn, Ref, XSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerCallbackSet} from "./DisposerCallbackSet";
@@ -80,7 +80,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static has(target: object): target is Record<typeof disposerSymbol, Disposer> {
-        return Ref.hasOwn(target, disposerSymbol);
+        return hasOwn(target, disposerSymbol);
     }
 
     public static for(target: object) {

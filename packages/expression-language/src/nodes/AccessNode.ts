@@ -1,4 +1,4 @@
-import {Obj, Ref, Var} from "@sirian/common";
+import {hasMethod, isArray, isObject, Obj} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
@@ -54,25 +54,25 @@ export class AccessNode extends Node<{ node: Node, key: Node, args: Node }, { ty
 
         switch (this.options.type) {
             case AccessType.PROPERTY:
-                if (!Var.isObject(obj)) {
+                if (!isObject(obj)) {
                     throw new Error("Unable to get a property on a non-object.");
                 }
 
                 return obj[value];
 
             case AccessType.METHOD:
-                if (!Var.isObject(obj)) {
+                if (!isObject(obj)) {
                     throw new Error("Unable to get a property on a non-object.");
                 }
 
-                if (!Ref.hasMethod(obj, value)) {
+                if (!hasMethod(obj, value)) {
                     throw new Error(`Unable to call method "${value}" of object "${this.constructor.name}".`);
                 }
 
                 return obj[value](...Obj.values(args.evaluate(functions, values)));
 
             case AccessType.ARRAY:
-                if (!Var.isArray(obj)) {
+                if (!isArray(obj)) {
                     throw new Error("Unable to get an item on a non-array.");
                 }
 

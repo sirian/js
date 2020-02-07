@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {isNullish, isNumber} from "@sirian/common";
 import {Property} from "@sirian/property-access";
 import {StyleStack} from "./StyleStack";
 
@@ -34,11 +34,11 @@ export class FormatContext {
     }
 
     public getArgument(path?: string | number): any {
-        if (Var.isNullable(path)) {
+        if (isNullish(path)) {
             path = this.argIndex++;
         }
 
-        if (Var.isNumber(path) || /^[0-9]+$/.test(path)) {
+        if (isNumber(path) || /^[0-9]+$/.test(path)) {
             const index = +path;
             this.handledArgs[index] = true;
             return this.args[index];

@@ -1,5 +1,5 @@
 import {XTypeName} from "@sirian/ts-extra-types";
-import {Var} from "../../src";
+import {isXType} from "../../src";
 import {Util} from "../Util";
 
 describe("Var.isXType", () => {
@@ -20,6 +20,6 @@ describe("Var.isXType", () => {
     const data = Util.mergeData(trueData, falseData, false);
 
     test.each(data)("Var.isType(%O, %O) === %O", (value, types, expected) => {
-        expect(Var.isXType(value, types)).toBe(expected);
+        expect(isXType(value, types)).toBe(expected);
     });
 });

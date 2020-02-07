@@ -1,4 +1,4 @@
-import {Ref} from "../../src";
+import {isPropWritable, Ref} from "../../src";
 
 describe("Ref.isWritable", () => {
     const data = [
@@ -20,7 +20,7 @@ describe("Ref.isWritable", () => {
     ];
 
     test.each(data)("Ref.isWritable(%p, 'x') === %p", (value, expected) => {
-        expect(Ref.isWritable(value, "x")).toBe(expected);
+        expect(isPropWritable(value, "x")).toBe(expected);
     });
 
 });

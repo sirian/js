@@ -1,4 +1,4 @@
-import {Ref, Var} from "@sirian/common";
+import {hasOwn, isArray, isInstanceOf, isNumber} from "@sirian/common";
 import {InvalidArgumentError, LogicError} from "../Error";
 import {KV} from "../Util";
 import {Argument} from "./Argument";
@@ -19,11 +19,11 @@ export class InputDefinition {
         this.options = new Map();
         this.shortcuts = new Map();
 
-        if (Var.isArray(definition)) {
-            const args = definition.filter((a) => Var.isInstanceOf(a, Argument));
+        if (isArray(definition)) {
+            const args = definition.filter((a) => isInstanceOf(a, Argument));
             this.setArguments(args as Argument[]);
 
-            const options = definition.filter((o) => Var.isInstanceOf(o, Option));
+            const options = definition.filter((o) => isInstanceOf(o, Option));
             this.setOptions(options as Option[]);
         } else {
             this.setArguments(definition.arguments || {});
@@ -37,7 +37,7 @@ export class InputDefinition {
     }
 
     public addArguments(args: Record<string, Argument> | Argument[]) {
-        if (Var.isArray(args)) {
+        if (isArray(args)) {
             for (const argument of args) {
                 this.addArgument(argument.getName(), argument);
             }
@@ -78,7 +78,7 @@ export class InputDefinition {
             throw new InvalidArgumentError(`The "${name}" argument does not exist.`);
         }
 
-        if (Var.isNumber(name)) {
+        if (isNumber(name)) {
             return this.getArgumentByIndex(name)!;
         }
 
@@ -86,9 +86,9 @@ export class InputDefinition {
     }
 
     public hasArgument(name: string | number) {
-        if (Var.isNumber(name)) {
+        if (isNumber(name)) {
             const args = this.getArguments();
-            return Ref.hasOwn(args, name);
+            return hasOwn(args, name);
         }
 
         return this.arguments.has(name);
@@ -133,7 +133,7 @@ export class InputDefinition {
     }
 
     public addOptions(options: Record<string, Option> | Option[]) {
-        if (Var.isArray(options)) {
+        if (isArray(options)) {
             for (const option of options) {
                 this.addOption(option.getName(), option);
             }

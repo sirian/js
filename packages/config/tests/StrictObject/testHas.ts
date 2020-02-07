@@ -1,4 +1,4 @@
-import {Ref} from "@sirian/common";
+import {hasProp} from "@sirian/common";
 import {StrictObject} from "../../src";
 
 describe("StrictObject.has", () => {
@@ -9,16 +9,16 @@ describe("StrictObject.has", () => {
 
         const o = StrictObject.from(target);
 
-        expect(Ref.has(target, "x")).toBe(true);
-        expect(Ref.has(o, "x")).toBe(true);
+        expect(hasProp(target, "x")).toBe(true);
+        expect(hasProp(o, "x")).toBe(true);
 
-        expect(Ref.has(target, "y")).toBe(false);
-        expect(Ref.has(o, "y")).toBe(false);
+        expect(hasProp(target, "y")).toBe(false);
+        expect(hasProp(o, "y")).toBe(false);
 
-        expect(Ref.has(target, "hasOwnProperty")).toBe(true);
-        expect(Ref.has(o, "hasOwnProperty")).toBe(false);
+        expect(hasProp(target, "hasOwnProperty")).toBe(true);
+        expect(hasProp(o, "hasOwnProperty")).toBe(false);
 
-        expect(Ref.has(target, "__proto__")).toBe(true);
-        expect(Ref.has(o, "__proto__")).toBe(false);
+        expect(hasProp(target, "__proto__")).toBe(true);
+        expect(hasProp(o, "__proto__")).toBe(false);
     });
 });

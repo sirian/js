@@ -1,5 +1,5 @@
 import {Obj} from "./Obj";
-import {Var} from "./Var";
+import {isFunction, isPlainObject, isPropertyKey} from "./Var";
 
 export type XMapInitializer<K, V> = (key: K) => V;
 export type XMapSource<K = any, V = any> = Iterable<[K, V]> | ArrayLike<[K, V]> | Record<Extract<K, PropertyKey>, V>;
@@ -29,7 +29,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
     public static parseArgs(args: any[]): [Array<[any, any]>, XMapInitializer<any, any> | undefined] {
         const [src, initializer] = args;
 
-        if (Var.isFunction(src)) {
+        if (isFunction(src)) {
             return [[], src];
         }
 
@@ -41,7 +41,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
             return [];
         }
 
-        if (Var.isPlainObject(src)) {
+        if (isPlainObject(src)) {
             return Obj.entries(src) as any;
         }
 
@@ -61,7 +61,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
 
     public static ensure<K, V>(map: IMapMini<K, V>, key: K, initializer: XMapInitializer<K, V>) {
         if (!map.has(key)) {
-            if (!Var.isFunction(initializer)) {
+            if (!isFunction(initializer)) {
                 throw new Error(`Could not ensure key "${key}" - initializer is not a function`);
             }
 
@@ -100,7 +100,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
         const result: any = {};
 
         for (const [key, value] of this) {
-            if (!Var.isPropertyKey(key)) {
+            if (!isPropertyKey(key)) {
                 throw new Error(`Could not convert map to object. ${key} is not a number|string|symbol`);
             }
             result[key] = value;

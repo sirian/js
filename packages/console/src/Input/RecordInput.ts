@@ -1,4 +1,4 @@
-import {Arr, Var} from "@sirian/common";
+import {Arr, isNullish, isNumber} from "@sirian/common";
 import {InvalidArgumentError, InvalidOptionError} from "../Error";
 import {KV} from "../Util";
 import {Input} from "./Input";
@@ -27,7 +27,7 @@ export class RecordInput extends Input {
         values = Arr.cast(values);
 
         for (let [k, v] of this.parameters) {
-            if (!Var.isNumber(k)) {
+            if (!isNumber(k)) {
                 v = k;
             }
 
@@ -47,11 +47,11 @@ export class RecordInput extends Input {
         values = Arr.cast(values);
 
         for (const [k, v] of this.parameters) {
-            if (onlyParams && (k === "--" || (Var.isNumber(k) && "--" === v))) {
+            if (onlyParams && (k === "--" || (isNumber(k) && "--" === v))) {
                 return false;
             }
 
-            if (Var.isNumber(k)) {
+            if (isNumber(k)) {
                 if (values.includes(v)) {
                     return true;
                 }
@@ -119,7 +119,7 @@ export class RecordInput extends Input {
 
         const option = definition.getOption(name);
 
-        if (Var.isNullable(value)) {
+        if (isNullish(value)) {
             if (option.isValueRequired()) {
                 throw new InvalidOptionError(`The "--${name}" option requires a value.`);
             }

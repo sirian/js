@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {stringifyVar} from "@sirian/common";
 import {Instance} from "@sirian/ts-extra-types";
 import {Application} from "../Application";
 import {LogicError} from "../Error";
@@ -49,9 +49,9 @@ export class Command<A extends Application = Application> {
     }
 
     public static guessName() {
-        return Var.stringify(this.name)
+        return stringifyVar(this.name)
             .replace(/Command$/, "")
-            .replace(/\.?([A-Z]+)/g, (_, s) => "-" + Var.stringify(s).toLowerCase())
+            .replace(/\.?([A-Z]+)/g, (_, s) => "-" + stringifyVar(s).toLowerCase())
             .replace(/^-/, "");
     }
 
