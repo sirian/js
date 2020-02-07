@@ -1,4 +1,4 @@
-import {Var} from "../../src";
+import {stringifyVar} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -15,6 +15,6 @@ describe("", () => {
 
     test.each(data)("Var.stringify(%s) === %o", (code, expected) => {
         const value = Util.eval(code);
-        expect(Var.stringify(value)).toBe(expected);
+        expect(stringifyVar(value)).toBe(expected);
     });
 });

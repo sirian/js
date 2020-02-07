@@ -8,8 +8,8 @@ import {
     ToPrimitive,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {ProtoChainOptions, Ref} from "./Ref";
-import {isArray, isFunction, isNullish, isObjectOrFunction, isPrimitive} from "./Var";
+import {deleteProp, getPrototypes, hasMethod, hasOwn, hasProp, ownDescriptors, ownKeys, ProtoChainOptions} from "./Ref";
+import {coalesce, isArray, isNullish, isObjectOrFunction, isPrimitive} from "./Var";
 import {XSet} from "./XSet";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -19,45 +19,45 @@ export interface SnapshotOptions {
     stopAt?: object;
 }
 
+export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
+export function assign(target: any, ...sources: any[]) {
+    const keySet = new XSet(Obj.keys(target));
+
+    for (const source of sources) {
+        if (isNullish(source)) {
+            continue;
+        }
+        keySet.add(...Obj.keys(source));
+
+        for (const key of keySet) {
+            if (hasProp(source, key)) {
+                target[key] = source[key] as any;
+            }
+        }
+    }
+
+    return target;
+}
+
+export const stringifyObj = (v: any) => Object.prototype.toString.call(v);
+
 export class Obj {
     public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
     public static values = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
     public static entries = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
 
-    public static stringify(v: any) {
-        return Object.prototype.toString.call(v);
-    }
-
-    public static assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
-
-    public static assign(target: any, ...sources: any[]) {
-        const keys = new XSet(Obj.keys(target));
-        for (const source of sources) {
-            if (isNullish(source)) {
-                continue;
-            }
-            keys.add(...Obj.keys(source));
-
-            for (const key of keys) {
-                if (Ref.has(source, key)) {
-                    target[key] = source[key] as any;
-                }
-            }
-        }
-
-        return target;
-    }
+    public static stringify = stringifyObj;
 
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
-        const keys = Obj.keys(target) as Array<keyof T>;
+        const k = Obj.keys(target) as Array<keyof T>;
         for (const source of sources) {
-            Obj.assign(target, Obj.pick(source, keys));
+            assign(target, Obj.pick(source, k));
         }
         return target;
     }
 
     public static snapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
-        const keys = new XSet(Obj.keys(target) as Array<keyof T>);
+        const keySet = new XSet(Obj.keys(target) as Array<keyof T>);
 
         const opts = {
             stopAt: Object.prototype,
@@ -70,24 +70,24 @@ export class Obj {
             maxDepth: opts.maxDepth,
         };
 
-        for (const x of Ref.getPrototypes(target, protoOpts)) {
-            for (const [key, desc] of Obj.entries(Ref.ownDescriptors(x))) {
+        for (const x of getPrototypes(target, protoOpts)) {
+            for (const [key, desc] of Obj.entries(ownDescriptors(x))) {
                 if ("__proto__" === key) {
                     continue;
                 }
-                if (isFunction(desc.get)) {
-                    keys.add(key as keyof T);
+                if (hasMethod(desc, "get")) {
+                    keySet.add(key as keyof T);
                 }
             }
         }
 
-        return Obj.pick(target, [...keys]);
+        return Obj.pick(target, [...keySet]);
     }
 
     public static create(o?: null): Record<any, any>;
-    public static create<T extends object | null, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
+    public static create<T extends object | null | undefined, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
     public static create(o = null, properties: any = {}) {
-        return Object.create(o, properties);
+        return Object.create(coalesce(o, null) as any, properties);
     }
 
     public static clear<T extends object>(target: T): Partial<T> {
@@ -95,8 +95,8 @@ export class Obj {
             target.length = 0;
         }
 
-        for (const key of Ref.ownKeys(target)) {
-            Ref.delete(target, key);
+        for (const key of ownKeys(target)) {
+            deleteProp(target, key);
         }
 
         return target as Partial<T>;
@@ -104,7 +104,7 @@ export class Obj {
 
     public static getStringTag(arg: any) {
         // extract "[object (.*)]"
-        return Obj.stringify(arg).slice(8, -1);
+        return stringifyObj(arg).slice(8, -1);
     }
 
     public static wrap<T>(value: T): object & Wrap<T> {
@@ -118,20 +118,20 @@ export class Obj {
 
         const toPrimitive = Symbol.toPrimitive;
 
-        if (Ref.hasMethod(target, toPrimitive)) {
+        if (hasMethod(target, toPrimitive)) {
             return (target as any)[toPrimitive]("default");
         }
 
-        if (Ref.hasMethod(target, "valueOf")) {
+        if (hasMethod(target, "valueOf")) {
             return (target as any).valueOf();
         }
 
         throw new Error(`Could not convert ${Obj.getStringTag(target)} to primitive value`);
     }
 
-    public static fromEntries<E extends [any, any]>(entries: Iterable<E>): FromEntries<E[]> {
+    public static fromEntries<E extends [any, any]>(data: Iterable<E>): FromEntries<E[]> {
         const obj: any = {};
-        for (const [key, value] of entries) {
+        for (const [key, value] of data) {
             obj[key] = value;
         }
         return obj;
@@ -141,22 +141,22 @@ export class Obj {
         // noinspection LoopStatementThatDoesntLoopJS
         for (const key in obj) { // tslint:disable-line:forin
             // noinspection JSUnfilteredForInLoop
-            return !Ref.hasOwn(obj, key);
+            return !hasOwn(obj, key);
         }
 
         return true;
     }
 
-    public static zip<K extends PropertyKey[], V extends any[]>(keys: K, values: V): ObjectZip<K, V> {
-        return keys.reduce((obj, key, index) => {
-            obj[key] = values[index];
+    public static zip<K extends PropertyKey[], V extends any[]>(k: K, v: V): ObjectZip<K, V> {
+        return k.reduce((obj, key, index) => {
+            obj[key] = v[index];
             return obj;
         }, {} as any);
     }
 
-    public static pick<T, K extends keyof T>(target: T, keys: K[]): Pick<T, K> {
-        return keys.reduce((obj, key) => {
-            if (Ref.has(target, key)) {
+    public static pick<T, K extends keyof T>(target: T, k: K[]): Pick<T, K> {
+        return k.reduce((obj, key) => {
+            if (hasProp(target, key)) {
                 obj[key] = target[key];
             }
             return obj;

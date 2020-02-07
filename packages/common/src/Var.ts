@@ -5,15 +5,21 @@ import {
     ExtractByXTypeName,
     Instance,
     Newable,
+    Predicate,
     Primitive,
+    TypeGuard,
     TypeName,
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
-import {Num} from "./Num";
-import {Obj} from "./Obj";
-import {Ref} from "./Ref";
-import {Str} from "./Str";
+import {stringifyObj} from "./Obj";
+import {getPrototype, hasMethod, hasProp} from "./Ref";
+
+export const ifSatisfy = <T, P extends Predicate, O>(value: T, predicate: P, otherwise?: O) => {
+    return (predicate(value) ? value : otherwise) as P extends TypeGuard<infer U>
+                                                     ? (T extends U ? T : O)
+                                                     : P | O;
+};
 
 export const isNull = (value: any): value is null => {
     return null === value;
@@ -24,9 +30,7 @@ export const isUndefined = (value: any): value is undefined => {
 };
 
 export const isNullish = (value: any): value is null | undefined => null === value || undefined === value;
-
-/** @deprecated */
-export const isNullable = isNullish;
+export const isNotNullish = <T>(value: T): value is Exclude<T, null | undefined> => !isNullish(value);
 
 export const getXType = <T>(value: T): XTypeNameOf<T> => {
     if (null === value) {
@@ -91,10 +95,13 @@ export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
     if (!isFunction(value)) {
         return false;
     }
-    const p: any = new Proxy(value as any, {construct: () => ({})});
+
+    const p: any = new Proxy(value, {
+        construct: (target) => target,
+    });
 
     try {
-        return new p() && true;
+        return value === new p();
     } catch (e) {
         return false;
     }
@@ -117,7 +124,7 @@ export const isNumeric = (value: any): value is string | number => {
 };
 
 export const isPromiseLike = (value: any): value is PromiseLike<any> => {
-    return Ref.hasMethod(value, "then");
+    return hasMethod(value, "then");
 };
 
 export const isObjectOrFunction = (value: any): value is object => {
@@ -159,7 +166,7 @@ export const isArrayLike = (value: any, strict: boolean = true): value is { leng
     if (isString(value)) {
         return true;
     }
-    if (!isObject(value) || !Ref.has(value, "length")) {
+    if (!isObject(value) || !hasProp(value, "length")) {
         return false;
     }
 
@@ -169,7 +176,7 @@ export const isArrayLike = (value: any, strict: boolean = true): value is { leng
         return isNumeric(length);
     }
 
-    return Num.isInt(length) && length >= 0;
+    return isNumber(length) && !(length % 1) && length >= 0;
 };
 
 export const isPlain = (value: any) => {
@@ -181,13 +188,13 @@ export const isPlainArray = (value: any): value is unknown[] => {
         return false;
     }
 
-    const proto = Ref.getPrototype(value);
+    const proto = getPrototype(value);
 
     if (!isArray(proto)) {
         return false;
     }
 
-    const nextProto = Ref.getPrototype(proto);
+    const nextProto = getPrototype(proto);
 
     return !isArray(nextProto);
 };
@@ -196,20 +203,20 @@ export const isRegExp = (value: any): value is RegExp => {
     return isInstanceOf(value, RegExp);
 };
 
-export const stringify = (value: any) => {
+export const stringifyVar = (value: any) => {
     if (isNullish(value) || isSymbol(value)) {
         return "";
     }
 
-    return Str.stringify(value);
+    return String(value);
 };
 
 export const isAsyncIterable = (value: any): value is AsyncIterable<any> => {
-    return Ref.hasMethod(value, Symbol.asyncIterator);
+    return hasMethod(value, Symbol.asyncIterator);
 };
 
 export const isIterable = (value: any): value is Iterable<any> => {
-    return Ref.hasMethod(value, Symbol.iterator);
+    return hasMethod(value, Symbol.iterator);
 };
 
 export const isEqual = (x: any, y: any) => {
@@ -224,9 +231,9 @@ export const isPlainObject = (x: any) => {
     if (!isObject(x)) {
         return false;
     }
-    const prototype = Ref.getPrototype(x);
+    const prototype = getPrototype(x);
 
-    if (Obj.getStringTag(x) !== "Object") {
+    if (stringifyObj(x) !== "[object Object]") {
         return !prototype;
     }
 
@@ -243,13 +250,22 @@ export const isPlainObject = (x: any) => {
     return !ctor || !isFunction(ctor) || ctor.prototype !== x;
 };
 
-export const coalesce = <T>(...values: T[]) => values.find((v) => null !== v && undefined !== v) as Exclude<T, null | undefined>;
+export const coalesce = <T>(...values: T[]) => {
+    let result;
+    for (const value of values) {
+        result = value;
+        if (!isNullish(value)) {
+            break;
+        }
+    }
+    return result;
+};
 
 export const Var = {
     coalesce,
     isNull,
     isUndefined,
-    isNullable,
+    isNullable: isNullish,
     isNullish,
     getXType,
     isXType,
@@ -280,9 +296,9 @@ export const Var = {
     isPlain,
     isPlainArray,
     isRegExp,
-    stringify,
     isAsyncIterable,
     isIterable,
     isEqual,
     isPlainObject,
+    stringify: stringifyVar,
 };

@@ -1,13 +1,13 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
 import {Obj} from "./Obj";
-import {Ref} from "./Ref";
-import {isNullish, isString} from "./Var";
+import {hasMethod} from "./Ref";
+import {isNotNullish, isString} from "./Var";
 
 export class Entries<T extends Entry> {
     protected items: T[];
 
     public constructor(entries: Iterable<T | undefined | null> = []) {
-        this.items = Array.from(entries).filter((x) => !isNullish(x)) as T[];
+        this.items = Array.from(entries).filter(isNotNullish) as T[];
     }
 
     public static from<E extends Entry>(value: IterableEntries<E>): Entries<E>;
@@ -18,7 +18,7 @@ export class Entries<T extends Entry> {
             value = [...value];
         }
 
-        const entries = Ref.hasMethod(value, "entries")
+        const entries = hasMethod(value, "entries")
                         ? value.entries()
                         : Obj.entries(value);
 

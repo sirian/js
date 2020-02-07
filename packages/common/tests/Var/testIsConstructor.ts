@@ -1,4 +1,4 @@
-import {isConstructor} from "../../src";
+import {isConstructor, isObjectOrFunction} from "../../src";
 
 describe("Fn", () => {
     function Foo() {}
@@ -27,11 +27,13 @@ describe("Fn", () => {
         [Foo.bind(Foo), true],
         [Bar.bind(null), true],
         [Bar.bind(Bar), true],
-        [new Proxy(Foo, {}), true],
-        [new Proxy(Bar, {}), true],
     ];
 
     test.each(data)("Var.isConstructor(%O) === %p", (value, expected) => {
         expect(isConstructor(value)).toBe(expected);
+        if (isObjectOrFunction(value)) {
+            const proxy = new Proxy(value, {});
+            expect(isConstructor(proxy)).toBe(expected);
+        }
     });
 });

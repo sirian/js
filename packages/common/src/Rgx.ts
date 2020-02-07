@@ -1,4 +1,4 @@
-import {isNullish, isRegExp, isString, Var} from "./Var";
+import {isNullish, isRegExp, isString, stringifyVar} from "./Var";
 import {XSet} from "./XSet";
 
 const escapeRe = /[|\\{}()[\]^$+*?.]/g;
@@ -37,12 +37,12 @@ export class Rgx {
     }
 
     public static escape(str: string) {
-        return Var.stringify(str).replace(escapeRe, "\\$&"); // $& means the whole matched string
+        return stringifyVar(str).replace(escapeRe, "\\$&"); // $& means the whole matched string
     }
 
     public static* matchAll(subject: string, pattern: RegExp | string) {
         const regex = Rgx.create(pattern, {addFlags: "g"});
-        const str = Var.stringify(subject);
+        const str = stringifyVar(subject);
 
         let lastIndex = 0;
 

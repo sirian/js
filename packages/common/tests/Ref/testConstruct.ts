@@ -1,4 +1,4 @@
-import {Ref} from "../../src";
+import {construct} from "../../src";
 
 describe("Ref.construct", () => {
     class Foo {
@@ -6,8 +6,8 @@ describe("Ref.construct", () => {
     }
 
     test("", () => {
-        expect(Ref.construct(Foo)).toBeInstanceOf(Foo);
-        expect(Ref.construct(Foo, [])).toBeInstanceOf(Foo);
-        expect(Ref.construct(Foo, [], undefined)).toBeInstanceOf(Foo);
+        expect(construct(Foo)).toBeInstanceOf(Foo);
+        expect(construct(Foo, [])).toBeInstanceOf(Foo);
+        expect(construct(Foo, [], undefined)).toBeInstanceOf(Foo);
     });
 });

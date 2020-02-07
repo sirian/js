@@ -1,4 +1,4 @@
-import {Ref} from "../../src";
+import {hasMethod} from "../../src";
 
 describe("", () => {
     const data = [
@@ -16,6 +16,6 @@ describe("", () => {
     ];
 
     test.each(data)("Ref.hasMethod(%o, %o) === %o", (target, key, expected) => {
-        expect(Ref.hasMethod(target, key)).toBe(expected);
+        expect(hasMethod(target, key)).toBe(expected);
     });
 });

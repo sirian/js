@@ -1,4 +1,4 @@
-import {Ref} from "../../src";
+import {getDescriptor} from "../../src/Ref";
 
 const desc = (value: any, enumerable = false, configurable = true, writable = true): PropertyDescriptor => ({
     value,
@@ -17,6 +17,6 @@ const data: Array<[object, PropertyKey, PropertyDescriptor?]> = [
 ];
 
 test.each(data)("Ref.descriptor(%p, %p) === %p", (target, key, expected) => {
-    const descriptor = Ref.descriptor(target, key);
+    const descriptor = getDescriptor(target, key);
     expect(descriptor).toStrictEqual(expected!);
 });

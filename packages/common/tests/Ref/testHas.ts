@@ -1,4 +1,4 @@
-import {Ref} from "../../src";
+import {hasProp} from "../../src";
 
 describe("", () => {
     const data: Array<[any, any, boolean]> = [
@@ -15,6 +15,6 @@ describe("", () => {
     ];
 
     test.each(data)("Ref.has(%o, %o) === %o", (target, key, expected) => {
-        expect(Ref.has(target, key)).toBe(expected);
+        expect(hasProp(target, key)).toBe(expected);
     });
 });

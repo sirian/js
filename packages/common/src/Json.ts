@@ -1,5 +1,5 @@
 import {JSONValue} from "@sirian/ts-extra-types";
-import {isSome, Var} from "./Var";
+import {isSome, stringifyVar} from "./Var";
 
 export class Json {
     public static stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
@@ -27,7 +27,7 @@ export class Json {
     }
 
     public static stripComments(value: string) {
-        value = Var.stringify(value);
+        value = stringifyVar(value);
 
         const tokenizer = /"|(?:\/\*)|(?:\*\/)|(?:\/\/)|\n|\r/g;
 
