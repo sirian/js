@@ -1,4 +1,4 @@
-import {Obj, Ref, XMap, XWeakMap} from "@sirian/common";
+import {apply, construct, getPrototypes, Obj, Ref, setPrototype, XMap, XWeakMap} from "@sirian/common";
 import {ArrayValueOf, Ctor, UnionToIntersection} from "@sirian/ts-extra-types";
 
 export type UCtor = Ctor<object>;
@@ -19,7 +19,7 @@ export class Mixin {
     protected static readonly applied = new XWeakMap<object, MixinFn>();
     protected static readonly caches = new XWeakMap((superclass) => new XMap((mixin) => mixin(superclass)));
 
-    public static   create<M extends MixinFn>(mixin: M) {
+    public static create<M extends MixinFn>(mixin: M) {
         const bare = Mixin.createBareMixin(mixin);
 
         const {cache, deduplicate, hasInstanceWrapper} = Mixin;
@@ -34,8 +34,8 @@ export class Mixin {
 
         const wrapper: any = function(this: any, ...args: any) {
             return new.target
-                   ? Ref.construct(ctor, args, new.target)
-                   : Ref.apply(m, this, args);
+                   ? construct(ctor, args, new.target)
+                   : apply(m, this, args);
         };
 
         wrapper.prototype = Obj.create(ctor.prototype);
@@ -51,7 +51,7 @@ export class Mixin {
     public static has<M extends MixinFn>(object: object, mixin: M): object is MixinInstance<M> {
         const unwrapped = Mixin.unwrap(mixin);
 
-        return Ref.getPrototypes(object).some((o) => Mixin.applied.get(o) === unwrapped);
+        return getPrototypes(object, {}).some((o) => Mixin.applied.get(o) === unwrapped);
     }
 
     protected static cache(mixin: MixinFn) {
@@ -67,7 +67,7 @@ export class Mixin {
     }
 
     protected static wrap(mixin: MixinFn, wrapper: MixinFn) {
-        Ref.setPrototype(wrapper, mixin);
+        setPrototype(wrapper, mixin);
 
         Mixin.wrappers.set(wrapper, Mixin.unwrap(mixin));
 

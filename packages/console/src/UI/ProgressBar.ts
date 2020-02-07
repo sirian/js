@@ -1,4 +1,4 @@
-import {sprintf, Str, Var} from "@sirian/common";
+import {sprintf, Str, stringifyVar} from "@sirian/common";
 import {LogicError} from "../Error";
 import {Output, OutputVerbosity} from "../Output";
 import {ESC} from "../TTY";
@@ -308,7 +308,7 @@ export class ProgressBar {
                 text = sprintf("%" + matches[2], text);
             }
 
-            return Var.stringify(text);
+            return stringifyVar(text);
         });
     }
 
@@ -323,7 +323,7 @@ export class ProgressBar {
     protected setMaxSteps(max: number) {
         this.format = undefined;
         this.max = Math.max(0, max);
-        this.stepWidth = this.max ? StrUtil.width(Var.stringify(this.max)) : 4;
+        this.stepWidth = this.max ? StrUtil.width(stringifyVar(this.max)) : 4;
     }
 
     protected doOverwrite(message: string) {

@@ -1,4 +1,4 @@
-import {Descriptor, DescriptorType, isEqual, isPrimitive, Obj, Ref} from "@sirian/common";
+import {Descriptor, DescriptorType, isEqual, isPrimitive, Obj, ownDescriptor} from "@sirian/common";
 import {CloneOptions, Cloner, ValidateError} from "./index";
 
 export class CloneValidator {
@@ -12,13 +12,13 @@ export class CloneValidator {
         this.map = new Map();
     }
 
+    protected get maxDepth() {
+        return this.options.maxDepth || 0;
+    }
+
     public static validate(src: any, clone: any, options: Partial<CloneOptions> = {}) {
         const validator = new CloneValidator();
         validator.validate(src, clone, options);
-    }
-
-    protected get maxDepth() {
-        return this.options.maxDepth || 0;
     }
 
     public validate(src: any, clone: any, options: Partial<CloneOptions> = {}) {
@@ -108,8 +108,8 @@ export class CloneValidator {
     }
 
     protected validateKey(src: object, clone: object | object, key: PropertyKey) {
-        const desc1 = Ref.ownDescriptor(src, key);
-        const desc2 = Ref.ownDescriptor(clone, key);
+        const desc1 = ownDescriptor(src, key);
+        const desc2 = ownDescriptor(clone, key);
 
         const type1 = Descriptor.getDescriptorType(desc1);
         const type2 = Descriptor.getDescriptorType(desc2);

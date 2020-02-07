@@ -1,4 +1,14 @@
-import {Entries, isNumeric, isPlain, isPlainArray, isPlainObject, isString, Obj, Ref, Var} from "@sirian/common";
+import {
+    Entries,
+    isNumeric,
+    isPlain,
+    isPlainArray,
+    isPlainObject,
+    isString,
+    Obj,
+    Ref,
+    stringifyVar,
+} from "@sirian/common";
 import {ParameterBagError, ParameterCircularReferenceError, ParameterNotFoundError} from "./Error";
 import {ParameterBag} from "./ParameterBag";
 import {StrictObject} from "./StrictObject";
@@ -83,8 +93,8 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
                 throw new ParameterBagError("A string value must be composed of strings/numbers, "
                     + `but found parameter "${key}" of type ${typeof resolved} inside string value "${value}".`);
             }
-            resolved = Var.stringify(resolved);
-            resolving.push(Var.stringify(key));
+            resolved = stringifyVar(resolved);
+            resolving.push(stringifyVar(key));
             try {
                 return this.resolved ? resolved : this.resolveString(resolved, resolving);
             } finally {

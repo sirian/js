@@ -1,4 +1,4 @@
-import {isArray, isInstanceOf, isNumber, Ref} from "@sirian/common";
+import {hasOwn, isArray, isInstanceOf, isNumber} from "@sirian/common";
 import {InvalidArgumentError, LogicError} from "../Error";
 import {KV} from "../Util";
 import {Argument} from "./Argument";
@@ -88,7 +88,7 @@ export class InputDefinition {
     public hasArgument(name: string | number) {
         if (isNumber(name)) {
             const args = this.getArguments();
-            return Ref.hasOwn(args, name);
+            return hasOwn(args, name);
         }
 
         return this.arguments.has(name);

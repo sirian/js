@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {stringifyVar} from "@sirian/common";
 
 interface GlobOptions {
     // Whether we are matching so called "extended" globs (like bash) and should
@@ -23,7 +23,7 @@ interface GlobOptions {
 
 export class Glob {
     public static toRegex(glob: string, options: Partial<GlobOptions> = {}) {
-        const str = Var.stringify(glob);
+        const str = stringifyVar(glob);
 
         const opts = {
             extended: false,

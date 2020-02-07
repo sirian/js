@@ -1,4 +1,4 @@
-import {isArray, isNullish, isString, Var} from "@sirian/common";
+import {isArray, isNullish, isString, stringifyVar} from "@sirian/common";
 import {InvalidArgumentError, LogicError} from "../Error";
 import {IParameterInit, Parameter} from "./Parameter";
 
@@ -24,7 +24,7 @@ export class Option<T = any> extends Parameter<T> {
 
         super(init);
 
-        this.name = Var.stringify(this.name).replace(/^-+/, "");
+        this.name = stringifyVar(this.name).replace(/^-+/, "");
         this.shortcuts = Option.parseShortcuts(init.shortcut);
         this.required = Boolean(init.required);
         this.valueRequired = Boolean(init.valueRequired) || this.required;

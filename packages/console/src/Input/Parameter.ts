@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {stringifyVar} from "@sirian/common";
 import {InvalidArgumentError, ValueValidateError} from "../Error";
 
 export type ValueNormalizer<T> = (value: string) => T;
@@ -24,8 +24,8 @@ export abstract class Parameter<T> {
     protected allowedValues: T[];
 
     constructor(init: IParameterInit<T>) {
-        this.name = Var.stringify(init.name);
-        this.description = Var.stringify(init.description);
+        this.name = stringifyVar(init.name);
+        this.description = stringifyVar(init.description);
         this.defaultValue = init.defaultValue;
         this.normalizer = init.normalizer;
         this.validator = init.validator;
@@ -89,7 +89,7 @@ export abstract class Parameter<T> {
     }
 
     public setName(name: string) {
-        this.name = Var.stringify(name);
+        this.name = stringifyVar(name);
         return this;
     }
 

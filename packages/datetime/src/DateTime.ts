@@ -1,4 +1,4 @@
-import {Obj, Ref} from "@sirian/common";
+import {hasOwn, Obj} from "@sirian/common";
 import {DateTimeImmutable, IDateTime} from "./DateTimeImmutable";
 import {DateTimeInterval, IDateInterval} from "./DateTimeInterval";
 import {DateTimeModifier} from "./DateTimeModifier";
@@ -139,7 +139,7 @@ export class DateTime extends DateTimeImmutable {
         };
 
         for (const [key, value] of Obj.entries(it)) {
-            if (!value || !Ref.hasOwn(map, key)) {
+            if (!value || !hasOwn(map, key)) {
                 continue;
             }
             const field = map[key];

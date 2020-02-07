@@ -1,4 +1,4 @@
-import {isPlainObject, isPrimitive, Obj, Ref} from "@sirian/common";
+import {getPrototype, getPrototypes, hasMethod, isPlainObject, isPrimitive, Obj} from "@sirian/common";
 import {Instance} from "@sirian/ts-extra-types";
 import {cloneSymbol} from "./Cloneable";
 import {CloneContext} from "./CloneContext";
@@ -76,8 +76,8 @@ export class Cloner implements ICloner<any> {
     }
 
     public static hasCloneSymbol(value: any) {
-        for (const proto of Ref.getPrototypes(value)) {
-            if (Ref.hasMethod(proto, cloneSymbol)) {
+        for (const proto of getPrototypes(value, {})) {
+            if (hasMethod(proto, cloneSymbol)) {
                 return true;
             }
         }
@@ -92,7 +92,7 @@ export class Cloner implements ICloner<any> {
             return true;
         }
 
-        const proto = Ref.getPrototype(value);
+        const proto = getPrototype(value);
 
         if (!proto || this.handlers.has(proto)) {
             return true;
@@ -117,7 +117,7 @@ export class Cloner implements ICloner<any> {
     }
 
     public getHandler<T extends object>(src: T): ICloneHandler<T> | undefined {
-        const proto = Ref.getPrototype(src);
+        const proto = getPrototype(src);
         return this.handlers.get(proto as any);
     }
 

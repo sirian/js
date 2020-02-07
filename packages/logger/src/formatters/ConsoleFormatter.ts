@@ -1,4 +1,4 @@
-import {isInstanceOf, Var} from "@sirian/common";
+import {isInstanceOf, stringifyVar} from "@sirian/common";
 import {LogRecord} from "../LogRecord";
 import {FormatContext} from "./FormatContext";
 import {LineFormatter, LineFormatterInit} from "./LineFormatter";
@@ -41,7 +41,7 @@ export class ConsoleFormatter extends LineFormatter {
             msg.push(v);
         }
 
-        const message = msg.map(Var.stringify).join("");
+        const message = msg.map((v: any) => stringifyVar(v)).join("");
 
         ctx.setFormatted([message, ...args]);
 

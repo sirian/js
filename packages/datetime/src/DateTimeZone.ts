@@ -1,4 +1,4 @@
-import {isInstanceOf, Var} from "@sirian/common";
+import {isInstanceOf, stringifyVar} from "@sirian/common";
 
 export type DateTimeZoneName =
     "Africa/Abidjan"
@@ -452,7 +452,7 @@ export class DateTimeZone {
     }
 
     public static getTimeZoneOffset(tz: string) {
-        tz = Var.stringify(tz).toUpperCase();
+        tz = stringifyVar(tz).toUpperCase();
         if ("Z" === tz || "GMT" === tz) {
             return 0;
         }

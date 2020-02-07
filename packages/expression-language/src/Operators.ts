@@ -1,4 +1,4 @@
-import {Obj, Ref} from "@sirian/common";
+import {hasOwn, Obj} from "@sirian/common";
 import {Operator} from "./Operator";
 
 export class Operators {
@@ -42,10 +42,10 @@ export class Operators {
     }
 
     public hasBinary(name: string) {
-        return Ref.hasOwn(this.binary, name);
+        return hasOwn(this.binary, name);
     }
 
     public hasUnary(name: string) {
-        return Ref.hasOwn(this.unary, name);
+        return hasOwn(this.unary, name);
     }
 }

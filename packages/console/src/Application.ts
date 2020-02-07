@@ -1,7 +1,6 @@
-import {Rgx, sprintf, Str, Var, XSet} from "@sirian/common";
+import {Rgx, sprintf, Str, stringifyVar, XSet} from "@sirian/common";
 import {EventDispatcher} from "@sirian/event-dispatcher";
-import {CommandDefinition, HelpCommand, ICommandConstructor, ListCommand} from "./Command";
-import {ICommandLoader} from "./Command/ICommandLoader";
+import {CommandDefinition, HelpCommand, ICommandConstructor, ICommandLoader, ListCommand} from "./Command";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
 import {ErrorEvent} from "./Event";
 import {Argument, FlagOption, Input, InputDefinition, RecordInput} from "./Input";
@@ -106,7 +105,7 @@ export class Application {
     }
 
     public setName(name: string) {
-        this.name = Var.stringify(name);
+        this.name = stringifyVar(name);
         return this;
     }
 

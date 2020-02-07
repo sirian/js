@@ -1,5 +1,5 @@
 import {isObject} from "@sirian/common";
-import {FormatContext} from "../formatters/FormatContext";
+import {FormatContext} from "../formatters";
 import {LogRecord} from "../LogRecord";
 import {ProcessingHandler, ProcessingHandlerInit} from "./ProcessingHandler";
 

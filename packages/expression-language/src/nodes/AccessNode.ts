@@ -1,4 +1,4 @@
-import {isArray, isObject, Obj, Ref} from "@sirian/common";
+import {hasMethod, isArray, isObject, Obj} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
@@ -65,7 +65,7 @@ export class AccessNode extends Node<{ node: Node, key: Node, args: Node }, { ty
                     throw new Error("Unable to get a property on a non-object.");
                 }
 
-                if (!Ref.hasMethod(obj, value)) {
+                if (!hasMethod(obj, value)) {
                     throw new Error(`Unable to call method "${value}" of object "${this.constructor.name}".`);
                 }
 

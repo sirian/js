@@ -1,4 +1,4 @@
-import {isInstanceOf, isObjectOrFunction, isPrimitive, Ref, Str} from "@sirian/common";
+import {hasMethod, isInstanceOf, isObjectOrFunction, isPrimitive, isPropWritable, Str} from "@sirian/common";
 import {Get, GetDeep, Tail} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
 import {Path, PathElement, PathKey, PropertyPath} from "./PropertyPath";
@@ -104,7 +104,7 @@ export class Property {
         try {
             const props = this.readPropertiesUntil(target, pPath, pPath.length - 1);
             const last = props[props.length - 1];
-            return Ref.isWritable(last, pPath.last.key);
+            return isPropWritable(last, pPath.last.key);
         } catch (error) {
             if (isInstanceOf(error, PropertyAccessError)) {
                 return false;
@@ -131,7 +131,7 @@ export class Property {
         // }
 
         for (const method of methods) {
-            if (Ref.hasMethod(target, method)) {
+            if (hasMethod(target, method)) {
                 access.type = AccessType.METHOD;
                 access.key = method;
                 break;

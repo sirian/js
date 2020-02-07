@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {stringifyVar} from "@sirian/common";
 
 export interface IQuestionOptions<V> {
     question: string;
@@ -54,7 +54,7 @@ export abstract class AbstractQuestion<V, TOptions extends IQuestionOptions<V> =
 
         const set = new Set<string>();
         for (const value of values) {
-            const str = Var.stringify(value);
+            const str = stringifyVar(value);
             if (str.startsWith(text)) {
                 set.add(str);
             }

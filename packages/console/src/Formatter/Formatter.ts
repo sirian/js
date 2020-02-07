@@ -1,4 +1,4 @@
-import {Arr, isArray, sprintf, Var} from "@sirian/common";
+import {Arr, isArray, sprintf, stringifyVar} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
 import {TTYStyle} from "../TTY";
 import {KV, StrUtil} from "../Util";
@@ -66,13 +66,13 @@ export class Formatter {
             return value;
         }
 
-        value = Var.stringify(value);
+        value = stringifyVar(value);
 
         return `<${style}>${value}</>`;
     }
 
     public static escape(text: string = ""): string {
-        text = Var.stringify(text).replace(/([^\\]?)</gi, (tmp, match) => {
+        text = stringifyVar(text).replace(/([^\\]?)</gi, (tmp, match) => {
             return match + "\\<";
         });
 
@@ -159,7 +159,7 @@ export class Formatter {
     }
 
     public decorate(message: string): string {
-        message = Var.stringify(message);
+        message = stringifyVar(message);
         let offset: number = 0;
         const output: string[] = [];
         const tagRegex: string = "[a-z][a-z0-9_=,;-]*";
@@ -235,7 +235,7 @@ export class Formatter {
     }
 
     protected normalizeStyleName(name: string) {
-        return Var.stringify(name).toLowerCase();
+        return stringifyVar(name).toLowerCase();
     }
 
     private createStyleFromString(str: string) {
@@ -243,7 +243,7 @@ export class Formatter {
             return this.getStyle(str);
         }
 
-        const options = Var.stringify(str).split(/[,;]+/) as TTYStyle[];
+        const options = stringifyVar(str).split(/[,;]+/) as TTYStyle[];
 
         if (options.some((opt) => !FormatterStyle.isValid(opt))) {
             return;

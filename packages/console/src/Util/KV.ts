@@ -1,4 +1,4 @@
-import {isArray, isNullish, isString, Obj, Ref} from "@sirian/common";
+import {hasMethod, hasProp, isArray, isNullish, isString, Obj} from "@sirian/common";
 import {IterableEntries, IterableKeys, IterableValues, ObjEntryOf, ObjKeyOf, ObjValueOf} from "@sirian/ts-extra-types";
 
 type KVValues<T> =
@@ -24,7 +24,7 @@ export class KV {
         if (isNullish(value)) {
             return [] as KVValues<T>;
         }
-        if (Ref.hasMethod(value, "values")) {
+        if (hasMethod(value, "values")) {
             return [...value.values()] as KVValues<T>;
         }
 
@@ -43,7 +43,7 @@ export class KV {
             return KV.keys([...value]) as KVKeys<T>;
         }
 
-        if (Ref.hasMethod(value, "keys")) {
+        if (hasMethod(value, "keys")) {
             return [...value.keys()] as KVKeys<T>;
         }
 
@@ -57,7 +57,7 @@ export class KV {
         if (isString(value)) {
             return KV.entries([...value]) as KVEntries<T>;
         }
-        if (Ref.hasMethod(value, "entries")) {
+        if (hasMethod(value, "entries")) {
             return [...value.entries()] as KVEntries<T>;
         }
 
@@ -68,11 +68,11 @@ export class KV {
         if (isNullish(value)) {
             return 0;
         }
-        if (Ref.has(value, "length")) {
+        if (hasProp(value, "length")) {
             return value.length;
         }
 
-        if (Ref.hasMethod(value, "size")) {
+        if (hasMethod(value, "size")) {
             return value.size();
         }
 

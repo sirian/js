@@ -1,5 +1,5 @@
 import DateTimeFormat = Intl.DateTimeFormat;
-import {Var} from "@sirian/common";
+import {stringifyVar} from "@sirian/common";
 import {DateTimeImmutable} from "./DateTimeImmutable";
 
 export class DateTimeFormatter {
@@ -10,7 +10,7 @@ export class DateTimeFormatter {
     }
 
     public static pad(value: string | number, length: number = 2) {
-        return Var.stringify(+value || 0)
+        return stringifyVar(+value || 0)
             .substr(0, length)
             .padStart(length, "0");
     }
@@ -62,7 +62,7 @@ export class DateTimeFormatter {
 
         const re = new RegExp(Object.keys(tokens).join("|"), "g");
 
-        return Var.stringify(mask).replace(re, (token) => String(tokens[token]));
+        return stringifyVar(mask).replace(re, (token) => String(tokens[token]));
     }
 
     protected static getParts(date: DateTimeImmutable, type: "numeric" | "long" | "short", locale?: string | string[]) {

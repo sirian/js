@@ -1,4 +1,4 @@
-import {Var} from "@sirian/common";
+import {stringifyVar} from "@sirian/common";
 
 export class TableCell {
     protected value: any;
@@ -12,6 +12,6 @@ export class TableCell {
     }
 
     public toString() {
-        return Var.stringify(this.value);
+        return stringifyVar(this.value);
     }
 }

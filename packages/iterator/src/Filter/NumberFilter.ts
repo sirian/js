@@ -1,4 +1,4 @@
-import {Num, Var} from "@sirian/common";
+import {Num, stringifyVar} from "@sirian/common";
 import {CompareFilter, Operator} from "./CompareFilter";
 
 export class NumberFilter extends CompareFilter {
@@ -6,7 +6,7 @@ export class NumberFilter extends CompareFilter {
         super();
 
         const re = /^\s*(==|!=|[<>]=?)?\s*([0-9.]+)\s*(?:([kmg])(i?))?\s*$/;
-        const match = Var.stringify(test).match(re);
+        const match = stringifyVar(test).match(re);
 
         if (!match) {
             throw new Error(`Don't understand "${test}" as a number test.`);
