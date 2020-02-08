@@ -1,4 +1,5 @@
-import {Fn} from "../../src";
+import {throwError} from "../../src";
+import {tryAsync} from "../../src/Fn";
 
 describe("Fn.try", () => {
     const err1 = new Error("err1");
@@ -7,44 +8,44 @@ describe("Fn.try", () => {
     const fnResult = 1;
     const onErr = jest.fn(() => onErrResult);
     const fn = jest.fn(() => fnResult);
-    const fnThrow1 = jest.fn(() => Fn.throw(err1));
-    const fnThrow2 = jest.fn(() => Fn.throw(err2));
+    const fnThrow1 = jest.fn(() => throwError(err1));
+    const fnThrow2 = jest.fn(() => throwError(err2));
 
     test(`Fn.tryAsync(${fn}) === ${fnResult}`, async () => {
         jest.clearAllMocks();
-        expect(await Fn.tryAsync(fn)).toBe(fnResult);
+        expect(await tryAsync(fn)).toBe(fnResult);
         expect(fn).toHaveBeenCalled();
     });
 
     test(`Fn.tryAsync(${fn}, ${onErr}) === ${fnResult}`, async () => {
         jest.clearAllMocks();
-        expect(await Fn.tryAsync(fn, onErr)).toBe(1);
+        expect(await tryAsync(fn, onErr)).toBe(1);
         expect(fn).toHaveBeenCalled();
         expect(onErr).not.toHaveBeenCalled();
     });
 
     test(`Fn.tryAsync(${fnThrow1}, ${onErr}) === ${onErrResult}`, async () => {
         jest.clearAllMocks();
-        expect(await Fn.tryAsync(fnThrow1, onErr)).toBe(onErrResult);
+        expect(await tryAsync(fnThrow1, onErr)).toBe(onErrResult);
         expect(fnThrow1).toHaveBeenCalled();
         expect(onErr).toHaveBeenCalledWith(err1);
     });
 
     test(`Fn.tryAsync(${fnThrow1}, ${onErrResult}) === ${onErrResult}`, async () => {
         jest.clearAllMocks();
-        expect(await Fn.tryAsync(fnThrow1, onErrResult)).toBe(onErrResult);
+        expect(await tryAsync(fnThrow1, onErrResult)).toBe(onErrResult);
         expect(fnThrow1).toHaveBeenCalled();
     });
 
     test(`Fn.tryAsync(${fnThrow1}) === undefined`, async () => {
         jest.clearAllMocks();
-        expect(await Fn.tryAsync(fnThrow1)).toBe(undefined);
+        expect(await tryAsync(fnThrow1)).toBe(undefined);
         expect(fnThrow1).toHaveBeenCalled();
     });
 
     test(`Fn.tryAsync(${fnThrow1}, ${fnThrow2}) throws ${err2}`, async () => {
         jest.clearAllMocks();
-        await expect(Fn.tryAsync(fnThrow1, fnThrow2)).rejects.toThrow(err2);
+        await expect(tryAsync(fnThrow1, fnThrow2)).rejects.toThrow(err2);
         expect(fnThrow1).toHaveBeenCalled();
         expect(fnThrow2).toHaveBeenCalledWith(err1);
     });

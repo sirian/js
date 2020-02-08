@@ -1,4 +1,4 @@
-import {Fn} from "./Fn";
+import {tryCatch} from "./Fn";
 import {Json} from "./Json";
 import {Num} from "./Num";
 import {Obj} from "./Obj";
@@ -83,7 +83,7 @@ export class Sprintf {
     }
 
     public static isValid(format: string) {
-        return !!Fn.try(() => this.parse(format));
+        return !!tryCatch(() => this.parse(format));
     }
 
     public resolveArg(ph: Placeholder, argv: any[]) {
