@@ -1,7 +1,7 @@
 import {stringifyVar} from "../../src";
 import {Util} from "../Util";
 
-describe("", () => {
+describe("stringifyVar", () => {
     const data = [
         [`Object("foo")`, "foo"],
         [`""`, ""],
@@ -13,7 +13,7 @@ describe("", () => {
         ["undefined", ""],
     ];
 
-    test.each(data)("Var.stringify(%s) === %o", (code, expected) => {
+    test.each(data)("stringifyVar(%s) === %o", (code, expected) => {
         const value = Util.eval(code);
         expect(stringifyVar(value)).toBe(expected);
     });

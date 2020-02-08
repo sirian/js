@@ -1,3 +1,4 @@
+import {CastBool} from "./cast";
 import {AsyncFunc, Ctor, Func} from "./function";
 import {And, If, Not} from "./logic";
 
@@ -66,9 +67,9 @@ export type Predicate<T = any> = (value: T) => boolean;
 
 export type TypeGuard<U extends V = any, V = any, R extends any[] = any[]> = (arg: V, ...rest: R) => arg is U;
 
-export type NegatePredicate<F extends Func> =
-    F extends TypeGuard<infer U, infer V, infer R> ? TypeGuard<Exclude<V, U>, V, R> :
-    F extends Func<any, infer A, infer T> ? Func<boolean, A, T> :
+export type Negate<F extends Func> =
+    F extends TypeGuard<infer U, infer V, infer Rest> ? TypeGuard<Exclude<V, U>, V, Rest> :
+    F extends Func<infer R, infer A, infer This> ? Func<Not<CastBool<R>>, A, This> :
     never;
 
 export type GuardedType<T extends Func> = T extends TypeGuard<infer R> ? R : never;

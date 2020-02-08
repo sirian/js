@@ -12,18 +12,16 @@ import {
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
-import {stringifyObj} from "./Obj";
 import {getPrototype, hasMethod, hasProp} from "./Ref";
+import {stringifyObj, stringifyVar} from "./Stringify";
 
-export const ifSatisfy = <T, P extends Predicate, O>(value: T, predicate: P, otherwise?: O) => {
-    return (predicate(value) ? value : otherwise) as P extends TypeGuard<infer U>
-                                                     ? (T extends U ? T : O)
-                                                     : P | O;
+export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) => {
+    return (condition(v) ? v : otherwise) as P extends TypeGuard<infer U>
+                                            ? (T extends U ? T : O)
+                                            : T | O;
 };
 
-export const isNull = (value: any): value is null => {
-    return null === value;
-};
+export const isNull = (value: any): value is null => null === value;
 
 export const isUndefined = (value: any): value is undefined => {
     return undefined === value;
@@ -203,14 +201,6 @@ export const isRegExp = (value: any): value is RegExp => {
     return isInstanceOf(value, RegExp);
 };
 
-export const stringifyVar = (value: any) => {
-    if (isNullish(value) || isSymbol(value)) {
-        return "";
-    }
-
-    return String(value);
-};
-
 export const isAsyncIterable = (value: any): value is AsyncIterable<any> => {
     return hasMethod(value, Symbol.asyncIterator);
 };
@@ -226,7 +216,6 @@ export const isEqual = (x: any, y: any) => {
 
     return isEqualNaN(x) && isEqualNaN(y);
 };
-
 export const isPlainObject = (x: any) => {
     if (!isObject(x)) {
         return false;

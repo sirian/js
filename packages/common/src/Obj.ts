@@ -9,6 +9,7 @@ import {
     Wrap,
 } from "@sirian/ts-extra-types";
 import {deleteProp, getPrototypes, hasMethod, hasOwn, hasProp, ownDescriptors, ownKeys, ProtoChainOptions} from "./Ref";
+import {stringifyObj} from "./Stringify";
 import {coalesce, isArray, isNullish, isObjectOrFunction, isPrimitive} from "./Var";
 import {XSet} from "./XSet";
 
@@ -38,8 +39,6 @@ export function assign(target: any, ...sources: any[]) {
 
     return target;
 }
-
-export const stringifyObj = (v: any) => Object.prototype.toString.call(v);
 
 export class Obj {
     public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;

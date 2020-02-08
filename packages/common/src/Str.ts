@@ -1,7 +1,8 @@
 import {Obj} from "./Obj";
 import {Rgx} from "./Rgx";
+import {stringifyVar} from "./Stringify";
 import {Unicode} from "./Unicode";
-import {isFunction, isString, stringifyVar} from "./Var";
+import {isFunction, isString} from "./Var";
 
 export const enum StrSide {
     LEFT = "left",

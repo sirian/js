@@ -1,8 +1,8 @@
-import {Fn} from "../../src";
+import {callableClass} from "../../src";
 
 test("Test callableClass", () => {
 
-    const Foo = Fn.callableClass("zoo", class Bar {
+    const Foo = callableClass("zoo", class Bar {
         constructor(public x: number) {}
 
         public static zoo(x: number) {

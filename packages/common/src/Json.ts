@@ -1,5 +1,6 @@
 import {JSONValue} from "@sirian/ts-extra-types";
-import {isSome, stringifyVar} from "./Var";
+import {stringifyVar} from "./Stringify";
+import {isSome} from "./Var";
 
 export class Json {
     public static stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;

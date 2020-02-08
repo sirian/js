@@ -3,6 +3,11 @@ import {AnyFunc} from "./types";
 
 export type Cast<T, P, D extends P = P> = T extends P ? T : D;
 export type CastFunc<T> = T extends AnyFunc ? T : never;
+export type CastBool<T> =
+    T extends boolean ? T :
+    T extends undefined | void | null | false | 0 | "" ? false :
+    T extends object | symbol ? true :
+    boolean;
 
 export type ArraySymbols = {
     [Symbol.iterator]: any;

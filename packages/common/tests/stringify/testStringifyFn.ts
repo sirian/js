@@ -1,6 +1,6 @@
-import {Fn} from "../../src";
+import {stringifyFn} from "../../src";
 
-describe("", () => {
+describe("stringifyFn", () => {
     const data = [
         function() {
             return "foo";
@@ -22,8 +22,8 @@ describe("", () => {
         Object,
     ];
 
-    test.each(data)("Fn.stringify(%O)", (fn) => {
-        const result = Fn.stringify(fn);
+    test.each(data)("stringifyFn(%O)", (fn) => {
+        const result = stringifyFn(fn);
         expect(result).toEqual(Function.prototype.toString.call(fn));
         expect(result).toEqual("" + fn);
     });
