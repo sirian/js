@@ -185,7 +185,10 @@ export const isPlainObject = (x: any) => {
     return !isFunction(ctor) || ctor.prototype !== x;
 };
 
-export const coalesce = <T extends any[]>(...values: T): Coalesce<T> => values.find(isNotNullish) ?? values.pop();
+export const coalesce = <T extends any[]>(...values: T): Coalesce<T> => {
+    const result = values.find(isNotNullish);
+    return isNullish(result) ? values.pop() : result;
+};
 
 export const Var = {
     /** @deprecated use coalesce */

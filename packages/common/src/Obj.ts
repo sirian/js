@@ -90,7 +90,7 @@ export class Obj {
     public static create(o?: null): Record<any, any>;
     public static create<T extends object | null | undefined, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
     public static create(o?: object | null, properties: any = {}) {
-        return Object.create(o ?? null as any, properties);
+        return Object.create(o || null, properties);
     }
 
     public static clear<T extends object>(target: T): Partial<T> {
