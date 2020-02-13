@@ -17,19 +17,11 @@ import {
 import {getPrototype, hasMethod, hasProp} from "./Ref";
 import {stringifyObj, stringifyVar} from "./Stringify";
 
-export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
-    (condition(v) ? v : otherwise) as P extends TypeGuard<infer U>
-                                      ? (T extends U ? T : O)
-                                      : T | O;
+export const isNull = (value: any): value is null => null === value;
 
-export const isNull = (value: any): value is null =>
-    null === value;
+export const isUndefined = (value: any): value is undefined => undefined === value;
 
-export const isUndefined = (value: any): value is undefined =>
-    undefined === value;
-
-export const isNullish = (value: any): value is Nullish =>
-    null === value || undefined === value;
+export const isNullish = (value: any): value is Nullish => null === value || undefined === value;
 
 export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => !isNullish(value);
 
@@ -45,20 +37,13 @@ export const getXType = <T>(value: T): XTypeNameOf<T> => {
     return typeof value as XTypeNameOf<T>;
 };
 
-export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> => {
-    const type: any = getXType(v);
+export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> =>
+    isArray(types) ? isSome(getXType(v), types) : getXType<any>(v) === types;
 
-    return isArray(types) ? isSome(type, types) : type === types;
-};
+export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> =>
+    isArray(types) ? isSome(typeof v, types) : typeof v === types;
 
-export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> => {
-    const type: any = typeof v;
-    return isArray(types) ? isSome(type, types) : type === types;
-};
-
-export const isSome = <U>(value: any, values: U[]): value is U => {
-    return values.includes(value);
-};
+export const isSome = <U>(value: any, values: U[]): value is U => values.includes(value);
 
 export const isNumber = (value: any): value is number => isType(value, "number");
 
@@ -68,19 +53,18 @@ export const isBoolean = (value: any): value is boolean => isType(value, "boolea
 
 export const isString = (value: any): value is string => isType(value, "string");
 
+export const isSymbol = (value: any): value is symbol => isType(value, "symbol");
+
+export const isFunction = <T extends any>(value: T): value is Function & Extract<T, AnyFunc> => isType(value, "function");
+
+export const isPrimitive = (value: any): value is Primitive => !isObjectOrFunction(value);
+
 export const isPropertyKey = (value: any): value is PropertyKey => isType(value, ["string", "number", "symbol"]);
 
-export const isPrimitive = (value: any): value is Primitive => {
-    return !isObjectOrFunction(value);
-};
-
-export const isSymbol = (value: any): value is symbol => {
-    return "symbol" === typeof value;
-};
-
-export const isFunction = <T extends any>(value: T): value is Function & Extract<T, AnyFunc> => {
-    return "function" === typeof value;
-};
+export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
+    (condition(v) ? v : otherwise) as P extends TypeGuard<infer U>
+                                      ? (T extends U ? T : O)
+                                      : T | O;
 
 export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
     if (!isFunction(value)) {
@@ -98,60 +82,41 @@ export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
     }
 };
 
-export const isTruthy = (a: any) => {
-    return !!a;
-};
+export const isTruthy = (a: any) => !!a;
 
-export const isFalsy = (a: any) => {
-    return !a;
-};
+export const isFalsy = (a: any) => !a;
 
-export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> => {
-    return null !== value && "object" === typeof value;
-};
+export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> =>
+    null !== value && isType(value, "object");
 
-export const isNumeric = (value: any): value is string | number => {
-    return isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
-};
+export const isNumeric = (value: any): value is string | number =>
+    isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
 
-export const isPromiseLike = (value: any): value is PromiseLike<any> => {
-    return hasMethod(value, "then");
-};
+export const isPromiseLike = (value: any): value is PromiseLike<any> =>
+    hasMethod(value, "then");
 
-export const isObjectOrFunction = (value: any): value is object => {
-    return isObject(value) || isFunction(value);
-};
+export const isObjectOrFunction = (value: any): value is object =>
+    isObject(value) || isFunction(value);
 
-export const isInstanceOf = <C extends Ctor | Newable>(obj: any, ctor: C): obj is Instance<C> => {
-    return isFunction(ctor) && (obj instanceof ctor);
-};
+export const isInstanceOf = <C extends Ctor | Newable>(obj: any, ctor: C): obj is Instance<C> =>
+    isFunction(ctor) && (obj instanceof ctor);
 
 export const isEqualNaN = (value: any): value is number => {
     return value !== value;
 };
 
-export const isSubclassOf = <A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> => {
-    return isFunction(a) && (isEqual(a, b) || isInstanceOf(a.prototype, b));
-};
+export const isSubclassOf = <A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> =>
+    isFunction(a) && (isEqual(a, b) || isInstanceOf(a.prototype, b));
 
-export const isSameType = <T>(x: any, value: T): value is T => {
-    if (x === null || value === null) {
-        return x === value;
-    }
-    return typeof x === typeof value;
-};
+export const isSameType = <T>(x: any, value: T): value is T =>
+    (x === null || value === null)
+    ? x === value
+    : typeof x === typeof value;
 
-export const isBetween = <T extends string | number | bigint>(x: T, min: T, max: T) => {
-    if (!isSameType(x, min) || !isSameType(x, max)) {
-        return false;
-    }
+export const isBetween = <T extends string | number | bigint>(x: T, min: T, max: T) =>
+    isSameType(x, min) && isSameType(x, max) && x >= min && x <= max;
 
-    return x >= min && x <= max;
-};
-
-export const isArray = (value: any): value is any[] => {
-    return Array.isArray(value);
-};
+export const isArray = (value: any): value is any[] => Array.isArray(value);
 
 export const isArrayLike = (value: any, strict: boolean = true): value is { length: number } => {
     if (isString(value)) {
@@ -170,9 +135,7 @@ export const isArrayLike = (value: any, strict: boolean = true): value is { leng
     return isNumber(length) && !(length % 1) && length >= 0;
 };
 
-export const isPlain = (value: any) => {
-    return isPlainArray(value) || isPlainObject(value);
-};
+export const isPlain = (value: any) => isPlainArray(value) || isPlainObject(value);
 
 export const isPlainArray = (value: any): value is unknown[] => {
     if (!isArray(value)) {
@@ -190,25 +153,18 @@ export const isPlainArray = (value: any): value is unknown[] => {
     return !isArray(nextProto);
 };
 
-export const isRegExp = (value: any): value is RegExp => {
-    return isInstanceOf(value, RegExp);
-};
+export const isRegExp = (value: any): value is RegExp =>
+    isInstanceOf(value, RegExp);
 
-export const isAsyncIterable = (value: any): value is AsyncIterable<any> => {
-    return hasMethod(value, Symbol.asyncIterator);
-};
+export const isAsyncIterable = (value: any): value is AsyncIterable<any> =>
+    hasMethod(value, Symbol.asyncIterator);
 
-export const isIterable = (value: any): value is Iterable<any> => {
-    return hasMethod(value, Symbol.iterator);
-};
+export const isIterable = (value: any): value is Iterable<any> =>
+    hasMethod(value, Symbol.iterator);
 
-export const isEqual = (x: any, y: any) => {
-    if (x === y) {
-        return true;
-    }
+export const isEqual = (x: any, y: any) =>
+    x === y || isEqualNaN(x) && isEqualNaN(y);
 
-    return isEqualNaN(x) && isEqualNaN(y);
-};
 export const isPlainObject = (x: any) => {
     if (!isObject(x)) {
         return false;

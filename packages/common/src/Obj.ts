@@ -10,7 +10,7 @@ import {
 } from "@sirian/ts-extra-types";
 import {deleteProp, getPrototypes, hasMethod, hasOwn, hasProp, ownDescriptors, ownKeys, ProtoChainOptions} from "./Ref";
 import {stringifyObj} from "./Stringify";
-import {coalesce, isArray, isNullish, isObjectOrFunction, isPrimitive} from "./Var";
+import {isArray, isNullish, isObjectOrFunction, isPrimitive} from "./Var";
 import {XSet} from "./XSet";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -20,15 +20,19 @@ export interface SnapshotOptions {
     stopAt?: object;
 }
 
+export const keysOf = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
+export const valuesOf = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
+export const entriesOf = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
+
 export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
 export function assign(target: any, ...sources: any[]) {
-    const keySet = new XSet(Obj.keys(target));
+    const keySet = new XSet(keysOf(target));
 
     for (const source of sources) {
         if (isNullish(source)) {
             continue;
         }
-        keySet.add(...Obj.keys(source));
+        keySet.add(...keysOf(source));
 
         for (const key of keySet) {
             if (hasProp(source, key)) {
@@ -41,14 +45,14 @@ export function assign(target: any, ...sources: any[]) {
 }
 
 export class Obj {
-    public static keys = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
-    public static values = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
-    public static entries = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
+    public static keys = keysOf;
+    public static values = valuesOf;
+    public static entries = entriesOf;
 
     public static stringify = stringifyObj;
 
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
-        const k = Obj.keys(target) as Array<keyof T>;
+        const k = keysOf(target) as Array<keyof T>;
         for (const source of sources) {
             assign(target, Obj.pick(source, k));
         }
@@ -56,7 +60,7 @@ export class Obj {
     }
 
     public static snapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
-        const keySet = new XSet(Obj.keys(target) as Array<keyof T>);
+        const keySet = new XSet(keysOf(target) as Array<keyof T>);
 
         const opts = {
             stopAt: Object.prototype,
@@ -85,8 +89,8 @@ export class Obj {
 
     public static create(o?: null): Record<any, any>;
     public static create<T extends object | null | undefined, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
-    public static create(o = null, properties: any = {}) {
-        return Object.create(coalesce(o, null) as any, properties);
+    public static create(o?: object | null, properties: any = {}) {
+        return Object.create(o ?? null as any, properties);
     }
 
     public static clear<T extends object>(target: T): Partial<T> {
