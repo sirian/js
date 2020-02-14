@@ -1,4 +1,4 @@
-import {assign, hasOwn, isPropertyKey, Obj, Ref} from "@sirian/common";
+import {assign, entriesOf, hasOwn, isPropertyKey, keysOf, Ref, valuesOf} from "@sirian/common";
 import {ParameterNotFoundError} from "./Error";
 
 export class ParameterBag<T extends Record<string | number, any>> {
@@ -112,15 +112,15 @@ export class ParameterBag<T extends Record<string | number, any>> {
     }
 
     public keys() {
-        return Obj.keys(this.params);
+        return keysOf(this.params);
     }
 
     public values() {
-        return Obj.values(this.params);
+        return valuesOf(this.params);
     }
 
     public entries() {
-        return Obj.entries(this.params);
+        return entriesOf(this.params);
     }
 
     public* [Symbol.iterator]() {

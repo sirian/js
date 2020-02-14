@@ -1,4 +1,4 @@
-import {Obj} from "./Obj";
+import {entriesOf} from "./Obj";
 import {isFunction, isPlainObject, isPropertyKey} from "./Var";
 
 export type XMapInitializer<K, V> = (key: K) => V;
@@ -42,7 +42,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
         }
 
         if (isPlainObject(src)) {
-            return Obj.entries(src) as any;
+            return entriesOf(src) as any;
         }
 
         return Array.from(src as any);

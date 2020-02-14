@@ -1,4 +1,4 @@
-import {hasOwn, Obj} from "@sirian/common";
+import {entriesOf, hasOwn} from "@sirian/common";
 import {DateTimeImmutable, IDateTime} from "./DateTimeImmutable";
 import {DateTimeInterval, IDateInterval} from "./DateTimeInterval";
 import {DateTimeModifier} from "./DateTimeModifier";
@@ -138,7 +138,7 @@ export class DateTime extends DateTimeImmutable {
             ms: "ms",
         };
 
-        for (const [key, value] of Obj.entries(it)) {
+        for (const [key, value] of entriesOf(it)) {
             if (!value || !hasOwn(map, key)) {
                 continue;
             }

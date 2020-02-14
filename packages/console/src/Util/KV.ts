@@ -1,4 +1,4 @@
-import {hasMethod, hasProp, isArray, isNullish, isString, Obj} from "@sirian/common";
+import {entriesOf, hasMethod, hasProp, isArray, isNullish, isString, keysOf, valuesOf} from "@sirian/common";
 import {IterableEntries, IterableKeys, IterableValues, ObjEntryOf, ObjKeyOf, ObjValueOf} from "@sirian/ts-extra-types";
 
 type KVValues<T> =
@@ -32,7 +32,7 @@ export class KV {
             return [...value] as KVValues<T>;
         }
 
-        return Obj.values(value) as KVValues<T>;
+        return valuesOf(value) as KVValues<T>;
     }
 
     public static keys<T>(value: T): KVKeys<T> {
@@ -47,7 +47,7 @@ export class KV {
             return [...value.keys()] as KVKeys<T>;
         }
 
-        return [...Obj.keys(value)] as KVKeys<T>;
+        return [...keysOf(value)] as KVKeys<T>;
     }
 
     public static entries<T>(value: T): KVEntries<T> {
@@ -61,7 +61,7 @@ export class KV {
             return [...value.entries()] as KVEntries<T>;
         }
 
-        return Obj.entries(value) as KVEntries<T>;
+        return entriesOf(value) as KVEntries<T>;
     }
 
     public static size<T>(value: T) {

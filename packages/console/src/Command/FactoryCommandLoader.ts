@@ -1,4 +1,4 @@
-import {hasOwn, Obj} from "@sirian/common";
+import {hasOwn, keysOf} from "@sirian/common";
 import {CommandNotFoundError} from "../Error";
 import {ICommandConstructor} from "./Command";
 import {ICommandLoader} from "./ICommandLoader";
@@ -24,6 +24,6 @@ export class FactoryCommandLoader implements ICommandLoader {
     }
 
     public getNames() {
-        return Obj.keys(this.factories);
+        return keysOf(this.factories);
     }
 }

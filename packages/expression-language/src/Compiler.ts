@@ -1,4 +1,4 @@
-import {isArray, isObject, isPrimitive, isString, Obj, Str} from "@sirian/common";
+import {entriesOf, isArray, isObject, isPrimitive, isString, Str} from "@sirian/common";
 import {IExpressionFunction} from "./IExpressionFunction";
 import {Node} from "./nodes";
 
@@ -84,7 +84,7 @@ export class Compiler {
             this.raw("{");
             let first = false;
 
-            for (const [k, v] of Obj.entries(value)) {
+            for (const [k, v] of entriesOf(value)) {
                 if (first) {
                     this.raw(",");
                 }

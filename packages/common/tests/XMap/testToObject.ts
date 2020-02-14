@@ -1,4 +1,4 @@
-import {Obj, XMap} from "../../src";
+import {entriesOf, XMap} from "../../src";
 
 describe("XMap.toObject", () => {
     const data = [
@@ -14,7 +14,7 @@ describe("XMap.toObject", () => {
     ];
 
     test.each(data)("toObject(entries(%p))", (obj) => {
-        const map = new XMap(Obj.entries(obj));
+        const map = new XMap(entriesOf(obj));
 
         expect(map.toObject()).toStrictEqual(obj);
     });

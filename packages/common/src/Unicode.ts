@@ -1,4 +1,4 @@
-import {stringifyVar} from "./Stringify";
+import {stringifyVar} from "./Var";
 
 export class Unicode {
     public static getSymbols(str: string) {

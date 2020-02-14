@@ -15,7 +15,7 @@ import {
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
 import {getPrototype, hasMethod, hasProp} from "./Ref";
-import {stringifyObj, stringifyVar} from "./Stringify";
+import {stringifyObj} from "./Stringify";
 
 export const isNull = (value: any): value is null => null === value;
 
@@ -189,6 +189,8 @@ export const coalesce = <T extends any[]>(...values: T): Coalesce<T> => {
     const result = values.find(isNotNullish);
     return isNullish(result) ? values.pop() : result;
 };
+
+export const stringifyVar = (value: any) => isNullish(value) || isSymbol(value) ? "" : String(value);
 
 export const Var = {
     /** @deprecated use coalesce */

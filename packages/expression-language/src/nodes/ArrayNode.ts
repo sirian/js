@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {valuesOf} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
@@ -25,7 +25,7 @@ export class ArrayNode extends Node<Record<number, Node>, {}> {
 
     public evaluate(functions: Record<string, IExpressionFunction>, values: Record<string, any>) {
         const result = [];
-        for (const value of Obj.values(this.nodes)) {
+        for (const value of valuesOf(this.nodes)) {
             result.push(value.evaluate(functions, values));
         }
 
@@ -34,7 +34,7 @@ export class ArrayNode extends Node<Record<number, Node>, {}> {
 
     protected compileArguments(compiler: Compiler) {
         let first = true;
-        for (const value of Obj.values(this.nodes)) {
+        for (const value of valuesOf(this.nodes)) {
             if (!first) {
                 compiler.raw(", ");
             }

@@ -1,5 +1,5 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
-import {Obj} from "./Obj";
+import {entriesOf, fromEntries} from "./Obj";
 import {hasMethod} from "./Ref";
 import {isNotNullish, isString} from "./Var";
 
@@ -20,7 +20,7 @@ export class Entries<T extends Entry> {
 
         const entries = hasMethod(value, "entries")
                         ? value.entries()
-                        : Obj.entries(value);
+                        : entriesOf(value);
 
         return new this(entries);
     }
@@ -31,7 +31,7 @@ export class Entries<T extends Entry> {
     }
 
     public toObject(): FromEntries<T[]> {
-        return Obj.fromEntries(this.items);
+        return fromEntries(this.items);
     }
 
     public keys() {

@@ -1,4 +1,4 @@
-import {hasOwn, Obj} from "@sirian/common";
+import {hasOwn, keysOf, Obj} from "@sirian/common";
 
 export type MarkingPlaces<S extends string = any> = Partial<Record<S, number>>;
 
@@ -8,7 +8,7 @@ export class Marking<S extends string = any> {
     constructor(representation: Partial<MarkingPlaces<S>> = {}) {
         this.places = {};
         if (representation) {
-            for (const place of Obj.keys(representation)) {
+            for (const place of keysOf(representation)) {
                 this.mark(place as S);
             }
         }

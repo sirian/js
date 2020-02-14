@@ -1,4 +1,4 @@
-import {Descriptor, DescriptorType, isEqual, isPrimitive, Obj, ownDescriptor} from "@sirian/common";
+import {Descriptor, DescriptorType, isEqual, isPrimitive, keysOf, ownDescriptor} from "@sirian/common";
 import {CloneOptions, Cloner, ValidateError} from "./index";
 
 export class CloneValidator {
@@ -88,7 +88,7 @@ export class CloneValidator {
             return;
         }
 
-        for (const key of Obj.keys(src)) {
+        for (const key of keysOf(src)) {
             if (this.checkCircle(src, key)) {
                 continue;
             }

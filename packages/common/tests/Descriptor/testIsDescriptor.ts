@@ -1,5 +1,5 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor} from "@sirian/ts-extra-types";
-import {Descriptor, Obj, ownDescriptors} from "../../src";
+import {Descriptor, Obj, ownDescriptors, valuesOf} from "../../src";
 
 describe("Descriptor", () => {
     const dataDescriptors: DataPropertyDescriptor[] = [
@@ -26,8 +26,8 @@ describe("Descriptor", () => {
     ];
 
     const descriptors = [
-        ...Obj.values(ownDescriptors(Object)),
-        ...Obj.values(ownDescriptors(Function)),
+        ...valuesOf(ownDescriptors(Object)),
+        ...valuesOf(ownDescriptors(Function)),
     ];
 
     const invalidDescriptors = [

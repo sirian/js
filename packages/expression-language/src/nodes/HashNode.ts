@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {valuesOf} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
@@ -34,7 +34,7 @@ export class HashNode extends Node<Record<number, Node>, {}> {
 
     protected getKeyValuePairs() {
         const pairs: Array<[Node, Node]> = [];
-        const nodes = Obj.values(this.nodes);
+        const nodes = valuesOf(this.nodes);
 
         for (let i = 0; i < nodes.length; i += 2) {
             pairs.push([nodes[i], nodes[i + 1]]);

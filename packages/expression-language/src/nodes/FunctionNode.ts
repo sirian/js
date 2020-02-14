@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {valuesOf} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
@@ -11,7 +11,7 @@ export class FunctionNode extends Node<{ args: Node }, { name: string }> {
     public compile(compiler: Compiler) {
         const args: string[] = [];
         const argsNode = this.nodes.args;
-        for (const node of Obj.values(argsNode.nodes)) {
+        for (const node of valuesOf(argsNode.nodes)) {
             args.push(compiler.subcompile(node));
         }
 
@@ -24,7 +24,7 @@ export class FunctionNode extends Node<{ args: Node }, { name: string }> {
         const args = [];
         const options = this.options;
         const argsNode = this.nodes.args;
-        for (const node of Obj.values(argsNode.nodes)) {
+        for (const node of valuesOf(argsNode.nodes)) {
             args.push(node.evaluate(functions, values));
         }
 

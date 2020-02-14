@@ -1,4 +1,4 @@
-import {isInstanceOf, isString, Obj, Sprintf} from "@sirian/common";
+import {entriesOf, isInstanceOf, isString, Sprintf} from "@sirian/common";
 import {FormatContext} from "@sirian/logger";
 import {LogRecord} from "../LogRecord";
 import {PlaceholderToken, TagToken, TokenStream} from "../parser/token";
@@ -48,7 +48,7 @@ export abstract class LogFormatter implements ILogFormatter {
     }
 
     public addPlaceholders(placeholders: Record<string, PlaceholderFormatCallback>) {
-        for (const [key, value] of Obj.entries(placeholders)) {
+        for (const [key, value] of entriesOf(placeholders)) {
             this.setPlaceholder(key, value);
         }
         return this;

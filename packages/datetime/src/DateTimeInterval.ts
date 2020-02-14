@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {entriesOf} from "@sirian/common";
 
 export interface IDateInterval {
     years: number;
@@ -30,7 +30,7 @@ export class DateTimeInterval implements IDateInterval {
             "ms",
         ]);
 
-        for (const [key, value] of Obj.entries(interval)) {
+        for (const [key, value] of entriesOf(interval)) {
             if (!value || !keys.has(key)) {
                 continue;
             }
