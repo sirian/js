@@ -1,8 +1,7 @@
-import {Obj} from "./Obj";
+import {keysOf} from "./Obj";
 import {Rgx} from "./Rgx";
-import {stringifyVar} from "./Stringify";
 import {Unicode} from "./Unicode";
-import {isFunction, isString} from "./Var";
+import {isFunction, isString, stringifyVar} from "./Var";
 
 export const enum StrSide {
     LEFT = "left",
@@ -154,8 +153,7 @@ export class Str {
             return str;
         }
 
-        const keys = Obj
-            .keys(pairs)
+        const keys = keysOf(pairs)
             .sort()
             .reverse();
 

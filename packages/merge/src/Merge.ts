@@ -1,5 +1,5 @@
 import {Cloner} from "@sirian/clone";
-import {hasOwn, isPlainObject, Obj} from "@sirian/common";
+import {hasOwn, isPlainObject, keysOf} from "@sirian/common";
 
 export interface MergeOptions {
     clone?: boolean;
@@ -45,7 +45,7 @@ export class Merge {
             target = cloner.clone(target);
         }
 
-        const keys = Obj.keys(source);
+        const keys = keysOf(source);
 
         for (const key of keys) {
             if (!allowAdd && !hasOwn(target, key)) {

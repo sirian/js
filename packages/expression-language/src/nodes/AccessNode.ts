@@ -1,4 +1,4 @@
-import {hasMethod, isArray, isObject, Obj} from "@sirian/common";
+import {hasMethod, isArray, isObject, valuesOf} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 import {Node} from "./Node";
@@ -69,7 +69,7 @@ export class AccessNode extends Node<{ node: Node, key: Node, args: Node }, { ty
                     throw new Error(`Unable to call method "${value}" of object "${this.constructor.name}".`);
                 }
 
-                return obj[value](...Obj.values(args.evaluate(functions, values)));
+                return obj[value](...valuesOf(args.evaluate(functions, values)));
 
             case AccessType.ARRAY:
                 if (!isArray(obj)) {

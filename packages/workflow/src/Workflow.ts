@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {keysOf} from "@sirian/common";
 import {EventDispatcher} from "@sirian/event-dispatcher";
 import {Definition} from "./Definition";
 import {NotEnabledTransitionError, UndefinedTransitionError} from "./Error";
@@ -55,7 +55,7 @@ export class Workflow<S extends string = any> {
         // check that the subject has a known place
         const places = this.definition.places;
 
-        for (const place of Obj.keys(marking.getPlaces())) {
+        for (const place of keysOf(marking.getPlaces())) {
             if (places.has(place as S)) {
                 continue;
             }

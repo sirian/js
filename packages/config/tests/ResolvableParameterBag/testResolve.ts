@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {entriesOf} from "@sirian/common";
 import {ResolvableParameterBag} from "../../src";
 
 describe("ResolvableParameterBag.resolve", () => {
@@ -18,7 +18,7 @@ describe("ResolvableParameterBag.resolve", () => {
             zoo: "zbffbf 42",
         };
 
-        for (const [k, v] of Obj.entries(expected)) {
+        for (const [k, v] of entriesOf(expected)) {
             expect(p.get(k)).toBe(v);
         }
     });

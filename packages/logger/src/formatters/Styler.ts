@@ -1,4 +1,4 @@
-import {hasOwn, isObject, Obj, Str, stringifyVar} from "@sirian/common";
+import {entriesOf, hasOwn, isObject, Str, stringifyVar} from "@sirian/common";
 import {StyleInit} from "./StyleStack";
 
 export class Styler {
@@ -15,7 +15,7 @@ export class Styler {
         }
 
         const result = [];
-        for (const [key, value] of Obj.entries(style)) {
+        for (const [key, value] of entriesOf(style)) {
             result.push(Str.dashCase(key), ":", value, ";");
         }
         return result.join("");
@@ -28,7 +28,7 @@ export class Styler {
     }
 
     public addStyles(styles: Record<string, StyleInit>) {
-        for (const [name, style] of Obj.entries(styles)) {
+        for (const [name, style] of entriesOf(styles)) {
             this.setStyle(name, style);
         }
         return this;

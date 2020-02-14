@@ -1,5 +1,5 @@
 import {Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
-import {Obj, TypedPropertyDescriptorMap} from "./Obj";
+import {TypedPropertyDescriptorMap} from "./Obj";
 import {
     ifSatisfy,
     isConstructor,
@@ -20,10 +20,9 @@ export interface ProtoChainOptions {
 }
 
 export const getPrototype = (target: any) => {
-    if (isNullish(target)) {
-        return;
+    if (!isNullish(target)) {
+        return Reflect.getPrototypeOf(Object(target));
     }
-    return Reflect.getPrototypeOf(Obj.wrap(target));
 };
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {
@@ -81,7 +80,7 @@ export function getDescriptor(target: any, key: PropertyKey) {
 }
 
 export const getDescriptors = <T>(target: T) => {
-    const result = Obj.create();
+    const result: Record<any, any> = {};
 
     for (const obj of getPrototypes(target)) {
         for (const key of ownKeys(obj)) {
@@ -101,9 +100,8 @@ export function defineProp(t: object, k: PropertyKey, d: PropertyDescriptor) {
     return Reflect.defineProperty(t, k, d);
 }
 
-export const getConstructor = <T extends any>(target: T): Newable<T> | undefined => {
-    return ifSatisfy(target && target.constructor, isConstructor);
-};
+export const getConstructor = <T extends any>(target: T): Newable<T> | undefined =>
+    ifSatisfy(target && target.constructor, isConstructor);
 
 export function apply<R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
 export function apply<R>(target: () => R, thisArg?: any, args?: []): R;
@@ -120,7 +118,7 @@ export function construct(target: Function, args: any[] = [], newTarget?: Functi
 }
 
 export function hasProp<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-    return !isNullish(target) && (key in Obj.wrap(target));
+    return !isNullish(target) && (key in Object(target));
 }
 
 export function getProp<T, K extends keyof T>(target: T, key: K): T[K];

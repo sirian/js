@@ -1,4 +1,4 @@
-import {Obj, Str} from "@sirian/common";
+import {entriesOf, Str, valuesOf} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 
@@ -16,13 +16,13 @@ export class Node<N extends Nodes = Nodes, A extends Record<string, any> = Recor
     public toString() {
         const options = [];
 
-        for (const [name, value] of Obj.entries(this.options)) {
+        for (const [name, value] of entriesOf(this.options)) {
             options.push(`${name}: ${Str.stringify(value).replace(/\n/g, "")}`);
         }
 
         const repr = [this.constructor.name + "(" + options.join(", ")];
 
-        const nodes = Obj.values(this.nodes);
+        const nodes = valuesOf(this.nodes);
         if (nodes.length) {
             for (const node of nodes) {
                 for (const line of Str.stringify(node).split("\n")) {
@@ -39,13 +39,13 @@ export class Node<N extends Nodes = Nodes, A extends Record<string, any> = Recor
     }
 
     public compile(compiler: Compiler) {
-        for (const node of Obj.values(this.nodes)) {
+        for (const node of valuesOf(this.nodes)) {
             node.compile(compiler);
         }
     }
 
     public evaluate(functions: Record<string, IExpressionFunction>, values: Record<string, any>): any {
-        return Obj.values(this.nodes)
+        return valuesOf(this.nodes)
             .map((node) => node.evaluate(functions, values));
     }
 }

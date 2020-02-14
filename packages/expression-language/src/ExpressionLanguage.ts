@@ -1,4 +1,4 @@
-import {isFunction, Obj} from "@sirian/common";
+import {entriesOf, isFunction, keysOf} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 import {Compiler} from "./Compiler";
 import {IExpressionFunction} from "./IExpressionFunction";
@@ -20,7 +20,7 @@ export class ExpressionLanguage {
     constructor(init: Partial<ExpressionLanguageInit> = {}) {
         this.functions = {};
 
-        for (const [name, fn] of Obj.entries(init.functions || {})) {
+        for (const [name, fn] of entriesOf(init.functions || {})) {
             this.functions[name] = isFunction(fn) ? new SimpleExpressionFunction(fn) : fn;
         }
 
@@ -30,7 +30,7 @@ export class ExpressionLanguage {
     }
 
     public getFunctionNames() {
-        return Obj.keys(this.functions);
+        return keysOf(this.functions);
     }
 
     public compile(expression: string, names: string[] = []) {
@@ -39,7 +39,7 @@ export class ExpressionLanguage {
     }
 
     public evaluate(expression: string, values: Record<string, any> = {}) {
-        const exp = this.parse(expression, Obj.keys(values));
+        const exp = this.parse(expression, keysOf(values));
         return exp.nodes.evaluate(this.functions, values);
     }
 

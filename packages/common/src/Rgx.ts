@@ -1,5 +1,5 @@
-import {stringifyVar} from "./Stringify";
-import {isNullish, isRegExp, isString} from "./Var";
+
+import {isNullish, isRegExp, isString, stringifyVar} from "./Var";
 import {XSet} from "./XSet";
 
 const escapeRe = /[|\\{}()[\]^$+*?.]/g;

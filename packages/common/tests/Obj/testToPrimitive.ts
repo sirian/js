@@ -1,5 +1,5 @@
 import {Primitive} from "@sirian/ts-extra-types";
-import {isNullish, Obj} from "../../src";
+import {isNullish, toPrimitive} from "../../src";
 
 describe("Obj.toPrimitive", () => {
     const primitives: Primitive[] = [1, true, "foo", Symbol.iterator, Symbol(), undefined, null];
@@ -16,11 +16,11 @@ describe("Obj.toPrimitive", () => {
     ];
 
     test.each(data)("Obj.toPrimitive(%o) === %o", (x, expected) => {
-        expect(Obj.toPrimitive(x)).toBe(expected);
+        expect(toPrimitive(x)).toBe(expected);
     });
 
     test("Obj.toPrimitive(Date)", () => {
         const date = new Date();
-        expect(Obj.toPrimitive(date)).toBe("" + date);
+        expect(toPrimitive(date)).toBe("" + date);
     });
 });

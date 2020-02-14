@@ -1,4 +1,4 @@
-import {isPropWritable, Ref} from "../../src";
+import {isPropWritable} from "../../src";
 
 describe("Ref.isWritable", () => {
     const data = [

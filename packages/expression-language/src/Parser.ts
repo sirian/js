@@ -1,4 +1,4 @@
-import {Obj} from "@sirian/common";
+import {valuesOf} from "@sirian/common";
 import {SyntaxError} from "@sirian/parser";
 import {
     AccessNode,
@@ -322,7 +322,7 @@ export class Parser {
         if (stream.current.test(TokenType.PUNCTUATION, "(")) {
             type = AccessType.METHOD;
             const argNodes = this.parseArguments().nodes;
-            for (const n of Obj.values(argNodes)) {
+            for (const n of valuesOf(argNodes)) {
                 args.addElement(n);
             }
         } else {

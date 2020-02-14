@@ -1,4 +1,4 @@
-import {hasOwn, Obj} from "@sirian/common";
+import {hasOwn, keysOf} from "@sirian/common";
 import {Operator} from "./Operator";
 
 export class Operators {
@@ -38,7 +38,7 @@ export class Operators {
     };
 
     public getOperatorNames() {
-        return Obj.keys({...this.unary, ...this.binary});
+        return keysOf({...this.unary, ...this.binary});
     }
 
     public hasBinary(name: string) {

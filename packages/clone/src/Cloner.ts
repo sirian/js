@@ -1,4 +1,12 @@
-import {getPrototype, getPrototypes, hasMethod, isPlainObject, isPrimitive, Obj} from "@sirian/common";
+import {
+    getPrototype,
+    getPrototypes,
+    hasMethod,
+    isPlainObject,
+    isPrimitive,
+    toObject,
+    toPrimitive,
+} from "@sirian/common";
 import {Instance} from "@sirian/ts-extra-types";
 import {cloneSymbol} from "./Cloneable";
 import {CloneContext} from "./CloneContext";
@@ -38,7 +46,7 @@ export class Cloner implements ICloner<any> {
 
         for (const target of [Number, Boolean, String, Symbol, BigInt]) {
             this.addHandler(target, {
-                create: (src) => Obj.wrap(Obj.toPrimitive(src)),
+                create: (src) => toObject(toPrimitive(src)),
             });
         }
 

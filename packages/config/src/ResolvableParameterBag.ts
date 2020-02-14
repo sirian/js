@@ -1,11 +1,11 @@
 import {
     Entries,
+    entriesOf,
     isNumeric,
     isPlain,
     isPlainArray,
     isPlainObject,
     isString,
-    Obj,
     Ref,
     stringifyVar,
 } from "@sirian/common";
@@ -27,7 +27,7 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
         }
 
         if (isPlain(value)) {
-            for (const [k, v] of Obj.entries(value)) {
+            for (const [k, v] of entriesOf(value)) {
                 value[k] = this.escape(v);
             }
         }
@@ -41,7 +41,7 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
             return value.replace(/%%/g, "%");
         }
         if (isPlain(value)) {
-            for (const [k, v] of Obj.entries(value)) {
+            for (const [k, v] of entriesOf(value)) {
                 value[k] = this.unescape(v);
             }
         }
@@ -52,7 +52,7 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
     public resolve() {
         if (!this.resolved) {
             const resolved: any = {};
-            for (const [key, value] of Obj.entries(this.params)) {
+            for (const [key, value] of entriesOf(this.params)) {
                 resolved[key] = this.resolveValue(value);
             }
             this.params = this.unescape(resolved as T);

@@ -1,5 +1,5 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
-import {Obj} from "./Obj";
+import {entriesOf} from "./Obj";
 import {getDescriptor, Ref} from "./Ref";
 import {isNotNullish, isPlainObject} from "./Var";
 
@@ -113,7 +113,7 @@ export class Descriptor {
         let hasAccessor = false;
         let hasValueOrWritable = false;
 
-        for (const [key, v] of Obj.entries(d)) {
+        for (const [key, v] of entriesOf(d)) {
             const type = typeof v;
             const defined = undefined !== v;
 

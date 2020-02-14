@@ -23,7 +23,7 @@
         "access": "public"
     },
     "devDependencies": {
-        "js-base64": "^2.5.1"
+        "js-base64": "^2.5.2"
     },
     "dependencies": {
         "@sirian/common": "^5.9.0"
