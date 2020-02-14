@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.10.0](https://github.com/sirian/js/compare/@sirian/common@5.9.0...@sirian/common@5.10.0) (2020-02-14)
+
+
+### Features
+
+* move some methods to constants ([2a6bd82](https://github.com/sirian/js/commit/2a6bd82cdaaa65a78ff71a70364a5dcf31534a48))
+
+
+
+
+
 # [5.9.0](https://github.com/sirian/js/compare/@sirian/common@5.8.0...@sirian/common@5.9.0) (2020-02-08)
 
 
