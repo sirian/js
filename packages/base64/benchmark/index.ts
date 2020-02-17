@@ -20,7 +20,10 @@ interface IBase64 {
             decode: (x) => Buffer.from(x, "base64").toString(),
         },
         "js-base64": JSBase64,
-        "Base64": Base64,
+        "Base64": {
+            encode: Base64.encode,
+            decode: (x) => Base64.decode(x).toString(),
+        },
     };
 
 // tslint:disable:no-console max-line-length
