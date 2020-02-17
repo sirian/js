@@ -1,4 +1,4 @@
-import {apply, construct, getPrototypes, Obj, Ref, setPrototype, XMap, XWeakMap} from "@sirian/common";
+import {apply, construct, defineProp, getPrototypes, setPrototype, XMap, XWeakMap} from "@sirian/common";
 import {ArrayValueOf, Ctor, UnionToIntersection} from "@sirian/ts-extra-types";
 
 export type UCtor = Ctor<object>;
@@ -38,7 +38,7 @@ export class Mixin {
                    : apply(m, this, args);
         };
 
-        wrapper.prototype = Obj.create(ctor.prototype);
+        wrapper.prototype = Object.create(ctor.prototype);
         wrapper.prototype.constructor = wrapper;
 
         return Mixin.wrap(m, wrapper) as ConstructableMixin<M>;
@@ -96,7 +96,7 @@ export class Mixin {
             value: (o: object) => Mixin.has(o, mixin),
         };
 
-        Ref.define(mixin, Symbol.hasInstance, desc);
+        defineProp(mixin, Symbol.hasInstance, desc);
 
         return mixin;
     }

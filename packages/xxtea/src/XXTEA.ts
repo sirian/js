@@ -1,4 +1,4 @@
-import {ArrBufTarget, TypedArr} from "@sirian/common";
+import {ArrBufTarget, ByteArray} from "@sirian/common";
 
 const DELTA = 0x9E3779B9;
 
@@ -7,7 +7,7 @@ export class XXTEA {
     protected key: Uint32Array;
 
     public constructor(key: ArrBufTarget) {
-        this.key = TypedArr.create(Uint32Array, key).slice(0, 4);
+        this.key = ByteArray.from(key).to(Uint32Array).slice(0, 4);
     }
 
     public static encrypt(data: ArrBufTarget, key: ArrBufTarget) {
@@ -19,16 +19,16 @@ export class XXTEA {
     }
 
     public encrypt(data: ArrBufTarget) {
-        const uint8Data = TypedArr.create(Uint8Array, data);
-        const uint32Data = TypedArr.create(Uint32Array, data);
+        const uint8Data = ByteArray.from(data);
+        const uint32Data = uint8Data.to(Uint32Array);
         const uint32DataWithLength = new Uint32Array([...uint32Data, uint8Data.byteLength]);
 
         const uint32 = this.encryptUint32Array(uint32DataWithLength);
-        return new Uint8Array(uint32.buffer);
+        return new ByteArray(uint32.buffer);
     }
 
     public decrypt(data: ArrBufTarget) {
-        const uint32Data = TypedArr.create(Uint32Array, data);
+        const uint32Data = ByteArray.from(data).to(Uint32Array);
 
         const uint32DecryptedWithLength = this.decryptUint32Array(uint32Data);
 
@@ -49,7 +49,7 @@ export class XXTEA {
             n = m;
         }
 
-        return TypedArr.create(Uint8Array, data).slice(0, n);
+        return ByteArray.from(data).slice(0, n);
     }
 
     protected int32(i: number) {

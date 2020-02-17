@@ -1,4 +1,4 @@
-import {Base64} from "@sirian/base64";
+import {base64Encode} from "@sirian/base64";
 import {Unicode} from "@sirian/common";
 import {XXTEA} from "../../src/XXTEA";
 
@@ -8,6 +8,6 @@ test("XXTEA", function() {
     const key = "1234567890";
     const encrypted = XXTEA.encrypt(data, key);
     const decrypted = XXTEA.decrypt(encrypted, key);
-    expect(Base64.encode(encrypted)).toStrictEqual(encryptedBase64);
+    expect(base64Encode(encrypted)).toStrictEqual(encryptedBase64);
     expect(Unicode.bytesToString(decrypted)).toStrictEqual(data);
 });

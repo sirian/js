@@ -1,4 +1,5 @@
 import {
+    defineProp,
     getPrototype,
     hasMethod,
     hasProp,
@@ -7,7 +8,6 @@ import {
     Obj,
     ownDescriptor,
     ownKeys,
-    Ref,
     setPrototype,
     XMap,
 } from "@sirian/common";
@@ -76,7 +76,7 @@ export class CloneContext {
             descriptor.value = this.clone(value);
         }
 
-        Ref.define(copy, key, descriptor);
+        defineProp(copy, key, descriptor);
     }
 
     protected doClone<T>(src: T): T {

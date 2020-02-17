@@ -1,4 +1,4 @@
-import {assign, entriesOf, hasOwn, isPropertyKey, keysOf, Ref, valuesOf} from "@sirian/common";
+import {assign, deleteProp, entriesOf, hasOwn, isPropertyKey, keysOf, valuesOf} from "@sirian/common";
 import {ParameterNotFoundError} from "./Error";
 
 export class ParameterBag<T extends Record<string | number, any>> {
@@ -35,7 +35,7 @@ export class ParameterBag<T extends Record<string | number, any>> {
     public get(key: keyof T, defaultValue?: any) {
         if (!this.has(key)) {
             if (undefined === defaultValue) {
-                throw new ParameterNotFoundError(key);
+                throw new ParameterNotFoundError(key, keysOf(this.params));
             }
             return defaultValue;
         }
@@ -99,15 +99,14 @@ export class ParameterBag<T extends Record<string | number, any>> {
 
     public ensure<K extends keyof T>(key: K, init: () => T[K]) {
         if (!this.has(key)) {
-            const value = init();
-            this.set(key, value);
+            this.set(key, init());
         }
 
         return this.get(key);
     }
 
     public delete<K extends keyof T>(key: K | PropertyKey) {
-        Ref.delete(this.params, key);
+        deleteProp(this.params, key);
         return this;
     }
 

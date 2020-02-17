@@ -1,4 +1,4 @@
-import {isFunction, isNumber, Ref, XMap} from "@sirian/common";
+import {apply, isFunction, isNumber, XMap} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 
 export interface IDebouncerOptions<A extends any[]> {
@@ -47,7 +47,7 @@ export class Debouncer<A extends any[]> {
 
     protected resolve(hashKey: string) {
         const [thisArg, args] = this.hashMap.pick(hashKey, true);
-        Ref.apply(this.fn, thisArg, args);
+        apply(this.fn, thisArg, args);
     }
 
     protected resolveTimeout(thisArg: any, args: A) {

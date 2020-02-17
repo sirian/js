@@ -1,4 +1,5 @@
 import {
+    deleteProp,
     Entries,
     entriesOf,
     isNumeric,
@@ -6,7 +7,6 @@ import {
     isPlainArray,
     isPlainObject,
     isString,
-    Ref,
     stringifyVar,
 } from "@sirian/common";
 import {ParameterBagError, ParameterCircularReferenceError, ParameterNotFoundError} from "./Error";
@@ -73,7 +73,7 @@ export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
     }
 
     public delete(key: PropertyKey) {
-        Ref.delete(this.params, key);
+        deleteProp(this.params, key);
         return this;
     }
 
