@@ -1,4 +1,4 @@
-import {ArrBuf} from "../../src";
+import {isArrayBuffer} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -18,6 +18,6 @@ describe("", () => {
     const data = Util.mergeData(trueData, falseData, true);
 
     test.each(data)("", (value, expected) => {
-        expect(ArrBuf.isBuffer(value)).toBe(expected);
+        expect(isArrayBuffer(value)).toBe(expected);
     });
 });

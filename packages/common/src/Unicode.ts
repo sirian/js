@@ -2,7 +2,7 @@ import {stringifyVar} from "./Var";
 
 export class Unicode {
     public static getSymbols(str: string) {
-        return [...(stringifyVar(str))];
+        return [...stringifyVar(str)];
     }
 
     public static getGraphemes(str: string): string[] {
@@ -75,29 +75,29 @@ export class Unicode {
     }
 
     public static bytesToString(buf: Uint8Array | number[]) {
+        const decodeChar = (str: string) => {
+            try {
+                return decodeURIComponent(str);
+            } catch (err) {
+                return String.fromCharCode(0xFFFD); // UTF 8 invalid char
+            }
+        };
+
         const res = [];
         let tmp = "";
         const end = buf.length;
 
         for (let i = 0; i < end; i++) {
             if (buf[i] <= 0x7F) {
-                res.push(Unicode.decodeChar(tmp), String.fromCharCode(buf[i]));
+                res.push(decodeChar(tmp), String.fromCharCode(buf[i]));
                 tmp = "";
             } else {
                 tmp += "%" + buf[i].toString(16);
             }
         }
 
-        res.push(Unicode.decodeChar(tmp));
+        res.push(decodeChar(tmp));
 
         return res.join("");
-    }
-
-    protected static decodeChar(str: string) {
-        try {
-            return decodeURIComponent(str);
-        } catch (err) {
-            return String.fromCharCode(0xFFFD); // UTF 8 invalid char
-        }
     }
 }

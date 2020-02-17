@@ -1,27 +1,20 @@
+import {ByteArray} from "./ByteArray";
 import {Unicode} from "./Unicode";
-import {isEqual, isFunction, isInstanceOf, isNumber, isObject, isPrimitive} from "./Var";
+import {isArrayBuffer, isArrayBufferView, isEqual, isString} from "./Var";
 
-export type ArrBufTarget = ArrayBufferLike | ArrayBufferView | string;
+export type ArrBufTarget = ArrayBuffer | ArrayBufferView | string;
 
 export class ArrBuf {
-    public static isBuffer(value: any): value is ArrayBuffer {
-        return isInstanceOf(value, ArrayBuffer);
-    }
-
-    public static isView(arg: any): arg is ArrayBufferView {
-        return ArrayBuffer.isView(arg);
-    }
-
     public static getBuffer(arg: ArrBufTarget) {
-        if (isPrimitive(arg)) {
+        if (isString(arg)) {
             return Unicode.stringToBytes(arg).buffer;
         }
 
-        if (ArrBuf.isBuffer(arg)) {
+        if (isArrayBuffer(arg)) {
             return arg;
         }
 
-        if (ArrBuf.isView(arg)) {
+        if (isArrayBufferView(arg)) {
             const buffer = arg.buffer;
             const offset = arg.byteOffset;
             const byteLength = arg.byteLength;
@@ -31,11 +24,11 @@ export class ArrBuf {
         throw new Error("Expected ArrayBuffer or DataView");
     }
 
-    public static isBufferLike(arg: any): arg is ArrayBufferLike {
-        return isObject(arg) && isNumber(arg.byteLength) && isFunction(arg.slice);
-    }
-
     public static isEqual(t1: ArrBufTarget, t2: ArrBufTarget) {
+        if (t1 === t2) {
+            return true;
+        }
+
         const buf1 = ArrBuf.getBuffer(t1);
         const buf2 = ArrBuf.getBuffer(t2);
 
@@ -47,21 +40,14 @@ export class ArrBuf {
             return false;
         }
 
-        const view1 = new DataView(buf1);
-        const view2 = new DataView(buf2);
-
-        for (let i = buf1.byteLength - 1; i >= 0; i--) {
-            if (view1.getUint8(i) !== view2.getUint8(i)) {
-                return false;
-            }
-        }
-
-        return true;
+        const view1 = new ByteArray(buf1);
+        const view2 = new ByteArray(buf2);
+        return view1.every((value, index) => value === view2[index]);
     }
 
     public static set(from: ArrBufTarget, to: ArrBufTarget, offset: number = 0) {
-        const sourceView = new Uint8Array(ArrBuf.getBuffer(from));
-        const destView = new Uint8Array(ArrBuf.getBuffer(to));
+        const sourceView = new ByteArray(ArrBuf.getBuffer(from));
+        const destView = new ByteArray(ArrBuf.getBuffer(to));
         destView.set(sourceView, offset);
     }
 

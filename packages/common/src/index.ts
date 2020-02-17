@@ -12,7 +12,7 @@ export * from "./Ref";
 export * from "./Rgx";
 export * from "./Sprintf";
 export * from "./Str";
-export * from "./TypedArr";
+export * from "./ByteArray";
 export * from "./Unicode";
 export * from "./Var";
 export * from "./XMap";

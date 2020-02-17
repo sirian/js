@@ -1,4 +1,4 @@
-import {ArrBuf} from "../../src";
+import {isArrayBufferView} from "../../src";
 import {Util} from "../Util";
 
 describe("", () => {
@@ -19,6 +19,6 @@ describe("", () => {
     const data = Util.mergeData(trueData, falseData, true);
 
     test.each(data)("", (value, expected) => {
-        expect(ArrBuf.isView(value)).toBe(expected);
+        expect(isArrayBufferView(value)).toBe(expected);
     });
 });

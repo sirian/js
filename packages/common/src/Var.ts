@@ -162,6 +162,10 @@ export const isAsyncIterable = (value: any): value is AsyncIterable<any> =>
 export const isIterable = (value: any): value is Iterable<any> =>
     hasMethod(value, Symbol.iterator);
 
+export const isArrayBuffer = (value: any): value is ArrayBuffer => isInstanceOf(value, ArrayBuffer);
+
+export const isArrayBufferView = (arg: any): arg is ArrayBufferView => ArrayBuffer.isView(arg);
+
 export const isEqual = (x: any, y: any) =>
     x === y || isEqualNaN(x) && isEqualNaN(y);
 
