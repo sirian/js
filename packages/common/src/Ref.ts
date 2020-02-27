@@ -9,7 +9,6 @@ import {
     isPrimitive,
     isString,
     isSymbol,
-    isUndefined,
 } from "./Var";
 import {XSet} from "./XSet";
 
@@ -112,9 +111,7 @@ export function apply(target: Func, thisArg?: any, args: any[] = []) {
 export function construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
 export function construct<F extends Newable>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
 export function construct(target: Function, args: any[] = [], newTarget?: Function) {
-    return isUndefined(newTarget)
-           ? Reflect.construct(target, args)
-           : Reflect.construct(target, args, newTarget);
+    return Reflect.construct(target, args, ...(newTarget ? [newTarget] : []));
 }
 
 export function hasProp<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {

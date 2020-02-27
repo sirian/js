@@ -21,7 +21,7 @@ export const isNull = (value: any): value is null => null === value;
 
 export const isUndefined = (value: any): value is undefined => undefined === value;
 
-export const isNullish = (value: any): value is Nullish => null === value || undefined === value;
+export const isNullish = (value: any): value is Nullish => null == value;
 
 export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => !isNullish(value);
 
@@ -98,8 +98,8 @@ export const isPromiseLike = (value: any): value is PromiseLike<any> =>
 export const isObjectOrFunction = (value: any): value is object =>
     isObject(value) || isFunction(value);
 
-export const isInstanceOf = <C extends Ctor | Newable>(obj: any, ctor: C): obj is Instance<C> =>
-    isFunction(ctor) && (obj instanceof ctor);
+export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
+    ctor.some((c) => isFunction(c) && (obj instanceof c));
 
 export const isEqualNaN = (value: any): value is number => {
     return value !== value;
@@ -116,7 +116,7 @@ export const isSameType = <T>(x: any, value: T): value is T =>
 export const isBetween = <T extends string | number | bigint>(x: T, min: T, max: T) =>
     isSameType(x, min) && isSameType(x, max) && x >= min && x <= max;
 
-export const isArray = (value: any): value is any[] => Array.isArray(value);
+export const isArray = Array.isArray;
 
 export const isArrayLike = (value: any, strict: boolean = true): value is { length: number } => {
     if (isString(value)) {
@@ -153,18 +153,21 @@ export const isPlainArray = (value: any): value is unknown[] => {
     return !isArray(nextProto);
 };
 
-export const isRegExp = (value: any): value is RegExp =>
-    isInstanceOf(value, RegExp);
-
 export const isAsyncIterable = (value: any): value is AsyncIterable<any> =>
     hasMethod(value, Symbol.asyncIterator);
 
 export const isIterable = (value: any): value is Iterable<any> =>
     hasMethod(value, Symbol.iterator);
 
-export const isArrayBuffer = (value: any): value is ArrayBuffer => isInstanceOf(value, ArrayBuffer);
+export const instanceOfGuard = <C extends Array<Ctor | Newable>>(...ctor: C) =>
+    (value: any): value is Instance<C[number]> => isInstanceOf(value, ...ctor);
 
-export const isArrayBufferView = (arg: any): arg is ArrayBufferView => ArrayBuffer.isView(arg);
+export const isRegExp = instanceOfGuard(RegExp);
+export const isArrayBuffer = instanceOfGuard(ArrayBuffer);
+export const isArrayBufferView = ArrayBuffer.isView;
+
+export const isArrayBufferLike = (arg: any): arg is ArrayBufferLike =>
+    isObject(arg) && isNumber(arg.byteLength) && isFunction(arg.slice);
 
 export const isEqual = (x: any, y: any) =>
     x === y || isEqualNaN(x) && isEqualNaN(y);

@@ -1,10 +1,9 @@
 import {Instance} from "@sirian/ts-extra-types";
-import {ArrBuf, ArrBufTarget} from "./ArrBuf";
-import {Unicode} from "./Unicode";
-import {isArrayBuffer, isArrayBufferView, isString} from "./Var";
+import {bytesToString, stringToBytes} from "./Unicode";
+import {isArrayBuffer, isArrayBufferView, isInstanceOf, isString} from "./Var";
 
 export type TypedArray =
-    Int8Array
+    | Int8Array
     | Int16Array
     | Int32Array
     | Uint8Array
@@ -14,29 +13,58 @@ export type TypedArray =
     | Float32Array
     | Float64Array;
 
-export interface TypedArrayConstructor<T extends TypedArray = TypedArray> {
-    readonly BYTES_PER_ELEMENT: number;
+export type TypedArrayConstructor =
+    | Int8ArrayConstructor
+    | Int16ArrayConstructor
+    | Int32ArrayConstructor
+    | Uint8ArrayConstructor
+    | Uint8ClampedArrayConstructor
+    | Uint16ArrayConstructor
+    | Uint32ArrayConstructor
+    | Float32ArrayConstructor
+    | Float64ArrayConstructor;
 
-    new(arrayOrArrayBuffer: ArrayBuffer): T;
-}
+export type ByteArrayInput = string | ArrayBuffer;
 
 export class ByteArray extends Uint8Array {
-    public static from(arrayLike: ArrBufTarget | ArrayLike<number>): ByteArray;
-    public static from<T>(arrayLike: Iterable<number>, mapfn: (v: T, k: number) => number, thisArg?: any): ByteArray;
-    public static from(source: any) {
-        if (isString(source) || isArrayBuffer(source) || isArrayBufferView(source)) {
-            return new ByteArray(ArrBuf.getBuffer(source));
+    public static from(str: ArrayBuffer | string): ByteArray;
+    public static from(str: ArrayLike<number>): ByteArray;
+    public static from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): ByteArray;
+    public static from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): ByteArray;
+    public static from(source: any, ...args: any) {
+        if (isString(source)) {
+            return new this(stringToBytes(source).buffer);
         }
 
-        return new ByteArray(super.from(source));
+        if (isArrayBuffer(source)) {
+            return new ByteArray(source);
+        }
+
+        if (isArrayBufferView(source)) {
+            const {buffer, byteOffset, byteLength} = source;
+            return new this(buffer.slice(byteOffset, byteOffset + byteLength));
+        }
+
+        return super.from(source, ...args);
+    }
+
+    public static stringify(buf: ByteArrayInput) {
+        return isString(buf) ? buf : ByteArray.from(buf).toString();
+    }
+
+    public static convert<T extends TypedArrayConstructor>(buf: ByteArrayInput, to: T) {
+        return isInstanceOf(buf, to) ? buf : ByteArray.from(buf).to(to);
     }
 
     public to<T extends TypedArrayConstructor>(typedArrayCtor: T) {
-        const buffer = ArrBuf.align(this.buffer, typedArrayCtor.BYTES_PER_ELEMENT);
-        return new typedArrayCtor(buffer) as Instance<T>;
+        const bytesPerElement = typedArrayCtor.BYTES_PER_ELEMENT;
+        const elements = Math.ceil(this.byteLength / bytesPerElement);
+        const bufferView = new ByteArray(bytesPerElement * elements);
+        bufferView.set(this, 0);
+        return new typedArrayCtor(bufferView.buffer) as Instance<T>;
     }
 
     public toString(): string {
-        return Unicode.bytesToString(this);
+        return bytesToString(this);
     }
 }

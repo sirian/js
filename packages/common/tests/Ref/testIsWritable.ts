@@ -2,25 +2,28 @@ import {isPropWritable} from "../../src";
 
 describe("Ref.isWritable", () => {
     const data = [
-        [null, false],
-        [undefined, false],
-        ["foo", true],
-        [3, true],
-        [{}, true],
-        [() => 1, true],
-        [Object.create(null), true],
-        [Object.create(null, {x: {writable: false}}), false],
-        [Object.create(null, {x: {get: () => 1}}), false],
-        [Object.seal({}), false],
-        [Object.seal({x: 1}), true],
-        [Object.freeze({x: 1}), false],
-        [Object.freeze({}), false],
-        [Object.preventExtensions(new class {public x() {}}), true],
-        [Object.preventExtensions(new class {public y() {}}), false],
+        [null, "x", false],
+        [undefined, "x", false],
+        ["foo", "x", true],
+        [globalThis, "undefined", false],
+        [globalThis, "NaN", false],
+        [globalThis, "Infinity", false],
+        [globalThis, "false", true],
+        [3, "x", true],
+        [{}, "x", true],
+        [() => 1, "x", true],
+        [Object.create(null), "x", true],
+        [Object.create(null, {x: {writable: false}}), "x", false],
+        [Object.create(null, {x: {get: () => 1}}), "x", false],
+        [Object.seal({}), "x", false],
+        [Object.seal({x: 1}), "x", true],
+        [Object.freeze({x: 1}), "x", false],
+        [Object.freeze({}), "x", false],
+        [Object.preventExtensions(new class {public x() {}}), "x", true],
+        [Object.preventExtensions(new class {public y() {}}), "x", false],
     ];
 
-    test.each(data)("Ref.isWritable(%p, 'x') === %p", (value, expected) => {
-        expect(isPropWritable(value, "x")).toBe(expected);
+    test.each(data)("Ref.isWritable(%p, %p) === %p", (value, key, expected) => {
+        expect(isPropWritable(value, key)).toBe(expected);
     });
-
 });
