@@ -19,9 +19,11 @@ export class XProxy<T extends object> {
 
     protected target?: T;
     protected factory?: XProxyFactory<T>;
+    protected fakeTarget: object;
     protected revoked = false;
 
     protected constructor(fakeTarget: object, init: XProxyInit<T> = {}) {
+        this.fakeTarget = fakeTarget;
         if ("function" === typeof init) {
             this.factory = init;
         } else {
@@ -47,7 +49,8 @@ export class XProxy<T extends object> {
     }
 
     public static forObject<T extends object>(init: XProxyInit<T> = {}) {
-        return new XProxy({}, init).proxy;
+        const fake = {}; // todo: Object.create(Expected prototype)
+        return new XProxy(fake, init).proxy;
     }
 
     public static forFunction<T extends AnyFunc>(init: XProxyInit<T> = {}) {
@@ -77,6 +80,7 @@ export class XProxy<T extends object> {
                 throw new XProxyError(`Invalid XProxy target '${target}'`);
             }
             this.target = target;
+            // todo: Reflect.setPrototypeOf(this.fakeTarget, target);
         }
 
         return this;
@@ -116,7 +120,8 @@ export class XProxy<T extends object> {
         if (this.revoked) {
             throw new XProxyError(`Cannot perform '${trapName}' on a xProxy that has been revoked`);
         }
-        args[0] = this.ensureTarget();
-        return (Reflect[trapName] as TrapFunc<T, P>)(...args);
+        const target = this.ensureTarget();
+        const a = (args as any[]).map((v) => v === this.fakeTarget || v === this.proxy ? target : v);
+        return (Reflect[trapName] as TrapFunc<T, P>)(...a as TrapArgs<T, P>);
     }
 }
