@@ -1,4 +1,4 @@
-import {HybridMap, Ref} from "@sirian/common";
+import {apply, HybridMap} from "@sirian/common";
 import {Args, Func, Return, ThisArg} from "@sirian/ts-extra-types";
 
 export interface IMemoizerOptions<A extends any[]> {
@@ -33,7 +33,7 @@ export class Memoizer<F extends Func> {
 
         if (!map.has(hashKey)) {
             map.set(hashKey, this.resolving);
-            map.set(hashKey, Ref.apply(this.fn, thisArg, args));
+            map.set(hashKey, apply(this.fn, thisArg, args));
         }
         const value = map.get(hashKey)!;
 
@@ -47,7 +47,7 @@ export class Memoizer<F extends Func> {
     protected getHashKey(thisArg: ThisArg<F>, args: Args<F>) {
         const hasher = this.options.hasher;
         if (hasher) {
-            return Ref.apply(hasher, thisArg, args);
+            return apply(hasher, thisArg, args);
         }
     }
 }

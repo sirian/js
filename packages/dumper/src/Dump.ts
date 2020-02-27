@@ -1,4 +1,4 @@
-import {CloneOptions, Cloner} from "@sirian/clone";
+import {CloneOptions, cloner, Cloner} from "@sirian/clone";
 import {CtorArgs} from "@sirian/ts-extra-types";
 
 export interface DumpOptions {
@@ -14,13 +14,13 @@ export class Dump<T = any> {
     constructor(target: any, options: Partial<DumpOptions> = {}) {
         this.target = target;
         this.options = {
-            cloner: Cloner.defaultCloner,
+            cloner,
             clone: {},
             ...options,
         };
 
-        const {clone, cloner} = this.options;
-        this.snapshot = cloner.clone(target, clone);
+        const {clone, cloner: c} = this.options;
+        this.snapshot = c.clone(target, clone);
     }
 }
 

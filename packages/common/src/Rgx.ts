@@ -1,4 +1,3 @@
-
 import {isNullish, isRegExp, isString, stringifyVar} from "./Var";
 import {XSet} from "./XSet";
 

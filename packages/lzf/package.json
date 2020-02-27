@@ -19,5 +19,8 @@
     "scripts": {},
     "publishConfig": {
         "access": "public"
+    },
+    "dependencies": {
+        "@sirian/common": "^5.10.0"
     }
 }

@@ -1,4 +1,5 @@
-import {clone, CloneOptions, CloneValidator} from "../src";
+import {CloneOptions, cloner} from "../src";
+import {CloneValidator} from "./CloneValidator";
 
 export class TestCloner {
     public static multiTest(target: any) {
@@ -7,8 +8,8 @@ export class TestCloner {
         const data = depths.map<[any, Partial<CloneOptions>]>((maxDepth) => [target, {maxDepth}]);
 
         test.each(data)("clone(%O, %O)", (obj, options) => {
-            const cloned = clone(obj, options);
-            const validator = new CloneValidator();
+            const cloned = cloner.clone(obj, options);
+            const validator = new CloneValidator(cloner);
             validator.validate(obj, cloned, options);
         });
     }

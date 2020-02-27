@@ -10,8 +10,8 @@ export class Random {
     protected readonly source: IRandomSource;
     protected maxAttempts = 64;
 
-    constructor(source?: IRandomSource) {
-        this.source = source || new NativeMathSource();
+    constructor(source: IRandomSource = new NativeMathSource()) {
+        this.source = source;
     }
 
     public pick<V>(target: V[]): [number, V];

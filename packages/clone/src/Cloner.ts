@@ -20,8 +20,6 @@ export interface ICloneHandler<T> {
 export class Cloner implements ICloner<any> {
     public static readonly symbol: typeof cloneSymbol = cloneSymbol;
 
-    public static readonly defaultCloner = new Cloner();
-
     protected handlers: Map<object, ICloneHandler<any>>;
 
     public constructor() {
@@ -71,32 +69,12 @@ export class Cloner implements ICloner<any> {
         });
     }
 
-    public static supports(target: any) {
-        return this.defaultCloner.supports(target);
-    }
-
-    public static clone<T>(target: T, options: Partial<CloneOptions> = {}): T {
-        return this.defaultCloner.clone(target, options);
-    }
-
-    public static cloneDeep<T>(target: T, options: Partial<CloneOptions> = {}): T {
-        return this.defaultCloner.cloneDeep(target, options);
-    }
-
     public static hasCloneSymbol(value: any) {
-        for (const proto of getPrototypes(value, {})) {
-            if (hasMethod(proto, cloneSymbol)) {
-                return true;
-            }
-        }
-        return false;
+        return getPrototypes(value, {}).some((proto) => hasMethod(proto, cloneSymbol));
     }
 
     public supports(value: any) {
-        if (isPrimitive(value)) {
-            return true;
-        }
-        if (isPlainObject(value)) {
+        if (isPrimitive(value) || isPlainObject(value)) {
             return true;
         }
 
@@ -106,16 +84,13 @@ export class Cloner implements ICloner<any> {
             return true;
         }
 
-        if (Cloner.hasCloneSymbol(value)) {
-            return true;
-        }
-
-        return false;
+        return Cloner.hasCloneSymbol(value);
     }
 
     public addHandler<T extends { prototype: any }>(target: T, handler: ICloneHandler<Instance<T>>) {
         this.handlers.set(target.prototype, handler);
 
+        return this;
     }
 
     public clone<T>(src: T, options: Partial<CloneOptions> = {}) {

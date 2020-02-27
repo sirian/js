@@ -1,7 +1,7 @@
 export function lzfCompress(bytes?: Uint8Array | null) {
-    const ByteArray = Uint8Array;
+    const U8Array = Uint8Array;
     if (bytes == null || !bytes.length) {
-        return new ByteArray();
+        return new U8Array();
     }
 
     const HLOG = 16;
@@ -108,7 +108,7 @@ export function lzfCompress(bytes?: Uint8Array | null) {
         output[op - lit - 1] = (lit - 1) & 255; /* stop run */
     }
 
-    const res = new ByteArray(output.length);
+    const res = new U8Array(output.length);
     res.set(output);
     return res;
 }

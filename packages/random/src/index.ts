@@ -1,5 +1,4 @@
 export * from "./Random";
-export * from "./DataViewSource";
 export * from "./BrowserCryptoSource";
 export * from "./BufferedSource";
 export * from "./CallbackSource";

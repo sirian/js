@@ -1,20 +1,29 @@
-import {Unicode} from "../../src";
+import {TextEncoder} from "util";
+import {ByteArray} from "../../src";
 
 describe("Unicode.bytesToString && Unicode.stringToBytes", () => {
-    const bytes = [
-        [],
-        [0],
-        [0, 0],
-        [239, 191, 189],
+    const data = [
+        new ByteArray([]),
+        new ByteArray([0]),
+        new ByteArray([0, 0]),
+        new ByteArray([239, 191, 189]),
     ];
 
-    const data = bytes.map((b) => new Uint8Array(b));
+    test.each(data)("%p", (byteArray) => {
+        const str = ByteArray.stringify(byteArray);
+        const bts = ByteArray.from(str);
 
-    test.each(data)("%p", (uint8Array) => {
-        const str = Unicode.bytesToString(uint8Array);
-        const bts = Unicode.stringToBytes(str);
+        expect(bts).toStrictEqual(byteArray);
+        expect(ByteArray.stringify(bts)).toBe(str);
+    });
 
-        expect(bts).toStrictEqual(uint8Array);
-        expect(Unicode.bytesToString(bts)).toBe(str);
+    test("Random strings", () => {
+        for (let i = 0; i < 10; i++) {
+            const s = Array(15).map(() => String.fromCharCode(Math.floor(2 ** 16 * Math.random()))).join("");
+            const bytes = ByteArray.from(s).to(Uint8Array);
+
+            expect(bytes).toStrictEqual(new TextEncoder().encode(s));
+            expect(ByteArray.stringify(bytes)).toBe(s);
+        }
     });
 });

@@ -1,4 +1,4 @@
-import {Cloneable, Cloner} from "../../src";
+import {clone, Cloneable, Cloner} from "../../src";
 
 describe("", () => {
     class Foo implements Cloneable {
@@ -12,22 +12,22 @@ describe("", () => {
 
     const foo = new Foo(0);
 
-    const clone = Cloner.clone(foo);
+    const copy = clone(foo);
 
     test("", () => {
         expect(foo.x).toBe(0);
 
-        expect(clone).toBeInstanceOf(Foo);
-        expect(clone.x).toBe(1);
+        expect(copy).toBeInstanceOf(Foo);
+        expect(copy.x).toBe(1);
 
     });
 
     test("", () => {
-        const clone2 = Cloner.clone(clone);
-        expect(clone2).toBeInstanceOf(Foo);
+        const copy2 = clone(copy);
+        expect(copy2).toBeInstanceOf(Foo);
 
-        expect(clone2.x).toBe(2);
-        expect(clone.x).toBe(1);
+        expect(copy2.x).toBe(2);
+        expect(copy.x).toBe(1);
         expect(foo.x).toBe(0);
     });
 });

@@ -18,7 +18,7 @@ describe("Random strings", () => {
         test("Length: " + str.length, () => {
             const encoded = Base64.encode(str);
             const decoded = Base64.decode(encoded);
-            expect(decoded).toBe(str);
+            expect(decoded.toString()).toBe(str);
         });
     }
 });

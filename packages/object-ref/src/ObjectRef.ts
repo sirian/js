@@ -1,4 +1,4 @@
-import {isString, Obj, Ref} from "@sirian/common";
+import {getConstructor, isString, Obj} from "@sirian/common";
 import {SharedStore} from "@sirian/shared-store";
 
 export class ObjectRef {
@@ -27,7 +27,7 @@ export class ObjectRef {
             return tag;
         }
 
-        const ctor = Ref.getConstructor(obj);
+        const ctor = getConstructor(obj);
         if (ctor) {
             const name = ctor.name;
             if (isString(name) && name) {

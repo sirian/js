@@ -1,9 +1,9 @@
-import {Cloner} from "../../src";
+import {clone} from "../../src";
 import {TestCloner} from "../TestCloner";
 
 describe("", () => {
     const a = new Set([1, 2, 3]);
-    const b = Cloner.clone(a);
+    const b = clone(a);
 
     TestCloner.multiTest(a);
 

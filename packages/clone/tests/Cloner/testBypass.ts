@@ -1,6 +1,6 @@
-import {isInstanceOf} from "@sirian/common";
+import {instanceOfGuard} from "@sirian/common";
 import {Predicate} from "@sirian/ts-extra-types";
-import {CloneError, Cloner} from "../../src";
+import {clone, cloneDeep, CloneError} from "../../src";
 
 describe("", () => {
     const obj = {
@@ -9,31 +9,31 @@ describe("", () => {
     };
 
     test("", () => {
-        const clone = Cloner.clone(obj);
-        expect(clone).toStrictEqual(obj);
-        expect(clone).not.toBe(obj);
-        expect(clone.x).toBe(obj.x);
-        expect(clone.y).toBe(obj.y);
+        const copy = clone(obj);
+        expect(copy).toStrictEqual(obj);
+        expect(copy).not.toBe(obj);
+        expect(copy.x).toBe(obj.x);
+        expect(copy.y).toBe(obj.y);
     });
 
     test("", () => {
-        const clone = Cloner.cloneDeep(obj, {
-            bypass: (o) => isInstanceOf(o, WeakMap) || isInstanceOf(o, WeakSet),
+        const copy = cloneDeep(obj, {
+            bypass: instanceOfGuard(WeakMap, WeakSet),
         });
-        expect(clone).toStrictEqual(obj);
-        expect(clone).not.toBe(obj);
-        expect(clone.x).toBe(obj.x);
-        expect(clone.y).toBe(obj.y);
+        expect(copy).toStrictEqual(obj);
+        expect(copy).not.toBe(obj);
+        expect(copy.x).toBe(obj.x);
+        expect(copy.y).toBe(obj.y);
     });
 
     const bypassErrors: Predicate[] = [
         () => false,
-        (o) => isInstanceOf(o, WeakMap),
-        (o) => isInstanceOf(o, WeakSet),
+        instanceOfGuard(WeakMap),
+        instanceOfGuard(WeakSet),
     ];
 
     test.each(bypassErrors)("", (bypass) => {
-        expect(() => Cloner.clone(obj, {maxDepth: 1, bypass})).toThrow(CloneError);
-        expect(() => Cloner.cloneDeep(obj, {bypass})).toThrow(CloneError);
+        expect(() => clone(obj, {maxDepth: 1, bypass})).toThrow(CloneError);
+        expect(() => cloneDeep(obj, {bypass})).toThrow(CloneError);
     });
 });

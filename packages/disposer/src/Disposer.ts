@@ -1,4 +1,4 @@
-import {hasOwn, Ref, XSet} from "@sirian/common";
+import {defineProp, hasOwn, XSet} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerCallbackSet} from "./DisposerCallbackSet";
@@ -96,8 +96,8 @@ export class Disposer extends StaticEventEmitter {
             value: disposer,
         };
 
-        Ref.define(target, disposerSymbol, desc);
-        Ref.define(disposer, disposerSymbol, desc);
+        defineProp(target, disposerSymbol, desc);
+        defineProp(disposer, disposerSymbol, desc);
         Disposer.emit("created", disposer);
         return disposer;
     }

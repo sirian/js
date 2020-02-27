@@ -1,4 +1,4 @@
-import {Cloner} from "@sirian/clone";
+import {cloner, Cloner} from "@sirian/clone";
 import {hasOwn, isPlainObject, keysOf} from "@sirian/common";
 
 export interface MergeOptions {
@@ -18,7 +18,7 @@ export class Merge {
             clone: true,
             maxDepth: 1 / 0,
             allowAdd: true,
-            cloner: Cloner.defaultCloner,
+            cloner,
             ...opts,
         };
 
@@ -32,17 +32,17 @@ export class Merge {
     }
 
     protected static doMerge(target: any, source: any, options: Required<MergeOptions>) {
-        const {clone, cloner, maxDepth, allowAdd} = options;
+        const {clone, cloner: c, maxDepth, allowAdd} = options;
 
         if (!isPlainObject(source)) {
             if (clone) {
-                source = cloner.clone(source);
+                source = c.clone(source);
             }
             return source;
         }
 
         if (clone) {
-            target = cloner.clone(target);
+            target = c.clone(target);
         }
 
         const keys = keysOf(source);

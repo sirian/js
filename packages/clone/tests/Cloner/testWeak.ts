@@ -1,4 +1,4 @@
-import {CloneError, Cloner} from "../../src";
+import {clone, cloneDeep, CloneError} from "../../src";
 
 const data = [
     new WeakMap(),
@@ -6,7 +6,7 @@ const data = [
 ];
 
 test.each(data)("%o", (o) => {
-    expect(() => Cloner.clone(o)).toThrow(CloneError);
-    expect(() => Cloner.cloneDeep(o)).toThrow(CloneError);
-    expect(Cloner.clone(o, {bypass: () => true})).toBe(o);
+    expect(() => clone(o)).toThrow(CloneError);
+    expect(() => cloneDeep(o)).toThrow(CloneError);
+    expect(clone(o, {bypass: () => true})).toBe(o);
 });

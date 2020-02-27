@@ -1,6 +1,6 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
 import {entriesOf} from "./Obj";
-import {getDescriptor, Ref} from "./Ref";
+import {apply, defineProp, getDescriptor} from "./Ref";
 import {isNotNullish, isPlainObject} from "./Var";
 
 export enum DescriptorType {
@@ -38,7 +38,7 @@ export class Descriptor {
             },
         });
 
-        Ref.define(target, key, descriptor);
+        defineProp(target, key, descriptor);
 
         return descriptor;
     }
@@ -75,7 +75,7 @@ export class Descriptor {
     public static read(desc: PropertyDescriptor | undefined, obj: any) {
         if (desc && isNotNullish(obj)) {
             const {get, value} = desc;
-            return get ? Ref.apply(get, obj) : value;
+            return get ? apply(get, obj) : value;
         }
     }
 
@@ -84,12 +84,12 @@ export class Descriptor {
     public static write(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any): void;
     public static write(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any) {
         if (!Descriptor.isAccessorDescriptor(desc)) {
-            Ref.define(object, key, Descriptor.extend(desc, {value}));
+            defineProp(object, key, Descriptor.extend(desc, {value}));
             return;
         }
         const setter = desc.set;
         if (setter) {
-            Ref.apply(setter, object, [value]);
+            apply(setter, object, [value]);
         }
     }
 
