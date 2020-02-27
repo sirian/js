@@ -1,5 +1,5 @@
 import {Obj} from "@sirian/common";
-import {Cloner, cloneSymbol} from "../../src";
+import {cloner, cloneSymbol} from "../../src";
 
 class Foo {
 
@@ -49,9 +49,9 @@ const data = [
 ];
 
 test.each(data)("Cloner.supports(%O) === %p", (obj, expected) => {
-    expect(Cloner.supports(obj)).toBe(expected);
+    expect(cloner.supports(obj)).toBe(expected);
 });
 
 test("", () => {
-    expect(Cloner.supports(Obj.create(null))).toBe(true);
+    expect(cloner.supports(Obj.create(null))).toBe(true);
 });

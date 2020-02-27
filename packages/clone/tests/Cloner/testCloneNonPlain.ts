@@ -1,4 +1,4 @@
-import {Cloner} from "../../src";
+import {clone} from "../../src";
 import {TestCloner} from "../TestCloner";
 
 describe("", () => {
@@ -15,31 +15,31 @@ describe("", () => {
     TestCloner.multiTest(foo);
 
     test("maxDepth = 0", () => {
-        const cloned = Cloner.clone(foo, {maxDepth: 0});
-        expect(cloned).not.toBe(foo);
-        expect(cloned).toStrictEqual(foo);
-        expect(cloned.d1).toBe(d1);
-        expect(cloned.bar).toBe(foo.bar);
+        const copy = clone(foo, {maxDepth: 0});
+        expect(copy).not.toBe(foo);
+        expect(copy).toStrictEqual(foo);
+        expect(copy.d1).toBe(d1);
+        expect(copy.bar).toBe(foo.bar);
     });
 
     test("maxDepth = 1", () => {
-        const cloned = Cloner.clone(foo, {maxDepth: 1});
-        expect(cloned).not.toBe(foo);
-        expect(cloned).toStrictEqual(foo);
-        expect(cloned.d1).not.toBe(d1);
-        expect(cloned.d1).toStrictEqual(d1);
-        expect(cloned.bar).not.toBe(foo.bar);
-        expect(cloned.bar.d2).toBe(d2);
+        const copy = clone(foo, {maxDepth: 1});
+        expect(copy).not.toBe(foo);
+        expect(copy).toStrictEqual(foo);
+        expect(copy.d1).not.toBe(d1);
+        expect(copy.d1).toStrictEqual(d1);
+        expect(copy.bar).not.toBe(foo.bar);
+        expect(copy.bar.d2).toBe(d2);
     });
 
     test("maxDepth = 2", () => {
-        const cloned = Cloner.clone(foo, {maxDepth: 2});
-        expect(cloned).not.toBe(foo);
-        expect(cloned).toStrictEqual(foo);
-        expect(cloned.d1).not.toBe(d1);
-        expect(cloned.d1).toStrictEqual(d1);
-        expect(cloned.bar).not.toBe(foo.bar);
-        expect(cloned.bar.d2).not.toBe(d2);
-        expect(cloned.bar.d2).toStrictEqual(d2);
+        const copy = clone(foo, {maxDepth: 2});
+        expect(copy).not.toBe(foo);
+        expect(copy).toStrictEqual(foo);
+        expect(copy.d1).not.toBe(d1);
+        expect(copy.d1).toStrictEqual(d1);
+        expect(copy.bar).not.toBe(foo.bar);
+        expect(copy.bar.d2).not.toBe(d2);
+        expect(copy.bar.d2).toStrictEqual(d2);
     });
 });

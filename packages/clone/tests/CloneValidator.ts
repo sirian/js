@@ -1,5 +1,6 @@
 import {Descriptor, DescriptorType, isEqual, isPrimitive, keysOf, ownDescriptor} from "@sirian/common";
-import {CloneOptions, Cloner, ValidateError} from "./index";
+import {CloneOptions, Cloner} from "../src";
+import {ValidateError} from "./ValidateError";
 
 export class CloneValidator {
     protected stack!: Array<[object, PropertyKey]>;
@@ -7,18 +8,13 @@ export class CloneValidator {
     protected options!: Partial<CloneOptions>;
     protected map: Map<object, [object, number]>;
 
-    public constructor(cloner: Cloner = Cloner.defaultCloner) {
+    public constructor(cloner: Cloner) {
         this.cloner = cloner;
         this.map = new Map();
     }
 
     protected get maxDepth() {
         return this.options.maxDepth || 0;
-    }
-
-    public static validate(src: any, clone: any, options: Partial<CloneOptions> = {}) {
-        const validator = new CloneValidator();
-        validator.validate(src, clone, options);
     }
 
     public validate(src: any, clone: any, options: Partial<CloneOptions> = {}) {
@@ -131,7 +127,7 @@ export class CloneValidator {
                 this.doValidate(desc1!.value, desc2!.value);
                 break;
             default:
-                throw new Error(`Unexpected decsriptor type ${type1}`);
+                throw new Error(`Unexpected descriptor type ${type1}`);
         }
 
         for (const k of ["writable", "configurable", "enumerable"] as const) {
