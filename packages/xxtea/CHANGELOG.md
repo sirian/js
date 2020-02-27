@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/sirian/js/compare/@sirian/xxtea@1.1.31...@sirian/xxtea@1.2.0) (2020-02-27)
+
+
+### Features
+
+* xxteaEncrypt, xxteaDecrypt ([8c267ed](https://github.com/sirian/js/commit/8c267edce8b7ffc7c8c39a7e499dd713accca316))
+
+
+
+
+
 ## [1.1.31](https://github.com/sirian/js/compare/@sirian/xxtea@1.1.30...@sirian/xxtea@1.1.31) (2020-02-14)
 
 **Note:** Version bump only for package @sirian/xxtea

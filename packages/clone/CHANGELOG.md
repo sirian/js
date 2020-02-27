@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sirian/js/compare/@sirian/clone@1.6.0...@sirian/clone@2.0.0) (2020-02-27)
+
+
+* export constants clone, cloneDeep, cloner ([0ac5cb0](https://github.com/sirian/js/commit/0ac5cb0f2c4b1e6916ca029465a89d602ce1e4e3))
+
+
+### BREAKING CHANGES
+
+* Drop Cloner.defaultCloner property
+
+
+
+
+
 # [1.6.0](https://github.com/sirian/js/compare/@sirian/clone@1.5.1...@sirian/clone@1.6.0) (2020-02-14)
 
 

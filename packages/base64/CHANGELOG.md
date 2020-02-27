@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sirian/js/compare/@sirian/base64@1.2.33...@sirian/base64@2.0.0) (2020-02-27)
+
+
+### Features
+
+* **base64:** base64Encode, base64Decode ([bbbe252](https://github.com/sirian/js/commit/bbbe252a308d5fc4d1e92cac21ea2d8f5d427348))
+
+
+### BREAKING CHANGES
+
+* **base64:** Base64.decode now return ByteArray. Use .toString() to get string representation if needed
+
+
+
+
+
 ## [1.2.33](https://github.com/sirian/js/compare/@sirian/base64@1.2.32...@sirian/base64@1.2.33) (2020-02-14)
 
 **Note:** Version bump only for package @sirian/base64
