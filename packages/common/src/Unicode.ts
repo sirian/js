@@ -92,21 +92,10 @@ export const stringToBytes = (str: string) => {
     return new Uint8Array(resArr);
 };
 
-export class Unicode {
-    public static getSymbols(str: string) {
-        return [...stringifyVar(str)];
+export const isUTF8String = (source: string) => {
+    try {
+        return source === decodeURIComponent(encodeURIComponent(source));
+    } catch (e) {
+        return false;
     }
-
-    public static getGraphemes(str: string): string[] {
-        const re = /(\P{M}\p{M}*)/gu;
-        return stringifyVar(str).match(re) || [];
-    }
-
-    public static isUTF8(source: string) {
-        try {
-            return source === decodeURIComponent(encodeURIComponent(source));
-        } catch (e) {
-            return false;
-        }
-    }
-}
+};

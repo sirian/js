@@ -1,7 +1,7 @@
 import {TextEncoder} from "util";
 import {ByteArray} from "../../src";
 
-describe("Unicode.bytesToString && Unicode.stringToBytes", () => {
+describe("ByteArray.from && ByteArray.stringify", () => {
     const data = [
         new ByteArray([]),
         new ByteArray([0]),

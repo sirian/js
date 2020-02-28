@@ -1,4 +1,4 @@
-import {Unicode} from "../../src";
+import {isUTF8String} from "../../src";
 
 describe("Unicode.isUTF8", () => {
     const data: Array<[string, boolean]> = [
@@ -11,6 +11,6 @@ describe("Unicode.isUTF8", () => {
     ];
 
     test.each(data)("Unicode.isUTF(%p) === %p", (str, expected) => {
-        expect(Unicode.isUTF8(str)).toBe(expected);
+        expect(isUTF8String(str)).toBe(expected);
     });
 });
