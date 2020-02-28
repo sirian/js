@@ -28,6 +28,17 @@ interface IBase64 {
             encode: (x) => Buffer.from(x).toString("base64"),
             decode: (x) => Buffer.from(x, "base64").toString(),
         },
+        // "polyfill_1": {
+        //     encode: (x) =>
+        //         btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
+        //     decode: (x) =>
+        //         decodeURIComponent([].map.call(atob(x), (c: string) =>
+        //             "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
+        // },
+        // "polyfill_2": {
+        //     encode: (s) => btoa(unescape(encodeURIComponent(s))),
+        //     decode: (s) => decodeURIComponent(escape(atob(s))),
+        // },
         "js-base64": {
             encode: (x) => JSBase64.encode(x),
             decode: (x) => JSBase64.decode(x),
@@ -36,33 +47,25 @@ interface IBase64 {
             encode: (x) => base64Encode(ByteArray.from(x)),
             decode: (x) => bytesToString(base64Decode(x)),
         },
-        "polyfill_1": {
-            encode: (x) =>
-                btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
-            decode: (x) =>
-                decodeURIComponent([].map.call(atob(x), (c: string) =>
-                    "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
-        },
-        "polyfill_2": {
-            encode: (s) => btoa(unescape(encodeURIComponent(s))),
-            decode: (s) => decodeURIComponent(escape(atob(s))),
-        },
     };
 
-    const str = "Sed ut perspiciatis, unde omnis iste natus ";
+    const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        + "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+        + "Современные технологии достигли такого уровня, что синтетическое тестирование "
+        + "обеспечивает широкому кругу (специалистов) участие в формировании форм воздействия.";
 
     const str64 = Buf.from(str).toString("base64");
 
-    function testEngine(N: number, b64Engine: IBase64, enc: boolean) {
+    function testEngine(N: number, {encode, decode}: IBase64, enc: boolean) {
         if ("function" === typeof gc) {
             gc();
         }
         const start = Date.now();
-        console.assert(str64 === b64Engine.encode(str));
-        console.assert(str === b64Engine.decode(str64));
+        console.assert(str64 === encode(str));
+        console.assert(str === decode(str64));
 
         for (let i = 0; i < N; i++) {
-            enc ? b64Engine.encode(str) : b64Engine.decode(str64);
+            enc ? encode(str) : decode(str64);
         }
         return Date.now() - start;
     }
@@ -70,7 +73,7 @@ interface IBase64 {
     for (const enc of [true, false]) {
         const data: Record<number, Record<string, number>> = {};
         let maxTime = 0;
-        for (let N = 10000; maxTime < 1000; N *= 2) {
+        for (let N = 500; maxTime < 1000; N *= 2) {
             const times = {};
             console.group(`Test ${enc ? "encode" : "decode"} ${N}`);
 
@@ -78,7 +81,6 @@ interface IBase64 {
                 const time = testEngine(N, engine, enc);
                 maxTime = Math.max(time, maxTime);
                 times[name] = time;
-                console.log(name, time);
             }
             console.groupEnd();
 
