@@ -1,9 +1,18 @@
+import {LastElement} from "@sirian/ts-extra-types";
 import {isArray, isEqual} from "./Var";
 import {XSet} from "./XSet";
 
 export class Arr {
     public static removeItem<T>(array: T[], value: T, limit?: number) {
         return Arr.remove(array, (item) => isEqual(item, value), limit);
+    }
+
+    public static create<T>(length: number, fill: (index: number) => T): T[] {
+        const a = Array(length);
+        for (let i = 0; i < length; i++) {
+            a[i] = fill(i);
+        }
+        return a;
     }
 
     public static remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
@@ -63,5 +72,9 @@ export class Arr {
             from += step;
         }
         return result;
+    }
+
+    public static last<T extends any[]>(value: T): LastElement<T> {
+        return value[value.length - 1];
     }
 }

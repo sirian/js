@@ -1,5 +1,5 @@
 import {isObject} from "../../src";
-import {Util} from "../Util";
+import {TestUtil} from "../TestUtil";
 
 describe("", () => {
     const data: Array<[string, boolean]> = [
@@ -16,7 +16,7 @@ describe("", () => {
     ];
 
     test.each(data)("Var.isObject(%s) === %o", (code, expected) => {
-        const value = Util.eval(code);
+        const value = TestUtil.eval(code);
 
         expect(isObject(value)).toBe(expected);
     });

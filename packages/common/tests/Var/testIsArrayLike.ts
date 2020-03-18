@@ -1,5 +1,5 @@
 import {isArrayLike} from "../../src";
-import {Util} from "../Util";
+import {TestUtil} from "../TestUtil";
 
 describe("", () => {
     const data: Array<[string, boolean, boolean]> = [
@@ -22,7 +22,7 @@ describe("", () => {
     ];
 
     test.each(data)("Var.isArrayLike(%s) === %o", (code, expected, expectedStrict) => {
-        const value = Util.eval(code);
+        const value = TestUtil.eval(code);
         expect(isArrayLike(value, true)).toBe(expectedStrict);
         expect(isArrayLike(value, false)).toBe(expected);
     });

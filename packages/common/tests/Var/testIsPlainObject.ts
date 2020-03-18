@@ -1,5 +1,5 @@
 import {isPlainObject} from "../../src";
-import {Util} from "../Util";
+import {TestUtil} from "../TestUtil";
 
 describe("", () => {
     const data: Array<[string, boolean]> = [
@@ -17,7 +17,7 @@ describe("", () => {
     ];
 
     test.each(data)("Var.isPlainObject(%s) === %o", (code, expected) => {
-        const value = Util.eval(code);
+        const value = TestUtil.eval(code);
 
         expect(isPlainObject(value)).toBe(expected);
     });

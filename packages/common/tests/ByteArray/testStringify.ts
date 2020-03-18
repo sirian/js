@@ -1,5 +1,6 @@
 import {TextEncoder} from "util";
 import {ByteArray} from "../../src";
+import {TestUtil} from "../TestUtil";
 
 describe("ByteArray.from && ByteArray.stringify", () => {
     const data = [
@@ -17,13 +18,10 @@ describe("ByteArray.from && ByteArray.stringify", () => {
         expect(ByteArray.stringify(bts)).toBe(str);
     });
 
-    test("Random strings", () => {
-        for (let i = 0; i < 10; i++) {
-            const s = Array(15).map(() => String.fromCharCode(Math.floor(2 ** 16 * Math.random()))).join("");
-            const bytes = ByteArray.from(s).to(Uint8Array);
-
-            expect(bytes).toStrictEqual(new TextEncoder().encode(s));
-            expect(ByteArray.stringify(bytes)).toBe(s);
-        }
+    test.each(TestUtil.randStrings(20))("ByteArray.stringify(%o)", (s) => {
+        const expected = new TextEncoder().encode(s);
+        const bytes = ByteArray.from(s).to(Uint8Array);
+        expect(bytes).toStrictEqual(expected);
+        expect(ByteArray.stringify(bytes)).toBe(s);
     });
 });

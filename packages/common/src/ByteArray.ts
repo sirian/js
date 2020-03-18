@@ -21,32 +21,30 @@ export class ByteArray extends Uint8Array {
     public static from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): ByteArray;
     public static from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): ByteArray;
     public static from(source: any, ...args: any) {
+        let arg;
+
         if (isNullish(source)) {
-            return new this();
+            arg = [] as number[];
+        } else if (isString(source)) {
+            arg = stringToBytes(source).buffer;
+        } else if (isArrayBuffer(source)) {
+            arg = source;
+        } else if (isArrayBufferView(source)) {
+            const {buffer, byteOffset = 0, byteLength} = source;
+            arg = buffer.slice(byteOffset, byteOffset + byteLength);
+        } else {
+            arg = Uint8Array.from(source, ...args).buffer;
         }
 
-        if (isString(source)) {
-            return new this(stringToBytes(source).buffer);
-        }
-
-        if (isArrayBuffer(source)) {
-            return new this(source);
-        }
-
-        if (isArrayBufferView(source)) {
-            const {buffer, byteOffset, byteLength} = source;
-            return new this(buffer.slice(byteOffset, byteOffset + byteLength));
-        }
-
-        return super.from(source, ...args);
+        return new ByteArray(arg);
     }
 
     public static stringify(buf: ByteArraySource) {
-        return isPrimitive(buf) ? stringifyVar(buf) : this.from(buf).toString();
+        return isPrimitive(buf) ? stringifyVar(buf) : bytesToString(ByteArray.from(buf));
     }
 
     public static convert<T extends TypedArrayConstructor>(buf: ByteArraySource, to: T) {
-        return this.from(buf).to(to);
+        return ByteArray.from(buf).to(to);
     }
 
     public to<T extends TypedArrayConstructor>(typedArrayCtor: T) {
