@@ -1,5 +1,5 @@
 import {entriesOf} from "./Obj";
-import {isFunction, isPlainObject, isPropertyKey} from "./Var";
+import {isEqual, isFunction, isPlainObject, isPropertyKey} from "./Var";
 
 export type XMapInitializer<K, V> = (key: K) => V;
 export type XMapSource<K = any, V = any> = Iterable<[K, V]> | ArrayLike<[K, V]> | Record<Extract<K, PropertyKey>, V>;
@@ -113,5 +113,9 @@ export class XMap<K = any, V = any> extends Map<K, V> {
     public pick(key: K, strict?: boolean): V | undefined;
     public pick(key: K, strict = false) {
         return XMap.pick(this, key, strict);
+    }
+
+    public deleteStrict(key: K, value: V) {
+        return this.has(key) && isEqual(value, this.get(key)) && super.delete(key);
     }
 }
