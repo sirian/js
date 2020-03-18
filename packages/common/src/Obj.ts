@@ -1,5 +1,6 @@
 import {
     Assign,
+    Entry,
     FromEntries,
     ObjectZip,
     ObjEntryOf,
@@ -64,12 +65,12 @@ export const toPrimitive = <T>(target: T): ToPrimitive<T> => {
 
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 
-export const fromEntries = <E extends [any, any]>(data: Iterable<E>): FromEntries<E[]> => {
+export const fromEntries = <E extends Entry>(data: E[] | Iterable<E>): FromEntries<E[]> => {
     const obj: any = {};
     for (const [key, value] of data) {
         obj[key] = value;
     }
-    return obj;
+    return obj as FromEntries<E[]>;
 };
 
 export class Obj {

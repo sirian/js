@@ -2,6 +2,7 @@ import {KeyToString} from "./cast";
 import {Thenable} from "./interfaces";
 import {MustBeArray} from "./mustbe";
 import {Overwrite} from "./object";
+import {Awaited} from "./promise";
 import {Cons, DropLast, Head, LastElement, Length, Tail} from "./tuple";
 import {NotFunc, Primitive} from "./types";
 
@@ -27,6 +28,11 @@ export type Func1<R = any, A = any> = (a: A) => R;
 export type Func2<R = any, A = any, B = any> = (a: A, b: B) => R;
 
 export type Return<T> = T extends Func<infer R> ? R : never;
+
+export type UpdateReturn<R1, R2> =
+    R1 extends PromiseLike<infer U>
+    ? PromiseLike<U | Awaited<R2>>
+    : R1 | R2;
 
 export type SyncFunc = Func<Primitive | object & { then?: NotFunc }>;
 export type AsyncFunc = Func<Thenable>;

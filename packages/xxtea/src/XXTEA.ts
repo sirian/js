@@ -1,4 +1,4 @@
-import {ByteArray, ByteArrayInput} from "@sirian/common";
+import {ByteArray, ByteArraySource} from "@sirian/common";
 import {parseKey} from "./util";
 import {xxteaDecrypt} from "./xxteaDecrypt";
 import {xxteaEncrypt} from "./xxteaEncrypt";
@@ -7,11 +7,11 @@ import {xxteaEncrypt} from "./xxteaEncrypt";
 export class XXTEA {
     protected key: Uint32Array;
 
-    public constructor(key: ByteArrayInput) {
+    public constructor(key: ByteArraySource) {
         this.key = parseKey(key);
     }
 
-    public static encrypt(data: ByteArrayInput, key: ByteArrayInput) {
+    public static encrypt(data: ByteArraySource, key: ByteArraySource) {
         const uint8Data = ByteArray.from(data);
         const uint32Data = uint8Data.to(Uint32Array);
         const uint32DataWithLength = new Uint32Array(uint32Data.length + 1);
@@ -22,7 +22,7 @@ export class XXTEA {
         return new ByteArray(uint32.buffer);
     }
 
-    public static decrypt(data: ByteArrayInput, key: ByteArrayInput) {
+    public static decrypt(data: ByteArraySource, key: ByteArraySource) {
         const uint32Data = ByteArray.convert(data, Uint32Array);
         const uint32DecryptedWithLength = xxteaDecrypt(uint32Data, parseKey(key));
 
@@ -42,11 +42,11 @@ export class XXTEA {
         return new ByteArray(buffer.slice(0, n));
     }
 
-    public encrypt(data: ByteArrayInput) {
+    public encrypt(data: ByteArraySource) {
         return XXTEA.encrypt(data, this.key);
     }
 
-    public decrypt(data: ByteArrayInput) {
+    public decrypt(data: ByteArraySource) {
         return XXTEA.decrypt(data, this.key);
     }
 }

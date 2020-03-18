@@ -1,4 +1,5 @@
-import {Awaited, AwaitedArray, Func, Return} from "@sirian/ts-extra-types";
+import {Awaited, AwaitedArray, Func, Func0, Return} from "@sirian/ts-extra-types";
+import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
 
 export type OnFulfilled<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
 export type OnReject<R> = undefined | null | ((reason: any) => R | PromiseLike<R>);
@@ -53,10 +54,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    get promise() {
-        return this;
-    }
-
     public static create<T>(executor?: PromiseExecutor<T>) {
         return new XPromise<T>(executor);
     }
@@ -105,7 +102,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             }
 
             let fulfilledCount = 0;
-            const results = [] as Partial<AwaitedArray<T>>;
+            const results = Array(length);
 
             for (let i = 0; i < length; i++) {
                 const promise = promises[i];
@@ -136,7 +133,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public static race<T extends any[]>(promises: T) {
-        return XPromise.create((resolve, reject) => {
+        return new XPromise((resolve, reject) => {
             if (!promises.length) {
                 return resolve([] as any);
             }
@@ -147,30 +144,34 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public static wrap<R>(fn: () => R | PromiseLike<R>) {
-        return XPromise.create<R>((resolve) => resolve(fn()));
+        return new XPromise<R>((resolve) => resolve(fn()));
     }
 
-    public setTimeout(ms?: number) {
+    get promise() {
+        return this;
+    }
+
+    public setTimeout(ms: number, fn?: Func0): this {
         if (!this.isPending()) {
             return this;
         }
 
         this.clearTimeout();
 
-        if ("number" === typeof ms) {
-            const reject = () => this.reject(new Error(`Timeout ${ms}ms exceeded`));
-
-            if (ms >= 0) {
-                this.timeout = setTimeout(reject, ms);
-            } else {
-                reject();
+        this.timeout = setTimeout(() => {
+            let error;
+            try {
+                error = fn ? fn() : new XPromiseTimeoutError();
+            } catch (e) {
+                error = e;
             }
-        }
+            this.reject(error);
+        }, ms);
 
         return this;
     }
 
-    public clearTimeout() {
+    public clearTimeout(): this {
         if (this.timeout) {
             clearTimeout(this.timeout);
             delete this.timeout;

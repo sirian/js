@@ -197,7 +197,8 @@ export const coalesce = <T extends any[]>(...values: T): Coalesce<T> => {
     return isNullish(result) ? values.pop() : result;
 };
 
-export const stringifyVar = (value: any) => isNullish(value) || isSymbol(value) ? "" : String(value);
+export const stringifyVar = (value: any) =>
+    isNullish(value) || isSymbol(value) ? "" : String(value);
 
 export const Var = {
     /** @deprecated use coalesce */

@@ -1,6 +1,10 @@
 // tslint:disable:no-console max-line-length
 declare function gc(): void;
 
+declare function require(x: string): any;
+
+declare const console: any;
+
 declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 
 declare function decodeURIComponent(encodedURIComponent: string): string;
@@ -9,13 +13,9 @@ const buf = require("buffer"); // tslint:disable-line:no-var-requires
 const Buf = buf.Buffer;
 delete buf.Buffer;
 
-import {ByteArray, bytesToString} from "@sirian/common";
-import {Base64 as JSBase64} from "js-base64";
-import {base64Decode, base64Encode} from "../src";
-import * as polyfill from "./polyfill";
-
-const atob = globalThis.atob || polyfill.atob;
-const btoa = globalThis.btoa || polyfill.btoa;
+import {assert} from "@sirian/assert";
+import {Base64} from "../src";
+import {atob, btoa} from "./polyfill";
 
 interface IBase64 {
     encode: (value: string) => string;
@@ -25,16 +25,8 @@ interface IBase64 {
 (() => {
     const engines: Record<string, IBase64> = {
         "Buffer": {
-            encode: (x) => Buffer.from(x).toString("base64"),
-            decode: (x) => Buffer.from(x, "base64").toString(),
-        },
-        "js-base64": {
-            encode: (x) => JSBase64.encode(x),
-            decode: (x) => JSBase64.decode(x),
-        },
-        "Base64": {
-            encode: (x) => base64Encode(ByteArray.from(x)),
-            decode: (x) => bytesToString(base64Decode(x)),
+            encode: (x) => Buf.from(x).toString("base64"),
+            decode: (x) => Buf.from(x, "base64").toString(),
         },
         "polyfill_1": {
             encode: (x) =>
@@ -47,22 +39,33 @@ interface IBase64 {
             encode: (s) => btoa(unescape(encodeURIComponent(s))),
             decode: (s) => decodeURIComponent(escape(atob(s))),
         },
+        "js-base64": require("js-base64").Base64,
+        "base-64": require("base-64"),
+        "@sirian/base64": {
+            encode: (x) => Base64.encode(x, true),
+            decode: (x) => Base64.decode(x, true),
+        },
     };
 
-    const str = "Sed ut perspiciatis, unde omnis iste natus ";
+    const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+        + "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+        + "Современные технологии достигли такого уровня, что синтетическое тестирование "
+        + "обеспечивает широкому кругу (специалистов) участие в формировании форм воздействия.";
 
     const str64 = Buf.from(str).toString("base64");
 
-    function testEngine(N: number, b64Engine: IBase64, enc: boolean) {
+    function testEngine(N: number, {encode, decode}: IBase64, enc: boolean) {
         if ("function" === typeof gc) {
             gc();
         }
+        if (enc) {
+            assert(str64 === encode(str));
+        } else {
+            assert(str === decode(str64));
+        }
         const start = Date.now();
-        console.assert(str64 === b64Engine.encode(str));
-        console.assert(str === b64Engine.decode(str64));
-
         for (let i = 0; i < N; i++) {
-            enc ? b64Engine.encode(str) : b64Engine.decode(str64);
+            enc ? encode(str) : decode(str64);
         }
         return Date.now() - start;
     }
@@ -70,15 +73,18 @@ interface IBase64 {
     for (const enc of [true, false]) {
         const data: Record<number, Record<string, number>> = {};
         let maxTime = 0;
-        for (let N = 10000; maxTime < 1000; N *= 2) {
-            const times = {};
+        for (let N = 500; maxTime < 500; N *= 2) {
+            const times: Record<string, any> = {};
             console.group(`Test ${enc ? "encode" : "decode"} ${N}`);
 
             for (const [name, engine] of Object.entries(engines)) {
-                const time = testEngine(N, engine, enc);
-                maxTime = Math.max(time, maxTime);
-                times[name] = time;
-                console.log(name, time);
+                try {
+                    const time = testEngine(N, engine, enc);
+                    maxTime = Math.max(time, maxTime);
+                    times[name] = time;
+                } catch (e) {
+                    times[name] = e.message;
+                }
             }
             console.groupEnd();
 
@@ -88,5 +94,5 @@ interface IBase64 {
         console.table(data);
     }
 
-    buf.Buffer = Buffer;
+    buf.Buffer = Buf;
 })();

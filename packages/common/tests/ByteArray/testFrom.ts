@@ -13,7 +13,9 @@ describe("ByteArray.from", () => {
         [new Uint16Array([1000]), [232, 3]],
         [new Uint16Array([1000]).buffer, [232, 3]],
     ];
-    test.each(data)("ByteArray.from(%O) is %p", (value, bytes) => {
-        expect(ByteArray.from(value)).toStrictEqual(new ByteArray(bytes));
+    test.each(data)("ByteArray.from(%p) is %p", (value, bytes) => {
+
+        const f = ByteArray.from;
+        expect(f(value)).toStrictEqual(new ByteArray(bytes));
     });
 });

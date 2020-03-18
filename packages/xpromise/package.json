@@ -27,10 +27,11 @@
         "access": "public"
     },
     "devDependencies": {
-        "@types/node": "^13.7.6",
+        "@types/node": "^13.9.2",
         "promises-aplus-tests": "^2.1.2"
     },
     "dependencies": {
+        "@sirian/error": "^2.1.22",
         "@sirian/ts-extra-types": "^3.54.2"
     }
 }

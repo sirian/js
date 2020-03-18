@@ -1,4 +1,4 @@
-import {Arr, Str, stringifyVar, Unicode} from "@sirian/common";
+import {Arr, Str, stringifyVar} from "@sirian/common";
 
 export class StrUtil {
     public static stripTags(text: string) {
@@ -10,7 +10,7 @@ export class StrUtil {
     }
 
     public static width(str?: number | string | undefined) {
-        return Unicode.getGraphemes(stringifyVar(str)).length;
+        return StrUtil.getGraphemes(str).length;
     }
 
     public static splitByWidth(str: string, width: number) {
@@ -19,9 +19,14 @@ export class StrUtil {
             return [str];
         }
 
-        const graphemes = Unicode.getGraphemes(str);
+        const graphemes = StrUtil.getGraphemes(str);
 
         return Arr.chunk(graphemes, width)
             .map((a) => Str.padRight(a.join(""), width, " "));
+    }
+
+    public static getGraphemes(str: any) {
+        const re = /(\P{M}\p{M}*)/gu;
+        return stringifyVar(str).match(re) || [];
     }
 }

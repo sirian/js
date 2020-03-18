@@ -1,24 +1,14 @@
+import {TestUtil} from "../../../common/tests/TestUtil";
 import {Base64} from "../../src";
 
-function seed(length: number) {
-    const a = [];
-
-    for (let i = 0; i < length; i++) {
-        a.push(Math.floor(0xFFFF * Math.random()));
-        a.push(Math.floor(0xFFF * Math.random()));
-        a.push(Math.floor(0xFF * Math.random()));
-    }
-
-    return a.join("");
-}
-
 describe("Random strings", () => {
-    for (let i = 0; i < 8; i++) {
-        const str = seed(i << i);
-        test("Length: " + str.length, () => {
-            const encoded = Base64.encode(str);
-            const decoded = Base64.decode(encoded);
-            expect(decoded.toString()).toBe(str);
-        });
-    }
+    const data = TestUtil.randStrings(20, 0, 50);
+
+    test.each(data)("encode/decode %p", (str) => {
+        const expected = Buffer.from(str).toString("base64");
+        const encoded = Base64.encode(str);
+        const decoded = Base64.decode(encoded);
+        expect(encoded.toString()).toBe(expected);
+        expect(decoded.toString()).toBe(str);
+    });
 });

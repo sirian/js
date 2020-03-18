@@ -1,13 +1,15 @@
 import {Base64, base64Encode} from "@sirian/base64";
 import {ByteArray} from "@sirian/common";
+import {TestUtil} from "../../../common/tests/TestUtil";
 import {XXTEA} from "../../src";
 
 describe("XXTEA", () => {
-    const data: Array<[any]> = [
-        [""],
-        ["foo"],
-        ["foo bar baz"],
-        [new Uint8Array([])],
+    const data: string[] = [
+        null,
+        "",
+        "foo",
+        "foo bar baz",
+        ...TestUtil.randStrings(30),
     ];
 
     function check(value: string, key: any) {
@@ -19,7 +21,7 @@ describe("XXTEA", () => {
 
     test.each(data)("xxtea.decrypt(xxtea.encrypt(%o)) should be same string", (value: string) => {
         check(value, "");
-        check(value, Math.random().toString());
+        check(value, TestUtil.randString(0, 10));
     });
 
     test("xxtea encrypt/decrypt for unicode data", () => {

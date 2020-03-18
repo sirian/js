@@ -1,4 +1,4 @@
-import {Unicode} from "../../src";
+import {StrUtil} from "../../../src/Util";
 
 describe("", () => {
     const data: Array<[string, string[]]> = [
@@ -13,6 +13,6 @@ describe("", () => {
     ];
 
     test.each(data)("Unicode.getGraphemes(%p) === %p", (str, expected) => {
-        expect(Unicode.getGraphemes(str)).toStrictEqual(expected);
+        expect(StrUtil.getGraphemes(str)).toStrictEqual(expected);
     });
 });

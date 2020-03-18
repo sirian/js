@@ -17,12 +17,14 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "scripts": {
-        "benchmark": "ts-node --skip-project benchmark/index.ts"
+        "benchmark": "node --expose-gc -r ts-node/register benchmark/index.ts"
     },
     "publishConfig": {
         "access": "public"
     },
     "devDependencies": {
+        "@types/base-64": "^0.1.3",
+        "base-64": "^0.1.0",
         "js-base64": "^2.5.2"
     },
     "dependencies": {

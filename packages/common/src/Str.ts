@@ -1,6 +1,5 @@
 import {keysOf} from "./Obj";
 import {Rgx} from "./Rgx";
-import {Unicode} from "./Unicode";
 import {isFunction, isString, stringifyVar} from "./Var";
 
 export const enum StrSide {
@@ -84,9 +83,7 @@ export class Str {
     public static trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
         const str = stringifyVar(value);
 
-        const maskChars = Unicode.getSymbols(mask);
-
-        const maskPattern = maskChars.map(Rgx.escape).join("|");
+        const maskPattern = [...mask].map(Rgx.escape).join("|");
 
         const parts = [];
 
