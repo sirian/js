@@ -27,7 +27,7 @@
         "access": "public"
     },
     "devDependencies": {
-        "@types/node": "^13.7.6",
+        "@types/node": "^13.9.2",
         "promises-aplus-tests": "^2.1.2"
     },
     "dependencies": {

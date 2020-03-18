@@ -12,10 +12,10 @@
     },
     "references": [
         {
-            "path": "../ts-extra-types"
+            "path": "../error"
         },
         {
-            "path": "../error"
+            "path": "../ts-extra-types"
         }
     ]
 }

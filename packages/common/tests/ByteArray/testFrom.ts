@@ -15,7 +15,7 @@ describe("ByteArray.from", () => {
     ];
     test.each(data)("ByteArray.from(%p) is %p", (value, bytes) => {
 
-        const f =ByteArray.from;
+        const f = ByteArray.from;
         expect(f(value)).toStrictEqual(new ByteArray(bytes));
     });
 });
