@@ -31,6 +31,7 @@
         "promises-aplus-tests": "^2.1.2"
     },
     "dependencies": {
+        "@sirian/error": "^2.1.22",
         "@sirian/ts-extra-types": "^3.54.2"
     }
 }
