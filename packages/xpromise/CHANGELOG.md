@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/sirian/js/compare/@sirian/xpromise@2.5.10...@sirian/xpromise@2.6.0) (2020-03-18)
+
+
+### Features
+
+* **xpromise:** XPromiseTimeoutError ([3e6a623](https://github.com/sirian/js/commit/3e6a623f16676fcac347048deafc94be28f1d0e1))
+
+
+
+
+
 ## [2.5.10](https://github.com/sirian/js/compare/@sirian/xpromise@2.5.9...@sirian/xpromise@2.5.10) (2020-02-27)
 
 **Note:** Version bump only for package @sirian/xpromise

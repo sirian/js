@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.11.0](https://github.com/sirian/js/compare/@sirian/common@5.10.1...@sirian/common@5.11.0) (2020-03-18)
+
+
+### Features
+
+* **common:** Arr.create, Arr.last ([df9ab30](https://github.com/sirian/js/commit/df9ab30a5f9c8db4602bd09bb2e6401118e4a42e))
+* **common:** XMap.deleteStrict ([91e217d](https://github.com/sirian/js/commit/91e217d9b8fc9f73eaba56cc90a33492fd1e7f2a))
+
+
+
+
+
 ## [5.10.1](https://github.com/sirian/js/compare/@sirian/common@5.10.0...@sirian/common@5.10.1) (2020-02-27)
 
 **Note:** Version bump only for package @sirian/common

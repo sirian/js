@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/sirian/js/compare/@sirian/xxtea@1.2.0...@sirian/xxtea@1.2.1) (2020-03-18)
+
+
+### Bug Fixes
+
+* **xxtea:** remove internal exports ([a2cea97](https://github.com/sirian/js/commit/a2cea973d5feb291ec0720a5fed30f3c4f9b30ef))
+
+
+
+
+
 # [1.2.0](https://github.com/sirian/js/compare/@sirian/xxtea@1.1.31...@sirian/xxtea@1.2.0) (2020-02-27)
 
 
