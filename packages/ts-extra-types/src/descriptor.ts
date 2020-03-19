@@ -1,4 +1,4 @@
-import {OptionalKeys} from "./object";
+import {AnyKey, OptionalKeys} from "./object";
 
 export type DataPropertyDescriptor<V = any> = {
     configurable?: boolean;
@@ -22,12 +22,12 @@ export type AccessorPropertyDescriptor<T = any> = {
     & Partial<DescriptorGetter<T> & DescriptorSetter<T>>
     & (DescriptorGetter<T> | DescriptorSetter<T>);
 
-export type DescriptorOf<T, K extends keyof any> =
+export type DescriptorOf<T, K extends AnyKey> =
     K extends keyof T
     ? TypedPropertyDescriptor<T[K]>
     : PropertyDescriptor;
 
-export type PickDescriptor<T, K extends keyof any> =
+export type PickDescriptor<T, K extends AnyKey> =
     K extends OptionalKeys<T> ? TypedPropertyDescriptor<T[K]> | undefined :
     K extends keyof T ? TypedPropertyDescriptor<T[K]> :
     PropertyDescriptor | undefined;

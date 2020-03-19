@@ -6,6 +6,9 @@ import {IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
 export type EntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
 
+export type AnyKey = keyof any;
+export type AnyObject<K extends AnyKey = PropertyKey, V = any> = Partial<Record<K, V>>;
+
 export type ObjKeyOf<T> =
     T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
     {
@@ -23,13 +26,13 @@ export type ObjEntryOf<T> =
     ? { [P in KeyOf<T>]: [P, T[P]] }[TupleKeyOf<T>]
     : { [P in KeyOf<T>]: [KeyToString<P>, T[P]] }[KeyOf<T, string | number>];
 
-export type Get<T, K extends keyof any, TDefault = never> =
+export type Get<T, K extends AnyKey, TDefault = never> =
     K extends keyof T ? T[K] :
     [T] extends [{ [P in K]: infer V }] ? V : TDefault;
 
-export type Has<T, K extends keyof any> = K extends keyof T ? true : IsExtends<T, { [P in K]: any }>;
+export type Has<T, K extends AnyKey> = K extends keyof T ? true : IsExtends<T, { [P in K]: any }>;
 
-export type GetDeep<T, L extends PropertyKey[], D = never> =
+export type GetDeep<T, L extends AnyKey[], D = never> =
     {
         0: T
         1: Has<T, L[0]> extends true
@@ -37,11 +40,11 @@ export type GetDeep<T, L extends PropertyKey[], D = never> =
            : D;
     }[L extends [any, ...any[]] ? 1 : 0];
 
-export type ExpandKey<K extends keyof any> = K | ExcludeWide<KeyToString<K>> | ExcludeWide<KeyToNumber<K>>;
+export type ExpandKey<K extends AnyKey> = K | ExcludeWide<KeyToString<K>> | ExcludeWide<KeyToNumber<K>>;
 export type Expand<T> = { [P in ExpandKey<keyof T>]?: unknown } & T;
 
-export type MyPick<T, K extends keyof any> = Pick<T, Extract<keyof T, ExpandKey<K>>>;
-export type MyOmit<T, K extends keyof any> = IfNever<K, T, Pick<T, Exclude<keyof T, ExpandKey<K>>>>;
+export type MyPick<T, K extends AnyKey> = Pick<T, Extract<keyof T, ExpandKey<K>>>;
+export type MyOmit<T, K extends AnyKey> = IfNever<K, T, Pick<T, Exclude<keyof T, ExpandKey<K>>>>;
 
 export type ExactTypedKeyOf<T, Condition> = { [K in keyof T]: IsExact<T[K], Condition> extends true ? K : never }[keyof T];
 export type TypedKeyOf<T, Condition> = { [K in keyof T]: T[K] extends Condition ? K : never }[keyof T];
@@ -96,11 +99,11 @@ export type ReadonlyKeys<T> = {
     [P in KeyOf<T>]-?: Pick<Required<T>, P> extends infer O ? IfExact<Writable<O>, O, never, P> : never
 }[KeyOf<T>];
 
-export type Require<T, K extends keyof any = keyof T> = Overwrite<T, Required<MyPick<T, K>>>;
+export type Require<T, K extends AnyKey = keyof T> = Overwrite<T, Required<MyPick<T, K>>>;
 
-export type Partialize<T, K extends keyof any = keyof T> = Overwrite<T, Partial<MyPick<T, K>>>;
+export type Partialize<T, K extends AnyKey = keyof T> = Overwrite<T, Partial<MyPick<T, K>>>;
 
-export type Ensure<T, K extends keyof any> = {
+export type Ensure<T, K extends AnyKey> = {
     [P in K]-?: Get<T, K, unknown>
 } & T;
 
