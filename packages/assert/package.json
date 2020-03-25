@@ -1,7 +1,7 @@
 {
     "name": "@sirian/assert",
     "description": "",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,6 +21,6 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/error": "^2.1.23"
+        "@sirian/error": "^2.1.24"
     }
 }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.12.0](https://github.com/sirian/js/compare/@sirian/common@5.11.0...@sirian/common@5.12.0) (2020-03-25)
+
+
+### Features
+
+* **common:** isEqualTuple ([beb59aa](https://github.com/sirian/js/commit/beb59aa9052576d5ad269481faaee2a9a90ccb36))
+
+
+
+
+
 # [5.11.0](https://github.com/sirian/js/compare/@sirian/common@5.10.1...@sirian/common@5.11.0) (2020-03-18)
 
 

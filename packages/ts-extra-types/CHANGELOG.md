@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.55.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.54.3...@sirian/ts-extra-types@3.55.0) (2020-03-25)
+
+
+### Features
+
+* **ts-extra-types:** AnyKey, ArrayKey ([caabe8d](https://github.com/sirian/js/commit/caabe8d043acd80a599526bf19b54216a09ec306))
+
+
+
+
+
 ## [3.54.3](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.54.2...@sirian/ts-extra-types@3.54.3) (2020-03-18)
 
 **Note:** Version bump only for package @sirian/ts-extra-types
