@@ -1,4 +1,5 @@
 import {XPromise} from "../../src";
+import {Adapter} from "./Adapter";
 
 class AsyncXPromise extends XPromise {
     protected react(value: any) {
@@ -6,6 +7,5 @@ class AsyncXPromise extends XPromise {
     }
 }
 
-export = {
-    deferred: () => new AsyncXPromise(),
-};
+Adapter.run(() => new AsyncXPromise());
+

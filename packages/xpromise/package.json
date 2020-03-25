@@ -19,16 +19,15 @@
     "scripts": {
         "test:aplus": "yarn test:aplus:deferred && yarn test:aplus:xpromise",
         "test:aplus:base": "TS_NODE_PROJECT=tsconfig.test.json node --require ts-node/register node_modules/.bin/promises-aplus-tests",
-        "test:aplus:deferred": "yarn test:aplus:base tests/APlus/AsyncXPromiseAdapter.ts",
-        "test:aplus:xpromise": "yarn test:aplus:base tests/APlus/DeferredAdapter.ts",
+        "test:aplus:deferred": "yarn test:aplus:base tests/APlus/testXPromise.ts",
+        "test:aplus:xpromise": "yarn test:aplus:base tests/APlus/testDeferred.ts",
         "benchmark": "node --require ts-node/register --expose-gc --nouse-idle-notification benchmark/index.ts"
     },
     "publishConfig": {
         "access": "public"
     },
     "devDependencies": {
-        "@types/node": "^13.9.2",
-        "promises-aplus-tests": "^2.1.2"
+        "@types/node": "^13.9.3"
     },
     "dependencies": {
         "@sirian/error": "^2.1.23",
