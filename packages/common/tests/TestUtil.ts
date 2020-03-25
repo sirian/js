@@ -1,5 +1,5 @@
-import {Push} from "@sirian/ts-extra-types";
-import {Arr} from "../src";
+import {And, IsArray, Push} from "@sirian/ts-extra-types";
+import {Arr, isArray} from "../src";
 
 export class TestUtil {
     public static eval(code: string) {
@@ -7,14 +7,18 @@ export class TestUtil {
         return fn();
     }
 
-    public static mergeData<T>(trueData: T[], falseData: T[], oneArg: true): Array<[T, boolean]>;
-    public static mergeData<T extends any[]>(trueData: T[], falseData: T[], oneArg: false): Array<Push<T, boolean>>;
+    public static delay(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
 
-    public static mergeData(trueData: any[], falseData: any[], oneArg: boolean) {
+    public static mergeData<X extends readonly any[], Y extends readonly any[]>(trueData: X, falseData: Y) {
+        const oneArg = [...trueData, ...falseData].some((v) => !isArray(v));
         return [
-            ...trueData.map((values) => oneArg ? [values, true] : [...values, true]),
-            ...falseData.map((values) => oneArg ? [values, false] : [...values, false]),
-        ] as any;
+            ...trueData.map((v) => oneArg ? [v, true] : [...v, true]),
+            ...falseData.map((v) => oneArg ? [v, false] : [...v, false]),
+        ] as And<IsArray<X[number]>, IsArray<Y[number]>> extends true
+             ? Array<Push<X[number], true> | Push<Y[number], false>>
+             : Array<[X[number], true] | [Y[number], false]>;
     }
 
     public static rand(x: number, y: number) {

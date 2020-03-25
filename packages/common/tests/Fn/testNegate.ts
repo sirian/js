@@ -1,16 +1,18 @@
 import {Predicate} from "@sirian/ts-extra-types";
-import {isNumber, isObject, isTruthy, negate} from "../../src";
+import {isFalsy, isNullish, isNumber, isObject, isTruthy} from "../../src";
 
-describe("Fn.negate", () => {
-    const data: Array<[Predicate, Predicate]> = [
-        [isObject, (x) => "object" !== typeof x],
-        [isNumber, (x) => "number" !== typeof x],
-        [isTruthy, (x) => !x],
+describe("not()", () => {
+    const data: Array<[Predicate, any[]]> = [
+        [isObject, [{x: 1}]],
+        [isNumber, [1, 2]],
+        [isTruthy, [1, 2, {x: 1}]],
+        [isFalsy, [null, "", false]],
+        [isNullish, [null]],
+        [Boolean, [1, 2, {x: 1}]],
     ];
-    const array = [1, 2, "", false, {x: 1}];
-    test.each(data)("Fn.negate()", (x, y) => {
-        const actual = array.filter(negate(x));
-        const expected = array.filter(y);
-        expect(actual).toStrictEqual(expected);
+
+    const array = [null, 1, 2, "", false, {x: 1}];
+    test.each(data)("not(%o)", (f, expected) => {
+        expect(array.filter(f)).toStrictEqual(expected);
     });
 });

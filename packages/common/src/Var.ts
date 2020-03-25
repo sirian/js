@@ -105,6 +105,16 @@ export const isEqualNaN = (value: any): value is number => {
     return value !== value;
 };
 
+export const isEqualTuple = <T extends any[]>(x: T, y: any[]) => {
+    if (!isArray(x) || !isArray(y)) {
+        return false;
+    }
+    if (x.length !== y.length) {
+        return false;
+    }
+    return x.every((v, i) => isEqual(v, y[i]));
+};
+
 export const isSubclassOf = <A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> =>
     isFunction(a) && (isEqual(a, b) || isInstanceOf(a.prototype, b));
 

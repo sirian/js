@@ -22,9 +22,7 @@
         "@sirian/property-access": "^1.4.4",
         "pretty-format": "^25.1.0"
     },
-    "devDependencies": {
-        "@types/pretty-format": "^24.3.0"
-    },
+    "devDependencies": {},
     "scripts": {},
     "publishConfig": {
         "access": "public"

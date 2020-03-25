@@ -17,7 +17,7 @@ describe("Var.isType", () => {
         [3, "string"],
     ];
 
-    const data = TestUtil.mergeData(trueData, falseData, false);
+    const data = TestUtil.mergeData(trueData, falseData);
 
     test.each(data)("Var.isType(%O, %O) === %O", (value, types, expected) => {
         expect(isType(value, types)).toBe(expected);

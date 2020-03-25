@@ -1,6 +1,6 @@
 import {MustBeArray, MustBeNumber} from "./mustbe";
 import {Dec, Inc, Numbers} from "./number";
-import {Expand, IsPartial, IsRequired, KeyOf, OmitIndexSignature, Partialize} from "./object";
+import {AnyKey, Expand, IsPartial, IsRequired, KeyOf, OmitIndexSignature, Partialize} from "./object";
 import {IfNever, IsExact, IsFiniteNumber, IsWide} from "./types";
 
 export type NonEmptyTuple<H = any, R extends any[] = any> = [H, ...R[]];
@@ -56,7 +56,7 @@ export type DropLeft<N extends number, L extends any[], TMP extends any[] = []> 
     1: DropLeft<N, Tail<L>, Cons<any, TMP>>,
 }[Length<TMP> extends N ? 0 : 1];
 
-export type Drop<L extends any[], K extends keyof any, N extends number = 0> =
+export type Drop<L extends any[], K extends AnyKey, N extends number = 0> =
     number extends K ? [] :
     IsRepeatedTuple<L> extends true ? L :
     {
@@ -80,7 +80,7 @@ export type Take<N extends number, L extends any[]> =
     }[N extends 0 ? 0 : 1];
 
 export type Length<T> = T extends { length: MustBeNumber<infer L> } ? L : never;
-
+export type ArrayKey = keyof any[];
 export type IsArray<T> = T extends any[] ? true : false;
 export type IsFiniteTuple<T> = T extends any[] ? IsFiniteNumber<Length<T>> : false;
 export type IsOpenTuple<T> = T extends any[] ? IsWide<Length<T>> : false;
@@ -97,7 +97,7 @@ export type StripArray<T> =
       : OmitIndexSignature<OmitArrayProto<T>>
     : never;
 
-export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
+export type OmitArrayProto<T> = Omit<T, Exclude<ArrayKey, number>>;
 
 export type StripTuple<T> = Pick<T, TupleKeyOf<T> | TupleIndex<T>>;
 
@@ -164,7 +164,7 @@ export type IndexRange<N extends number, TMP extends number[] = []> =
 export type KeyRange<N extends number, TMP extends any[] = []> =
     number extends N ? N :
     {
-        0: Exclude<keyof TMP, keyof any[]>
+        0: Exclude<keyof TMP, ArrayKey>
         1: KeyRange<N, Cons<any, TMP>>;
     }[N extends Length<Partial<TMP>> ? 0 : 1];
 

@@ -12,11 +12,15 @@ const revLookup = (b64: string, index: number) => {
 };
 
 export function base64Decode(b64: string): Uint8Array {
-    const length = b64.length;
-
-    if (length % 4 > 0) {
-        throw new Error(`Invalid string "${b64}". Length must be a multiple of 4`);
+    if (!b64.length) {
+        return new Uint8Array();
     }
+
+    while (b64.length % 4 > 0) {
+        b64 += "=";
+    }
+
+    const length = b64.length;
 
     const placeHolders = "=" === b64[length - 2] ? 2 : +("=" === b64[length - 1]);
     const byteLength = (length * 3 / 4) - placeHolders;
