@@ -1,5 +1,6 @@
-import {Descriptor, isConstructor, isObjectOrFunction, isString, isSymbol} from "@sirian/common";
+import {Descriptor, isArray, isConstructor, isObjectOrFunction, isString, isSymbol} from "@sirian/common";
 import {Args, Return} from "@sirian/ts-extra-types";
+import {DecorateError} from "./DecorateError";
 
 export enum DecoratorType {
     CLASS = "class",
@@ -61,25 +62,22 @@ export class Decorator {
 
     public static create<T extends DecoratorType, F extends DecoratorFactory<T>>(type: T, callback: F) {
         return ((...args: any[]) => {
-            if (Decorator.isDecoratorArgs(type, args)) {
-                const decorator = callback() as any;
-                return decorator(...args);
-            }
-
-            return callback(...args);
+            return Decorator.isDecoratorArgs(type, args)
+                   ? (callback() as F)(...args)
+                   : callback(...args);
         }) as F & Return<F>;
     }
 
     public static parseArgs<T extends DecoratorType>(type: T, args: Args<Decorators[T]>): DecoratorParams[T] {
         if (!this.isDecoratorArgs(type, args)) {
-            throw new Error(`Could not parse ${type} decorator args "${args}"`);
+            throw new DecorateError(`Could not parse ${type} decorator args "${args}"`);
         }
 
         if (DecoratorType.CLASS === type) {
             return {class: args[0]} as any;
         }
 
-        const [proto, propertyKey, arg3] = args as any[];
+        const [proto, propertyKey, arg3] = args;
 
         switch (type) {
             case DecoratorType.METHOD:
@@ -89,11 +87,15 @@ export class Decorator {
                 return {proto, propertyKey, parameterIndex: arg3} as any;
         }
 
-        throw new Error(`Invalid decorator type "${type}"`);
+        throw new DecorateError(`Invalid decorator type "${type}"`);
     }
 
     public static isDecoratorArgs<T extends DecoratorType>(type: T, args: any[]): args is Args<Decorators[T]> {
         const len = args.length;
+
+        if (!isArray(args)) {
+            return false;
+        }
 
         const [a1, a2, a3] = args;
 
@@ -102,11 +104,7 @@ export class Decorator {
                 return DecoratorType.CLASS === type && isConstructor(a1);
             case 2:
             case 3:
-                if (!isObjectOrFunction(a1)) {
-                    return false;
-                }
-
-                if (!isString(a2) && !isSymbol(a2)) {
+                if (!isObjectOrFunction(a1) || !isString(a2) && !isSymbol(a2)) {
                     return false;
                 }
 

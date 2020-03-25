@@ -1,21 +1,20 @@
-import {apply, HybridMap} from "@sirian/common";
+import {apply, HybridMap, XSet} from "@sirian/common";
 import {Args, Func, Return, ThisArg} from "@sirian/ts-extra-types";
+import {DecorateError} from "./DecorateError";
 
 export interface IMemoizerOptions<A extends any[]> {
     hasher?: Func<any, A>;
 }
 
 export class Memoizer<F extends Func> {
-    protected map: HybridMap<any, HybridMap<any, Return<F> | symbol>>;
+    protected map = new HybridMap<any, HybridMap<any, Return<F> | symbol>>();
     protected options: IMemoizerOptions<Args<F>>;
     protected fn: F;
-    protected resolving: symbol;
+    protected resolving = new XSet();
 
     constructor(fn: F, options?: IMemoizerOptions<Args<F>>) {
-        this.map = new HybridMap();
         this.options = {...options};
         this.fn = fn;
-        this.resolving = Symbol();
     }
 
     public static memoize<F extends Func>(fn: F, opts?: IMemoizerOptions<Args<F>>) {
@@ -28,26 +27,22 @@ export class Memoizer<F extends Func> {
 
     public get(thisArg: ThisArg<F>, args: Args<F>) {
         const map = this.map.ensure(thisArg, () => new HybridMap());
+        const resolving = this.resolving;
 
         const hashKey = this.getHashKey(thisArg, args);
 
         if (!map.has(hashKey)) {
-            map.set(hashKey, this.resolving);
+            if (!resolving.insert(hashKey)) {
+                throw new DecorateError(`Circular @memoize call detected at\n${this.fn}`);
+            }
             map.set(hashKey, apply(this.fn, thisArg, args));
+            resolving.delete(hashKey);
         }
-        const value = map.get(hashKey)!;
-
-        if (value === this.resolving) {
-            throw new Error(`Circular @memoize call detected at\n${this.fn}`);
-        }
-
-        return value;
+        return map.get(hashKey)!;
     }
 
     protected getHashKey(thisArg: ThisArg<F>, args: Args<F>) {
         const hasher = this.options.hasher;
-        if (hasher) {
-            return apply(hasher, thisArg, args);
-        }
+        return hasher && apply(hasher, thisArg, args);
     }
 }

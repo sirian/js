@@ -12,7 +12,7 @@ export const bind = Decorator.forMethod(() => {
         const map = new XWeakMap((obj) => new XWeakMap((fn: Func) => fn.bind(obj)));
 
         return Descriptor.wrap(proto, key, {
-            get: (object, previous: () => any) => map.ensure(object).ensure(previous()) as PropertyDescriptor,
+            get: (object, previous) => map.ensure(object).ensure(previous()),
         });
     };
 });
