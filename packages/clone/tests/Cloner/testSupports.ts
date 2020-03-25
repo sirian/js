@@ -1,4 +1,5 @@
 import {Obj} from "@sirian/common";
+import {TestUtil} from "../../../common/tests/TestUtil";
 import {cloner, cloneSymbol} from "../../src";
 
 class Foo {
@@ -34,24 +35,17 @@ const trueData = [
     new DataView(new ArrayBuffer(42)),
     new Bar(),
     new Baz(),
-];
+] as const;
 
 const falseData = [
     new WeakMap(),
     new WeakSet(),
     new class {}(),
     new Foo(),
-];
+] as const;
 
-const data = [
-    ...trueData.map<[any, boolean]>((x) => [x, true]),
-    ...falseData.map<[any, boolean]>((x) => [x, false]),
-];
-
+const data = TestUtil.mergeData(trueData, falseData);
 test.each(data)("Cloner.supports(%O) === %p", (obj, expected) => {
     expect(cloner.supports(obj)).toBe(expected);
 });
 
-test("", () => {
-    expect(cloner.supports(Obj.create(null))).toBe(true);
-});

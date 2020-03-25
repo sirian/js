@@ -1,3 +1,4 @@
+import {TestUtil} from "../../../common/tests/TestUtil";
 import {ParameterBag} from "../../src";
 
 describe("ParameterBag.get", () => {
@@ -27,12 +28,7 @@ describe("ParameterBag.get", () => {
         "ON",
     ];
 
-    const data = [
-        ...falseData.map((v) => [v, false]),
-        ...trueData.map((v) => [v, true]),
-    ] as Array<[any, boolean]>;
-
-    test.each(data)("ParameterBag.getBool(%p) is %p", (v, expected) => {
+    test.each(TestUtil.mergeData(trueData, falseData))("ParameterBag.getBool(%p) is %p", (v, expected) => {
         const p = new ParameterBag({v});
         expect(p.getBool("v")).toBe(expected);
     });
