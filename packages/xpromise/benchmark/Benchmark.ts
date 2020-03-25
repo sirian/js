@@ -2,6 +2,7 @@ import {XPromise} from "../src";
 
 declare const console: any;
 declare const gc: any;
+declare const process: any;
 
 // tslint:disable:no-console
 export class Benchmark {
@@ -115,13 +116,18 @@ export class Benchmark {
         if ("undefined" !== typeof gc) {
             gc();
         }
-
+        const before = process.memoryUsage().heapUsed / 1024 / 1024;
         const start = Date.now();
         const result = await fn();
         const time = Date.now() - start;
 
+        if ("undefined" !== typeof gc) {
+            gc();
+        }
+        const after = process.memoryUsage().heapUsed / 1024 / 1024;
+
         console.assert(result === this.count, name);
 
-        console.log("%s\t%dms", name.padEnd(20), time);
+        console.log("%s\t%s ms. Memory: %s => %s", name.padEnd(20), time.toString().padStart(5), before.toFixed(2), after.toFixed(2));
     }
 }
