@@ -2,9 +2,12 @@ import {Args, Drop, Func, Func0, Func1, Get, Negate, Return} from "@sirian/ts-ex
 import {apply} from "./Ref";
 import {isFunction, isPromiseLike} from "./Var";
 
-export const negate = <F extends Func>(fn: F) => function(this: any, ...args) {
+export const not = <F extends Func>(fn: F) => function(this: any, ...args) {
     return !apply(fn, this, args);
 } as Negate<F>;
+
+export const negate = not;
+
 
 // export const firstArg = <T extends any[]>(...args: T) => args[0] as Head<T>;
 

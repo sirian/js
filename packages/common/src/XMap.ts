@@ -1,8 +1,15 @@
+import {Nullish} from "@sirian/ts-extra-types";
 import {entriesOf} from "./Obj";
 import {isEqual, isFunction, isPlainObject, isPropertyKey} from "./Var";
 
 export type XMapInitializer<K, V> = (key: K) => V;
-export type XMapSource<K = any, V = any> = Iterable<[K, V]> | ArrayLike<[K, V]> | Record<Extract<K, PropertyKey>, V>;
+export type XMapSource<K = any, V = any> =
+    | Nullish
+    | Iterable<readonly [K, V]>
+    | ArrayLike<readonly [K, V]>
+    | Record<Extract<K, PropertyKey>, V>;
+
+declare const x: readonly (readonly [boolean])[];
 
 export interface IMapMini<K, V> {
     delete(key: K): boolean;
