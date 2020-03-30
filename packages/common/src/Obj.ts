@@ -60,7 +60,7 @@ export const toPrimitive = <T>(target: T): ToPrimitive<T> => {
         return (target as any).valueOf();
     }
 
-    throw new Error(`Could not convert ${Obj.getStringTag(target)} to primitive value`);
+    throw new Error(`Could not convert ${getObjectTag(target)} to primitive value`);
 };
 
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
@@ -73,12 +73,16 @@ export const fromEntries = <E extends Entry>(data: E[] | Iterable<E>): FromEntri
     return obj as FromEntries<E[]>;
 };
 
+export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");
+
 export class Obj {
     public static keys = keysOf;
     public static values = valuesOf;
     public static entries = entriesOf;
     public static stringify = stringifyObj;
     public static toPrimitive = toPrimitive;
+    /** @deprecated */
+    public static getStringTag = getObjectTag;
     public static wrap = toObject;
     public static fromEntries = fromEntries;
 
@@ -130,11 +134,6 @@ export class Obj {
         }
 
         return target as Partial<T>;
-    }
-
-    public static getStringTag(arg: any) {
-        // extract "[object (.*)]"
-        return stringifyObj(arg).slice(8, -1);
     }
 
     public static isEmpty(obj: object) {

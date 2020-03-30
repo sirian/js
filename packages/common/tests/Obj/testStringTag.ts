@@ -1,4 +1,4 @@
-import {Obj} from "../../src";
+import {getObjectTag} from "../../src";
 
 describe("", () => {
     class Foo {
@@ -11,9 +11,12 @@ describe("", () => {
         [new Date(), "Date"],
         [{}, "Object"],
         [[], "Array"],
+        [/./, "RegExp"],
         [() => 1, "Function"],
         ["foo", "String"],
         [3, "Number"],
+        [null, "Null"],
+        [undefined, "Undefined"],
         [true, "Boolean"],
         [Symbol.iterator, "Symbol"],
         [Foo, "Function"],
@@ -21,6 +24,6 @@ describe("", () => {
     ];
 
     test.each(data)("Obj.getStringTag(%o) === %o", (obj, tag) => {
-        expect(Obj.getStringTag(obj)).toBe(tag);
+        expect(getObjectTag(obj)).toBe(tag);
     });
 });

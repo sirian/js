@@ -2,6 +2,7 @@ import {
     AnyFunc,
     Coalesce,
     Ctor,
+    ExtractByObjectTag,
     ExtractByTypeName,
     ExtractByXTypeName,
     Instance,
@@ -14,6 +15,7 @@ import {
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
+import {getObjectTag} from "./Obj";
 import {getPrototype, hasMethod, hasProp} from "./Ref";
 import {stringifyObj} from "./Stringify";
 
@@ -206,6 +208,9 @@ export const coalesce = <T extends any[]>(...values: T): Coalesce<T> => {
     const result = values.find(isNotNullish);
     return isNullish(result) ? values.pop() : result;
 };
+
+export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
+    tag === getObjectTag(obj);
 
 export const stringifyVar = (value: any) =>
     isNullish(value) || isSymbol(value) ? "" : String(value);
