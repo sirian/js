@@ -1,7 +1,7 @@
 import {tryCatch} from "./Fn";
 import {Json} from "./Json";
 import {Num} from "./Num";
-import {Obj} from "./Obj";
+import {getObjectTag} from "./Obj";
 import {isFunction} from "./Var";
 
 interface Placeholder {
@@ -47,7 +47,7 @@ export class Sprintf {
         o: (arg) => Num.toUint32(arg).toString(8),
         s: (arg, ph) => this.substr(arg, ph),
         t: (arg, ph) => this.substr(!!arg, ph),
-        T: (arg, ph) => this.substr(Obj.getStringTag(arg).toLowerCase(), ph),
+        T: (arg, ph) => this.substr(getObjectTag(arg).toLowerCase(), ph),
         u: (arg) => Num.toUint32(arg),
         v: (arg, ph) => this.substr(arg.valueOf(), ph),
         x: (arg) => Num.toUint32(arg).toString(16),

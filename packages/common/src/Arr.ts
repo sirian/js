@@ -1,4 +1,4 @@
-import {LastElement} from "@sirian/ts-extra-types";
+import {Head, LastElement} from "@sirian/ts-extra-types";
 import {isArray, isEqual} from "./Var";
 import {XSet} from "./XSet";
 
@@ -18,11 +18,7 @@ export class Arr {
     public static remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
         let removed = 0;
 
-        for (let i = 0; i < array.length;) {
-            if (removed >= limit) {
-                break;
-            }
-
+        for (let i = 0; i < array.length && removed < limit;) {
             const remove = predicate(array[i], i, array);
 
             if (!remove) {
@@ -74,7 +70,19 @@ export class Arr {
         return result;
     }
 
-    public static last<T extends any[]>(value: T): LastElement<T> {
-        return value[value.length - 1];
+    public static first<T extends any[]>(value: T): Head<T>;
+    public static first(value: any[]) {
+        const length = value && value.length;
+        if (length > 0) {
+            return value[0];
+        }
+    }
+
+    public static last<T extends any[]>(value: T): LastElement<T>;
+    public static last(value: any[]) {
+        const length = value && value.length;
+        if (length > 0) {
+            return value[length - 1];
+        }
     }
 }

@@ -1,5 +1,6 @@
 import {
     defineProp,
+    getObjectTag,
     getPrototype,
     hasMethod,
     hasProp,
@@ -88,7 +89,7 @@ export class CloneContext {
             if (this.bypass(src, this)) {
                 return src;
             }
-            throw new CloneError(`Could not clone ${Obj.getStringTag(src)} - provide bypass option to copy as-is`);
+            throw new CloneError(`Could not clone ${getObjectTag(src)} - provide bypass option to copy as-is`);
         }
 
         const map = this.map;
