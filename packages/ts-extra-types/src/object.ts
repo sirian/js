@@ -1,13 +1,52 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If, Not} from "./logic";
+import {MustBeString} from "./mustbe";
 import {ArrayValueOf, IsEmptyTuple, IsOpenTuple, NonEmptyTuple, Tail, TupleKeyOf} from "./tuple";
-import {IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
+import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
 export type KeyOf<T, Filter = any> = Extract<keyof Required<T>, Filter>;
 export type EntryOf<T> = { [P in keyof T]-?: [P, T[P]] }[keyof T];
 
 export type AnyKey = keyof any;
 export type AnyObject<K extends AnyKey = PropertyKey, V = any> = Partial<Record<K, V>>;
+
+export type ObjectTag<T> =
+    T extends null ? "Null" :
+    T extends undefined | void ? "Undefined" :
+    T extends symbol ? "Symbol" :
+    T extends { [Symbol.toStringTag]: MustBeString<infer R> } ? R :
+    T extends any[] ? "Array" :
+    T extends number ? "Number" :
+    T extends IArguments ? "Arguments" :
+    T extends AnyFunc ? "Function" :
+    T extends Error ? "Error" :
+    T extends boolean ? "Boolean" :
+    T extends number ? "Number" :
+    T extends bigint ? "BigInt" :
+    T extends string ? "String" :
+    T extends Date ? "Date" :
+    T extends RegExp ? "RegExp" :
+    "Object";
+
+export type ExtractByObjectTag<T, Type extends string> =
+    T extends any
+    ? ObjectTag<T> extends Type ? T : never
+    : never;
+
+export type BuiltinObjTagMap = {
+    Undefined: undefined | void,
+    Null: null;
+    Array: any[];
+    Arguments: IArguments;
+    Function: AnyFunc;
+    Error: Error;
+    Boolean: Boolean | boolean;
+    Number: Number | number;
+    String: String | string;
+    BigInt: BigInt | bigint;
+    Date: Date;
+    RegExp: RegExp;
+}
 
 export type ObjKeyOf<T> =
     T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
