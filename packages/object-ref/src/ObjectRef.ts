@@ -1,4 +1,4 @@
-import {getConstructor, isString, Obj} from "@sirian/common";
+import {getConstructor, getObjectTag, isString} from "@sirian/common";
 import {SharedStore} from "@sirian/shared-store";
 
 export class ObjectRef {
@@ -21,7 +21,7 @@ export class ObjectRef {
     }
 
     public static guessName(obj: object) {
-        const tag = Obj.getStringTag(obj);
+        const tag = getObjectTag(obj);
 
         if (tag !== "Object") {
             return tag;

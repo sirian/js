@@ -23,7 +23,7 @@ describe("", () => {
         [new Foo(), "Bar"],
     ];
 
-    test.each(data)("Obj.getStringTag(%o) === %o", (obj, tag) => {
+    test.each(data)("getObjectTag(%o) === %o", (obj, tag) => {
         expect(getObjectTag(obj)).toBe(tag);
     });
 });
