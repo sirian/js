@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.56.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.55.0...@sirian/ts-extra-types@3.56.0) (2020-03-30)
+
+
+### Features
+
+* **ts-extra-types:** ObjectTag<T>, ExtractByObjectTag<T, Tag> ([7ffe5b4](https://github.com/sirian/js/commit/7ffe5b45cfad0231ed35220f6fa6ea85141e29e3))
+
+
+
+
+
 # [3.55.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.54.3...@sirian/ts-extra-types@3.55.0) (2020-03-25)
 
 

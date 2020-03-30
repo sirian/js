@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.13.0](https://github.com/sirian/js/compare/@sirian/common@5.12.0...@sirian/common@5.13.0) (2020-03-30)
+
+
+### Features
+
+* **common:** getObjectTag, isObjectTag ([142f947](https://github.com/sirian/js/commit/142f9470c2583b5c4f77f611a207e511a66fbc7a))
+
+
+
+
+
 # [5.12.0](https://github.com/sirian/js/compare/@sirian/common@5.11.0...@sirian/common@5.12.0) (2020-03-25)
 
 

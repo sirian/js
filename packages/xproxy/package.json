@@ -1,7 +1,7 @@
 {
     "name": "@sirian/xproxy",
     "description": "",
-    "version": "1.5.7",
+    "version": "1.5.8",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,7 +21,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/error": "^2.1.24",
-        "@sirian/ts-extra-types": "^3.55.0"
+        "@sirian/error": "^2.1.25",
+        "@sirian/ts-extra-types": "^3.56.0"
     }
 }
