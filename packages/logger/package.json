@@ -1,7 +1,7 @@
 {
     "name": "@sirian/logger",
     "description": "",
-    "version": "1.6.4",
+    "version": "1.6.5",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
