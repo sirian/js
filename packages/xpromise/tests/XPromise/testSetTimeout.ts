@@ -19,12 +19,19 @@ describe("XPromise.setTimeout", () => {
         expect(promise).rejects.toThrow(XPromiseTimeoutError);
     });
 
-    test("promise.setTimeout(0) should be rejected on next tick", () => {
+    test("promise.setTimeout(0) should be rejected on next tick", async () => {
         const promise = new XPromise();
         promise.setTimeout(0);
-        promise.resolve(1);
+        expect(promise.isPending()).toBe(true);
         jest.runAllTimers();
-        expect(promise).resolves.toBe(1);
+        await expect(promise).rejects.toThrow(new XPromiseTimeoutError("XPromise rejected by timeout (0ms)"));
+    });
+
+    test("empty callback", () => {
+        const promise = new XPromise();
+        promise.setTimeout(1);
+        jest.runAllTimers();
+        expect(promise).rejects.toThrow(new XPromiseTimeoutError());
     });
 
     test("custom error callback", () => {
@@ -32,6 +39,27 @@ describe("XPromise.setTimeout", () => {
         promise.setTimeout(1, () => new Error("foo"));
         jest.runAllTimers();
         expect(promise).rejects.toThrow(new Error("foo"));
+    });
+
+    test("custom reject callback", () => {
+        const promise = new XPromise();
+        promise.setTimeout(1, (p) => p.reject(""));
+        jest.runAllTimers();
+        expect(promise).rejects.toThrow("");
+    });
+
+    test("custom resolve callback", async () => {
+        const promise = new XPromise();
+        promise.setTimeout(1, (p) => p.resolve(123));
+        jest.runAllTimers();
+        expect(await promise).toBe(123);
+    });
+
+    test("custom noop callback", async () => {
+        const promise = new XPromise();
+        promise.setTimeout(1, () => {});
+        jest.runAllTimers();
+        await expect(promise).rejects.toThrow(new XPromiseTimeoutError("XPromise rejected by timeout (1ms)"));
     });
 
     test("custom error callback throws", () => {
