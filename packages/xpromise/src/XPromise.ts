@@ -1,4 +1,4 @@
-import {Awaited, AwaitedArray, Func, Func0, Return} from "@sirian/ts-extra-types";
+import {Awaited, AwaitedArray, Func, Func1, Return} from "@sirian/ts-extra-types";
 import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
 
 export type OnFulfilled<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
@@ -38,10 +38,11 @@ declare function clearTimeout(timeoutId: any): void;
 const isFunction = (x: any): x is Func => "function" === typeof x;
 
 export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
+    public readonly promise = this;
+
     protected status: PromiseStatus = PromiseStatus.PENDING;
     protected reactions: Array<PromiseReaction<any>> = [];
     protected resolved = false;
-
     protected timeout?: Return<typeof setTimeout>;
     protected value?: any;
 
@@ -52,16 +53,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 (reason) => this.reject(reason),
             );
         }
-    }
-
-    public static create<T>(executor?: PromiseExecutor<T>) {
-        return new XPromise<T>(executor);
-    }
-
-    public static resolve<T>(value?: T | PromiseLike<T>): XPromise<T> {
-        return value instanceof XPromise
-               ? value
-               : XPromise.create((resolve) => resolve(value));
     }
 
     // public static any<T extends any[]>(promises: T) {
@@ -88,6 +79,16 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     //         }
     //     });
     // }
+
+    public static create<T>(executor?: PromiseExecutor<T>) {
+        return new XPromise<T>(executor);
+    }
+
+    public static resolve<T>(value?: T | PromiseLike<T>): XPromise<T> {
+        return value instanceof XPromise
+               ? value
+               : XPromise.create((resolve) => resolve(value));
+    }
 
     public static reject<T = never>(reason?: any): XPromise<T> {
         return XPromise.create((resolve, reject) => reject(reason));
@@ -121,9 +122,9 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
     public static allSettled<T extends any[]>(promises: T) {
         return XPromise.wrap(() => {
-            const wrapped = Array.from(promises, (promise) => XPromise
-                .resolve(promise)
-                .then(
+            const wrapped = promises
+                .map(XPromise.resolve)
+                .map((promise) => promise.then(
                     (value) => ({status: PromiseStatus.FULFILLED, value}),
                     (reason) => ({status: PromiseStatus.REJECTED, reason}),
                 ));
@@ -147,11 +148,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         return new XPromise<R>((resolve) => resolve(fn()));
     }
 
-    get promise() {
-        return this;
-    }
-
-    public setTimeout(ms: number, fn?: Func0): this {
+    public setTimeout(ms: number, fn?: Func1<any, this>): this {
         if (!this.isPending()) {
             return this;
         }
@@ -160,12 +157,14 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
         this.timeout = setTimeout(() => {
             let error;
+
             try {
-                error = fn ? fn() : new XPromiseTimeoutError();
+                error = fn && fn(this);
             } catch (e) {
                 error = e;
             }
-            this.reject(error);
+
+            this.reject(error || new XPromiseTimeoutError(`XPromise rejected by timeout (${ms}ms)`));
         }, ms);
 
         return this;
