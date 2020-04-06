@@ -1,7 +1,8 @@
 import {XPromise} from "../../src";
+import {XPromiseError} from "../../src/XPromiseError";
 
 describe("XPromise.getValue", () => {
-    const pendingError = new Error("XPromise is not settled yet");
+    const pendingError = new XPromiseError("Could not get value of pending promise");
 
     const expectError = (p: XPromise, error) => {
         expect(() => p.getValue()).toThrow(error);

@@ -1,4 +1,5 @@
 import {Awaited, AwaitedArray, Func, Func1, Return} from "@sirian/ts-extra-types";
+import {XPromiseError} from "./XPromiseError";
 import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
 
 export type OnFulfilled<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
@@ -206,14 +207,11 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public getValue() {
-        switch (this.status) {
-            case PromiseStatus.REJECTED:
-                throw this.value;
-            case PromiseStatus.FULFILLED:
-                return this.value;
-            default:
-                throw new Error("XPromise is not settled yet");
+        const {value} = this;
+        if (this.isFulfilled()) {
+            return value;
         }
+        throw this.isRejected() ? value : new XPromiseError("Could not get value of pending promise");
     }
 
     public then<R1 = T, R2 = never>(onFulfilled?: OnFulfilled<T, R1>, onRejected?: OnReject<R2>) {
