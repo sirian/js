@@ -1,4 +1,4 @@
-import {Ctor, Overwrite} from "@sirian/ts-extra-types";
+import {Ctor0, Instance, Overwrite, Primitive} from "@sirian/ts-extra-types";
 
 declare global {
     interface ErrorConstructor {
@@ -9,8 +9,8 @@ declare global {
 export class CustomError extends Error {
     public previous?: Error;
 
-    constructor(message: string = "", previous?: Error) {
-        super(message);
+    constructor(message?: Primitive, previous?: Error) {
+        super(null == message ? "" : String(message));
 
         this.previous = previous;
 
@@ -22,17 +22,20 @@ export class CustomError extends Error {
         this.name = new.target.name;
     }
 
-    public static wrap<E extends Error>(target: E): E;
-    public static wrap<T extends CustomError>(this: Ctor<T, [any]>, target: string): T;
-    public static wrap<T extends CustomError, E>(this: Ctor<T, [any]>, e: E): Overwrite<T, E>;
-    public static wrap<T extends ErrorConstructor>(this: T, target: any) {
+    public static wrap<T extends Ctor0, E>(this: T, target: E): E extends Error ? E : Overwrite<Instance<T>, E> {
         if (target instanceof Error) {
-            return target;
+            return target as any;
         }
 
-        if ("object" === typeof target) {
-            return Object.assign(new this(), target);
+        const wrapped = new this();
+
+        if (null == target) {
+            return wrapped;
         }
-        return new this(target);
+        if (Object(target) !== target) {
+            wrapped.message = String(target);
+        }
+
+        return Object.assign(wrapped, target);
     }
 }
