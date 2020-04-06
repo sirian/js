@@ -1,16 +1,17 @@
 import {Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
+import {tryCatch} from "./Fn";
 import {TypedPropertyDescriptorMap} from "./Obj";
 import {
     ifSatisfy,
     isConstructor,
     isFunction,
+    isNotNullish,
     isNullish,
     isObjectOrFunction,
     isPrimitive,
     isString,
     isSymbol,
 } from "./Var";
-import {XSet} from "./XSet";
 
 export interface ProtoChainOptions {
     self?: boolean;
@@ -18,23 +19,16 @@ export interface ProtoChainOptions {
     stopAt?: object;
 }
 
-export const getPrototype = (target: any) => {
-    if (!isNullish(target)) {
-        return Reflect.getPrototypeOf(Object(target));
-    }
-};
+export const getPrototype = (target: any) => isNullish(target) ? undefined : Reflect.getPrototypeOf(Object(target));
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {
-    const result = new XSet<any>();
+    const result = new Set<any>();
     const {maxDepth, stopAt, self = true} = options;
 
     let current: any = target;
 
-    while (!isNullish(current)) {
-        if (maxDepth && result.size >= maxDepth) {
-            break;
-        }
-        if (result.has(current) || stopAt === current) {
+    while (isNotNullish(current)) {
+        if (maxDepth && result.size >= maxDepth || stopAt === current || result.has(current)) {
             break;
         }
         if (!isPrimitive(current)) {
@@ -52,13 +46,20 @@ export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Ar
 
 export const setPrototype = (target: object, proto: object | null) => Reflect.setPrototypeOf(target, proto);
 
-export const hasMethod = <T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> => !isNullish(target) && isFunction(target[key]);
+export const hasMethod = <T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> =>
+    isNotNullish(target) && isFunction(target[key]);
 
-export const hasOwn = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> => !isNullish(target) && Object.prototype.hasOwnProperty.call(target, key);
+export const hasOwn = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
+    isNotNullish(target) && Object.prototype.hasOwnProperty.call(target, key);
 
-export const ownKeys = <T>(target: T) => (isObjectOrFunction(target) ? Reflect.ownKeys(target) : []) as Array<keyof T>;
-export const ownSymbols = <S extends symbol>(target: { [P in S]: any }) => ownKeys(target).filter(isSymbol);
-export const ownNames = <T>(target: T) => ownKeys(target).filter(isString) as Array<Extract<keyof T, string>>;
+export const ownKeys = <T>(target: T) =>
+    (isObjectOrFunction(target) ? Reflect.ownKeys(target) : []) as Array<keyof T>;
+
+export const ownSymbols = <S extends symbol>(target: { [P in S]: any }) =>
+    ownKeys(target).filter(isSymbol);
+
+export const ownNames = <T>(target: T) =>
+    ownKeys(target).filter(isString) as Array<Extract<keyof T, string>>;
 
 export function ownDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
 export function ownDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
@@ -69,13 +70,12 @@ export function ownDescriptor(target: any, key: PropertyKey) {
 export function getDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
 export function getDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
 export function getDescriptor(target: any, key: PropertyKey) {
-    while (target) {
-        const descriptor = ownDescriptor(target, key);
-        if (descriptor) {
-            return descriptor;
-        }
+    let descriptor;
+    while (!descriptor && isNotNullish(target)) {
+        descriptor = ownDescriptor(target, key);
         target = getPrototype(target);
     }
+    return descriptor;
 }
 
 export const getDescriptors = <T>(target: T) => {
@@ -108,14 +108,21 @@ export function apply(target: Func, thisArg?: any, args: any[] = []) {
     return Reflect.apply(target, thisArg, args);
 }
 
+export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A): R =>
+    apply(target, thisArg, args);
+
+
 export function construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
 export function construct<F extends Newable>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
 export function construct(target: Function, args: any[] = [], newTarget?: Function) {
-    return Reflect.construct(target, args, ...(newTarget ? [newTarget] : []));
+    return isNullish(newTarget)
+           ? Reflect.construct(target, args)
+           : Reflect.construct(target, args, newTarget);
+
 }
 
 export function hasProp<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-    return !isNullish(target) && (key in Object(target));
+    return isNotNullish(target) && (key in Object(target));
 }
 
 export function getProp<T, K extends keyof T>(target: T, key: K): T[K];
@@ -132,23 +139,15 @@ export function setProp(target: any, key: PropertyKey, value: any) {
     return isObjectOrFunction(target) && Reflect.set(target, key, value);
 }
 
-export function deleteProp<T>(target: T, key: (keyof T) | PropertyKey) {
-    if (isNullish(target)) {
-        return true;
-    }
-    try {
-        return delete target[key as keyof T];
-    } catch (e) {
-        return false;
-    }
-}
+export const deleteProp = <T>(target: T, key: (keyof T) | PropertyKey) =>
+    isNullish(target) || tryCatch(() => delete target[key as keyof T], false);
 
 export function isPropWritable(target: any, property: PropertyKey) {
     if (isNullish(target)) {
         return false;
     }
 
-    const desc = getDescriptor(target, property);
+    const desc = tryCatch(() => getDescriptor(target, property));
     if (!desc) {
         return isPrimitive(target) || Object.isExtensible(target);
     }
