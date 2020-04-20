@@ -23,7 +23,7 @@
         "access": "public"
     },
     "devDependencies": {
-        "@types/node": "^13.11.0"
+        "@types/node": "^13.13.1"
     },
     "dependencies": {
         "@sirian/error": "^2.1.25",
