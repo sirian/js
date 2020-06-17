@@ -9,8 +9,6 @@ export type XMapSource<K = any, V = any> =
     | ArrayLike<readonly [K, V]>
     | Record<Extract<K, PropertyKey>, V>;
 
-declare const x: readonly (readonly [boolean])[];
-
 export interface IMapMini<K, V> {
     delete(key: K): boolean;
 

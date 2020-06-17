@@ -8,7 +8,6 @@ export const not = <F extends Func>(fn: F) => function(this: any, ...args) {
 
 export const negate = not;
 
-
 // export const firstArg = <T extends any[]>(...args: T) => args[0] as Head<T>;
 
 export function tryCatch<T>(fn: () => T): T | undefined;

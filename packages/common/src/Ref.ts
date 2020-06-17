@@ -111,7 +111,6 @@ export function apply(target: Func, thisArg?: any, args: any[] = []) {
 export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A): R =>
     apply(target, thisArg, args);
 
-
 export function construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
 export function construct<F extends Newable>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
 export function construct(target: Function, args: any[] = [], newTarget?: Function) {
