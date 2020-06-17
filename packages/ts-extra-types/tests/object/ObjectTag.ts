@@ -36,7 +36,6 @@ type Test = [
     AssertExact<"Array", ObjectTag<[1]>>,
     AssertExact<"Array", ObjectTag<number[]>>,
 
-
     AssertExact<"Error", ObjectTag<Error>>,
     AssertExact<"Date", ObjectTag<Date>>,
     AssertExact<"RegExp", ObjectTag<RegExp>>,

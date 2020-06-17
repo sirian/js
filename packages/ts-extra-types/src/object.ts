@@ -46,7 +46,7 @@ export type BuiltinObjTagMap = {
     BigInt: BigInt | bigint;
     Date: Date;
     RegExp: RegExp;
-}
+};
 
 export type ObjKeyOf<T> =
     T extends any[] ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
