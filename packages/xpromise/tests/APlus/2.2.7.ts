@@ -2,7 +2,6 @@ import {isObjectOrFunction} from "@sirian/common";
 import {Adapter} from "./Adapter";
 import {specify, testFulfilled, testReasons, testRejected} from "./helper";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
 const other = {other: "other"}; // a value we don't want to be strict equal to
@@ -31,7 +30,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
                         throw expectedReason;
                     });
 
-                    promise2.then(null, actualReason => {
+                    promise2.then(null, (actualReason) => {
                         expect(actualReason).toBe(expectedReason);
                         done();
                     });
@@ -41,7 +40,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
                         throw expectedReason;
                     });
 
-                    promise2.then(null, actualReason => {
+                    promise2.then(null, (actualReason) => {
                         expect(actualReason).toBe(expectedReason);
                         done();
                     });
@@ -60,7 +59,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
                 testFulfilled(sentinel, (promise1, done) => {
                     const promise2 = promise1.then(nonFunction);
 
-                    promise2.then(value => {
+                    promise2.then((value) => {
                         expect(value).toBe(sentinel);
                         done();
                     });
@@ -84,7 +83,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
                 testRejected(sentinel, (promise1, done) => {
                     const promise2 = promise1.then(null, nonFunction);
 
-                    promise2.then(null, reason => {
+                    promise2.then(null, (reason) => {
                         expect(reason).toBe(sentinel);
                         done();
                     });

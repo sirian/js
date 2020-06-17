@@ -17,11 +17,19 @@ export class LogRecord implements LogRecordInit {
     public extra: Record<string, any>;
 
     constructor(init: LogRecordInit) {
-        this.datetime = init.datetime || new DateTime();
-        this.level = init.level || LogLevel.INFO;
-        this.channel = init.channel || "";
-        this.extra = init.extra || {};
-        this.args = init.args;
+        const {
+            datetime = new DateTime(),
+            level = LogLevel.INFO,
+            extra = {},
+            channel = "",
+            args,
+        } = init;
+
+        this.datetime = datetime;
+        this.level = level;
+        this.channel = channel;
+        this.extra = extra;
+        this.args = args;
     }
 
     public clone() {

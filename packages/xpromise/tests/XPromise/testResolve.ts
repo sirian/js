@@ -39,6 +39,18 @@ test("resolve with rejected XPromise", async () => {
     expect(p.isRejected()).toBe(true);
 });
 
+test("resolve with inherited class", async () => {
+    class FooPromise extends XPromise {}
+
+    const foo = new FooPromise();
+    const xpromise = new XPromise();
+
+    expect(XPromise.resolve(xpromise)).toBe(xpromise);
+    expect(XPromise.resolve(foo)).toBe(foo);
+    expect(FooPromise.resolve(foo)).toBe(foo);
+    expect(FooPromise.resolve(xpromise)).toBe(xpromise);
+});
+
 test(".resolve(pending) and then .reject()", () => {
     const pendingPromise = new XPromise();
     const promise = new XPromise((resolve) => resolve(pendingPromise));

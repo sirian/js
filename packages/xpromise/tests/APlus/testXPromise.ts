@@ -8,4 +8,3 @@ class AsyncXPromise extends XPromise {
 }
 
 Adapter.run(() => new AsyncXPromise());
-

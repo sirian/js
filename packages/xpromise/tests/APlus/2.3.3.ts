@@ -1,20 +1,19 @@
 import {Adapter} from "./Adapter";
 import {specify, testReasons, thenables} from "./helper";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
 const other = {other: "other"}; // a value we don't want to be strict equal to
 const sentinelArray = [sentinel]; // a sentinel fulfillment value to test when we need an array
 
 function testPromiseResolution(xFactory, fn) {
-    specify("via return from a fulfilled promise", done => {
+    specify("via return from a fulfilled promise", (done) => {
         const promise = Adapter.resolved(dummy).then(() => xFactory());
 
         fn(promise, done);
     });
 
-    specify("via return from a rejected promise", done => {
+    specify("via return from a rejected promise", (done) => {
         const promise = Adapter.rejected(dummy).then(null, () => xFactory());
 
         fn(promise, done);
@@ -26,7 +25,7 @@ function testCallingResolvePromise(yFactory, stringRepresentation, test) {
         describe("`then` calls `resolvePromise` synchronously", () => {
             function xFactory() {
                 return {
-                    then: resolvePromise => resolvePromise(yFactory()),
+                    then: (resolvePromise) => resolvePromise(yFactory()),
                 };
             }
 
@@ -36,7 +35,7 @@ function testCallingResolvePromise(yFactory, stringRepresentation, test) {
         describe("`then` calls `resolvePromise` asynchronously", () => {
             function xFactory() {
                 return {
-                    then: resolvePromise => setTimeout(() => resolvePromise(yFactory()), 0),
+                    then: (resolvePromise) => setTimeout(() => resolvePromise(yFactory()), 0),
                 };
             }
 
@@ -71,7 +70,7 @@ function testCallingRejectPromise(r, stringRepresentation, test) {
 
 function testCallingResolvePromiseFulfillsWith(yFactory, stringRepresentation, fulfillmentValue) {
     testCallingResolvePromise(yFactory, stringRepresentation, (promise, done) =>
-        promise.then(value => {
+        promise.then((value) => {
             expect(value).toBe(fulfillmentValue);
             done();
         }));
@@ -79,7 +78,7 @@ function testCallingResolvePromiseFulfillsWith(yFactory, stringRepresentation, f
 
 function testCallingResolvePromiseRejectsWith(yFactory, stringRepresentation, rejectionReason) {
     testCallingResolvePromise(yFactory, stringRepresentation, (promise, done) =>
-        promise.then(null, reason => {
+        promise.then(null, (reason) => {
             expect(reason).toBe(rejectionReason);
             done();
         }));
@@ -87,7 +86,7 @@ function testCallingResolvePromiseRejectsWith(yFactory, stringRepresentation, re
 
 function testCallingRejectPromiseRejectsWith(reason, stringRepresentation) {
     testCallingRejectPromise(reason, stringRepresentation, (promise, done) =>
-        promise.then(null, rejectionReason => {
+        promise.then(null, (rejectionReason) => {
             expect(rejectionReason).toBe(reason);
             done();
         }));
@@ -107,7 +106,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     then: {
                         get: () => {
                             ++numberOfTimesThenWasRetrieved;
-                            return onFulfilled => onFulfilled('correct return');
+                            return (onFulfilled) => onFulfilled("correct return");
                         },
                     },
                 });
@@ -116,7 +115,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
             testPromiseResolution(xFactory, (promise, done) =>
                 promise.then((result) => {
                     expect(numberOfTimesThenWasRetrieved).toBe(1);
-                    expect(result).toBe('correct return')
+                    expect(result).toBe("correct return");
                     done();
                 }));
         });
@@ -133,7 +132,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     then: {
                         get: () => {
                             ++numberOfTimesThenWasRetrieved;
-                            return onFulfilled => onFulfilled("correct return")
+                            return (onFulfilled) => onFulfilled("correct return");
                         },
                     },
                 });
@@ -142,7 +141,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
             testPromiseResolution(xFactory, (promise, done) =>
                 promise.then((result) => {
                     expect(numberOfTimesThenWasRetrieved).toBe(1);
-                    expect(result).toBe('correct return')
+                    expect(result).toBe("correct return");
                     done();
                 }));
         });
@@ -160,7 +159,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 Object.defineProperty(x, "then", {
                     get: () => {
                         ++numberOfTimesThenWasRetrieved;
-                        return onFulfilled => onFulfilled('correct return');
+                        return (onFulfilled) => onFulfilled("correct return");
                     },
                 });
 
@@ -170,7 +169,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
             testPromiseResolution(xFactory, (promise, done) =>
                 promise.then((result) => {
                     expect(numberOfTimesThenWasRetrieved).toBe(1);
-                    expect(result).toBe('correct return')
+                    expect(result).toBe("correct return");
                     done();
                 }));
         });
@@ -189,7 +188,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
 
             describe("`e` is " + stringRepresentation, () =>
                 testPromiseResolution(xFactory, (promise, done) =>
-                    promise.then(null, reason => {
+                    promise.then(null, (reason) => {
                         expect(reason).toBe(e);
                         done();
                     })));
@@ -223,7 +222,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 then: {
                     get: () => {
                         if (numberOfTimesThenWasRetrieved === 0) {
-                            return onFulfilled => onFulfilled();
+                            return (onFulfilled) => onFulfilled();
                         }
                         return null;
                     },
@@ -245,7 +244,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 });
 
                 describe("`y` is a thenable", () => {
-                    Object.keys(thenables.fulfilled).forEach(stringRepresentation => {
+                    Object.keys(thenables.fulfilled).forEach((stringRepresentation) => {
                         function yFactory() {
                             return thenables.fulfilled[stringRepresentation](sentinel);
                         }
@@ -253,7 +252,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                         testCallingResolvePromiseFulfillsWith(yFactory, stringRepresentation, sentinel);
                     });
 
-                    Object.keys(thenables.rejected).forEach(stringRepresentation => {
+                    Object.keys(thenables.rejected).forEach((stringRepresentation) => {
                         function yFactory() {
                             return thenables.rejected[stringRepresentation](sentinel);
                         }
@@ -263,10 +262,10 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 });
 
                 describe("`y` is a thenable for a thenable", () =>
-                    Object.keys(thenables.fulfilled).forEach(outerStringRepresentation => {
+                    Object.keys(thenables.fulfilled).forEach((outerStringRepresentation) => {
                         const outerThenableFactory = thenables.fulfilled[outerStringRepresentation];
 
-                        Object.keys(thenables.fulfilled).forEach(innerStringRepresentation => {
+                        Object.keys(thenables.fulfilled).forEach((innerStringRepresentation) => {
                             const innerThenableFactory = thenables.fulfilled[innerStringRepresentation];
 
                             const stringRepresentation = outerStringRepresentation + " for " + innerStringRepresentation;
@@ -278,7 +277,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                             testCallingResolvePromiseFulfillsWith(yFactory, stringRepresentation, sentinel);
                         });
 
-                        Object.keys(thenables.rejected).forEach(innerStringRepresentation => {
+                        Object.keys(thenables.rejected).forEach((innerStringRepresentation) => {
                             const innerThenableFactory = thenables.rejected[innerStringRepresentation];
 
                             const stringRepresentation = outerStringRepresentation + " for " + innerStringRepresentation;
@@ -309,7 +308,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -327,7 +326,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -345,7 +344,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -366,7 +365,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -387,7 +386,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -404,7 +403,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -422,7 +421,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -440,7 +439,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -449,7 +448,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("calling `resolvePromise` twice synchronously", () => {
                     function xFactory() {
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(sentinel);
                                 resolvePromise(other);
                             },
@@ -457,7 +456,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -466,7 +465,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("calling `resolvePromise` twice, first synchronously then asynchronously", () => {
                     function xFactory() {
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(sentinel);
 
                                 setTimeout(() => resolvePromise(other), 0);
@@ -475,7 +474,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -484,7 +483,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("calling `resolvePromise` twice, both times asynchronously", () => {
                     function xFactory() {
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 setTimeout(() => resolvePromise(sentinel), 0);
 
                                 setTimeout(() => resolvePromise(other), 0);
@@ -493,7 +492,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -506,7 +505,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                         setTimeout(() => d.resolve(sentinel), 5);
 
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(d.promise);
                                 resolvePromise(other);
                             },
@@ -514,7 +513,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -527,7 +526,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                         setTimeout(() => d.reject(sentinel), 5);
 
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(d.promise);
                                 resolvePromise(other);
                             },
@@ -535,7 +534,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -552,7 +551,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -570,7 +569,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -588,7 +587,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -649,7 +648,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("`resolvePromise` was called with a non-thenable", () => {
                     function xFactory() {
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(sentinel);
                                 throw other;
                             },
@@ -657,7 +656,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -669,7 +668,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                         setTimeout(() => d.resolve(sentinel), 5);
 
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(d.promise);
                                 throw other;
                             },
@@ -677,7 +676,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -689,7 +688,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                         setTimeout(() => d.reject(sentinel), 5);
 
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 resolvePromise(d.promise);
                                 throw other;
                             },
@@ -697,7 +696,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -714,7 +713,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -732,7 +731,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(value => {
+                        promise.then((value) => {
                             expect(value).toBe(sentinel);
                             done();
                         }));
@@ -750,7 +749,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -768,7 +767,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -777,7 +776,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("`resolvePromise` is called asynchronously before the `throw`", () => {
                     function xFactory() {
                         return {
-                            then: resolvePromise => {
+                            then: (resolvePromise) => {
                                 setTimeout(() => resolvePromise(other), 0);
                                 throw sentinel;
                             },
@@ -785,7 +784,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -802,7 +801,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     }
 
                     testPromiseResolution(xFactory, (promise, done) =>
-                        promise.then(null, reason => {
+                        promise.then(null, (reason) => {
                             expect(reason).toBe(sentinel);
                             done();
                         }));
@@ -825,7 +824,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
 
             describe("`then` is " + stringRepresentation, () =>
                 testPromiseResolution(xFactory, (promise, done) =>
-                    promise.then(value => {
+                    promise.then((value) => {
                         expect(value).toBe(x);
                         done();
                     })));

@@ -1,4 +1,4 @@
-import {CustomError} from "@sirian/error";
+import {XPromiseError} from "./XPromiseError";
 
-export class XPromiseTimeoutError extends CustomError {
+export class XPromiseTimeoutError extends XPromiseError {
 }

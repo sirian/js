@@ -33,7 +33,7 @@ export class ByteArray extends Uint8Array {
             const {buffer, byteOffset = 0, byteLength} = source;
             arg = buffer.slice(byteOffset, byteOffset + byteLength);
         } else {
-            arg = Uint8Array.from(source, ...args).buffer;
+            arg = super.from(source, ...args).buffer;
         }
 
         return new ByteArray(arg);

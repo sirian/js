@@ -33,6 +33,7 @@
                 "packages/performance/package.json",
                 "packages/property-access/package.json",
                 "packages/random/package.json",
+                "packages/rpc/package.json",
                 "packages/shared-store/package.json",
                 "packages/timer/package.json",
                 "packages/tree/package.json",
