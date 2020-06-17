@@ -6,6 +6,8 @@ export interface DumpOptions {
     clone: Partial<CloneOptions>;
 }
 
+export const dump = (...args: CtorArgs<typeof Dump>) => new Dump(...args);
+
 export class Dump<T = any> {
     public target: T;
     public options: DumpOptions;
@@ -23,5 +25,3 @@ export class Dump<T = any> {
         this.snapshot = c.clone(target, clone);
     }
 }
-
-export const dump = (...args: CtorArgs<typeof Dump>) => new Dump(...args);
