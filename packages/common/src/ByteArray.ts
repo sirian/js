@@ -1,14 +1,6 @@
 import {Instance} from "@sirian/ts-extra-types";
 import {bytesToString, stringToBytes} from "./Unicode";
-import {
-    isArrayBuffer,
-    isArrayBufferLike,
-    isArrayBufferView,
-    isNullish,
-    isPrimitive,
-    isString,
-    stringifyVar,
-} from "./Var";
+import {isArrayBuffer, isArrayBufferView, isNullish, isPrimitive, isString, stringifyVar} from "./Var";
 
 export type TypedArrayConstructor =
     | Int8ArrayConstructor

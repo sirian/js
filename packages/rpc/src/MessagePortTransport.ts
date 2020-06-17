@@ -1,16 +1,20 @@
 import {AbstractTransport} from "./AbstractTransport";
 import {Payload} from "./Payload";
 
+export interface IMessageEvent {
+    data: any;
+}
+
 export interface IMessagePort {
-    onmessage(ev: MessageEvent): any;
+    onmessage(ev: IMessageEvent): any;
 
     postMessage(message: any): any;
 }
 
 export class MessagePortTransport extends AbstractTransport {
-    protected port: MessagePort;
+    protected port: IMessagePort;
 
-    constructor(port: MessagePort) {
+    constructor(port: IMessagePort) {
         super();
         this.port = port;
 

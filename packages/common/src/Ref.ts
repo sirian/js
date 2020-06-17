@@ -47,7 +47,7 @@ export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Ar
 export const setPrototype = (target: object, proto: object | null) => Reflect.setPrototypeOf(target, proto);
 
 export const hasMethod = <T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> =>
-    isNotNullish(target) && isFunction(target[key]);
+    isNotNullish(target) && isFunction(target[key as any as keyof T]);
 
 export const hasOwn = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
     isNotNullish(target) && Object.prototype.hasOwnProperty.call(target, key);
@@ -100,7 +100,7 @@ export function defineProp(t: object, k: PropertyKey, d: PropertyDescriptor) {
 }
 
 export const getConstructor = <T extends any>(target: T): Newable<T> | undefined =>
-    ifSatisfy(target && target.constructor, isConstructor);
+    ifSatisfy(target && (target as any).constructor, isConstructor);
 
 export function apply<R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
 export function apply<R>(target: () => R, thisArg?: any, args?: []): R;
