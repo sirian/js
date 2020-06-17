@@ -11,7 +11,7 @@ export class Adapter {
 
     public static deferred<T>() {
         const deferred = this.factory<T>();
-        Promise.resolve(deferred.promise).catch((preventUnhandledWarnings) => {})
+        Promise.resolve(deferred.promise).catch((preventUnhandledWarnings) => {});
         return deferred;
     }
 

@@ -2,7 +2,6 @@ import {specify, testRejected} from "./helper";
 
 import {Adapter} from "./Adapter";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
 
@@ -10,7 +9,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
     describe("2.2.3.1: it must be called after `promise` is rejected, with `promise`’s rejection reason as its " +
         "first argument.", () => {
         testRejected(sentinel, (promise, done) => {
-            promise.then(null, reason => {
+            promise.then(null, (reason) => {
                 expect(reason).toBe(sentinel);
                 done();
             });
@@ -18,7 +17,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
     });
 
     describe("2.2.3.2: it must not be called before `promise` is rejected", () => {
-        specify("rejected after a delay", done => {
+        specify("rejected after a delay", (done) => {
             const d = Adapter.deferred();
             let isRejected = false;
 
@@ -33,7 +32,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             }, 5);
         });
 
-        specify("never rejected", done => {
+        specify("never rejected", (done) => {
             const d = Adapter.deferred();
             let onRejectedCalled = false;
 
@@ -50,7 +49,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
     });
 
     describe("2.2.3.3: it must not be called more than once.", () => {
-        specify("already-rejected", done => {
+        specify("already-rejected", (done) => {
             let timesCalled = 0;
 
             Adapter.rejected(dummy).then(null, () => {
@@ -59,7 +58,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             });
         });
 
-        specify("trying to reject a pending promise more than once, immediately", done => {
+        specify("trying to reject a pending promise more than once, immediately", (done) => {
             const d = Adapter.deferred();
             let timesCalled = 0;
 
@@ -72,7 +71,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             d.reject(dummy);
         });
 
-        specify("trying to reject a pending promise more than once, delayed", done => {
+        specify("trying to reject a pending promise more than once, delayed", (done) => {
             const d = Adapter.deferred();
             let timesCalled = 0;
 
@@ -87,7 +86,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             }, 5);
         });
 
-        specify("trying to reject a pending promise more than once, immediately then delayed", done => {
+        specify("trying to reject a pending promise more than once, immediately then delayed", (done) => {
             const d = Adapter.deferred();
             let timesCalled = 0;
 
@@ -102,7 +101,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             }, 5);
         });
 
-        specify("when multiple `then` calls are made, spaced apart in time", done => {
+        specify("when multiple `then` calls are made, spaced apart in time", (done) => {
             const d = Adapter.deferred();
             const timesCalled = [0, 0, 0];
 
@@ -128,7 +127,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             }, 3);
         });
 
-        specify("when `then` is interleaved with rejection", done => {
+        specify("when `then` is interleaved with rejection", (done) => {
             const d = Adapter.deferred();
             const timesCalled = [0, 0];
 

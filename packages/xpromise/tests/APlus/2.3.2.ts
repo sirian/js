@@ -3,7 +3,6 @@ import {TestUtil} from "../../../common/tests/TestUtil";
 import {Adapter} from "./Adapter";
 import {specify} from "./helper";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
 
@@ -36,7 +35,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
         describe("`x` is already-fulfilled", () => {
             testPromiseResolution(
                 () => Adapter.resolved(sentinel),
-                (promise) => promise.then(value => expect(value).toBe(sentinel)),
+                (promise) => promise.then((value) => expect(value).toBe(sentinel)),
             );
         });
 
@@ -46,7 +45,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
                     setTimeout(() => d.resolve(sentinel), 5);
                     return d.promise;
                 },
-                (promise) => promise.then(value => expect(value).toBe(sentinel)));
+                (promise) => promise.then((value) => expect(value).toBe(sentinel)));
         });
     });
 
@@ -54,7 +53,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
         describe("`x` is already-rejected", () => {
             testPromiseResolution(
                 () => Adapter.rejected(sentinel),
-                (promise) => promise.then(null, reason => expect(reason).toBe(sentinel)));
+                (promise) => promise.then(null, (reason) => expect(reason).toBe(sentinel)));
         });
 
         describe("`x` is eventually-rejected", () => {
@@ -63,7 +62,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
                     setTimeout(() => d.reject(sentinel), 5);
                     return d.promise;
                 },
-                (promise) => promise.then(null, reason => expect(reason).toBe(sentinel)));
+                (promise) => promise.then(null, (reason) => expect(reason).toBe(sentinel)));
         });
     });
 });

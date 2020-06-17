@@ -36,7 +36,7 @@ describe("2.3.4: If `x` is not an object or function, fulfill `promise` with `x`
         testFulfilled(dummy, (promise1, done) => {
             const promise2 = promise1.then(() => expectedValue);
 
-            promise2.then(actualValue => {
+            promise2.then((actualValue) => {
                 expect(actualValue).toBe(expectedValue);
                 done();
             });
@@ -45,7 +45,7 @@ describe("2.3.4: If `x` is not an object or function, fulfill `promise` with `x`
         testRejected(dummy, (promise1, done) => {
             const promise2 = promise1.then(null, () => expectedValue);
 
-            promise2.then(actualValue => {
+            promise2.then((actualValue) => {
                 expect(actualValue).toBe(expectedValue);
                 done();
             });

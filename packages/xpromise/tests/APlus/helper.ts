@@ -33,21 +33,21 @@ export const expectNotCalled = (fn: Func) => () => expect(fn).not.toHaveBeenCall
 export const specify = (name: string, fn: DoneAwareCallback, timeout = 10) => {
     test(name, (done) => {
         setTimeout(done, timeout);
-        fn(() => done())
+        fn(() => done());
         // Promise.resolve(result).then(() => done(), () => done());
     }, timeout);
 };
 
 export const testFulfilled = (value, fn: (promise: PromiseLike<any>, done: Func0) => any) => {
-    specify("already-fulfilled", done => fn(Adapter.resolved(value), done));
+    specify("already-fulfilled", (done) => fn(Adapter.resolved(value), done));
 
-    specify("immediately-fulfilled", done => {
+    specify("immediately-fulfilled", (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
         d.resolve(value);
     });
 
-    specify("eventually-fulfilled", done => {
+    specify("eventually-fulfilled", (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
         setTimeout(() => d.resolve(value), 5);
@@ -57,15 +57,15 @@ export const testFulfilled = (value, fn: (promise: PromiseLike<any>, done: Func0
 export const dummy = () => ({dummy: "dummy"});
 
 export const testRejected = (reason, fn) => {
-    specify("already-rejected", done => fn(Adapter.rejected(reason), done));
+    specify("already-rejected", (done) => fn(Adapter.rejected(reason), done));
 
-    specify("immediately-rejected", done => {
+    specify("immediately-rejected", (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
         d.reject(reason);
     });
 
-    specify("eventually-rejected", done => {
+    specify("eventually-rejected", (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
         setTimeout(() => d.reject(reason), 5);
@@ -93,7 +93,7 @@ export const thenables = {
                     get() {
                         if (numberOfTimesThenRetrieved === 0) {
                             ++numberOfTimesThenRetrieved;
-                            return onFulfilled => onFulfilled(value);
+                            return (onFulfilled) => onFulfilled(value);
                         }
                         return null;
                     },

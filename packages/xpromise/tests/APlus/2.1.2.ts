@@ -1,7 +1,6 @@
 import {Adapter} from "./Adapter";
 import {specify, testFulfilled} from "./helper";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 
 describe("2.1.2.1: When fulfilled, a promise: must not transition to any other state.", () => {
@@ -16,7 +15,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
         });
     });
 
-    specify("trying to fulfill then immediately reject", done => {
+    specify("trying to fulfill then immediately reject", (done) => {
         const d = Adapter.deferred();
         let onFulfilledCalled = false;
 
@@ -32,7 +31,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
 
     });
 
-    specify("trying to fulfill then reject, delayed", done => {
+    specify("trying to fulfill then reject, delayed", (done) => {
         const d = Adapter.deferred();
         let onFulfilledCalled = false;
 
@@ -50,7 +49,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
 
     });
 
-    specify("trying to fulfill immediately then reject delayed", done => {
+    specify("trying to fulfill immediately then reject delayed", (done) => {
         const d = Adapter.deferred();
         let onFulfilledCalled = false;
 

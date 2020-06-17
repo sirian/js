@@ -30,7 +30,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
                 promise.then(handler2, spy);
                 promise.then(handler3, spy);
 
-                promise.then(value => {
+                promise.then((value) => {
                     expect(value).toBe(sentinel);
                     expect(handler1).toHaveBeenCalledWith(sentinel);
                     expect(handler2).toHaveBeenCalledWith(sentinel);
@@ -53,7 +53,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
                 promise.then(handler2, spy);
                 promise.then(handler3, spy);
 
-                return promise.then(value => {
+                return promise.then((value) => {
                     expect(value).toBe(sentinel);
                     expect(handler1).toHaveBeenCalledWith(sentinel);
                     expect(handler2).toHaveBeenCalledWith(sentinel);
@@ -67,19 +67,19 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
             testFulfilled(dummy, (promise, done) => {
                 const semiDone = callbackAggregator(3, done);
 
-                promise.then(() => sentinel).then(value => {
+                promise.then(() => sentinel).then((value) => {
                     expect(value).toBe(sentinel);
                     semiDone();
                 });
 
                 promise.then(() => {
                     throw sentinel2;
-                }).then(null, reason => {
+                }).then(null, (reason) => {
                     expect(reason).toBe(sentinel2);
                     semiDone();
                 });
 
-                promise.then(() => sentinel3).then(value => {
+                promise.then(() => sentinel3).then((value) => {
                     expect(value).toBe(sentinel3);
                     semiDone();
                 });
@@ -152,7 +152,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
                 promise.then(spy, handler2);
                 promise.then(spy, handler3);
 
-                promise.then(null, reason => {
+                promise.then(null, (reason) => {
                     expect(reason).toBe(sentinel);
                     expect(handler1).toHaveBeenCalledWith(sentinel);
                     expect(handler2).toHaveBeenCalledWith(sentinel);
@@ -167,7 +167,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
         describe("multiple rejection handlers, one of which throws", () => {
             testRejected(sentinel, async (promise) => {
                 const handler1 = jest.fn(() => 1);
-                const handler2 = jest.fn(() => {throw 2;});
+                const handler2 = jest.fn(() => {throw 2; });
                 const handler3 = jest.fn(() => 3);
 
                 const spy = jest.fn();
@@ -177,7 +177,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
                     expect(promise.then(spy, handler2)).rejects.toBe(2),
                     expect(promise.then(spy, handler3)).resolves.toBe(3),
 
-                    promise.then(null, reason => {
+                    promise.then(null, (reason) => {
                         expect(reason).toBe(sentinel);
                         expect(handler1).toHaveBeenCalledWith(sentinel);
                         expect(handler2).toHaveBeenCalledWith(sentinel);
@@ -192,19 +192,19 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
             testRejected(sentinel, (promise, done) => {
                 const semiDone = callbackAggregator(3, done);
 
-                promise.then(null, () => sentinel).then(value => {
+                promise.then(null, () => sentinel).then((value) => {
                     expect(value).toBe(sentinel);
                     semiDone();
                 });
 
                 promise.then(null, () => {
                     throw sentinel2;
-                }).then(null, reason => {
+                }).then(null, (reason) => {
                     expect(reason).toBe(sentinel2);
                     semiDone();
                 });
 
-                promise.then(null, () => sentinel3).then(value => {
+                promise.then(null, () => sentinel3).then((value) => {
                     expect(value).toBe(sentinel3);
                     semiDone();
                 });

@@ -1,4 +1,4 @@
-import {Awaited, AwaitedArray, Func, Func1, Return} from "@sirian/ts-extra-types";
+import {Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
 import {XPromiseError} from "./XPromiseError";
 import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
 
@@ -44,7 +44,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     protected status: PromiseStatus = PromiseStatus.PENDING;
     protected reactions: Array<PromiseReaction<any>> = [];
     protected resolved = false;
-    protected timeout?: Return<typeof setTimeout>;
+    protected timeout?: any;
     protected value?: any;
 
     constructor(executor?: PromiseExecutor<T>) {
@@ -88,15 +88,15 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     public static resolve<T>(value?: T | PromiseLike<T>): XPromise<T> {
         return value instanceof XPromise
                ? value
-               : XPromise.create((resolve) => resolve(value));
+               : new XPromise((resolve) => resolve(value));
     }
 
     public static reject<T = never>(reason?: any): XPromise<T> {
-        return XPromise.create((resolve, reject) => reject(reason));
+        return new XPromise((resolve, reject) => reject(reason));
     }
 
     public static all<T extends any[]>(promises: T) {
-        return XPromise.create<AwaitedArray<T>>((resolve, reject) => {
+        return new XPromise<AwaitedArray<T>>((resolve, reject) => {
             const length = promises.length;
 
             if (!length) {
@@ -145,8 +145,13 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }) as XPromise<Awaited<T[number]>>;
     }
 
-    public static wrap<R>(fn: () => R | PromiseLike<R>) {
-        return new XPromise<R>((resolve) => resolve(fn()));
+    public static wrap<R>(fn: () => R | PromiseLike<R>): XPromise<R> {
+        try {
+            const value = fn();
+            return XPromise.resolve<R>(value);
+        } catch (e) {
+            return XPromise.reject(e);
+        }
     }
 
     public setTimeout(ms: number, fn?: Func1<any, this>): this {
@@ -215,7 +220,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public then<R1 = T, R2 = never>(onFulfilled?: OnFulfilled<T, R1>, onRejected?: OnReject<R2>) {
-        const promise = XPromise.create<R1 | R2>();
+        const promise = new XPromise<R1 | R2>();
 
         const reaction: PromiseReaction<T, R1, R2> = {
             promise,

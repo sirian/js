@@ -1,7 +1,6 @@
 import {Adapter} from "./Adapter";
 import {specify, testFulfilled, testRejected} from "./helper";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 
 describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the execution context stack contains only " +
@@ -58,7 +57,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
                 expect(onFulfilledCalled).toBe(false);
             });
 
-        specify("when one `onFulfilled` is added inside another `onFulfilled`", done => {
+        specify("when one `onFulfilled` is added inside another `onFulfilled`", (done) => {
             const promise = Adapter.resolved();
             let firstOnFulfilledFinished = false;
 
@@ -71,7 +70,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when `onFulfilled` is added inside an `onRejected`", done => {
+        specify("when `onFulfilled` is added inside an `onRejected`", (done) => {
             const promise = Adapter.rejected();
             const promise2 = Adapter.resolved();
             let firstOnRejectedFinished = false;
@@ -85,7 +84,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when the promise is fulfilled asynchronously", done => {
+        specify("when the promise is fulfilled asynchronously", (done) => {
             const d = Adapter.deferred();
             let firstStackFinished = false;
 
@@ -130,7 +129,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
                 expect(onRejectedCalled).toBe(false);
             });
 
-        specify("when `onRejected` is added inside an `onFulfilled`", done => {
+        specify("when `onRejected` is added inside an `onFulfilled`", (done) => {
             const promise = Adapter.resolved();
             const promise2 = Adapter.rejected();
             let firstOnFulfilledFinished = false;
@@ -144,7 +143,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when one `onRejected` is added inside another `onRejected`", done => {
+        specify("when one `onRejected` is added inside another `onRejected`", (done) => {
             const promise = Adapter.rejected();
             let firstOnRejectedFinished = false;
 
@@ -157,7 +156,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when the promise is rejected asynchronously", done => {
+        specify("when the promise is rejected asynchronously", (done) => {
             const d = Adapter.deferred();
             let firstStackFinished = false;
 

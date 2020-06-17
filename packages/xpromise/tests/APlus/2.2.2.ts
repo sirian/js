@@ -1,7 +1,6 @@
 import {Adapter} from "./Adapter";
 import {specify, testFulfilled} from "./helper";
 
-
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
 
@@ -9,7 +8,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
     describe("2.2.2.1: it must be called after `promise` is fulfilled, with `promise`’s fulfillment value as its " +
         "first argument.", () => {
         testFulfilled(sentinel, (promise, done) => {
-            promise.then(value => {
+            promise.then((value) => {
                 expect(value).toBe(sentinel);
                 done();
             });
@@ -17,7 +16,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
     });
 
     describe("2.2.2.2: it must not be called before `promise` is fulfilled", () => {
-        specify("fulfilled after a delay", done => {
+        specify("fulfilled after a delay", (done) => {
             const d = Adapter.deferred();
             let isFulfilled = false;
 
@@ -32,7 +31,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             }, 5);
         });
 
-        specify("never fulfilled", done => {
+        specify("never fulfilled", (done) => {
             const d = Adapter.deferred();
             let onFulfilledCalled = false;
 
@@ -49,7 +48,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
     });
 
     describe("2.2.2.3: it must not be called more than once.", () => {
-        specify("already-fulfilled", done => {
+        specify("already-fulfilled", (done) => {
             let timesCalled = 0;
 
             Adapter.resolved(dummy).then(() => {
@@ -58,7 +57,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             });
         });
 
-        specify("trying to fulfill a pending promise more than once, immediately", done => {
+        specify("trying to fulfill a pending promise more than once, immediately", (done) => {
             const d = Adapter.deferred();
             let timesCalled = 0;
 
@@ -71,7 +70,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             d.resolve(dummy);
         });
 
-        specify("trying to fulfill a pending promise more than once, delayed", done => {
+        specify("trying to fulfill a pending promise more than once, delayed", (done) => {
             const d = Adapter.deferred();
             let timesCalled = 0;
 
@@ -86,7 +85,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             }, 5);
         });
 
-        specify("trying to fulfill a pending promise more than once, immediately then delayed", done => {
+        specify("trying to fulfill a pending promise more than once, immediately then delayed", (done) => {
             const d = Adapter.deferred();
             let timesCalled = 0;
 
@@ -101,7 +100,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             }, 5);
         });
 
-        specify("when multiple `then` calls are made, spaced apart in time", done => {
+        specify("when multiple `then` calls are made, spaced apart in time", (done) => {
             const d = Adapter.deferred();
             const timesCalled = [0, 0, 0];
 
@@ -127,7 +126,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             }, 6);
         });
 
-        specify("when `then` is interleaved with fulfillment", done => {
+        specify("when `then` is interleaved with fulfillment", (done) => {
             const d = Adapter.deferred();
             const timesCalled = [0, 0];
 
