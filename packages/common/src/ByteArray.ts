@@ -1,6 +1,14 @@
 import {Instance} from "@sirian/ts-extra-types";
 import {bytesToString, stringToBytes} from "./Unicode";
-import {isArrayBuffer, isArrayBufferView, isNullish, isPrimitive, isString, stringifyVar} from "./Var";
+import {
+    isArrayBuffer,
+    isArrayBufferLike,
+    isArrayBufferView,
+    isNullish,
+    isPrimitive,
+    isString,
+    stringifyVar,
+} from "./Var";
 
 export type TypedArrayConstructor =
     | Int8ArrayConstructor
@@ -33,7 +41,7 @@ export class ByteArray extends Uint8Array {
             const {buffer, byteOffset = 0, byteLength} = source;
             arg = buffer.slice(byteOffset, byteOffset + byteLength);
         } else {
-            arg = Uint8Array.from(source, ...args).buffer;
+            arg = super.from(source, ...args).buffer;
         }
 
         return new ByteArray(arg);

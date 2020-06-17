@@ -21,7 +21,7 @@ describe("ByteArray.from && ByteArray.stringify", () => {
     test.each(TestUtil.randStrings(20))("ByteArray.stringify(%o)", (s) => {
         const expected = new TextEncoder().encode(s);
         const bytes = ByteArray.from(s).to(Uint8Array);
-        expect(bytes).toStrictEqual(expected);
+        expect(bytes).toStrictEqual(Uint8Array.from(expected));
         expect(ByteArray.stringify(bytes)).toBe(s);
     });
 });
