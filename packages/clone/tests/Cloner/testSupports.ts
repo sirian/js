@@ -48,4 +48,3 @@ const data = TestUtil.mergeData(trueData, falseData);
 test.each(data)("Cloner.supports(%O) === %p", (obj, expected) => {
     expect(cloner.supports(obj)).toBe(expected);
 });
-
