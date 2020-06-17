@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.12](https://github.com/sirian/js/compare/@sirian/event-emitter@1.3.11...@sirian/event-emitter@1.3.12) (2020-06-17)
+
+**Note:** Version bump only for package @sirian/event-emitter
+
+
+
+
+
 ## [1.3.11](https://github.com/sirian/js/compare/@sirian/event-emitter@1.3.10...@sirian/event-emitter@1.3.11) (2020-03-30)
 
 **Note:** Version bump only for package @sirian/event-emitter

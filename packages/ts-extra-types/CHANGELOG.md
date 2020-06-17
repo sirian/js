@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.56.1](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.56.0...@sirian/ts-extra-types@3.56.1) (2020-06-17)
+
+
+### Bug Fixes
+
+* **ts-extra-types:** tests StripNever ([c192c49](https://github.com/sirian/js/commit/c192c4981bcfe52567f498b7647fdc145dc772cf))
+
+
+
+
+
 # [3.56.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.55.0...@sirian/ts-extra-types@3.56.0) (2020-03-30)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.14.0](https://github.com/sirian/js/compare/@sirian/common@5.13.0...@sirian/common@5.14.0) (2020-06-17)
+
+
+### Features
+
+* **common:** call ([22d0eae](https://github.com/sirian/js/commit/22d0eae51c78faa1889964790f856c925dcc98dc))
+
+
+
+
+
 # [5.13.0](https://github.com/sirian/js/compare/@sirian/common@5.12.0...@sirian/common@5.13.0) (2020-03-30)
 
 
