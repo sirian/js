@@ -2,8 +2,9 @@ import {IsEmptyTuple, MustBeFalse, MustBeTrue} from "../../src";
 
 type Test = [
     MustBeTrue<IsEmptyTuple<[]>>,
-    MustBeFalse<IsEmptyTuple<number[]>>,
-    MustBeFalse<IsEmptyTuple<number[]>>,
-    MustBeFalse<IsEmptyTuple<[number?]>>,
-    MustBeFalse<IsEmptyTuple<[number?, ...number[]]>>
+
+    MustBeFalse<IsEmptyTuple<[1?]>>,
+    MustBeFalse<IsEmptyTuple<[1]>>,
+    MustBeFalse<IsEmptyTuple<1[]>>,
+    MustBeFalse<IsEmptyTuple<[1?, ...1[]]>>
 ];

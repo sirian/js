@@ -1,14 +1,19 @@
-import {AssertExact, FromEntry} from "../../src";
+import {AssertExact, FromEntry, Rec} from "../../src";
 
 type Test = [
-    AssertExact<{}, FromEntry<[never, any]>>,
+    AssertExact<{}, FromEntry<[]>>,
+    AssertExact<{ foo: 1 }, FromEntry<["foo", 1]>>,
+    AssertExact<{ 0: 1 }, FromEntry<[0, 1]>>,
+    AssertExact<{ "0": 1 }, FromEntry<["0", 1]>>,
+    AssertExact<{}, FromEntry<[undefined, 1]>>,
+    AssertExact<{ 0?: 1 }, FromEntry<[0 | undefined, 1]>>,
+    AssertExact<{ 0: 1 | undefined }, FromEntry<[0, 1 | undefined]>>,
 
-    AssertExact<{ foo: number }, FromEntry<["foo", number]>>,
-    AssertExact<{ 0: number }, FromEntry<[0, number]>>,
+    AssertExact<{ 0?: 1 }, FromEntry<[0?, 1?]>>,
+    AssertExact<{ 0?: undefined }, FromEntry<[0?]>>,
+    AssertExact<Rec<number, string>, FromEntry<[number, string]>>,
+    AssertExact<Rec<1, string>, FromEntry<[1, string]>>,
 
-    AssertExact<{ [id: number]: string }, FromEntry<[number, string]>>,
-    AssertExact<Record<number, string>, FromEntry<[number, string]>>,
-
-    AssertExact<{ a: number } | { a: undefined } | { b: boolean },
-        FromEntry<["a", number] | ["a", undefined] | ["b", boolean]>>
+    AssertExact<{ a: 1 } | { a: undefined } | { b: boolean },
+        FromEntry<["a", 1] | ["a", undefined] | ["b", boolean]>>
 ];

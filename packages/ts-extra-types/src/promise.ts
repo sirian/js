@@ -1,2 +1,8 @@
-export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
-export type AwaitedArray<T extends any[]> = { [P in keyof T]: Awaited<T[P]> };
+import {ArrayRO} from "./tuple";
+
+export type Awaited<T> =
+    T extends void ? undefined :
+    T extends PromiseLike<infer U> ? Awaited<U> :
+    T;
+
+export type AwaitedArray<T extends ArrayRO> = { [P in keyof T]: Awaited<T[P]> };

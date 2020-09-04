@@ -5,6 +5,9 @@ type Test = [
 
     AssertExact<{ foo: number }, FromEntries<[["foo", number]]>>,
 
+    AssertExact<{ bar: string }, FromEntries<Array<["bar", string]>>>,
+    AssertExact<{ foo: number, bar: string }, FromEntries<[["foo", number], ...["bar", string][]]>>,
+
     AssertExact<{ foo: number, bar: string }, FromEntries<[["bar", string], ["foo", number]]>>,
 
     AssertExact<{ [id: number]: string }, FromEntries<Array<[number, string]>>>,

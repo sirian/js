@@ -30,7 +30,7 @@ export default class Client<T extends RPCProtocol> extends EventEmitter {
     public invoke<K extends keyof T>(methodOrInit: K | InvokeInit<T, K>, ...rest: [] | RPCParams<T, K>) {
         const init = isObject(methodOrInit)
                      ? methodOrInit
-                     : {method: methodOrInit, params: rest};
+                     : {method: methodOrInit, params: rest, timeoutMS: 0};
 
         const {transport, requests} = this;
         const {method, params, timeoutMS} = init;
