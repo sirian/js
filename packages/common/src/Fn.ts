@@ -1,4 +1,4 @@
-import {Args, Drop, Func, Func0, Func1, Get, Negate, Return} from "@sirian/ts-extra-types";
+import {Args, Func, Func0, Func1, Get, Negate, Return, Splice} from "@sirian/ts-extra-types";
 import {apply} from "./Ref";
 import {isFunction, isPromiseLike} from "./Var";
 
@@ -65,7 +65,7 @@ export class Fn {
     }
 
     public static bindArgs<K extends number, F extends Func>(fn: F, bind: { [P in K]: Get<Args<F>, P> }) {
-        return function(this: any, ...args: Drop<Args<F>, K>) {
+        return function(this: any, ...args: Splice<Args<F>, K>) {
             const mergedArgs: any[] = Object.assign([], bind);
 
             for (let i = 0; args.length > 0; i++) {

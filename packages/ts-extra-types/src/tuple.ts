@@ -1,8 +1,8 @@
 import {KeyToNumber} from "./cast";
 import {Lengthwise} from "./interfaces";
 import {MustBeArray} from "./mustbe";
-import {Dec, Inc, Numbers} from "./number";
-import {AnyKey, KeyOf, OmitIndexSignature} from "./object";
+import {Add, Dec, Numbers} from "./number";
+import {KeyOf, OmitIndexSignature} from "./object";
 import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
 
 export type ArrayRO<T = unknown> = readonly T[];
@@ -12,16 +12,18 @@ export type NonEmptyTuple<H = any, R extends ArrayRO = any> = [H, ...R[]];
 
 export type EmptyTuple = [];
 
-export type Head<T extends ArrayRO> =
-    T extends [infer U, ...unknown[]] ? U : T[0] | undefined;
-
-export type HasHead<T> = IsExtends<T, [any, ...unknown[]]>;
+export type Head<T extends ArrayRO> = T extends NonEmptyTuple ? T[0] : T[0] | undefined;
 
 export type Tail<L extends ArrayRO> =
-    ((...t: L) => void) extends ((h: any, ...rest: infer R) => void) ? R : never;
+    L extends [] ? [] :
+    L extends [any, ...infer U1] | [any?, ...infer U1] ? U1 :
+    never;
 
 export type ReplaceTail<T extends ArrayRO, L extends ArrayRO> =
-    Cons<Head<T>, L, T extends NonEmptyTuple ? false : true>;
+    T extends [] ? [...L] :
+    T extends [infer H1, ...any[]] ? [H1, ...L] :
+    T extends [(infer H2)?, ...any[]] ? [H2?, ...L] :
+    never;
 
 export type Cons<X, L extends ArrayRO, Optional extends boolean = false> =
     Optional extends true
@@ -35,8 +37,9 @@ export type Push<L extends ArrayRO, T, Optional extends boolean = false> =
 
 export type Reverse<L extends ArrayRO> =
     L extends [] ? [] :
-    IsOpenTuple<L> extends true ? Array<ArrayValueOf<L>> :
-    _Reverse<L>;
+    number extends Length<L>
+    ? Array<ArrayValueOf<L>>
+    : _Reverse<L>;
 
 type _Reverse<L extends ArrayRO, TMP extends ArrayRO = []> =
     L extends [] ? TMP : _Reverse<Tail<L>, ReplaceTail<L, TMP>>;
@@ -55,18 +58,12 @@ export type DropLast<L extends ArrayRO> =
 
 export type DropLeft<N extends number, L extends ArrayRO> =
     N extends 0 ? L :
+    L extends [] ? [] :
     number extends N ? [] :
     DropLeft<Dec<N>, Tail<L>>;
 
-export type Drop<L extends ArrayRO, K extends AnyKey, N extends number = 0> =
-    number extends K ? [] :
-    L extends [] ? [] :
-    IsRepeatedTuple<L> extends true ? L :
-    Drop<Tail<L>, K, Inc<N>> extends MustBeArray<infer R>
-    ? [N] extends [K]
-      ? R
-      : ReplaceTail<L, R>
-    : never;
+export type Splice<L extends ArrayRO, K extends number, N extends number = 1> =
+    [...Take<K, L>, ...Slice<L, Add<K, N>>];
 
 export type Slice<T extends ArrayRO, TStart extends number = 0, TLength extends number = Length<T>> =
     DropLeft<TStart, T> extends MustBeArray<infer R> ? Take<TLength, R> : never;
