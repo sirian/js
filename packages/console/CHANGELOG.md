@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.7.0](https://github.com/sirian/js/compare/@sirian/console@6.6.6...@sirian/console@6.7.0) (2020-09-09)
+
+
+### Features
+
+* typescript 4.1 ([fe646dc](https://github.com/sirian/js/commit/fe646dc3ebae780fb3ccf130a756683759e5eca4))
+
+
+
+
+
+## [6.6.6](https://github.com/sirian/js/compare/@sirian/console@6.6.5...@sirian/console@6.6.6) (2020-06-17)
+
+**Note:** Version bump only for package @sirian/console
+
+
+
+
+
 ## [6.6.5](https://github.com/sirian/js/compare/@sirian/console@6.6.4...@sirian/console@6.6.5) (2020-04-04)
 
 **Note:** Version bump only for package @sirian/console
