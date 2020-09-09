@@ -174,4 +174,6 @@ export type ObjectZip<K extends ArrayRO, V extends ArrayRO> =
     Rec<Head<K>, Head<V>> & ObjectZip<Tail<K>, Tail<V>>;
 
 export type Assign<T, S extends ArrayRO> =
-    S extends [] ? T : Assign<Overwrite<T, Head<S>>, Tail<S>>;
+    S extends [] ? T :
+    S extends NonEmptyTuple ? Assign<Overwrite<T, Head<S>>, Tail<S>> :
+    Overwrite<T, ArrayValueOf<S>>;

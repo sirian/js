@@ -6,6 +6,7 @@ type Test = [
     AssertExact<{ x: 1, y: 2 }, Assign<{ x: 1 }, [{ y: 2 }]>>,
     AssertExact<{ x: 1, y: 2 } | { x: 1 }, Assign<{ x: 1 }, [{ y: 2 } | {}]>>,
     AssertExact<{ x: 2 }, Assign<{ x?: 1 | 2 }, [{ x: 2 }]>>,
-    AssertExact<{ x: string }, Assign<{ x: number }, [{ x: string }]>>,
-    AssertExact<{ x: string, y: 3 }, Assign<{ x?: 1, y: 2 }, [{ x: 2 }, { x: number, y: 3 }, { x: string }]>>
+    AssertExact<{ x: 1 }, Assign<{ x: number }, [{ x: 1 }]>>,
+    AssertExact<{ x: 1, y: 3 }, Assign<{ x?: 1, y: 2 }, [{ x: 2 }, { x: number, y: 3 }, { x: 1 }]>>,
+    AssertExact<{ x: 4, y: 2, z: 3 }, Assign<{ x: 1, z: 3 }, Array<{ x: 4, y: 2 }>>>,
 ];
