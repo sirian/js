@@ -4,7 +4,7 @@ import {MustBeKey, MustBeString} from "./mustbe";
 import {ArrayRO, ArrayValueOf, Head, IsOpenTuple, IsRepeatedTuple, NonEmptyTuple, Tail, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
-export type KeyOf<T, Filter = any> = Extract<keyof T, Filter>;
+export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
 
 export type AnyKey = keyof any;
 
@@ -175,5 +175,5 @@ export type ObjectZip<K extends ArrayRO, V extends ArrayRO> =
 
 export type Assign<T, S extends ArrayRO> =
     S extends [] ? T :
-    S extends NonEmptyTuple ? Assign<Overwrite<T, Head<S>>, Tail<S>> :
+    S extends NonEmptyTuple ? Assign<Overwrite<T, S[0]>, Tail<S>> :
     Overwrite<T, ArrayValueOf<S>>;

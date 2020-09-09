@@ -11,10 +11,11 @@ export type CastBool<T> =
     boolean;
 
 export type KeyToNumber<K extends AnyKey> =
-    K extends number | symbol ? K :
+    K extends number ? K :
     K extends keyof Numbers ? Numbers[K] :
     never;
 
 export type KeyToString<K extends AnyKey> =
-    K extends string | symbol ? K :
-    { [P in keyof Numbers]: K extends Numbers[P] ? P : never }[keyof Numbers];
+    K extends string ? K :
+    K extends number ? { [P in keyof Numbers]: K extends Numbers[P] ? P : never }[keyof Numbers] :
+    never;
