@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/sirian/js/compare/@sirian/base64@2.0.4...@sirian/base64@2.1.0) (2020-09-09)
+
+
+### Features
+
+* typescript 4.1 ([fe646dc](https://github.com/sirian/js/commit/fe646dc3ebae780fb3ccf130a756683759e5eca4))
+
+
+
+
+
 ## [2.0.4](https://github.com/sirian/js/compare/@sirian/base64@2.0.3...@sirian/base64@2.0.4) (2020-06-17)
 
 **Note:** Version bump only for package @sirian/base64
