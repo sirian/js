@@ -6,5 +6,6 @@ type Test = [
     MustBeFalse<IsRepeatedTuple<[]>>,
     MustBeFalse<IsRepeatedTuple<[number]>>,
     MustBeFalse<IsRepeatedTuple<[number, ...number[]]>>,
-    MustBeFalse<IsRepeatedTuple<[number?, ...number[]]>>
+    MustBeFalse<IsRepeatedTuple<[number?, ...number[]]>>,
+    MustBeFalse<IsRepeatedTuple<[string?, ...number[]]>>
 ];

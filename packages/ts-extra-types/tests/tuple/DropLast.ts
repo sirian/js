@@ -2,11 +2,14 @@ import {AssertExact, DropLast} from "../../src";
 
 type Test = [
     AssertExact<[], DropLast<[]>>,
-    AssertExact<[], DropLast<[number]>>,
-    AssertExact<[number], DropLast<[number, string?]>>,
-    // AssertExact<[number, string?], DropLast<[number, string?, boolean?]>>,
-    AssertExact<[number], DropLast<[number, string]>>,
-    AssertExact<[number, string], DropLast<[number, string, boolean]>>,
-    AssertExact<number[], DropLast<number[]>>
-    // AssertExact<[string, ...number[]], DropLast<[string, ...number[]]>>,
+    AssertExact<[], DropLast<[1]>>,
+    AssertExact<[], DropLast<[1?]>>,
+    AssertExact<[1?], DropLast<[1?, 2?]>>,
+    AssertExact<[1], DropLast<[1, 2?]>>,
+    AssertExact<[1, 2?], DropLast<[1, 2?, 3?]>>,
+    AssertExact<[1], DropLast<[1, 2]>>,
+    AssertExact<[1, 2], DropLast<[1, 2, 3]>>,
+    AssertExact<1[], DropLast<1[]>>,
+    AssertExact<[1, 2, ...3[]], DropLast<[1, 2, ...3[]]>>,
+    AssertExact<[2, ...1[]], DropLast<[2, ...1[]]>>,
 ];

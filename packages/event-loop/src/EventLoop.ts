@@ -6,7 +6,7 @@ import {Timeout} from "./Timeout";
 
 export class EventLoop {
     public static waitTimeout(ms: number) {
-        return new Promise((resolve) => EventLoop.setTimeout(ms, resolve));
+        return new Promise((resolve) => EventLoop.setTimeout(ms, resolve as TaskCallback));
     }
 
     // public static waitNextEventLoop() {

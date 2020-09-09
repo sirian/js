@@ -1,4 +1,5 @@
 import {
+    AnyKey,
     Assign,
     Entry,
     FromEntries,
@@ -25,9 +26,8 @@ export const keysOf = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
 export const valuesOf = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
 export const entriesOf = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
 
-export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U>;
-export function assign(target: any, ...sources: any[]) {
-    const keySet = new XSet(keysOf(target));
+export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> {
+    const keySet = new XSet<AnyKey>(keysOf(target));
 
     for (const source of sources) {
         if (isNullish(source)) {
@@ -37,12 +37,12 @@ export function assign(target: any, ...sources: any[]) {
 
         for (const key of keySet) {
             if (hasProp(source, key)) {
-                target[key] = source[key] as any;
+                (target as any)[key] = source[key];
             }
         }
     }
 
-    return target;
+    return target as any;
 }
 
 export const toPrimitive = <T>(target: T): ToPrimitive<T> => {

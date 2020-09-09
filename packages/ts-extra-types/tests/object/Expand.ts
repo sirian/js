@@ -1,4 +1,4 @@
-import {AssertExact, Expand, StripArray} from "../../src";
+import {ArrayToObject, AssertExact, Expand} from "../../src";
 
 type Test = [
     AssertExact<{}, Expand<{}>>,
@@ -9,8 +9,8 @@ type Test = [
     AssertExact<{ [id: number]: 1 }, Expand<{ [id: number]: 1 }>>,
     AssertExact<Record<string, 1>, Expand<Record<string, 1>>>,
     AssertExact<Record<number, 1>, Expand<Record<number, 1>>>,
-    AssertExact<{ "0": true } & { 0: true }, Expand<StripArray<[true]>>>,
+    AssertExact<{ "0": true } & { 0: true }, Expand<ArrayToObject<[true]>>>,
     AssertExact<[true] & { 0: true }, Expand<[true]>>,
-    AssertExact<{ 0: 1 } & { "0": 1 } & { [x: number]: 1 | 2 }, Expand<StripArray<[1, ...2[]]>>>,
-    AssertExact<{ [id: number]: true } & { [id: number]: true }, Expand<StripArray<true[]>>>
+    AssertExact<{ 0: 1 } & { "0": 1 } & { [x: number]: 1 | 2 }, Expand<ArrayToObject<[1, ...2[]]>>>,
+    AssertExact<{ [id: number]: true } & { [id: number]: true }, Expand<ArrayToObject<true[]>>>
 ];

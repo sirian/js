@@ -1,19 +1,18 @@
-import {KeyToString} from "./cast";
 import {Thenable} from "./interfaces";
 import {MustBeArray} from "./mustbe";
 import {Overwrite} from "./object";
 import {Awaited} from "./promise";
-import {Cons, DropLast, Head, LastElement, Length, Tail} from "./tuple";
+import {ArrayRO, Cons, DropLast, Head, LastElement, Length, NonEmptyTuple, Tail, TupleGet} from "./tuple";
 import {NotFunc, Primitive} from "./types";
 
-export type Ctor<T = any, A extends any[] = any[]> = new(...args: A) => T;
+export type Ctor<T = any, A extends ArrayRO = any[]> = new(...args: A) => T;
 export type Ctor0<T = any> = Ctor<T, []>;
 export type Ctor1<T = any, A = any> = Ctor<T, [A]>;
 export type Ctor2<T = any, A = any, B = any> = Ctor<T, [A, B]>;
 
-export type WithMethod<M extends PropertyKey, R = any, A extends any[] = any[]> = { [P in M]: Func<R, A> };
+export type WithMethod<M extends PropertyKey, R = any, A extends ArrayRO = any[]> = { [P in M]: Func<R, A> };
 
-export type Creatable<T = any, A extends any[] = any[]> = WithMethod<"create", T, A>;
+export type Creatable<T = any, A extends ArrayRO = any[]> = WithMethod<"create", T, A>;
 
 export type Newable<T = any> = Overwrite<NewableFunction, { prototype: T }>;
 
@@ -22,7 +21,7 @@ export type Instance<T> =
     T extends Newable<infer P> ? P :
     never;
 
-export type Func<TReturn = any, TArgs extends any[] = any[], This = any> = (this: This, ...args: TArgs) => TReturn;
+export type Func<TReturn = any, TArgs extends ArrayRO = any[], This = any> = (this: This, ...args: TArgs) => TReturn;
 export type Func0<R = any> = () => R;
 export type Func1<R = any, A = any> = (a: A) => R;
 export type Func2<R = any, A = any, B = any> = (a: A, b: B) => R;
@@ -31,7 +30,7 @@ export type Return<T> = T extends Func<infer R> ? R : never;
 
 export type UpdateReturn<R1, R2> =
     R1 extends PromiseLike<infer U>
-    ? PromiseLike<U | Awaited<R2>>
+    ? PromiseLike<Awaited<U | R2>>
     : R1 | R2;
 
 export type SyncFunc = Func<Primitive | object & { then?: NotFunc }>;
@@ -40,19 +39,14 @@ export type AsyncFunc = Func<Thenable>;
 export type Args<F> =
     F extends Func<any, infer A> ? A :
     F extends Ctor<any, infer U> ? U :
-    F extends Function ? any[] : never;
+    F extends Function ? unknown[] :
+    never;
 
 export type CtorArgs<F> = F extends Ctor<any, infer A> ? A : never;
 export type FnArgs<F> = F extends Func<any, infer A> ? A : never;
 
 export type Arg<N extends number, F> =
-    Args<F> extends MustBeArray<infer A>
-    ? number extends N
-      ? A[N]
-      : KeyToString<N> extends keyof A
-        ? A[N]
-        : A[N] | undefined
-    : never;
+    Args<F> extends MustBeArray<infer A> ? TupleGet<A, N> : never;
 
 export type Arg1<F> = Arg<0, F>;
 export type Arg2<F> = Arg<1, F>;
@@ -93,7 +87,7 @@ export type Overloads<F extends Func> =
     never;
 
 export type OverloadedArgs<F extends Func> = Overloads<F>[0];
-export type OverloadedReturn<F extends Func, TArgs extends any[]> =
+export type OverloadedReturn<F extends Func, TArgs extends ArrayRO> =
     Overloads<F> extends infer O
     ? O extends [any[], any]
       ? TArgs extends O[0] ? O[1] : never
@@ -102,13 +96,12 @@ export type OverloadedReturn<F extends Func, TArgs extends any[]> =
 
 export type Compose<T extends Func, U extends Func1<any, Return<T>>> = Func<Return<U>, Args<T>>;
 
-export type ValidPipe<Fns extends Func[], Expected extends any[] = any[]> =
-    {
-        0: Head<Fns> extends Func<infer R>
-           ? Cons<Func<any, Expected>, ValidPipe<Tail<Fns>, [R]>>
-           : never
-        1: [];
-    }[Fns extends [any, ...any[]] ? 0 : 1];
+export type ValidPipe<Fns extends Func[], Expected extends ArrayRO = any[]> =
+    Fns extends NonEmptyTuple
+    ? Head<Fns> extends Func<infer R>
+      ? Cons<Func<any, Expected>, ValidPipe<Tail<Fns>, [R]>>
+      : never
+    : [];
 
 export type Pipe<Fns extends ValidPipe<Fns1>, Fns1 extends Func[] = Fns> =
     LastElement<Fns> extends Func<infer R>

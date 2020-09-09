@@ -7,6 +7,8 @@ type Test = [
     AssertExact<2, LastIndex<[number, boolean, string]>>,
     AssertExact<number, LastIndex<boolean[]>>,
     AssertExact<0, LastIndex<[1]>>,
+    AssertExact<1, LastIndex<[1, 2]>>,
     AssertExact<0, LastIndex<[1?]>>,
-    AssertExact<1, LastIndex<[1, 2?]>>
+    AssertExact<1, LastIndex<[1, 2?]>>,
+    AssertExact<number, LastIndex<[1, 2, 3?, ...number[]]>>
 ];

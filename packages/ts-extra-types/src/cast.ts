@@ -10,15 +10,10 @@ export type CastBool<T> =
     T extends object | symbol ? true :
     boolean;
 
-export type ArraySymbols = {
-    [Symbol.iterator]: any;
-    [Symbol.unscopables]: any;
-};
-
 export type KeyToNumber<K extends AnyKey> =
     K extends number | symbol ? K :
     K extends keyof Numbers ? Numbers[K] :
-    never; // number & ERROR<["StringToNumber fails", S]>;
+    never;
 
 export type KeyToString<K extends AnyKey> =
     K extends string | symbol ? K :

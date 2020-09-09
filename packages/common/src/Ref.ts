@@ -1,4 +1,4 @@
-import {Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
+import {Ctor, Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
 import {tryCatch} from "./Fn";
 import {TypedPropertyDescriptorMap} from "./Obj";
 import {
@@ -112,8 +112,8 @@ export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: an
     apply(target, thisArg, args);
 
 export function construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
-export function construct<F extends Newable>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
-export function construct(target: Function, args: any[] = [], newTarget?: Function) {
+export function construct<F extends Newable | Ctor>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
+export function construct(target: any, args: any = [], newTarget?: Function) {
     return isNullish(newTarget)
            ? Reflect.construct(target, args)
            : Reflect.construct(target, args, newTarget);

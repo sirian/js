@@ -9,13 +9,12 @@ declare function encodeURIComponent(uriComponent: string | number | boolean): st
 
 declare function decodeURIComponent(encodedURIComponent: string): string;
 
-const buf = require("buffer"); // tslint:disable-line:no-var-requires
-const Buf = buf.Buffer;
-delete buf.Buffer;
-
 import {assert} from "@sirian/assert";
+import {Obj} from "@sirian/common";
 import {Base64} from "../src";
-import {atob, btoa} from "./polyfill";
+
+const Buf = (globalThis as any).Buffer;
+delete (globalThis as any).Buffer;
 
 interface IBase64 {
     encode: (value: string) => string;
@@ -28,17 +27,17 @@ interface IBase64 {
             encode: (x) => Buf.from(x).toString("base64"),
             decode: (x) => Buf.from(x, "base64").toString(),
         },
-        "polyfill_1": {
-            encode: (x) =>
-                btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
-            decode: (x) =>
-                decodeURIComponent([].map.call(atob(x), (c: string) =>
-                    "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
-        },
-        "polyfill_2": {
-            encode: (s) => btoa(unescape(encodeURIComponent(s))),
-            decode: (s) => decodeURIComponent(escape(atob(s))),
-        },
+        // "polyfill_1": {
+        //     encode: (x) =>
+        //         btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
+        //     decode: (x) =>
+        //         decodeURIComponent([].map.call(atob(x), (c: string) =>
+        //             "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
+        // },
+        // "polyfill_2": {
+        //     encode: (s) => btoa(unescape(encodeURIComponent(s))),
+        //     decode: (s) => decodeURIComponent(escape(atob(s))),
+        // },
         "js-base64": require("js-base64").Base64,
         "base-64": require("base-64"),
         "@sirian/base64": {
@@ -47,17 +46,18 @@ interface IBase64 {
         },
     };
 
-    const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
-        + "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-        + "Современные технологии достигли такого уровня, что синтетическое тестирование "
-        + "обеспечивает широкому кругу (специалистов) участие в формировании форм воздействия.";
-
-    const str64 = Buf.from(str).toString("base64");
-
     function testEngine(N: number, {encode, decode}: IBase64, enc: boolean) {
         if ("function" === typeof gc) {
             gc();
         }
+
+        const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
+            + "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+            + "Современные технологии достигли такого уровня, что синтетическое тестирование "
+            + "обеспечивает широкому кругу (специалистов) участие в формировании форм воздействия.";
+
+        const str64 = Buf.from(str).toString("base64");
+
         if (enc) {
             assert(str64 === encode(str));
         } else {
@@ -77,7 +77,7 @@ interface IBase64 {
             const times: Record<string, any> = {};
             console.group(`Test ${enc ? "encode" : "decode"} ${N}`);
 
-            for (const [name, engine] of Object.entries(engines)) {
+            for (const [name, engine] of Obj.entries(engines)) {
                 try {
                     const time = testEngine(N, engine, enc);
                     maxTime = Math.max(time, maxTime);
@@ -93,6 +93,4 @@ interface IBase64 {
 
         console.table(data);
     }
-
-    buf.Buffer = Buf;
 })();

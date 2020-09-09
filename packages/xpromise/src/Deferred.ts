@@ -10,7 +10,10 @@ export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
     constructor(factory: PromiseConstructorLike = Promise) {
         this.factory = factory;
 
-        this.promise = new factory((res, rej) => [this.resolver, this.rejector] = [res, rej]);
+        this.promise = new factory((res, rej) => {
+            this.resolver = res as Resolver<T>;
+            this.rejector = rej;
+        });
     }
 
     public resolve(v?: T | PromiseLike<T>) {
