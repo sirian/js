@@ -62,8 +62,12 @@ export type DropLeft<N extends number, L extends ArrayRO> =
     number extends N ? [] :
     DropLeft<Dec<N>, Tail<L>>;
 
-export type Splice<L extends ArrayRO, K extends number, N extends number = 1> =
-    [...Take<K, L>, ...Slice<L, Add<K, N>>];
+export type Splice<L extends ArrayRO, TStart extends number, TDelCount extends number = 1, TItems extends any[] = []> =
+    [
+        ...Take<TStart, L>,
+        ...TItems,
+        ...DropLeft<Add<TStart, TDelCount>, L>
+    ];
 
 export type Slice<T extends ArrayRO, TStart extends number = 0, TLength extends number = Length<T>> =
     DropLeft<TStart, T> extends MustBeArray<infer R> ? Take<TLength, R> : never;

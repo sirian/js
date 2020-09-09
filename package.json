@@ -12,14 +12,14 @@
     "dependencies": {},
     "devDependencies": {
         "@types/jest": "^26.0.13",
-        "husky": "^4.2.5",
+        "husky": "^4.3.0",
         "jest": "^26.4.2",
         "lerna": "^3.22.1",
         "rimraf": "^3.0.2",
         "ts-jest": "^26.3.0",
         "ts-node": "^9.0.0",
-        "tslint": "^5",
-        "typescript": "^4.1.0-dev.20200905"
+        "tslint": "^5.0",
+        "typescript": "^4.1.0-dev.20200908"
     },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build:all",
