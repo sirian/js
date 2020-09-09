@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.58.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.57.0...@sirian/ts-extra-types@3.58.0) (2020-09-09)
+
+
+### Bug Fixes
+
+* **ts-extra-types:** Assign ([94bf26b](https://github.com/sirian/js/commit/94bf26bc9b6a5fae028f6b8359b2c1de23a6e74c))
+* **ts-extra-types:** Assign ([6d4b824](https://github.com/sirian/js/commit/6d4b8244eb715e5a25189bbce47e7ec6d0930707))
+
+
+### Features
+
+* **ts-extra-types:** type Splice<List, Start, DeleteCount, InsertItems> ([31dae19](https://github.com/sirian/js/commit/31dae19941f2fa99f50afbeec83203461fdd7445))
+
+
+
+
+
 # [3.57.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.56.1...@sirian/ts-extra-types@3.57.0) (2020-09-09)
 
 
