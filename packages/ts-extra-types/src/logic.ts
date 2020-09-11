@@ -1,6 +1,6 @@
 import {Ctor, Func} from "./function";
 import {MustBeBoolean} from "./mustbe";
-import {ArrayValueOf, Head, NonEmptyTuple, Tail} from "./tuple";
+import {ArrayValueOf, Head, Tail, Tuple} from "./tuple";
 
 export type If<C extends boolean, T, F = never, D = never> =
     boolean extends C ? D :
@@ -17,12 +17,12 @@ export type IfFalse<C extends boolean, T, F = never> = If<Not<C>, T, F>;
 
 export type Every<T extends boolean[]> =
     T extends [] ? true :
-    T extends NonEmptyTuple<MustBeBoolean<infer H>> ? And<H, Every<Tail<T>>> :
+    T extends Tuple<MustBeBoolean<infer H>> ? And<H, Every<Tail<T>>> :
     ArrayValueOf<T>;
 
 export type Some<T extends boolean[]> =
     T extends [] ? false :
-    T extends NonEmptyTuple<MustBeBoolean<infer H>> ? Or<H, Some<Tail<T>>> :
+    T extends Tuple<MustBeBoolean<infer H>> ? Or<H, Some<Tail<T>>> :
     ArrayValueOf<T>;
 
 export type Not<C extends boolean> =

@@ -8,11 +8,9 @@ import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
 export type ArrayRO<T = unknown> = readonly T[];
 export type ArrayRW<T = unknown> = T[];
 
-export type NonEmptyTuple<H = any, R extends ArrayRO = any> = [H, ...R[]];
+export type Tuple<H = any, R extends ArrayRO = any> = [H, ...R];
 
-export type EmptyTuple = [];
-
-export type Head<T extends ArrayRO> = T extends NonEmptyTuple ? T[0] : T[0] | undefined;
+export type Head<T extends ArrayRO> = T extends Tuple<infer H> ? H : T[0] | undefined;
 
 export type Tail<L extends ArrayRO> =
     L extends [] ? [] :
@@ -82,7 +80,7 @@ export type Length<T> = T extends Lengthwise<infer L> ? L : never;
 export type IsArray<T> = IsExtends<T, ArrayRO>;
 export type IsFiniteTuple<T> = T extends ArrayRO ? IsFiniteNumber<Length<T>> : false;
 export type IsOpenTuple<T> = T extends ArrayRO ? IsWide<Length<T>> : false;
-export type IsEmptyTuple<T> = IsExact<T, EmptyTuple>;
+export type IsEmptyTuple<T> = IsExact<T, []>;
 export type IsRepeatedTuple<T> = IsExact<Required<T>, Array<ArrayValueOf<T>>>;
 
 export type TupleKeyOf<T> = KeyOf<T, keyof Numbers>;
