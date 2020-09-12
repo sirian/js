@@ -81,7 +81,8 @@ export type IsArray<T> = IsExtends<T, ArrayRO>;
 export type IsFiniteTuple<T> = T extends ArrayRO ? IsFiniteNumber<Length<T>> : false;
 export type IsOpenTuple<T> = T extends ArrayRO ? IsWide<Length<T>> : false;
 export type IsEmptyTuple<T> = IsExact<T, []>;
-export type IsRepeatedTuple<T> = IsExact<Required<T>, Array<ArrayValueOf<T>>>;
+export type IsRepeatedTuple<T> =
+    IsExact<T, Array<ArrayValueOf<T>>>;
 
 export type TupleKeyOf<T> = KeyOf<T, keyof Numbers>;
 export type TupleIndex<T> = KeyOf<T, Numbers[keyof Numbers]>;
