@@ -1,8 +1,8 @@
 import {KeyToNumber} from "./cast";
 import {Lengthwise} from "./interfaces";
 import {MustBeArray} from "./mustbe";
-import {Add, Dec, Numbers} from "./number";
-import {KeyOf, OmitIndexSignature} from "./object";
+import {Add, Dec, INumber, SNumber} from "./number";
+import {KeyOf, ObjEntryOf, OmitIndexSignature} from "./object";
 import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
 
 export type ArrayRO<T = unknown> = readonly T[];
@@ -80,20 +80,20 @@ export type Length<T> = T extends Lengthwise<infer L> ? L : never;
 export type IsArray<T> = IsExtends<T, ArrayRO>;
 export type IsFiniteTuple<T> = T extends ArrayRO ? IsFiniteNumber<Length<T>> : false;
 export type IsOpenTuple<T> = T extends ArrayRO ? IsWide<Length<T>> : false;
-export type IsEmptyTuple<T> = IsExact<T, []>;
-export type IsRepeatedTuple<T> =
-    IsExact<T, Array<ArrayValueOf<T>>>;
+export type IsEmptyTuple<T> = IsExtends<T, []>;
+export type IsRepeatedTuple<T> = T extends ArrayRO<infer V> ? IsExact<T, V[]> : false;
 
-export type TupleKeyOf<T> = KeyOf<T, keyof Numbers>;
-export type TupleIndex<T> = KeyOf<T, Numbers[keyof Numbers]>;
+export type TupleKeyOf<T> = KeyOf<T, SNumber>;
+export type TupleIndex<T> = KeyOf<T, INumber>;
+
 export type TupleGet<T extends ArrayRO, N extends number> =
     N extends 0 ? Head<T> :
     number extends N ? ArrayValueOf<T> :
     TupleGet<Tail<T>, Dec<N>>;
 
 export type ArrayToObject<T> =
-    T extends ArrayRO & Lengthwise<infer N>
-    ? number extends N
+    T extends ArrayRO
+    ? number extends Length<T>
       ? OmitArrayProto<T>
       : OmitIndexSignature<OmitArrayProto<T>>
     : T;
@@ -102,18 +102,11 @@ export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
 
 export type StripTuple<T> = Pick<T, TupleKeyOf<T> | TupleIndex<T>>;
 
-// export type WrapTuple<T extends AnyArray & (number extends T["length"] ? never : unknown)> =
-//     { length: T["length"] }
-//     & { [K in keyof StripTuple<T>]: Box<T[K]> }
-//     & Array<keyof StripTuple<T> extends infer K
-//             ? K extends keyof T? Box<T[K]> : never
-//             : never>;
+export type ArrayValueOf<T> = T extends ArrayRO<infer U> ? U : never;
 
-export type ArrayValueOf<T> = T extends Array<infer U> ? U : never;
+export type ValueOf<T> = T extends ArrayRO<infer U> ? U : T[keyof T];
 
-export type ValueOf<T> = T extends Array<infer U> ? U : T[keyof T];
-
-export type TupleEntryOf<T extends ArrayRO> = { [P in TupleKeyOf<T>]: [P, T[P]] }[TupleKeyOf<T>];
+export type TupleEntryOf<T extends ArrayRO> = ObjEntryOf<StripTuple<T>>;
 
 export type ArrayEntryOf<T extends ArrayRO> =
     IsFiniteTuple<T> extends true
