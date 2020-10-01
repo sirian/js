@@ -12,7 +12,7 @@ describe("LZF", () => {
 
     const check = (str: string, compressed?: ByteArray) => {
         const uncompressed: ByteArray = ByteArray.from(str);
-        compressed = compressed || LZF.compress(uncompressed);
+        compressed = compressed ?? LZF.compress(uncompressed);
 
         expect(LZF.compress(uncompressed)).toStrictEqual(compressed);
         expect(LZF.decompress(compressed)).toStrictEqual(uncompressed);
@@ -21,20 +21,18 @@ describe("LZF", () => {
         expect(lzfDecompress(compressed)).toStrictEqual(uncompressed.to(Uint8Array));
     };
 
-    test.each(data)("LZF.compress %o", (input, compressed) => {
-        check(input, compressed);
-    });
+    test.each(data)("LZF.compress %o", check);
 
     test("compresses and decompresses all printable UTF-16 characters", () => {
         let str = "";
-        let i;
-        for (i = 32; i < 127; ++i) {
+
+        for (let i = 32; i < 127; ++i) {
             str += String.fromCharCode(i);
         }
-        for (i = 128 + 32; i < 55296; ++i) {
+        for (let i = 128 + 32; i < 55296; ++i) {
             str += String.fromCharCode(i);
         }
-        for (i = 63744; i < 65536; ++i) {
+        for (let i = 63744; i < 65536; ++i) {
             str += String.fromCharCode(i);
         }
         check(str);
