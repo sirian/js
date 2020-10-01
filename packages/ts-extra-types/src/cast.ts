@@ -2,11 +2,12 @@ import {Numbers} from "./number";
 import {AnyKey} from "./object";
 import {AnyFunc} from "./types";
 
-export type Cast<T, P, D extends P = P> = T extends P ? T : D;
-export type CastFunc<T> = T extends AnyFunc ? T : never;
+export type Cast<T, P, D = never> = T extends P ? T : D;
+export type CastFunc<T> = Cast<T, AnyFunc>;
 export type CastBool<T> =
-    T extends boolean ? T :
     T extends undefined | void | null | false | 0 | "" ? false :
+    T extends boolean ? T :
+    T extends 1 | true ? true :
     T extends object | symbol ? true :
     boolean;
 

@@ -3,12 +3,15 @@ import {AssertExact, PromisifyNode} from "../../src";
 type Callback<R> = (err: any, value: R) => any;
 
 type Test = [
-    AssertExact<() => Promise<boolean>,
-        PromisifyNode<(c: Callback<boolean>) => void>>,
+    AssertExact<never,
+        PromisifyNode<() => void>>,
 
-    AssertExact<(x: number) => Promise<boolean>,
-        PromisifyNode<(x: number, c: Callback<boolean>) => void>>,
+    AssertExact<() => Promise<2>,
+        PromisifyNode<(c: Callback<2>) => void>>,
 
-    AssertExact<(x: number, y: boolean) => Promise<boolean>,
-        PromisifyNode<(x: number, y: boolean, c: Callback<boolean>) => void>>
+    AssertExact<(x: 1) => Promise<2>,
+        PromisifyNode<(x: 1, c: Callback<2>) => void>>,
+
+    AssertExact<(x: 1, y: 2) => Promise<2>,
+        PromisifyNode<(x: 1, y: 2, c: Callback<2>) => void>>
 ];

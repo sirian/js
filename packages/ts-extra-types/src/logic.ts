@@ -6,7 +6,7 @@ export type If<C extends boolean, T, F = never, D = never> =
     boolean extends C ? D :
     C extends true ? T : F;
 
-export type AsType<T, U> = T extends U ? T : never;
+export type AsType<T, U, D = never> = T extends U ? T : D;
 export type AsArray<X> = AsType<X, any[]>;
 export type AsFunc<X> = AsType<X, Func>;
 export type AsCtor<X> = AsType<X, Ctor>;
