@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8](https://github.com/sirian/js/compare/@sirian/merge@1.3.7...@sirian/merge@1.3.8) (2020-10-01)
+
+**Note:** Version bump only for package @sirian/merge
+
+
+
+
+
 ## [1.3.7](https://github.com/sirian/js/compare/@sirian/merge@1.3.6...@sirian/merge@1.3.7) (2020-09-09)
 
 **Note:** Version bump only for package @sirian/merge

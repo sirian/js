@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.59.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.58.0...@sirian/ts-extra-types@3.59.0) (2020-10-01)
+
+
+### Features
+
+* **ts-extra-types:** Tuple ([7fb6990](https://github.com/sirian/js/commit/7fb69903fc837f29fdffa327314f1aee0f6698b2))
+
+
+
+
+
 # [3.58.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.57.0...@sirian/ts-extra-types@3.58.0) (2020-09-09)
 
 
