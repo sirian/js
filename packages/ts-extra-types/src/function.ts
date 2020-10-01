@@ -1,8 +1,8 @@
 import {Thenable} from "./interfaces";
-import {MustBeArray} from "./mustbe";
+import {MustBeArray, MustBeFunc} from "./mustbe";
 import {Overwrite} from "./object";
 import {Awaited} from "./promise";
-import {ArrayRO, Cons, DropLast, Head, LastElement, Length, NonEmptyTuple, Tail, TupleGet} from "./tuple";
+import {ArrayRO, Head, LastElement, Length, Tail, Tuple, TupleGet} from "./tuple";
 import {NotFunc, Primitive} from "./types";
 
 export type Ctor<T = any, A extends ArrayRO = any[]> = new(...args: A) => T;
@@ -58,8 +58,12 @@ export type ArgCount<F> = Length<Args<F>>;
 export type ThisArg<T> = ThisParameterType<T>;
 
 export type PromisifyNode<F> =
-    ArgLast<F> extends ((err: any, value: infer R) => any)
-    ? Func<Promise<R>, DropLast<Args<F>>, ThisArg<F>>
+    Args<F> extends MustBeArray<infer A>
+    ? A extends [...infer U, infer Last]
+      ? Last extends (err: any, value: infer R) => any
+        ? Func<Promise<R>, U, ThisArg<F>>
+        : never
+      : never
     : never;
 
 export type Overloads<F extends Func> =
@@ -86,20 +90,22 @@ export type Overloads<F extends Func> =
       } ? [A1, R1] :
     never;
 
-export type OverloadedArgs<F extends Func> = Overloads<F>[0];
+export type OverloadedArgs<F extends Func> =
+    Overloads<F>[0];
+
 export type OverloadedReturn<F extends Func, TArgs extends ArrayRO> =
     Overloads<F> extends infer O
-    ? O extends [any[], any]
-      ? TArgs extends O[0] ? O[1] : never
+    ? O extends [infer A, infer R]
+      ? TArgs extends A ? R : never
       : never
     : never;
 
 export type Compose<T extends Func, U extends Func1<any, Return<T>>> = Func<Return<U>, Args<T>>;
 
 export type ValidPipe<Fns extends Func[], Expected extends ArrayRO = any[]> =
-    Fns extends NonEmptyTuple
-    ? Head<Fns> extends Func<infer R>
-      ? Cons<Func<any, Expected>, ValidPipe<Tail<Fns>, [R]>>
+    Fns extends Tuple<MustBeFunc<infer H>>
+    ? H extends Func<infer R>
+      ? [Func<any, Expected>, ...ValidPipe<Tail<Fns>, [R]>]
       : never
     : [];
 

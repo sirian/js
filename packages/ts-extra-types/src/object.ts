@@ -1,7 +1,7 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBeKey, MustBeString} from "./mustbe";
-import {ArrayRO, ArrayValueOf, Head, IsOpenTuple, IsRepeatedTuple, NonEmptyTuple, Tail, TupleKeyOf} from "./tuple";
+import {ArrayRO, ArrayValueOf, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
@@ -71,7 +71,7 @@ export type Has<T, K extends AnyKey> =
     K extends keyof T ? true : IsExtends<T, Rec<K>>;
 
 export type GetDeep<T, L extends AnyKey[], D = never> =
-    L extends NonEmptyTuple<MustBeKey<infer H>>
+    L extends Tuple<MustBeKey<infer H>>
     ? Has<T, H> extends true
       ? GetDeep<Get<T, H>, Tail<L>, D>
       : D
@@ -158,7 +158,7 @@ export type FromEntry<E extends Partial<Entry>> =
 
 export type FromEntries<L extends Entry[]> =
     L extends [] ? {} :
-    L extends NonEmptyTuple ? FromEntry<L[0]> & FromEntries<Tail<L>> :
+    L extends Tuple ? FromEntry<L[0]> & FromEntries<Tail<L>> :
     FromEntry<ArrayValueOf<L>>;
 
 export type Exclusive<T, U> =
@@ -175,5 +175,5 @@ export type ObjectZip<K extends ArrayRO, V extends ArrayRO> =
 
 export type Assign<T, S extends ArrayRO> =
     S extends [] ? T :
-    S extends NonEmptyTuple ? Assign<Overwrite<T, S[0]>, Tail<S>> :
+    S extends Tuple<infer H, infer R> ? Assign<Overwrite<T, H>, R> :
     Overwrite<T, ArrayValueOf<S>>;

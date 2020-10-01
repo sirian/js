@@ -1,3 +1,4 @@
+import {AggregateError} from "@sirian/error";
 import {Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
 import {XPromiseError} from "./XPromiseError";
 import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
@@ -56,30 +57,33 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    // public static any<T extends any[]>(promises: T) {
-    //     return this.create<AwaitedArray<T>>((resolve, reject) => {
-    //         const length = promises.length;
-    //         if (!length) {
-    //             return resolve([] as any);
-    //         }
-    //
-    //         let rejectedCount = 0;
-    //         const errors: Partial<AwaitedArray<T>> = [] as any;
-    //
-    //         for (let i = 0; i < length; i++) {
-    //             const promise = promises[i];
-    //
-    //             const onRejected = (error: any) => {
-    //                 errors[i] = error;
-    //                 if (++rejectedCount === length) {
-    //                     reject(new AggregateError(errors));
-    //                 }
-    //             };
-    //
-    //             this.resolve(promise).then(resolve, onRejected);
-    //         }
-    //     });
-    // }
+    public static any<T>(it: Iterable<T | PromiseLike<T>>) {
+        return XPromise.create<T>((resolve, reject) => {
+            const promises = [...it];
+
+            const length = promises.length;
+
+            if (!length) {
+                return resolve([] as any);
+            }
+
+            let rejectedCount = 0;
+            const errors: any[] = [];
+
+            for (let i = 0; i < length; i++) {
+                const promise = promises[i];
+
+                const onRejected = (error: any) => {
+                    errors[i] = error;
+                    if (++rejectedCount === length) {
+                        reject(new AggregateError(errors));
+                    }
+                };
+
+                XPromise.resolve(promise).then(resolve, onRejected);
+            }
+        });
+    }
 
     public static create<T>(executor?: PromiseExecutor<T>) {
         return new XPromise<T>(executor);
