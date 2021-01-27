@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.7.3](https://github.com/sirian/js/compare/@sirian/console@6.7.2...@sirian/console@6.7.3) (2021-01-27)
+
+**Note:** Version bump only for package @sirian/console
+
+
+
+
+
 ## [6.7.2](https://github.com/sirian/js/compare/@sirian/console@6.7.1...@sirian/console@6.7.2) (2020-10-01)
 
 **Note:** Version bump only for package @sirian/console
