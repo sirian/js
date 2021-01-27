@@ -69,7 +69,7 @@ export abstract class AbstractQuestion<V, TOptions extends IQuestionOptions<V> =
         return this.options.attempts;
     }
 
-    public getSynopsis() {
+    public getSynopsis(): string {
         const defaultValue = this.getDefault();
         const text = this.getQuestion();
 

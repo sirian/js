@@ -21,7 +21,7 @@ export class Memoizer<F extends Func> {
         const memoizer = new Memoizer(fn, opts);
 
         return new Proxy(fn, {
-            apply: (target, thisArg, args) => memoizer.get(thisArg, args),
+            apply: (target, thisArg, args) => memoizer.get(thisArg, args as Args<F>),
         });
     }
 

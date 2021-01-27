@@ -2,7 +2,7 @@ import {Thenable} from "./interfaces";
 import {MustBeArray, MustBeFunc} from "./mustbe";
 import {Overwrite} from "./object";
 import {Awaited} from "./promise";
-import {ArrayRO, Head, LastElement, Length, Tail, Tuple, TupleGet} from "./tuple";
+import {ArrayRO, Head, LastElement, Length, Tuple, TupleGet} from "./tuple";
 import {NotFunc, Primitive} from "./types";
 
 export type Ctor<T = any, A extends ArrayRO = any[]> = new(...args: A) => T;
@@ -103,9 +103,11 @@ export type OverloadedReturn<F extends Func, TArgs extends ArrayRO> =
 export type Compose<T extends Func, U extends Func1<any, Return<T>>> = Func<Return<U>, Args<T>>;
 
 export type ValidPipe<Fns extends Func[], Expected extends ArrayRO = any[]> =
-    Fns extends Tuple<MustBeFunc<infer H>>
+    Fns extends Tuple<MustBeFunc<infer H>, infer Z>
     ? H extends Func<infer R>
-      ? [Func<any, Expected>, ...ValidPipe<Tail<Fns>, [R]>]
+      ? Z extends Func[]
+        ? [Func<any, Expected>, ...ValidPipe<Z, [R]>]
+        : never
       : never
     : [];
 

@@ -1,27 +1,34 @@
 import {AssertExact, Reverse} from "../../src";
 
+type U = undefined;
+
 type Test = [
     AssertExact<[], Reverse<[]>>,
-    AssertExact<[number], Reverse<[number]>>,
-    AssertExact<[number | string, 1], Reverse<[1, number | string]>>,
-    AssertExact<number[], Reverse<number[]>>,
-    AssertExact<Array<string | number>, Reverse<[string, ...number[]]>>,
+    AssertExact<[1], Reverse<[1]>>,
+    AssertExact<[1?], Reverse<[1?]>>,
+    AssertExact<[1 | 2, 1], Reverse<[1, 1 | 2]>>,
+    AssertExact<1[], Reverse<1[]>>,
+    AssertExact<[...2[], 1], Reverse<[1, ...2[]]>>,
+    AssertExact<[...3[], 2, 1], Reverse<[1, 2, ...3[]]>>,
+    AssertExact<[...1[], 1], Reverse<[1, ...1[]]>>,
+    // AssertExact<1[], Reverse<[1?, ...1[]]>>,
+    AssertExact<[...3[], 2 | U, 1], Reverse<[1, 2?, ...3[]]>>,
 
-    AssertExact<[string, number], Reverse<[number, string]>>,
-    AssertExact<[2 | undefined, 1], Reverse<[1, 2?]>>,
-    AssertExact<[3 | undefined, 2, 1], Reverse<[1, 2, 3 | undefined]>>,
-    AssertExact<[3 | undefined, 2, 1], Reverse<[1, 2, 3?]>>,
-    AssertExact<[1 | undefined], Reverse<[1 | undefined]>>,
-    AssertExact<[2, 1 | undefined], Reverse<[1 | undefined, 2]>>,
-    AssertExact<[2, 1 | undefined, 0], Reverse<[0, 1 | undefined, 2]>>,
+    AssertExact<[2, 1], Reverse<[1, 2]>>,
+    AssertExact<[2 | U, 1], Reverse<[1, 2?]>>,
+    AssertExact<[3 | U, 2, 1], Reverse<[1, 2, 3 | U]>>,
+    AssertExact<[3 | U, 2, 1], Reverse<[1, 2, 3?]>>,
+    AssertExact<[1 | U], Reverse<[1 | U]>>,
+    AssertExact<[2, 1 | U], Reverse<[1 | U, 2]>>,
+    AssertExact<[2, 1 | U, 0], Reverse<[0, 1 | U, 2]>>,
     AssertExact<[1?], Reverse<[1?]>>,
     AssertExact<[2?, 1?], Reverse<[1?, 2?]>>,
     AssertExact<[3?, 2?, 1?], Reverse<[1?, 2?, 3?]>>,
-    AssertExact<[3 | undefined, 2 | undefined, 1 | undefined], Reverse<[1 | undefined, 2 | undefined, 3 | undefined]>>,
+    AssertExact<[3 | U, 2 | U, 1 | U], Reverse<[1 | U, 2 | U, 3 | U]>>,
 
-    AssertExact<[string, string], Reverse<[string, string]>>,
+    AssertExact<[2, 2], Reverse<[2, 2]>>,
 
-    AssertExact<[string, string | number], Reverse<[string | number, string]>>,
+    AssertExact<[2, 2 | 1], Reverse<[2 | 1, 2]>>,
 
-    AssertExact<[string | boolean, number, boolean, void], Reverse<[void, boolean, number, string | boolean]>>
+    AssertExact<[2 | 3, 1, 3, void], Reverse<[void, 3, 1, 2 | 3]>>
 ];

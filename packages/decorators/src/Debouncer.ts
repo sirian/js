@@ -29,7 +29,7 @@ export class Debouncer<A extends any[]> {
         const debouncer = new Debouncer(fn, options);
 
         return new Proxy(fn, {
-            apply: (target, thisArg, args) => debouncer.apply(thisArg, args),
+            apply: (target, thisArg, args) => debouncer.apply(thisArg, args as A),
         });
     }
 
