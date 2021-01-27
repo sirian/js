@@ -16,4 +16,4 @@ export type MustBeTrue<T extends true> = T;
 export type MustBeFalse<T extends false> = T;
 export type MustBeKey<T extends AnyKey> = T;
 
-export type MustBeArray<T extends ArrayRO> = T;
+export type MustBeArray<T extends ArrayRO<V>, V = unknown> = T;

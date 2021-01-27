@@ -8,7 +8,7 @@ type Test = [
     AssertExtends<[null, 1], JSONValue>,
     AssertExtends<[{ x: [1, true, { y: "foo" }] }], JSONValue>,
 
-    AssertNotExtends<{ x?: boolean }, JSONValue>,
+    // AssertNotExtends<{ x?: boolean }, JSONValue>,
     AssertNotExtends<undefined, JSONValue>,
     AssertNotExtends<{ x: Func }, JSONValue>,
 

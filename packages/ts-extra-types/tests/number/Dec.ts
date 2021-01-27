@@ -1,7 +1,7 @@
 import {AssertExact, Dec} from "../../src";
 
 type Test = [
-    AssertExact<unknown, Dec<0>>,
+    AssertExact<number, Dec<0>>,
     AssertExact<0, Dec<1>>,
     AssertExact<1, Dec<2>>,
     AssertExact<2, Dec<3>>,

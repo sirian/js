@@ -1,6 +1,6 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
-import {MustBeKey, MustBeString} from "./mustbe";
+import {MustBe, MustBeKey, MustBeString} from "./mustbe";
 import {ArrayRO, ArrayValueOf, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
@@ -71,9 +71,11 @@ export type Has<T, K extends AnyKey> =
     K extends keyof T ? true : IsExtends<T, Rec<K>>;
 
 export type GetDeep<T, L extends AnyKey[], D = never> =
-    L extends Tuple<MustBeKey<infer H>>
+    L extends Tuple<MustBeKey<infer H>, infer R>
     ? Has<T, H> extends true
-      ? GetDeep<Get<T, H>, Tail<L>, D>
+      ? R extends AnyKey[]
+        ? GetDeep<Get<T, H>, R, D>
+        : never
       : D
     : T;
 
@@ -158,8 +160,11 @@ export type FromEntry<E extends Partial<Entry>> =
 
 export type FromEntries<L extends Entry[]> =
     L extends [] ? {} :
-    L extends Tuple ? FromEntry<L[0]> & FromEntries<Tail<L>> :
-    FromEntry<ArrayValueOf<L>>;
+    L extends [MustBe<infer H, Entry>, ...infer R]
+    ? R extends Entry[]
+      ? FromEntry<H> & FromEntries<R>
+      : never
+    : FromEntry<ArrayValueOf<L>>;
 
 export type Exclusive<T, U> =
     (T | U) extends any

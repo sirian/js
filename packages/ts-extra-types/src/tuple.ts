@@ -10,17 +10,16 @@ export type ArrayRW<T = unknown> = T[];
 
 export type Tuple<H = any, R extends ArrayRO = any> = [H, ...R];
 
-export type Head<T extends ArrayRO> = T extends Tuple<infer H> ? H : T[0] | undefined;
+export type Head<T extends ArrayRO> = T extends [infer H, ...any] ? H : T[0] | undefined;
 
 export type Tail<L extends ArrayRO> =
     L extends [] ? [] :
-    L extends [any, ...infer U1] | [any?, ...infer U1] ? U1 :
-    never;
+    L extends [any?, ...infer U1] ? U1 : never;
 
 export type ReplaceTail<T extends ArrayRO, L extends ArrayRO> =
-    T extends [] ? [...L] :
-    T extends [infer H1, ...any[]] ? [H1, ...L] :
-    T extends [(infer H2)?, ...any[]] ? [H2?, ...L] :
+    T extends [] ? L :
+    T extends [infer H1, ...infer Z1] ? [H1, ...L] :
+    T extends [(infer H2)?, ...infer Z2] ? [H2?, ...L] :
     never;
 
 export type Cons<X, L extends ArrayRO, Optional extends boolean = false> =
@@ -34,23 +33,24 @@ export type Push<L extends ArrayRO, T, Optional extends boolean = false> =
     : [...L, T];
 
 export type Reverse<L extends ArrayRO> =
-    L extends [] ? [] :
-    number extends Length<L>
-    ? Array<ArrayValueOf<L>>
-    : _Reverse<L>;
-
-type _Reverse<L extends ArrayRO, TMP extends ArrayRO = []> =
-    L extends [] ? TMP : _Reverse<Tail<L>, ReplaceTail<L, TMP>>;
+    L extends { length: 1 | 0 } ? L :
+    IsOpenTuple<L> extends true ? [...GetRest<L>, ...Reverse<DropRest<L>>] :
+    L extends [infer A1, ...infer B1, infer C1] ? [C1, ...Reverse<B1>, A1] :
+    L extends [infer A2, ...infer B2, (infer C2)?] ? [C2 | undefined, ...Reverse<B2>, A2] :
+    L extends [(infer A3)?, ...infer B3, (infer C3)?] ? [C3?, ...Reverse<B3>, A3?] :
+    never;
 
 export type Concat<A extends ArrayRO, B extends ArrayRO> = [...A, ...B];
 
 export type LastElement<T extends ArrayRO> =
     T extends [] ? undefined :
+    IsOpenTuple<T> extends true ? LastElement<DropRest<T>> | ArrayValueOf<GetRest<T>> :
     T extends ([...infer _, infer U] | [...infer _, (infer U)?]) ? U :
     undefined;
 
 export type DropLast<L extends ArrayRO> =
     L extends [] ? [] :
+    IsOpenTuple<L> extends true ? L :
     L extends ([...infer R, any] | [...infer R, any?]) ? R :
     L;
 
@@ -74,7 +74,9 @@ export type Take<N extends number, L extends ArrayRO> =
     N extends 0 ? [] :
     L extends [] ? L :
     number extends N ? L :
-    ReplaceTail<L, Take<Dec<N>, Tail<L>>>;
+    L extends [infer A1, ...infer B1] ? [A1, ...Take<Dec<N>, B1>] :
+    L extends [(infer A2)?, ...infer B2] ? [A2?, ...Take<Dec<N>, B2>] :
+    never;
 
 export type Length<T> = T extends Lengthwise<infer L> ? L : never;
 export type IsArray<T> = IsExtends<T, ArrayRO>;
@@ -102,7 +104,7 @@ export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
 
 export type StripTuple<T> = Pick<T, TupleKeyOf<T> | TupleIndex<T>>;
 
-export type ArrayValueOf<T> = T extends ArrayRO<infer U> ? U : never;
+export type ArrayValueOf<T> = T extends ArrayRO ? T[number] : never;
 
 export type ValueOf<T> = T extends ArrayRO<infer U> ? U : T[keyof T];
 
@@ -117,6 +119,11 @@ export type DropRest<T extends ArrayRO> =
     T extends [] ? [] :
     IsRepeatedTuple<T> extends true ? [] :
     ReplaceTail<T, DropRest<Tail<T>>>;
+
+export type GetRest<T extends ArrayRO> =
+    T extends [] ? [] :
+    IsRepeatedTuple<T> extends true ? T :
+    GetRest<Tail<T>>;
 
 export type Range<N extends number> =
     N extends 0 ? [0] :
