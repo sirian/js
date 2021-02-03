@@ -2,7 +2,7 @@ import {CastBool} from "./cast";
 import {AsyncFunc, Ctor, Func} from "./function";
 import {And, If, Not} from "./logic";
 import {AnyKey} from "./object";
-import {ArrayRO, ArrayValueOf, Head, Tail} from "./tuple";
+import {ArrayRO} from "./tuple";
 
 export type Primitive = boolean | bigint | number | string | symbol | null | undefined | void;
 export type Nullish = void | null | undefined;
@@ -65,16 +65,6 @@ export type ExtractFunction<T> = Extract<T, AnyFunc>;
 export type ExtractArray<T> = Extract<T, any[]>;
 export type ExtractObject<T> = Exclude<Extract<T, object>, AnyFunc>;
 export type ExtractSyncFunc<T> = Exclude<ExtractFunction<T>, AsyncFunc>;
-
-export type Coalesce<T extends ArrayRO> =
-    {
-        0: ArrayValueOf<T>,
-        1: Head<T> extends infer O
-           ? O extends Nullish
-             ? O | Coalesce<Tail<T>>
-             : O
-           : never;
-    }[T extends [] ? 0 : 1];
 
 export type Predicate<T = any> = (value: T) => boolean;
 

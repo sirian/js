@@ -1,7 +1,7 @@
 import {Cast} from "./cast";
 import {Ctor, Func} from "./function";
 import {MustBeBoolean} from "./mustbe";
-import {ArrayValueOf, Head, Tail} from "./tuple";
+import {Head, Tail} from "./tuple";
 
 export type If<C extends boolean, T, F = never, D = never> =
     boolean extends C ? D :
@@ -20,12 +20,12 @@ export type Every<T extends boolean[]> =
     T extends [] ? true :
     T extends [MustBeBoolean<infer H>, ...infer R]
     ? And<H, Every<Cast<R, boolean[]>>>
-    : ArrayValueOf<T>;
+    : T[number];
 
 export type Some<T extends boolean[]> =
     T extends [] ? false :
     T extends [MustBeBoolean<infer H>, ...infer R] ? Or<H, Some<Cast<R, boolean[]>>> :
-    ArrayValueOf<T>;
+    T[number];
 
 export type Not<C extends boolean> =
     C extends true ? false : true;

@@ -18,8 +18,8 @@ export type Tail<L extends ArrayRO> =
 
 export type ReplaceTail<T extends ArrayRO, L extends ArrayRO> =
     T extends [] ? L :
-    T extends [infer H1, ...infer Z1] ? [H1, ...L] :
-    T extends [(infer H2)?, ...infer Z2] ? [H2?, ...L] :
+    T extends [infer H1, ...any] ? [H1, ...L] :
+    T extends [(infer H2)?, ...any] ? [H2?, ...L] :
     never;
 
 export type Cons<X, L extends ArrayRO, Optional extends boolean = false> =
@@ -90,7 +90,7 @@ export type TupleIndex<T> = KeyOf<T, INumber>;
 
 export type TupleGet<T extends ArrayRO, N extends number> =
     N extends 0 ? Head<T> :
-    number extends N ? ArrayValueOf<T> :
+    number extends N ? T[number] :
     TupleGet<Tail<T>, Dec<N>>;
 
 export type ArrayToObject<T> =
@@ -113,7 +113,7 @@ export type TupleEntryOf<T extends ArrayRO> = ObjEntryOf<StripTuple<T>>;
 export type ArrayEntryOf<T extends ArrayRO> =
     IsFiniteTuple<T> extends true
     ? TupleEntryOf<T>
-    : TupleEntryOf<T> | [string, ArrayValueOf<T>];
+    : TupleEntryOf<T> | [string, T[number]];
 
 export type DropRest<T extends ArrayRO> =
     T extends [] ? [] :
