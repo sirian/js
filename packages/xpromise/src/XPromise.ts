@@ -1,4 +1,3 @@
-import {AggregateError} from "@sirian/error";
 import {Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
 import {XPromiseError} from "./XPromiseError";
 import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
@@ -76,7 +75,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 const onRejected = (error: any) => {
                     errors[i] = error;
                     if (++rejectedCount === length) {
-                        reject(new AggregateError(errors));
+                        reject(new AggregateError(errors, "All promises were rejected"));
                     }
                 };
 

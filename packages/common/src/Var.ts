@@ -206,8 +206,7 @@ export const isPlainObject = (x: any) => {
 export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
     tag === getObjectTag(obj);
 
-export const stringifyVar = (value: any) =>
-    isNullish(value) || isSymbol(value) ? "" : String(value);
+export const stringifyVar = (value: any) => isNullish(value) || isSymbol(value) ? "" : "" + value;
 
 export const Var = {
     /** @deprecated use isNull */

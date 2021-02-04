@@ -3,7 +3,7 @@
         "target": "esnext",
         "module": "esnext",
         "lib": [
-            "esnext"
+            "esnext",
         ],
         "declaration": true,
         "composite": true,

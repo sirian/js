@@ -1,4 +1,5 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
+import {toArray} from "./helper";
 import {entriesOf, fromEntries} from "./Obj";
 import {hasMethod} from "./Ref";
 import {isNotNullish, isString} from "./Var";
@@ -7,7 +8,7 @@ export class Entries<T extends Entry> {
     protected items: T[];
 
     public constructor(entries: Iterable<T | undefined | null> = []) {
-        this.items = Array.from(entries).filter(isNotNullish) as T[];
+        this.items = toArray(entries).filter(isNotNullish);
     }
 
     public static from<E extends Entry>(value: IterableEntries<E>): Entries<E>;

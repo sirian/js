@@ -29,22 +29,22 @@ describe("Obj.snapshot", () => {
     });
 
     test("Obj.snapshot(URL)", () => {
-        const url = new URL("https://example.org/foo");
-        expect({...url}).toStrictEqual({});
+        const url = new URL("https://example.org/foo?x=1#bar");
 
-        expect(Obj.snapshot(url)).toStrictEqual({
-            hash: "",
+        const expected = {
+            hash: "#bar",
             host: "example.org",
             hostname: "example.org",
-            href: "https://example.org/foo",
+            href: "https://example.org/foo?x=1#bar",
             origin: "https://example.org",
             password: "",
             pathname: "/foo",
             port: "",
             protocol: "https:",
-            search: "",
+            search: "?x=1",
             searchParams: url.searchParams,
             username: "",
-        });
+        };
+        expect(Obj.snapshot(url)).toStrictEqual(expected);
     });
 });

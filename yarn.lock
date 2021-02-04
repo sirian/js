@@ -1457,9 +1457,9 @@
   integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
 
 "@types/node@*", "@types/node@>= 8", "@types/node@^14.14.22", "@types/node@^14.6.2":
-  version "14.14.22"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.22.tgz#0d29f382472c4ccf3bd96ff0ce47daf5b7b84b18"
-  integrity sha512-g+f/qj/cNcqKkc3tFqlXOYjrmZA+jNBiDzbP3kH+B+otKFqAdPgVTGP1IeKRdMml/aE69as5S4FqtxAbl+LaMw==
+  version "14.14.25"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.25.tgz#15967a7b577ff81383f9b888aa6705d43fbbae93"
+  integrity sha512-EPpXLOVqDvisVxtlbvzfyqSsFeQxltFbluZNRndIb8tr9KiBnYNLzrc1N3pyKUCww2RNrfHDViqDWWE1LCJQtQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -6926,7 +6926,7 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-jest@^26.1.0, ts-jest@^26.4.4:
+ts-jest@^26.1.0, ts-jest@^26.5.0:
   version "26.5.0"
   resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-26.5.0.tgz#3e3417d91bc40178a6716d7dacc5b0505835aa21"
   integrity sha512-Ya4IQgvIFNa2Mgq52KaO8yBw2W8tWp61Ecl66VjF0f5JaV8u50nGoptHVILOPGoI7SDnShmEqnYQEmyHdQ+56g==
@@ -7047,10 +7047,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.2.0-dev.20210203:
-  version "4.2.0-dev.20210203"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.0-dev.20210203.tgz#3ce0302fe86a31240796431a77d00cf28377bf5c"
-  integrity sha512-3uBqMNiNj7Kkv8tm6XxUrKEDlQephvBKjnQ/r6PbZyDtdAgMu/bJLS+EfVBotzxHAYuhr1d4z+4OzQn5dqDYNg==
+typescript@^4.2.0-dev.20210204:
+  version "4.2.0-dev.20210204"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.0-dev.20210204.tgz#a8670f992d916121da3c455833d43a17950d35f9"
+  integrity sha512-mskEzzg8xT6dqZmmRvV27Ktabr79FxJ/nWhSVW2ERkuZHk//IeBkLdXGCUAbB170uAGMr8Izk4U/Lxl0EvRnaA==
 
 uglify-js@^3.1.4:
   version "3.12.6"

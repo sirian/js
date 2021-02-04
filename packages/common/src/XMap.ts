@@ -1,4 +1,5 @@
 import {Nullish} from "@sirian/ts-extra-types";
+import {toArray} from "./helper";
 import {entriesOf} from "./Obj";
 import {isEqual, isFunction, isPlainObject, isPropertyKey} from "./Var";
 
@@ -50,7 +51,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
             return entriesOf(src) as any;
         }
 
-        return Array.from(src as any);
+        return toArray(src as any);
     }
 
     public static pick<K, V>(map: IMapMini<K, V>, key: K, strict: true): V;
