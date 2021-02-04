@@ -1,9 +1,14 @@
-import {ByteArray} from "../../src";
+import {toBytes, toUTF} from "../../src";
 
-describe.only("ByteArray.from", () => {
+describe("toBytes", () => {
     const data: Array<[any, number[]]> = [
         ["", []],
+        [null, []],
+        [undefined, []],
         ["foo", [102, 111, 111]],
+        ["💩", [240, 159, 146, 169]],
+        [1, [49]],
+        ["1", [49]],
 
         [[], []],
         [[1, 2, 3], [1, 2, 3]],
@@ -14,7 +19,8 @@ describe.only("ByteArray.from", () => {
         // [new Uint16Array([1000]).buffer, [232, 3]], // todo: jest bug with ArrayBuffer
     ];
 
-    test.each(data)("ByteArray.from(%o) is %p", (value, bytes) => {
-        expect(ByteArray.from(value)).toStrictEqual(new ByteArray(bytes));
+    test.each(data)("toBytes(%o) is %p", (value, bytes) => {
+        const expected = new Uint8Array(bytes);
+        expect(toBytes(value)).toStrictEqual(expected);
     });
 });

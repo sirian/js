@@ -1,4 +1,4 @@
-import {IDeferred, OnFinally, OnFulfilled, OnReject, Rejector, Resolver} from "./XPromise";
+import {IDeferred, OnFinally, OnFulfill, OnReject, Rejector, Resolver} from "./XPromise";
 
 export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
     public readonly promise: PromiseLike<T>;
@@ -24,8 +24,8 @@ export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
         this.rejector(reason);
     }
 
-    public then<R1 = T, R2 = never>(onRonFulfill?: OnFulfilled<T, R1>, onReject?: OnReject<R2>) {
-        return this.promise.then(onRonFulfill, onReject);
+    public then<R1 = T, R2 = never>(onFulfill?: OnFulfill<T, R1>, onReject?: OnReject<R2>) {
+        return this.promise.then(onFulfill, onReject);
     }
 
     public finally(f?: OnFinally) {

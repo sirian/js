@@ -1,6 +1,5 @@
 import {
     AnyFunc,
-    Coalesce,
     Ctor,
     ExtractByObjectTag,
     ExtractByTypeName,
@@ -204,21 +203,12 @@ export const isPlainObject = (x: any) => {
     return !isFunction(ctor) || ctor.prototype !== x;
 };
 
-export const coalesce = <T extends any[]>(...values: T): Coalesce<T> => {
-    const result = values.find(isNotNullish);
-    return isNullish(result) ? values.pop() : result;
-};
-
 export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
     tag === getObjectTag(obj);
 
-export const stringifyVar = (value: any) =>
-    isNullish(value) || isSymbol(value) ? "" : String(value);
+export const stringifyVar = (value: any) => isNullish(value) || isSymbol(value) ? "" : "" + value;
 
 export const Var = {
-    /** @deprecated use coalesce */
-    coalesce,
-
     /** @deprecated use isNull */
     isNull,
 

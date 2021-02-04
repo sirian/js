@@ -1,3 +1,4 @@
+import {toArray} from "@sirian/common";
 import {IDevToolsFormatter} from "./DevToolsFormatter";
 
 declare global {
@@ -24,7 +25,7 @@ export class DevTools {
     }
 
     public static setFormatters(formatters: IDevToolsFormatter[], win = window) {
-        win.devtoolsFormatters = Array.from(formatters);
+        win.devtoolsFormatters = toArray(formatters);
         return DevTools;
     }
 }

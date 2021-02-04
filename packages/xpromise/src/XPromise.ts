@@ -1,9 +1,8 @@
-import {AggregateError} from "@sirian/error";
 import {Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
 import {XPromiseError} from "./XPromiseError";
 import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
 
-export type OnFulfilled<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
+export type OnFulfill<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
 export type OnReject<R> = undefined | null | ((reason: any) => R | PromiseLike<R>);
 export type OnFinally = undefined | null | (() => any);
 export type Resolver<T> = (value?: T | PromiseLike<T>) => void;
@@ -23,7 +22,7 @@ export interface IDeferred<T> {
 
 export interface PromiseReaction<T, R1 = any, R2 = any> {
     promise: XPromise<R1 | R2>;
-    onFulfilled: OnFulfilled<T, R1>;
+    onFulfilled: OnFulfill<T, R1>;
     onRejected: OnReject<R2>;
 }
 
@@ -76,7 +75,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 const onRejected = (error: any) => {
                     errors[i] = error;
                     if (++rejectedCount === length) {
-                        reject(new AggregateError(errors));
+                        reject(new AggregateError(errors, "All promises were rejected"));
                     }
                 };
 
@@ -223,7 +222,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         throw this.isRejected() ? value : new XPromiseError("Could not get value of pending promise");
     }
 
-    public then<R1 = T, R2 = never>(onFulfilled?: OnFulfilled<T, R1>, onRejected?: OnReject<R2>) {
+    public then<R1 = T, R2 = never>(onFulfilled?: OnFulfill<T, R1>, onRejected?: OnReject<R2>) {
         const promise = new XPromise<R1 | R2>();
 
         const reaction: PromiseReaction<T, R1, R2> = {

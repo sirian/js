@@ -1,5 +1,5 @@
 import {apply, construct, defineProp, getPrototypes, setPrototype, XMap, XWeakMap} from "@sirian/common";
-import {ArrayValueOf, Ctor, UnionToIntersection} from "@sirian/ts-extra-types";
+import {Ctor, UnionToIntersection} from "@sirian/ts-extra-types";
 
 export type UCtor = Ctor<object>;
 export type MixinFn = <C extends UCtor>(ctor: C) => C;
@@ -7,7 +7,7 @@ export type ConstructableMixin<M extends MixinFn> = M & ReturnType<M>;
 
 export type MixinInstance<M extends MixinFn> = InstanceType<ReturnType<M>>;
 
-export type MixinsInstance<M extends MixinFn[]> = MixinInstance<ArrayValueOf<M>>;
+export type MixinsInstance<M extends MixinFn[]> = MixinInstance<M[number]>;
 
 export type Mixified<C extends Ctor, M extends MixinFn[]> =
     C extends new (...args: infer A) => infer T

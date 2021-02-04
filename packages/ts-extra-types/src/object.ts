@@ -1,7 +1,7 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBe, MustBeKey, MustBeString} from "./mustbe";
-import {ArrayRO, ArrayValueOf, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
+import {ArrayRO, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
@@ -56,7 +56,7 @@ export type ObjKeyOf<T> =
     }[keyof T];
 
 export type ObjValueOf<T> =
-    T extends ArrayRO ? ArrayValueOf<T> : T[keyof T];
+    T extends ArrayRO ? T[number] : T[keyof T];
 
 export type ObjEntryOf<T> =
     T extends ArrayRO
@@ -164,7 +164,7 @@ export type FromEntries<L extends Entry[]> =
     ? R extends Entry[]
       ? FromEntry<H> & FromEntries<R>
       : never
-    : FromEntry<ArrayValueOf<L>>;
+    : FromEntry<L[number]>;
 
 export type Exclusive<T, U> =
     (T | U) extends any
@@ -181,4 +181,4 @@ export type ObjectZip<K extends ArrayRO, V extends ArrayRO> =
 export type Assign<T, S extends ArrayRO> =
     S extends [] ? T :
     S extends Tuple<infer H, infer R> ? Assign<Overwrite<T, H>, R> :
-    Overwrite<T, ArrayValueOf<S>>;
+    Overwrite<T, S[number]>;

@@ -1,4 +1,4 @@
-import {ByteArray, ByteArraySource} from "@sirian/common";
+import {ByteArray, ByteArraySource, toUTF} from "@sirian/common";
 import {base64Decode} from "./base64Decode";
 import {base64Encode} from "./base64Encode";
 import {base64Test} from "./const";
@@ -21,7 +21,7 @@ export const Base64 = {
         return asString ? b64 : ByteArray.from(b64);
     },
     decode(value: ByteArraySource, asString = false) {
-        const uint8 = base64Decode(ByteArray.stringify(value));
+        const uint8 = base64Decode(toUTF(value));
         const bytes = new ByteArray(uint8);
         return asString ? "" + bytes : bytes;
     },

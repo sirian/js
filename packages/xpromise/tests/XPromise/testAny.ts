@@ -1,4 +1,3 @@
-import {AggregateError} from "@sirian/error";
 import {XPromise} from "../../src";
 
 describe("XPromise.any", function() {
@@ -31,7 +30,7 @@ describe("XPromise.any", function() {
             Promise.reject("p2"),
         ];
 
-        await expect(XPromise.any(promises)).rejects.toThrow(new AggregateError(["p1", "p2"]));
+        await expect(XPromise.any(promises)).rejects.toThrow(new AggregateError(["p1", "p2"], "All promises were rejected"));
     });
 
     test("should handle any iterables", async () => {
@@ -83,7 +82,8 @@ describe("XPromise.any", function() {
             delayReject(85, "nuh-uh"),
         ];
 
-        await expect(XPromise.any(promises)).rejects.toThrow(new AggregateError(["ignore me", "yes", "nuh-uh"]));
+        await expect(XPromise.any(promises))
+            .rejects.toThrow(new AggregateError(["ignore me", "yes", "nuh-uh"], "All promises were rejected"));
     });
 
     test("Given some non-Promise items, XPromise.any should return the first of these.", async () => {
