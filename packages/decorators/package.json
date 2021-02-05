@@ -1,7 +1,7 @@
 {
     "name": "@sirian/decorators",
     "description": "",
-    "version": "1.5.9",
+    "version": "1.5.10",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,9 +17,9 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^5.15.3",
-        "@sirian/error": "^2.1.30",
-        "@sirian/ts-extra-types": "^3.59.1"
+        "@sirian/common": "^5.16.0",
+        "@sirian/error": "^2.2.0",
+        "@sirian/ts-extra-types": "^3.59.2"
     },
     "scripts": {},
     "publishConfig": {

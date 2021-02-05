@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.16.0](https://github.com/sirian/js/compare/@sirian/common@5.15.3...@sirian/common@5.16.0) (2021-02-05)
+
+
+### Bug Fixes
+
+* typings ([833c231](https://github.com/sirian/js/commit/833c231c2309cf74c740d7292b2c3351cf3d0d98))
+
+
+### Features
+
+* toBytes, toUTF uses native TextEncoder, TextDecoder ([f5516af](https://github.com/sirian/js/commit/f5516af6680ccba35a5bd9815d5cac1b6d09446d))
+
+
+
+
+
 ## [5.15.3](https://github.com/sirian/js/compare/@sirian/common@5.15.2...@sirian/common@5.15.3) (2021-01-27)
 
 **Note:** Version bump only for package @sirian/common

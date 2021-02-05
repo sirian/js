@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.59.2](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.59.1...@sirian/ts-extra-types@3.59.2) (2021-02-05)
+
+
+### Bug Fixes
+
+* typings ([833c231](https://github.com/sirian/js/commit/833c231c2309cf74c740d7292b2c3351cf3d0d98))
+
+
+
+
+
 ## [3.59.1](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.59.0...@sirian/ts-extra-types@3.59.1) (2021-01-27)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.13](https://github.com/sirian/js/compare/@sirian/assert@1.1.12...@sirian/assert@1.1.13) (2021-02-05)
+
+**Note:** Version bump only for package @sirian/assert
+
+
+
+
+
 ## [1.1.12](https://github.com/sirian/js/compare/@sirian/assert@1.1.11...@sirian/assert@1.1.12) (2021-01-27)
 
 **Note:** Version bump only for package @sirian/assert
