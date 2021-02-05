@@ -4,7 +4,6 @@ export * from "./ByteArray";
 export * from "./Descriptor";
 export * from "./Entries";
 export * from "./Fn";
-export * from "./helper";
 export * from "./HybridMap";
 export * from "./Json";
 export * from "./Num";

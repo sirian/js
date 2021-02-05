@@ -1,4 +1,4 @@
-import {Arr, stringifyVar} from "@sirian/common";
+import {castArray, stringifyVar} from "@sirian/common";
 import {Writable} from "stream";
 import {RuntimeError} from "../Error";
 import {Formatter} from "../Formatter";
@@ -121,7 +121,7 @@ export abstract class Output {
             ...init,
         };
 
-        messages = Arr.cast(messages);
+        messages = castArray(messages);
 
         if (options.verbosity > this.getVerbosity()) {
             return this;

@@ -1,6 +1,24 @@
-import {Head, LastElement} from "@sirian/ts-extra-types";
-import {isArray, isEqual} from "./Var";
+import {ArrayRO, Head, LastElement, Nullish} from "@sirian/ts-extra-types";
+import {isArray, isEqual, isNullish} from "./Var";
 import {XSet} from "./XSet";
+
+export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] => {
+    if (isArray(value)) {
+        return value;
+    }
+
+    return isNullish(value) ? [] : Array.from(value);
+};
+export const castArray = <T>(value: T): T extends ArrayRO ? T : T extends Nullish ? [] : [T] => {
+    if (isNullish(value)) {
+        return [] as any;
+    }
+    return (isArray(value) ? value : [value]) as any;
+};
+
+export const uniq = <T>(input: Iterable<T>) => {
+    return [...new Set(input)];
+};
 
 export class Arr {
     public static removeItem<T>(array: T[], value: T, limit?: number) {
@@ -48,12 +66,8 @@ export class Arr {
         return result;
     }
 
-    public static cast<T>(value: T | T[]): T[] {
-        return isArray(value) ? value : [value];
-    }
-
     public static removeDuplicates<T>(array: T[]) {
-        const set = new XSet(array);
+        const set = new Set(array);
 
         array.splice(0, array.length, ...set);
 
@@ -62,7 +76,7 @@ export class Arr {
 
     public static range(from: number, to: number, step: number = 1) {
         const result = [];
-        const sign = Math.sign(step);
+        const sign = step > 0 ? 1 : -1;
         while (sign * (to - from) >= 0) {
             result.push(from);
             from += step;
@@ -70,19 +84,12 @@ export class Arr {
         return result;
     }
 
-    public static first<T extends any[]>(value: T): Head<T>;
-    public static first(value: any[]) {
-        const length = value && value.length;
-        if (length > 0) {
-            return value[0];
-        }
+    public static first<T extends any[]>(value: T): Head<T> {
+        return value[0];
     }
 
-    public static last<T extends any[]>(value: T): LastElement<T>;
-    public static last(value: any[]) {
+    public static last<T extends ArrayRO>(value: T) {
         const length = value && value.length;
-        if (length > 0) {
-            return value[length - 1];
-        }
+        return value[length - 1] as LastElement<T>;
     }
 }

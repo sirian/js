@@ -1,5 +1,5 @@
 import {Nullish} from "@sirian/ts-extra-types";
-import {toArray} from "./helper";
+import {toArray} from "./Arr";
 import {entriesOf} from "./Obj";
 import {isEqual, isFunction, isPlainObject, isPropertyKey} from "./Var";
 

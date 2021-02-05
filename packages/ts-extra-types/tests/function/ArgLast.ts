@@ -9,7 +9,7 @@ type Test = [
 
     AssertExact<boolean | undefined, ArgLast<(x: string, y: boolean | undefined) => true>>,
 
-    AssertExact<boolean | undefined, ArgLast<(x: string, y?: boolean) => true>>,
+    AssertExact<string | boolean | undefined, ArgLast<(x: string, y?: boolean) => true>>,
 
     AssertExact<symbol | boolean, ArgLast<(x: string, y: boolean, ...args: symbol[]) => true>>,
 

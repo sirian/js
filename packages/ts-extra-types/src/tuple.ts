@@ -44,9 +44,8 @@ export type Concat<A extends ArrayRO, B extends ArrayRO> = [...A, ...B];
 
 export type LastElement<T extends ArrayRO> =
     T extends [] ? undefined :
-    IsOpenTuple<T> extends true ? LastElement<DropRest<T>> | ArrayValueOf<GetRest<T>> :
-    T extends ([...infer _, infer U] | [...infer _, (infer U)?]) ? U :
-    undefined;
+    number extends T["length"] ? LastElement<DropRest<T>> | ArrayValueOf<GetRest<T>> :
+    [undefined, ...T][Length<T>];
 
 export type DropLast<L extends ArrayRO> =
     L extends [] ? [] :

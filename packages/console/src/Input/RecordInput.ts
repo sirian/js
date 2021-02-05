@@ -1,4 +1,4 @@
-import {Arr, isNullish, isNumber} from "@sirian/common";
+import {castArray, isNullish, isNumber} from "@sirian/common";
 import {InvalidArgumentError, InvalidOptionError} from "../Error";
 import {KV} from "../Util";
 import {Input} from "./Input";
@@ -24,7 +24,7 @@ export class RecordInput extends Input {
     }
 
     public hasParameterOption(values: string | string[], onlyParams: boolean = false): boolean {
-        values = Arr.cast(values);
+        values = castArray(values);
 
         for (let [k, v] of this.parameters) {
             if (!isNumber(k)) {
@@ -44,7 +44,7 @@ export class RecordInput extends Input {
     }
 
     public getParameterOption(values: string | string[], defaultValue = false, onlyParams: boolean = false) {
-        values = Arr.cast(values);
+        values = castArray(values);
 
         for (const [k, v] of this.parameters) {
             if (onlyParams && (k === "--" || (isNumber(k) && "--" === v))) {
@@ -68,7 +68,7 @@ export class RecordInput extends Input {
 
         for (const [param, val] of this.parameters) {
             if (param && "-" === param[0]) {
-                for (const v of Arr.cast(val)) {
+                for (const v of castArray(val)) {
                     if (v) {
                         params.push(param + "=" + this.escapeToken(v));
                     } else {
@@ -76,7 +76,7 @@ export class RecordInput extends Input {
                     }
                 }
             } else {
-                const value = Arr.cast(val)
+                const value = castArray(val)
                     .map((v) => this.escapeToken(v))
                     .join(" ");
 

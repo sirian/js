@@ -1,5 +1,5 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
-import {toArray} from "./helper";
+import {toArray} from "./Arr";
 import {entriesOf, fromEntries} from "./Obj";
 import {hasMethod} from "./Ref";
 import {isNotNullish, isString} from "./Var";

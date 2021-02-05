@@ -1,4 +1,4 @@
-import {Arr, isArray, sprintf, stringifyVar} from "@sirian/common";
+import {castArray, isArray, sprintf, stringifyVar} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
 import {TTYStyle} from "../TTY";
 import {KV, StrUtil} from "../Util";
@@ -36,7 +36,7 @@ export class Formatter {
     }
 
     public static formatBlock(messages: string | string[], style?: FormatterStyleDefinition, large = false) {
-        messages = Arr.cast(messages);
+        messages = castArray(messages);
 
         let maxLength = 0;
         const lines: Array<[string, number]> = [];

@@ -1,4 +1,4 @@
-import {Arr} from "@sirian/common";
+import {castArray} from "@sirian/common";
 import {File, Filesystem, FileType, RecursiveDirectoryIterator} from "@sirian/filesystem";
 import {AppendIterator, BaseIterator, EveryFilter, FilterIterator, IFilter} from "@sirian/iterator";
 import {FilenameFilter} from "./FilenameFilter";
@@ -33,7 +33,7 @@ export class Finder extends BaseIterator<File> {
     }
 
     public type(type: FileType | FileType[]) {
-        this.options.types = Arr.cast(type);
+        this.options.types = castArray(type);
         return this;
     }
 
@@ -51,7 +51,7 @@ export class Finder extends BaseIterator<File> {
     }
 
     public name(names: string | RegExp | Array<string | RegExp>) {
-        this.options.names = Arr.cast(names);
+        this.options.names = castArray(names);
         return this;
     }
 
@@ -61,7 +61,7 @@ export class Finder extends BaseIterator<File> {
     }
 
     public in(dirs: string | string[]) {
-        this.options.dirs = Arr.cast(dirs);
+        this.options.dirs = castArray(dirs);
         return this;
     }
 

@@ -1,4 +1,4 @@
-import {Arr, Str, stringifyVar} from "@sirian/common";
+import {castArray, Str, stringifyVar} from "@sirian/common";
 import {Formatter, FormatterStyleDefinition} from "../Formatter";
 import {Output} from "../Output";
 import {StrUtil} from "../Util";
@@ -29,7 +29,7 @@ export class Block {
     }
 
     public render(messages: string | string[]) {
-        messages = Arr.cast(messages);
+        messages = castArray(messages);
         const options = this.options;
 
         const padding = options.padding || [];

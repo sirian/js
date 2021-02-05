@@ -1,4 +1,4 @@
-import {Arr, isArray, stringifyVar} from "@sirian/common";
+import {castArray, isArray, stringifyVar} from "@sirian/common";
 import {CommandDefinition} from "../Command";
 import {Formatter} from "../Formatter";
 import {Argument, InputDefinition, Option} from "../Input";
@@ -221,7 +221,7 @@ export class TextDescriptor extends Descriptor {
     }
 
     protected writeText(content: string | string[]) {
-        const str = Arr.cast(content).map((v: any) => stringifyVar(v)).join("");
+        const str = castArray(content).map((v: any) => stringifyVar(v)).join("");
         this.write(str, true);
 
         return this;

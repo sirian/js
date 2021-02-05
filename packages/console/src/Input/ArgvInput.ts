@@ -1,4 +1,4 @@
-import {Arr} from "@sirian/common";
+import {castArray} from "@sirian/common";
 import {RuntimeError} from "../Error";
 import {Input} from "./Input";
 import {InputDefinition} from "./InputDefinition";
@@ -36,7 +36,7 @@ export class ArgvInput extends Input {
     }
 
     public hasParameterOption(values: string | string[], onlyParams = false) {
-        values = Arr.cast(values);
+        values = castArray(values);
 
         for (const token of this.tokens) {
             if (onlyParams && "--" === token) {
@@ -59,7 +59,7 @@ export class ArgvInput extends Input {
     }
 
     public getParameterOption(values: string | string[], defaultValue = false, onlyParams = false) {
-        values = Arr.cast(values);
+        values = castArray(values);
 
         const tokens = [...this.tokens];
 

@@ -1,6 +1,6 @@
 import {Primitive} from "@sirian/ts-extra-types";
+import {toArray} from "./Arr";
 import {ByteArraySource} from "./ByteArray";
-import {toArray} from "./helper";
 import {isArrayBuffer, isArrayBufferView, isPrimitive, stringifyVar} from "./Var";
 
 declare class TextEncoder {

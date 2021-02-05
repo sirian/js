@@ -1,4 +1,4 @@
-import {Arr, Str} from "@sirian/common";
+import {castArray, Str} from "@sirian/common";
 import {TagToken} from "../../parser/token";
 
 export class JML {
@@ -37,7 +37,7 @@ export class JML {
             this.classes.clear();
             return this;
         }
-        for (const name of Arr.cast(names)) {
+        for (const name of castArray(names)) {
             this.classes.delete(name);
         }
 

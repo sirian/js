@@ -1,4 +1,4 @@
-import {Arr} from "../../src";
+import {uniq} from "../../src";
 
 describe("", () => {
     const data: Array<[any[], any[]]> = [
@@ -10,8 +10,7 @@ describe("", () => {
     ];
 
     test.each(data)("", (arr: number[], expected) => {
-        const res = Arr.removeDuplicates(arr);
-        expect(res).toBe(arr);
+        const res = uniq(arr);
         expect(res).toStrictEqual(expected);
     });
 });

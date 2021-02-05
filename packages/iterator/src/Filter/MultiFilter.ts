@@ -1,4 +1,4 @@
-import {Arr, isFunction} from "@sirian/common";
+import {castArray, isFunction} from "@sirian/common";
 import {CallbackFilter} from "./CallbackFilter";
 import {Filter, IFilter} from "./Filter";
 
@@ -15,7 +15,7 @@ export abstract class MultiFilter<V> implements IFilter<V> {
     }
 
     public add(filters: Filter<V> | Array<Filter<V>>) {
-        for (const filter of Arr.cast(filters)) {
+        for (const filter of castArray(filters)) {
             const f = isFunction(filter) ? new CallbackFilter(filter) : filter;
             this.filters.push(f);
         }
