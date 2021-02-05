@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.11](https://github.com/sirian/js/compare/@sirian/xxtea@1.2.10...@sirian/xxtea@1.2.11) (2021-02-05)
+
+**Note:** Version bump only for package @sirian/xxtea
+
+
+
+
+
 ## [1.2.10](https://github.com/sirian/js/compare/@sirian/xxtea@1.2.9...@sirian/xxtea@1.2.10) (2021-02-05)
 
 **Note:** Version bump only for package @sirian/xxtea

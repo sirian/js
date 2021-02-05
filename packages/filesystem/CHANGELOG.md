@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.6](https://github.com/sirian/js/compare/@sirian/filesystem@1.10.5...@sirian/filesystem@1.10.6) (2021-02-05)
+
+**Note:** Version bump only for package @sirian/filesystem
+
+
+
+
+
 ## [1.10.5](https://github.com/sirian/js/compare/@sirian/filesystem@1.10.4...@sirian/filesystem@1.10.5) (2021-02-05)
 
 **Note:** Version bump only for package @sirian/filesystem
