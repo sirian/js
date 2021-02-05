@@ -1,6 +1,6 @@
 import {ByteArray} from "../../src";
 
-describe.only("ByteArray.from", () => {
+describe("ByteArray.from", () => {
     const data: Array<[any, number[]]> = [
         ["", []],
         ["foo", [102, 111, 111]],

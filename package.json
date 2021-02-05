@@ -21,7 +21,7 @@
         "ts-jest": "^26.5.0",
         "ts-node": "^9.1.1",
         "tslint": "^5.0",
-        "typescript": "^4.2.0-dev.20210204"
+        "typescript": "^4.2.0-dev.20210205"
     },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build:all",
