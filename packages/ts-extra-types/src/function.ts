@@ -24,7 +24,7 @@ export type Func<TReturn = any, TArgs extends ArrayRO = any[], This = any> = (th
 export type Func0<R = any> = () => R;
 export type Func1<R = any, A = any> = (a: A) => R;
 export type Func2<R = any, A = any, B = any> = (a: A, b: B) => R;
-export type VoidFunc<TArgs extends ArrayRO = any[], This = any> = (this: This, ...args: TArgs) => void;
+// export type VoidFunc<TArgs extends ArrayRO = any[], This = any> = (this: This, ...args: TArgs) => void;
 
 export type Return<T> = T extends Func<infer R> ? R : never;
 
