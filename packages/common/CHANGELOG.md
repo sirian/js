@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.17.0](https://github.com/sirian/js/compare/@sirian/common@5.16.5...@sirian/common@5.17.0) (2021-02-07)
+
+
+### Features
+
+* **common:** swap(arr, i, j) ([0332e42](https://github.com/sirian/js/commit/0332e42d85f920314b4fbb2fe2a2ae15ad14ed04))
+
+
+
+
+
 ## [5.16.5](https://github.com/sirian/js/compare/@sirian/common@5.16.4...@sirian/common@5.16.5) (2021-02-07)
 
 **Note:** Version bump only for package @sirian/common
