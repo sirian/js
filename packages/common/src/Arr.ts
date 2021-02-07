@@ -86,6 +86,8 @@ export const intersect = <T>(array: Iterable<T>, ...arrays: Array<Iterable<T>>):
     return toArray(array).filter((value) => sets.every((set) => set.has(value)));
 };
 
+export const  swap = (arr: any[], i: number, j: number)  => [arr[i], arr[j]] = [arr[j], arr[i]];
+
 export class Arr {
     public static removeItem<T>(array: T[], value: T, limit?: number) {
         return Arr.remove(array, (item) => isEqual(item, value), limit);
