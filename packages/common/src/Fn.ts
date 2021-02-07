@@ -2,6 +2,8 @@ import {Args, Func, Func0, Func1, Get, Negate, Return, Splice} from "@sirian/ts-
 import {apply} from "./Ref";
 import {isFunction, isPromiseLike} from "./Var";
 
+export const noop = (() => {}) as Func;
+
 export const not = <F extends Func>(fn: F) => function(this: any, ...args) {
     return !apply(fn, this, args);
 } as Negate<F>;

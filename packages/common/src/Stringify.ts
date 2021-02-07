@@ -1,7 +1,9 @@
-function helper<T extends { toString: () => string }>(ctor: { prototype: T }) {
-    const toString = ctor.prototype.toString;
-    return (v: T) => toString.call(v);
+import {noop} from "./Fn";
+
+function helper(obj: { toString: () => string }) {
+    const {toString} = obj;
+    return (v: any) => toString.call(v);
 }
 
-export const stringifyObj = helper(Object);
-export const stringifyFn = helper(Function);
+export const stringifyObj = helper({});
+export const stringifyFn = helper(noop);

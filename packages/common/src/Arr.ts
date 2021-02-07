@@ -1,6 +1,56 @@
-import {ArrayRO, Head, LastElement, Nullish} from "@sirian/ts-extra-types";
-import {isArray, isEqual, isNullish} from "./Var";
-import {XSet} from "./XSet";
+import {ArrayRO, LastElement, Nullish, TupleOf} from "@sirian/ts-extra-types";
+import {isArray, isArrayLike, isEqual, isIterable, isNullish} from "./Var";
+
+export const range = (from: number, to: number, step: number = 1) => {
+    const result = [];
+    const sign = step > 0 ? 1 : -1;
+    while (sign * (to - from) >= 0) {
+        result.push(from);
+        from += step;
+    }
+    return result;
+};
+
+type First<T> =
+    T extends { 0: infer V1 } ? V1 :
+    T extends { 0?: infer V2 } ? V2 | undefined :
+    T extends Iterable<infer V3> | ArrayLike<infer V3> ? V3 | undefined :
+    never;
+
+export const each = <T>(value: Iterable<T>, fn: (value: T) => boolean | void) => {
+    for (const x of value) {
+        if (false === fn(x)) {
+            break;
+        }
+    }
+};
+
+export const first = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
+    if (isIterable(value)) {
+        for (const x of value) {
+            return x as First<T>;
+        }
+    }
+    return (value as any)[0] as First<T>;
+};
+
+type Last<T> =
+    T extends ArrayRO ? LastElement<T> :
+    T extends Iterable<infer V> | ArrayLike<infer V> ? V | undefined :
+    never;
+
+export const last = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
+    if (isArrayLike(value)) {
+        return value[value.length - 1] as Last<T>;
+    }
+    let res;
+    if (isIterable(value)) {
+        for (const x of value) {
+            res = x;
+        }
+    }
+    return res as Last<T>;
+};
 
 export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] => {
     if (isArray(value)) {
@@ -20,17 +70,25 @@ export const uniq = <T>(input: Iterable<T>) => {
     return [...new Set(input)];
 };
 
-export class Arr {
-    public static removeItem<T>(array: T[], value: T, limit?: number) {
-        return Arr.remove(array, (item) => isEqual(item, value), limit);
-    }
-
-    public static create<T>(length: number, fill: (index: number) => T): T[] {
-        const a = Array(length);
+export const makeArray = <N extends number, T = undefined>(length: N, fill?: (index: number) => T) => {
+    const a = Array(length);
+    if (fill) {
         for (let i = 0; i < length; i++) {
             a[i] = fill(i);
         }
-        return a;
+    }
+    return a as TupleOf<T, N>;
+};
+
+export const intersect = <T>(array: Iterable<T>, ...arrays: Array<Iterable<T>>): T[] => {
+    const sets = arrays.map((arr) => new Set(arr));
+
+    return toArray(array).filter((value) => sets.every((set) => set.has(value)));
+};
+
+export class Arr {
+    public static removeItem<T>(array: T[], value: T, limit?: number) {
+        return Arr.remove(array, (item) => isEqual(item, value), limit);
     }
 
     public static remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
@@ -51,12 +109,6 @@ export class Arr {
         return array;
     }
 
-    public static intersect<T>(array: T[], ...arrays: T[][]): T[] {
-        const sets = arrays.map((arr) => new XSet(arr));
-
-        return array.filter((value) => sets.every((set) => set.has(value)));
-    }
-
     public static chunk(value: any[], size: number) {
         const result = [];
 
@@ -64,32 +116,5 @@ export class Arr {
             result.push(value.slice(i, i + size));
         }
         return result;
-    }
-
-    public static removeDuplicates<T>(array: T[]) {
-        const set = new Set(array);
-
-        array.splice(0, array.length, ...set);
-
-        return array;
-    }
-
-    public static range(from: number, to: number, step: number = 1) {
-        const result = [];
-        const sign = step > 0 ? 1 : -1;
-        while (sign * (to - from) >= 0) {
-            result.push(from);
-            from += step;
-        }
-        return result;
-    }
-
-    public static first<T extends any[]>(value: T): Head<T> {
-        return value[0];
-    }
-
-    public static last<T extends ArrayRO>(value: T) {
-        const length = value && value.length;
-        return value[length - 1] as LastElement<T>;
     }
 }

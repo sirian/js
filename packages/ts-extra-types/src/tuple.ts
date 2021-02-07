@@ -1,7 +1,7 @@
 import {KeyToNumber} from "./cast";
 import {Lengthwise} from "./interfaces";
 import {MustBeArray} from "./mustbe";
-import {Add, Dec, INumber, SNumber} from "./number";
+import {Add, Dec, Decs, INumber, SNumber} from "./number";
 import {KeyOf, ObjEntryOf, OmitIndexSignature} from "./object";
 import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
 
@@ -153,5 +153,5 @@ type _Flatten<T> = T extends ArrayRO<infer U> ? _Flatten<U> : T;
 
 export type TupleOf<T, N extends number> =
     N extends 0 ? [] :
-    number extends N ? T[] :
-    [T, ...TupleOf<T, Dec<N>>];
+    N extends Decs ? [T, ...TupleOf<T, Dec<N>>] :
+    T[];

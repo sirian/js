@@ -129,7 +129,7 @@ export const isBetween = <T extends string | number | bigint>(x: T, min: T, max:
 
 export const isArray = Array.isArray;
 
-export const isArrayLike = (value: any, strict: boolean = true): value is { length: number } => {
+export const isArrayLike = (value: any, strict: boolean = true): value is ArrayLike<any> => {
     if (isString(value)) {
         return true;
     }

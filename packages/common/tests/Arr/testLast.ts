@@ -1,13 +1,13 @@
-import {Arr} from "../../src";
+import {last} from "../../src";
 
-describe("Arr.last", () => {
+describe("last", () => {
     const data: Array<[any, any[]]> = [
         [undefined, []],
         [1, [1]],
         [1, [2, 1]],
     ];
 
-    test.each(data)("%o === Arr.last(%o)", (expected, arr) => {
-        expect(Arr.last(arr)).toBe(expected);
+    test.each(data)("%o === last(%o)", (expected, arr) => {
+        expect(last(arr)).toBe(expected);
     });
 });

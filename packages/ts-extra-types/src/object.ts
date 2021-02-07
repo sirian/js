@@ -71,7 +71,7 @@ export type Has<T, K extends AnyKey> =
     K extends keyof T ? true : IsExtends<T, Rec<K>>;
 
 export type GetDeep<T, L extends AnyKey[], D = never> =
-    L extends Tuple<MustBeKey<infer H>, infer R>
+    L extends [MustBeKey<infer H>, ...infer R]
     ? Has<T, H> extends true
       ? R extends AnyKey[]
         ? GetDeep<Get<T, H>, R, D>

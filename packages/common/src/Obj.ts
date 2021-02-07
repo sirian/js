@@ -75,6 +75,16 @@ export const fromEntries = <E extends Entry>(data: E[] | Iterable<E>): FromEntri
 
 export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");
 
+export const pick = <T, K extends keyof T>(target: T, k: Iterable<K>): Pick<T, K> => {
+    const obj: any = {};
+    for (const key of k) {
+        if (hasProp(target, key)) {
+            obj[key] = target[key];
+        }
+    }
+    return obj;
+};
+
 export class Obj {
     public static keys = keysOf;
     public static values = valuesOf;
@@ -89,7 +99,7 @@ export class Obj {
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
         const k = keysOf(target) as Array<keyof T>;
         for (const source of sources) {
-            assign(target, Obj.pick(source, k));
+            assign(target, pick(source, k));
         }
         return target;
     }
@@ -115,7 +125,7 @@ export class Obj {
             }
         }
 
-        return Obj.pick(target, [...keySet]);
+        return pick(target, [...keySet]);
     }
 
     public static create(o?: null): Record<any, any>;
@@ -151,15 +161,5 @@ export class Obj {
             obj[key] = v[index];
             return obj;
         }, {} as any);
-    }
-
-    public static pick<T, K extends keyof T>(target: T, k: Iterable<K>): Pick<T, K> {
-        const obj: any = {};
-        for (const key of k) {
-            if (hasProp(target, key)) {
-                obj[key] = target[key];
-            }
-        }
-        return obj;
     }
 }

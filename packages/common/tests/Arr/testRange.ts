@@ -1,4 +1,4 @@
-import {Arr} from "../../src";
+import {range} from "../../src";
 
 describe("Arr.range", () => {
     const data: Array<[number, number, number, number[]]> = [
@@ -13,6 +13,6 @@ describe("Arr.range", () => {
     ];
 
     test.each(data)("Arr.range(%o, %o, %o) === %o", (from, to, step, expected) => {
-        expect(Arr.range(from, to, step)).toStrictEqual(expected);
+        expect(range(from, to, step)).toStrictEqual(expected);
     });
 });

@@ -1,5 +1,5 @@
 import {And, IsArray, Push} from "@sirian/ts-extra-types";
-import {Arr, isArray} from "../src";
+import {isArray, makeArray} from "../src";
 
 export class TestUtil {
     public static eval(code: string) {
@@ -85,10 +85,10 @@ export class TestUtil {
     }
 
     public static randString(min: number, max = min) {
-        return Arr.create(TestUtil.rand(min, max), TestUtil.randChar).join("");
+        return makeArray(TestUtil.rand(min, max), TestUtil.randChar).join("");
     }
 
     public static randStrings(count: number, minLength = 0, maxLength = 30) {
-        return Arr.create(count, () => TestUtil.randString(minLength, maxLength));
+        return makeArray(count, () => TestUtil.randString(minLength, maxLength));
     }
 }
