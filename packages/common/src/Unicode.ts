@@ -1,6 +1,7 @@
 import {Primitive} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
 import {ByteArraySource} from "./ByteArray";
+import {tryCatch} from "./Fn";
 import {isArrayBuffer, isArrayBufferView, isPrimitive, stringifyVar} from "./Var";
 
 declare class TextEncoder {
@@ -28,10 +29,5 @@ export const toUTF =
     (input?: ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive) =>
         isPrimitive(input) ? stringifyVar(input) : new TextDecoder().decode(toBytes(input));
 
-export const isUTF8String = (source: string) => {
-    try {
-        return source === decodeURIComponent(encodeURIComponent(source));
-    } catch (e) {
-        return false;
-    }
-};
+export const isUTF8String = (source: string) =>
+    tryCatch(() => source === decodeURIComponent(encodeURIComponent(source)), false);

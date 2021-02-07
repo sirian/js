@@ -70,15 +70,8 @@ export const uniq = <T>(input: Iterable<T>) => {
     return [...new Set(input)];
 };
 
-export const makeArray = <N extends number, T = undefined>(length: N, fill?: (index: number) => T) => {
-    const a = Array(length);
-    if (fill) {
-        for (let i = 0; i < length; i++) {
-            a[i] = fill(i);
-        }
-    }
-    return a as TupleOf<T, N>;
-};
+export const makeArray = <N extends number, T = undefined>(length: N, fill: (index: number) => T) =>
+    Array.from({length}, (v, i) => fill(i)) as TupleOf<T, N>;
 
 export const intersect = <T>(array: Iterable<T>, ...arrays: Array<Iterable<T>>): T[] => {
     const sets = arrays.map((arr) => new Set(arr));
@@ -86,7 +79,7 @@ export const intersect = <T>(array: Iterable<T>, ...arrays: Array<Iterable<T>>):
     return toArray(array).filter((value) => sets.every((set) => set.has(value)));
 };
 
-export const  swap = (arr: any[], i: number, j: number)  => [arr[i], arr[j]] = [arr[j], arr[i]];
+export const swap = (arr: any[], i: number, j: number) => [arr[i], arr[j]] = [arr[j], arr[i]];
 
 export class Arr {
     public static removeItem<T>(array: T[], value: T, limit?: number) {

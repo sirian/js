@@ -1,4 +1,5 @@
 import {Args, Func, Func0, Func1, Get, Negate, Return, Splice} from "@sirian/ts-extra-types";
+import {keysOf} from "./Obj";
 import {apply} from "./Ref";
 import {isFunction, isPromiseLike} from "./Var";
 
@@ -26,7 +27,7 @@ export async function tryAsync(fn: Func0, onError?: any) {
     const fallback = (error: any) => isFunction(onError) ? onError(error) : onError;
     try {
         const result = fn();
-        return isPromiseLike(result) ? result.then((v) => v, fallback) : result;
+        return isPromiseLike(result) ? result.then(null, fallback) : result;
     } catch (error) {
         return fallback(error);
     }
@@ -39,7 +40,7 @@ export const callableClass = <T extends object, K extends keyof T>(method: K, ct
 }) as T & T[K];
 
 export function createFn<T extends Record<string, any>>(code: string, args: T) {
-    const argNames = Object.keys(args);
+    const argNames = keysOf(args);
     const fn = new Function(...argNames, code);
     return function(newArgs: Partial<T> = {}) {
         const a = {...args, newArgs};
