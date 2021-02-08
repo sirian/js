@@ -1,7 +1,7 @@
 {
     "name": "@sirian/ts-extra-types",
     "description": "TypeScript extra types",
-    "version": "3.59.6",
+    "version": "3.59.7",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"

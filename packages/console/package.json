@@ -1,7 +1,7 @@
 {
     "name": "@sirian/console",
     "description": "The Console component allows you to create command-line commands",
-    "version": "6.7.10",
+    "version": "6.7.11",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -28,12 +28,12 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^5.17.0",
-        "@sirian/decorators": "^1.5.16",
-        "@sirian/error": "^2.2.4",
-        "@sirian/event-dispatcher": "^5.1.19",
-        "@sirian/ts-extra-types": "^3.59.6",
-        "@sirian/xpromise": "^2.10.4",
+        "@sirian/common": "^5.17.1",
+        "@sirian/decorators": "^1.5.17",
+        "@sirian/error": "^2.2.5",
+        "@sirian/event-dispatcher": "^5.1.20",
+        "@sirian/ts-extra-types": "^3.59.7",
+        "@sirian/xpromise": "^2.10.5",
         "error-stack-parser": "^2.0.4"
     },
     "devDependencies": {
