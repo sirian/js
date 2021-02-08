@@ -1,6 +1,6 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
-import {MustBe, MustBeKey, MustBeString} from "./mustbe";
+import {MustBe, MustBeString} from "./mustbe";
 import {ArrayRO, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
@@ -65,21 +65,23 @@ export type ObjEntryOf<T> =
 
 export type Get<T, K extends AnyKey, TDefault = never> =
     K extends keyof T ? T[K] :
-    T extends { [P in K]: infer V } ? V : TDefault;
+    T extends { [P in K]: infer V } ? V :
+        // T extends { [P in K]?: infer V } ? V | undefined :
+    TDefault;
 
 export type Has<T, K extends AnyKey> =
     K extends keyof T ? true : IsExtends<T, Rec<K>>;
 
-export type GetDeep<T, L extends AnyKey[], D = never> =
-    L extends [MustBeKey<infer H>, ...infer R]
-    ? Has<T, H> extends true
-      ? R extends AnyKey[]
-        ? GetDeep<Get<T, H>, R, D>
-        : never
-      : D
-    : T;
+export type GetDeep<T, L extends AnyKey[]> =
+    L extends [] ? T :
+    T extends any ? GetDeep<Get<T, L[0]>, Tail<L>> :
+    never;
 
-export type ExpandKey<K extends AnyKey> = K | ExcludeWide<KeyToString<K>> | ExcludeWide<KeyToNumber<K>>;
+export type ExpandKey<K extends AnyKey> =
+    number extends K ? K :
+    string extends K ? K :
+    K | KeyToNumber<K> | KeyToString<K>;
+
 export type Expand<T> = { [P in ExpandKey<keyof T>]?: unknown } & T;
 
 export type MyPick<T, K extends AnyKey> = Pick<T, KeyOf<T, ExpandKey<K>>>;

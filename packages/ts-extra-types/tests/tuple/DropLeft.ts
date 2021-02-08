@@ -9,6 +9,8 @@ type Test = [
     AssertExact<string[], DropLeft<1, [number, ...string[]]>>,
     AssertExact<string[], DropLeft<2, [number, ...string[]]>>,
     AssertExact<[number, ...string[]], DropLeft<0, [number, ...string[]]>>,
+    AssertExact<string[], DropLeft<1, [number, ...string[]]>>,
+    AssertExact<string[], DropLeft<2, [number, ...string[]]>>,
 
     AssertExact<[], DropLeft<2, []>>,
     AssertExact<[], DropLeft<2, [number]>>,

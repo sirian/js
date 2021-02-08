@@ -1,12 +1,12 @@
 import {hasMethod, isInstanceOf, isObjectOrFunction, isPrimitive, isPropWritable, Str} from "@sirian/common";
-import {Cast, Get, GetDeep, MustBe} from "@sirian/ts-extra-types";
+import {Get, GetDeep} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
 import {Path, PathElement, PathKey, PropertyPath} from "./PropertyPath";
 
 export type DeepType<T, P extends Path> =
-    P extends PathKey ? Get<T, P, unknown> :
-    P extends [MustBe<infer H, PathKey>, ...infer R] ? GetDeep<Get<T, H>, Cast<R, PathKey[]>> :
-    T;
+    P extends PathKey ? Get<T, P> :
+    P extends PathKey[] ? GetDeep<T, P> :
+    never;
 
 export const enum AccessType {
     NOT_FOUND,

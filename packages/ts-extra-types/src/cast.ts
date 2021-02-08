@@ -17,6 +17,10 @@ export type KeyToNumber<K extends AnyKey> =
     never;
 
 export type KeyToString<K extends AnyKey> =
-    K extends string ? K :
-    K extends number ? { [P in keyof Numbers]: K extends Numbers[P] ? P : never }[keyof Numbers] :
-    never;
+    K extends string | number ? ToString<K> : never;
+
+export type ToString<T> =
+    T extends string | number | bigint | boolean | null | undefined ? `${T}` : string;
+
+// type SplitString<S extends string, D extends string> =
+//     S extends `${infer A}${D}${infer R}` ? [A, ...SplitString<R, D>] : [S];

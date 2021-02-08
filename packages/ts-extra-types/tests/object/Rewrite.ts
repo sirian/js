@@ -20,6 +20,7 @@ type Test = [
     AssertExact<number | string, Rewrite<number | string>>,
     AssertExact<TypeGuard1, TypeGuard2>,
     AssertExact<TypeGuard2, TypeGuard1>,
+
     MustBeArray<Rewrite<[1, 2]>>,
     MustBeArray<Rewrite<number[]>>
 ];

@@ -1,5 +1,5 @@
+import {Cast} from "./cast";
 import {Thenable} from "./interfaces";
-import {MustBeArray, MustBeFunc} from "./mustbe";
 import {Overwrite} from "./object";
 import {ArrayRO, Head, LastElement, Length, Tuple, TupleGet} from "./tuple";
 import {NotFunc, Primitive} from "./types";
@@ -45,8 +45,7 @@ export type Args<F> =
 export type CtorArgs<F> = F extends Ctor<any, infer A> ? A : never;
 export type FnArgs<F> = F extends Func<any, infer A> ? A : never;
 
-export type Arg<N extends number, F> =
-    Args<F> extends MustBeArray<infer A> ? TupleGet<A, N> : never;
+export type Arg<N extends number, F> = TupleGet<Args<F>, N>;
 
 export type Arg1<F> = Arg<0, F>;
 export type Arg2<F> = Arg<1, F>;
@@ -58,35 +57,31 @@ export type ArgCount<F> = Length<Args<F>>;
 export type ThisArg<T> = ThisParameterType<T>;
 
 export type PromisifyNode<F> =
-    Args<F> extends MustBeArray<infer A>
-    ? A extends [...infer U, infer Last]
-      ? Last extends (err: any, value: infer R) => any
-        ? Func<Promise<R>, U, ThisArg<F>>
-        : never
-      : never
+    Args<F> extends [...infer U, (err: any, value: infer R) => any]
+    ? Func<Promise<R>, U, ThisArg<F>>
     : never;
 
 export type Overloads<F extends Func> =
     F extends {
-          (...args: infer A1): infer R1; (...args: infer A2): infer R2; (...args: infer A3): infer R3;
-          (...args: infer A4): infer R4; (...args: infer A5): infer R5; (...args: infer A6): infer R6;
+          (...a: infer A1): infer R1; (...a: infer A2): infer R2; (...a: infer A3): infer R3;
+          (...a: infer A4): infer R4; (...a: infer A5): infer R5; (...a: infer A6): infer R6;
       } ? [A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5] | [A6, R6] :
     F extends {
-          (...args: infer A1): infer R1; (...args: infer A2): infer R2; (...args: infer A3): infer R3;
-          (...args: infer A4): infer R4; (...args: infer A5): infer R5;
+          (...a: infer A1): infer R1; (...a: infer A2): infer R2; (...a: infer A3): infer R3;
+          (...a: infer A4): infer R4; (...a: infer A5): infer R5;
       } ? [A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5] :
     F extends {
-          (...args: infer A1): infer R1; (...args: infer A2): infer R2;
-          (...args: infer A3): infer R3; (...args: infer A4): infer R4;
+          (...a: infer A1): infer R1; (...a: infer A2): infer R2;
+          (...a: infer A3): infer R3; (...a: infer A4): infer R4;
       } ? [A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] :
     F extends {
-          (...args: infer A1): infer R1; (...args: infer A2): infer R2; (...args: infer A3): infer R3;
+          (...a: infer A1): infer R1; (...a: infer A2): infer R2; (...a: infer A3): infer R3;
       } ? [A1, R1] | [A2, R2] | [A3, R3] :
     F extends {
-          (...args: infer A1): infer R1; (...args: infer A2): infer R2;
+          (...a: infer A1): infer R1; (...a: infer A2): infer R2;
       } ? [A1, R1] | [A2, R2] :
     F extends {
-          (...args: infer A1): infer R1;
+          (...a: infer A1): infer R1;
       } ? [A1, R1] :
     never;
 
@@ -103,15 +98,9 @@ export type OverloadedReturn<F extends Func, TArgs extends ArrayRO> =
 export type Compose<T extends Func, U extends Func1<any, Return<T>>> = Func<Return<U>, Args<T>>;
 
 export type ValidPipe<Fns extends Func[], Expected extends ArrayRO = any[]> =
-    Fns extends Tuple<MustBeFunc<infer H>, infer Z>
-    ? H extends Func<infer R>
-      ? Z extends Func[]
-        ? [Func<any, Expected>, ...ValidPipe<Z, [R]>]
-        : never
-      : never
+    Fns extends Tuple<Func<infer R>, infer Z>
+    ? [Func<any, Expected>, ...ValidPipe<Cast<Z, Func[]>, [R]>]
     : [];
 
 export type Pipe<Fns extends ValidPipe<Fns1>, Fns1 extends Func[] = Fns> =
-    LastElement<Fns> extends Func<infer R>
-    ? Func<R, Args<Head<Fns>>>
-    : never;
+    Func<Return<LastElement<Fns>>, Args<Head<Fns>>>;

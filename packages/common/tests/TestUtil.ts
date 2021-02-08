@@ -1,4 +1,4 @@
-import {And, IsArray, Push} from "@sirian/ts-extra-types";
+import {And, IsArray} from "@sirian/ts-extra-types";
 import {isArray, makeArray} from "../src";
 
 export class TestUtil {
@@ -17,7 +17,7 @@ export class TestUtil {
             ...trueData.map((v) => oneArg ? [v, true] : [...v, true]),
             ...falseData.map((v) => oneArg ? [v, false] : [...v, false]),
         ] as And<IsArray<X[number]>, IsArray<Y[number]>> extends true
-             ? Array<Push<X[number], true> | Push<Y[number], false>>
+             ? Array<[...X[number], true] | [...Y[number], false]>
              : Array<[X[number], true] | [Y[number], false]>;
     }
 
