@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.60.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.59.7...@sirian/ts-extra-types@3.60.0) (2021-02-09)
+
+
+### Features
+
+* **ts-extra-types:** StrToArray, StrJoin, StrLength ([6aea599](https://github.com/sirian/js/commit/6aea59906fa477ff128152479745d284990e5912))
+
+
+
+
+
 ## [3.59.7](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.59.6...@sirian/ts-extra-types@3.59.7) (2021-02-08)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

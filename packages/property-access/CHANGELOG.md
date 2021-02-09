@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/sirian/js/compare/@sirian/property-access@1.4.19...@sirian/property-access@1.5.0) (2021-02-09)
+
+
+### Features
+
+* **property-access:** Property const ([291c6cd](https://github.com/sirian/js/commit/291c6cd6e99219679886ab79a7628ff070cc40ef))
+
+
+
+
+
 ## [1.4.19](https://github.com/sirian/js/compare/@sirian/property-access@1.4.18...@sirian/property-access@1.4.19) (2021-02-08)
 
 **Note:** Version bump only for package @sirian/property-access
