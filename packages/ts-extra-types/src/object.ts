@@ -47,16 +47,12 @@ export type BuiltinObjTagMap = {
 };
 
 export type ObjKeyOf<T> =
-    T extends ArrayRO ? TupleKeyOf<T> | If<IsOpenTuple<T>, string> :
-    {
-        [P in keyof T]-?:
-        P extends string ? P :
-        P extends number ? KeyToString<P> :
-        never;
-    }[keyof T];
+    T extends ArrayRO
+    ? TupleKeyOf<T> | If<IsOpenTuple<T>, string>
+    : KeyToString<KeyOf<T>>;
 
 export type ObjValueOf<T> =
-    T extends ArrayRO ? T[number] : T[keyof T];
+    T extends ArrayRO<infer V> ? V : T[keyof T];
 
 export type ObjEntryOf<T> =
     T extends ArrayRO

@@ -9,6 +9,7 @@ export * from "./logic";
 export * from "./number";
 export * from "./object";
 export * from "./promise";
+export * from "./string";
 export * from "./tree";
 export * from "./tuple";
 export * from "./types";

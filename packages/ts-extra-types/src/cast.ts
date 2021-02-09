@@ -12,15 +12,17 @@ export type CastBool<T> =
     boolean;
 
 export type KeyToNumber<K extends AnyKey> =
-    K extends number ? K :
-    K extends keyof Numbers ? Numbers[K] :
-    never;
+    K extends number | string ? ToNumber<K> : never;
 
 export type KeyToString<K extends AnyKey> =
     K extends string | number ? ToString<K> : never;
 
 export type ToString<T> =
     T extends string | number | bigint | boolean | null | undefined ? `${T}` : string;
+
+export type ToNumber<T> =
+    T extends number ? T :
+    T extends keyof Numbers ? Numbers[T] : never;
 
 // type SplitString<S extends string, D extends string> =
 //     S extends `${infer A}${D}${infer R}` ? [A, ...SplitString<R, D>] : [S];
