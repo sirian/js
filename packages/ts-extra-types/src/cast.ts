@@ -23,6 +23,3 @@ export type ToString<T> =
 export type ToNumber<T> =
     T extends number ? T :
     T extends keyof Numbers ? Numbers[T] : never;
-
-// type SplitString<S extends string, D extends string> =
-//     S extends `${infer A}${D}${infer R}` ? [A, ...SplitString<R, D>] : [S];
