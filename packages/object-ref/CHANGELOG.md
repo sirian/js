@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.22](https://github.com/sirian/js/compare/@sirian/object-ref@1.1.21...@sirian/object-ref@1.1.22) (2021-02-10)
+
+**Note:** Version bump only for package @sirian/object-ref
+
+
+
+
+
 ## [1.1.21](https://github.com/sirian/js/compare/@sirian/object-ref@1.1.20...@sirian/object-ref@1.1.21) (2021-02-09)
 
 **Note:** Version bump only for package @sirian/object-ref

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.10](https://github.com/sirian/js/compare/@sirian/devtools@1.2.9...@sirian/devtools@1.2.10) (2021-02-10)
+
+**Note:** Version bump only for package @sirian/devtools
+
+
+
+
+
 ## [1.2.9](https://github.com/sirian/js/compare/@sirian/devtools@1.2.8...@sirian/devtools@1.2.9) (2021-02-09)
 
 **Note:** Version bump only for package @sirian/devtools

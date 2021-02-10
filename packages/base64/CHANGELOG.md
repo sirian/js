@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/sirian/js/compare/@sirian/base64@2.2.9...@sirian/base64@2.3.0) (2021-02-10)
+
+
+### Features
+
+* **base64:** export base64Test ([3df26f6](https://github.com/sirian/js/commit/3df26f69fbf22a27d5e556fd48d5d731473a5840))
+
+
+
+
+
 ## [2.2.9](https://github.com/sirian/js/compare/@sirian/base64@2.2.8...@sirian/base64@2.2.9) (2021-02-09)
 
 **Note:** Version bump only for package @sirian/base64
