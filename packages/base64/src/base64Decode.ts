@@ -12,15 +12,15 @@ const revLookup = (b64: string, index: number) => {
 };
 
 export function base64Decode(b64: string): Uint8Array {
-    if (!b64.length) {
+    let length = b64.length;
+    if (!length) {
         return new Uint8Array();
     }
 
-    while (b64.length % 4 > 0) {
+    while (length % 4 > 0) {
         b64 += "=";
+        length++;
     }
-
-    const length = b64.length;
 
     const placeHolders = "=" === b64[length - 2] ? 2 : +("=" === b64[length - 1]);
     const byteLength = (length * 3 / 4) - placeHolders;
@@ -33,32 +33,35 @@ export function base64Decode(b64: string): Uint8Array {
 
     let i = 0;
     let k = 0;
+    let tmp;
+    const mask = 0xFF;
     for (; i < l; i += 4) {
-        const tmp = 0
+        tmp = 0
             | (rev(i) << 18)
             | (rev(i + 1) << 12)
             | (rev(i + 2) << 6)
             | (rev(i + 3))
         ;
-        bytes[k++] = 0xFF & (tmp >> 16);
-        bytes[k++] = 0xFF & (tmp >> 8);
-        bytes[k++] = 0xFF & (tmp);
+        bytes[k++] = mask & (tmp >> 16);
+        bytes[k++] = mask & (tmp >> 8);
+        bytes[k++] = mask & (tmp);
     }
 
     if (placeHolders === 1) {
-        const tmp = 0
+        tmp = 0
             | (rev(i) << 10)
             | (rev(i + 1) << 4)
             | (rev(i + 2) >> 2);
 
-        bytes[k++] = 0xFF & (tmp >> 8);
-        bytes[k++] = 0xFF & (tmp);
-    } else if (placeHolders === 2) {
-        const tmp = 0
+        bytes[k++] = mask & (tmp >> 8);
+        bytes[k++] = mask & (tmp);
+    }
+    if (placeHolders === 2) {
+        tmp = 0
             | (rev(i) << 2)
             | (rev(i + 1) >> 4);
 
-        bytes[k++] = 0xFF & (tmp);
+        bytes[k++] = mask & (tmp);
     }
 
     return bytes;

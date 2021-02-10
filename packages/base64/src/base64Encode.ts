@@ -8,6 +8,7 @@ export function base64Encode(uint8: Uint8Array): string {
     const length3 = length - extraBytes;
 
     // go through the array every three bytes, we'll deal with trailing stuff later
+    const mask = 0x3F;
     for (let start = 0; start < length3; start += maxChunkLength) {
         const chunkEnd = start + maxChunkLength;
 
@@ -21,10 +22,10 @@ export function base64Encode(uint8: Uint8Array): string {
                 + (uint8[i + 2]);
 
             chunk +=
-                base64Chars[0x3F & (tmp >> 18)] +
-                base64Chars[0x3F & (tmp >> 12)] +
-                base64Chars[0x3F & (tmp >> 6)] +
-                base64Chars[0x3F & (tmp)];
+                base64Chars[mask & (tmp >> 18)] +
+                base64Chars[mask & (tmp >> 12)] +
+                base64Chars[mask & (tmp >> 6)] +
+                base64Chars[mask & (tmp)];
 
         }
         result += chunk;
@@ -35,14 +36,15 @@ export function base64Encode(uint8: Uint8Array): string {
         const tmp = uint8[length - 1];
         result +=
             base64Chars[(tmp >> 2)] +
-            base64Chars[0x3F & (tmp << 4)] +
+            base64Chars[mask & (tmp << 4)] +
             "==";
-    } else if (extraBytes === 2) {
+    }
+    if (extraBytes === 2) {
         const tmp = (uint8[length - 2] << 8) + (uint8[length - 1]);
         result +=
             base64Chars[(tmp >> 10)] +
-            base64Chars[0x3F & (tmp >> 4)] +
-            base64Chars[0x3F & (tmp << 2)] +
+            base64Chars[mask & (tmp >> 4)] +
+            base64Chars[mask & (tmp << 2)] +
             "=";
     }
 
