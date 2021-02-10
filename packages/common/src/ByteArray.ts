@@ -1,6 +1,5 @@
 import {Instance} from "@sirian/ts-extra-types";
 import {toBytes, toUTF} from "./Unicode";
-import {isPrimitive, stringifyVar} from "./Var";
 
 export type TypedArrayConstructor =
     | Int8ArrayConstructor
@@ -21,7 +20,7 @@ export class ByteArray extends Uint8Array {
     }
 
     public static stringify(buf: ByteArraySource) {
-        return isPrimitive(buf) ? stringifyVar(buf) : toUTF(ByteArray.from(buf));
+        return toUTF(buf);
     }
 
     public static convert<T extends TypedArrayConstructor>(buf: ByteArraySource, to: T) {
