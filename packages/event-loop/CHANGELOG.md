@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.4](https://github.com/sirian/js/compare/@sirian/event-loop@1.4.3...@sirian/event-loop@1.4.4) (2021-02-11)
+
+**Note:** Version bump only for package @sirian/event-loop
+
+
+
+
+
 ## [1.4.3](https://github.com/sirian/js/compare/@sirian/event-loop@1.4.2...@sirian/event-loop@1.4.3) (2020-09-09)
 
 **Note:** Version bump only for package @sirian/event-loop
