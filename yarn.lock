@@ -3350,10 +3350,15 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2, graceful-fs@^4.2.4:
+graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.5.tgz#bc18864a6c9fc7b303f2e2abdb9155ad178fbe29"
   integrity sha512-kBBSQbz2K0Nyn+31j/w36fUfxkBW9/gfwRWdUY1ULReH3iokVJgddZAFcD1D0xlgTmFxJCbUkUclAlc6/IDJkw==
+
+graceful-fs@^4.2.4:
+  version "4.2.6"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.6.tgz#ff040b2b0853b23c3d31027523706f1885d76bee"
+  integrity sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ==
 
 growly@^1.3.0:
   version "1.3.0"
@@ -4923,7 +4928,7 @@ minimist-options@^3.0.1:
     arrify "^1.0.1"
     is-plain-obj "^1.1.0"
 
-"minimist@>=0.2.1 <1.0.0 || >=1.2.3", minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5:
+minimist@^1.1.1, minimist@^1.1.3, minimist@^1.2.0, minimist@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
@@ -6927,9 +6932,9 @@ trim-off-newlines@^1.0.0:
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
 ts-jest@^26.1.0, ts-jest@^26.5.0:
-  version "26.5.0"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-26.5.0.tgz#3e3417d91bc40178a6716d7dacc5b0505835aa21"
-  integrity sha512-Ya4IQgvIFNa2Mgq52KaO8yBw2W8tWp61Ecl66VjF0f5JaV8u50nGoptHVILOPGoI7SDnShmEqnYQEmyHdQ+56g==
+  version "26.5.1"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-26.5.1.tgz#4d53ee4481552f57c1624f0bd3425c8b17996150"
+  integrity sha512-G7Rmo3OJMvlqE79amJX8VJKDiRcd7/r61wh9fnvvG8cAjhA9edklGw/dCxRSQmfZ/z8NDums5srSVgwZos1qfg==
   dependencies:
     "@types/jest" "26.x"
     bs-logger "0.x"
@@ -7048,9 +7053,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 typescript@^4.2.0-dev.20210207:
-  version "4.2.0-dev.20210207"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.0-dev.20210207.tgz#440d91b0481d110a9764be07c82e8818ef97e67e"
-  integrity sha512-AYjUONY6RLndsxZWGweKmRo50dWVe46IxOoqjeuh38btU+6Jv2PWzKRaMGe8ZF34vzt0K9zZd/zpVoaftaz6CA==
+  version "4.2.0-insiders.20210210"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.0-insiders.20210210.tgz#f109217dec41af7ef0fece60a91e5c3cce572d25"
+  integrity sha512-PBBQ/WNJ/HG+cH2nu+sPFbUPqv8FMraVihOfwlBzoa+0iGHa1I8gueJTUyBIOPU24tClLwKoU8dfscpn0rnuWw==
 
 uglify-js@^3.1.4:
   version "3.12.7"
