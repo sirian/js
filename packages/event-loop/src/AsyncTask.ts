@@ -27,7 +27,7 @@ export abstract class AsyncTask {
             const id = ++AsyncTask.lastId;
             this.id = id;
             AsyncTask.tasks.set(id, this);
-            this.startTask(this.handle.bind(this, id));
+            this.startTask(() => this.handle(id));
         }
         return this;
     }

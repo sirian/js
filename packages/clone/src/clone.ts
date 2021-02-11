@@ -1,5 +1,6 @@
 import {Cloner} from "./Cloner";
+import {CloneOptions} from "./ICloner";
 
 export const cloner = new Cloner();
-export const clone = cloner.clone.bind(cloner);
-export const cloneDeep = cloner.cloneDeep.bind(cloner);
+export const clone = <T>(src: T, options: Partial<CloneOptions> = {}) => cloner.clone(src, options);
+export const cloneDeep = <T>(src: T, options: Partial<CloneOptions> = {}) => cloner.cloneDeep(src, options);

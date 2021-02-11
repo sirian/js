@@ -9,7 +9,7 @@ export class FilterIterator<V> extends BaseIterator<V> {
 
     constructor(target: AnyIterable<V>, filter: Filter<V>) {
         super();
-        this.callback = isFunction(filter) ? filter : filter.test.bind(filter);
+        this.callback = isFunction(filter) ? filter : (value: V) => filter.test(value);
         this.target = target;
     }
 

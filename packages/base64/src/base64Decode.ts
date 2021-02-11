@@ -29,7 +29,7 @@ export function base64Decode(b64: string): Uint8Array {
 
     // if there are placeholders, only get up to the last complete 4 chars
     const l = placeHolders > 0 ? length - 4 : length;
-    const rev = revLookup.bind(null, b64);
+    const rev = (index: number) => revLookup(b64, index);
 
     let i = 0;
     let k = 0;
