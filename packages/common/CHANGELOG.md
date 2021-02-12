@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.18.0](https://github.com/sirian/js/compare/@sirian/common@5.17.4...@sirian/common@5.18.0) (2021-02-12)
+
+
+### Features
+
+* **common:** convertBytes ([2d1616c](https://github.com/sirian/js/commit/2d1616c52aa8b7c6d6024ae1a5eb5a5bcf01f364))
+
+
+
+
+
 ## [5.17.4](https://github.com/sirian/js/compare/@sirian/common@5.17.3...@sirian/common@5.17.4) (2021-02-10)
 
 **Note:** Version bump only for package @sirian/common

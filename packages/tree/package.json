@@ -1,7 +1,7 @@
 {
     "name": "@sirian/tree",
     "description": "",
-    "version": "1.1.35",
+    "version": "1.1.36",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,7 +21,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^5.17.4",
+        "@sirian/common": "^5.18.0",
         "@sirian/ts-extra-types": "^3.60.1"
     }
 }
