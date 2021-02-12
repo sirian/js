@@ -102,9 +102,7 @@ export const isObjectOrFunction = (value: any): value is object =>
 export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
     ctor.some((c) => isFunction(c) && (obj instanceof c));
 
-export const isEqualNaN = (value: any): value is number => {
-    return value !== value;
-};
+export const isEqualNaN = (value: any): value is number => value !== value;
 
 export const isEqualTuple = <T extends any[]>(x: T, y: any[]) => {
     if (!isArray(x) || !isArray(y)) {
@@ -127,7 +125,7 @@ export const isSameType = <T>(x: any, value: T): value is T =>
 export const isBetween = <T extends string | number | bigint>(x: T, min: T, max: T) =>
     isSameType(x, min) && isSameType(x, max) && x >= min && x <= max;
 
-export const isArray = Array.isArray;
+export const isArray = (v: any): v is any[] => Array.isArray(v);
 
 export const isArrayLike = (value: any, strict: boolean = true): value is ArrayLike<any> => {
     if (isString(value)) {
@@ -175,7 +173,7 @@ export const instanceOfGuard = <C extends Array<Ctor | Newable>>(...ctor: C) =>
 
 export const isRegExp = instanceOfGuard(RegExp);
 export const isArrayBuffer = instanceOfGuard(ArrayBuffer);
-export const isArrayBufferView = ArrayBuffer.isView;
+export const isArrayBufferView = (v: any): v is ArrayBufferView => ArrayBuffer.isView(v);
 
 export const isArrayBufferLike = (arg: any): arg is ArrayBufferLike =>
     isObject(arg) && isNumber(arg.byteLength) && isFunction(arg.slice);

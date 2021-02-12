@@ -1,6 +1,6 @@
-import {Primitive} from "@sirian/ts-extra-types";
+import {Instance, Primitive} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
-import {ByteArraySource} from "./ByteArray";
+import {ByteArraySource, TypedArrayConstructor} from "./ByteArray";
 import {tryCatch} from "./Fn";
 import {isArrayBuffer, isArrayBufferView, isPrimitive, stringifyVar} from "./Var";
 
@@ -25,6 +25,16 @@ export const toBytes = (source?: ByteArraySource | ArrayLike<number> | Iterable<
 
     return new Uint8Array(isArrayBuffer(source) ? source : toArray(source));
 };
+
+export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer | ArrayBufferView, to: T) => {
+    const bytes = toBytes(from);
+    const bytesPerElement = to.BYTES_PER_ELEMENT;
+    const length = bytes.length;
+    const tmp = new Uint8Array(bytesPerElement * Math.ceil(length / bytesPerElement));
+    tmp.set(bytes);
+    return new to(tmp.buffer) as Instance<T>;
+};
+
 export const toUTF =
     (input?: ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive) =>
         isPrimitive(input) ? stringifyVar(input) : new TextDecoder().decode(toBytes(input));

@@ -22,9 +22,9 @@ export interface SnapshotOptions {
     stopAt?: object;
 }
 
-export const keysOf = Object.keys as <T>(target: T) => Array<ObjKeyOf<T>>;
-export const valuesOf = Object.values as <T>(target: T) => Array<ObjValueOf<T>>;
-export const entriesOf = Object.entries as <T>(target: T) => Array<ObjEntryOf<T>>;
+export const keysOf = <T>(target: T) => Object.keys(target) as Array<ObjKeyOf<T>>;
+export const valuesOf = <T>(target: T) => Object.values(target) as Array<ObjValueOf<T>>;
+export const entriesOf = <T>(target: T) => Object.entries(target) as Array<ObjEntryOf<T>>;
 
 export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> {
     const keySet = new XSet<AnyKey>(keysOf(target));

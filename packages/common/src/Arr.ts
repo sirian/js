@@ -52,23 +52,13 @@ export const last = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
     return res as Last<T>;
 };
 
-export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] => {
-    if (isArray(value)) {
-        return value;
-    }
+export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] =>
+    isArray(value) ? value : Array.from(value ?? []);
 
-    return isNullish(value) ? [] : Array.from(value);
-};
-export const castArray = <T>(value: T): T extends ArrayRO ? T : T extends Nullish ? [] : [T] => {
-    if (isNullish(value)) {
-        return [] as any;
-    }
-    return (isArray(value) ? value : [value]) as any;
-};
+export const castArray = <T>(value: T): T extends ArrayRO ? T : T extends Nullish ? [] : [T] =>
+    isArray(value) ? value : (isNullish(value) ? [] : [value]) as any;
 
-export const uniq = <T>(input: Iterable<T>) => {
-    return [...new Set(input)];
-};
+export const uniq = <T>(input: Iterable<T>) => [...new Set(input)];
 
 export const makeArray = <N extends number, T = undefined>(length: N, fill: (index: number) => T) =>
     Array.from({length}, (v, i) => fill(i)) as TupleOf<T, N>;

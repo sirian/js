@@ -1,6 +1,6 @@
-import {ByteArray, toBytes, TypedArrayConstructor} from "../../src";
+import {convertBytes, TypedArrayConstructor} from "../../src";
 
-describe("ByteArray.convert", () => {
+describe("convertBytes", () => {
     const data: Array<[TypedArrayConstructor]> = [
             [Int8Array],
             [Int16Array],
@@ -19,7 +19,7 @@ describe("ByteArray.convert", () => {
         const sourceBuffer = source.buffer;
         const sourceView = new DataView(sourceBuffer);
 
-        const arr = ByteArray.convert(source, constructor);
+        const arr = convertBytes(source, constructor);
 
         const view = new DataView(arr.buffer);
 

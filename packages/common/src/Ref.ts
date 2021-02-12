@@ -1,4 +1,4 @@
-import {Ctor, Ctor0, CtorArgs, Ensure, Func, Instance, Newable} from "@sirian/ts-extra-types";
+import {AnyKey, Ctor, Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
 import {tryCatch} from "./Fn";
 import {TypedPropertyDescriptorMap} from "./Obj";
 import {
@@ -124,12 +124,7 @@ export function hasProp<T, K extends PropertyKey>(target: T, key: K): target is 
     return isNotNullish(target) && (key in Object(target));
 }
 
-export function getProp<T, K extends keyof T>(target: T, key: K): T[K];
-export function getProp<V, K extends PropertyKey>(target: { [P in K]: V }, key: K): V;
-export function getProp(target: any, key: PropertyKey): any;
-export function getProp(target: any, key: any) {
-    return isNullish(target) ? undefined : target[key];
-}
+export const getProp = <T, K extends AnyKey>(target: T, key: K) => (target as any)?.[key] as Get<T, K>;
 
 export function setProp<T, K extends keyof T>(target: T, key: K, value: T[K]): boolean;
 export function setProp<V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
@@ -139,7 +134,7 @@ export function setProp(target: any, key: PropertyKey, value: any) {
 }
 
 export const deleteProp = <T>(target: T, key: (keyof T) | PropertyKey) =>
-    isNullish(target) || tryCatch(() => delete target[key as keyof T], false);
+    tryCatch(() => { delete (target as any)?.[key]; }, false);
 
 export function isPropWritable(target: any, property: PropertyKey) {
     if (isNullish(target)) {

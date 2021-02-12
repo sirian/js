@@ -1,5 +1,4 @@
-import {Instance} from "@sirian/ts-extra-types";
-import {toBytes, toUTF} from "./Unicode";
+import {convertBytes, toBytes, toUTF} from "./Unicode";
 
 export type TypedArrayConstructor =
     | Int8ArrayConstructor
@@ -28,11 +27,7 @@ export class ByteArray extends Uint8Array {
     }
 
     public to<T extends TypedArrayConstructor>(typedArrayCtor: T) {
-        const bytesPerElement = typedArrayCtor.BYTES_PER_ELEMENT;
-        const elements = Math.ceil(this.byteLength / bytesPerElement);
-        const bufferView = new Uint8Array(bytesPerElement * elements);
-        bufferView.set(this, 0);
-        return new typedArrayCtor(bufferView.buffer) as Instance<T>;
+        return convertBytes(this, typedArrayCtor);
     }
 
     public toString(): string {
