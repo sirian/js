@@ -1,8 +1,7 @@
 import {Instance, Primitive} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
-import {ByteArraySource, TypedArrayConstructor} from "./ByteArray";
 import {tryCatch} from "./Fn";
-import {isArrayBuffer, isArrayBufferView, isPrimitive, stringifyVar} from "./Var";
+import {isArrayBufferLike, isArrayBufferView, isPrimitive, stringifyVar} from "./Var";
 
 declare class TextEncoder {
     public encode(input?: string): Uint8Array;
@@ -12,7 +11,22 @@ declare class TextDecoder {
     public decode(input?: Uint8Array): string;
 }
 
-export const toBytes = (source?: ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive) => {
+export type TypedArrayConstructor =
+    | Int8ArrayConstructor
+    | Int16ArrayConstructor
+    | Int32ArrayConstructor
+    | Uint8ArrayConstructor
+    | Uint8ClampedArrayConstructor
+    | Uint16ArrayConstructor
+    | Uint32ArrayConstructor
+    | Float32ArrayConstructor
+    | Float64ArrayConstructor;
+
+export type ByteArraySource = null | undefined | string | ArrayBuffer | ArrayBufferView;
+
+export type ByteInput = ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive;
+
+export const toBytes = (source?: ByteInput) => {
     if (isPrimitive(source)) {
         return new TextEncoder().encode(stringifyVar(source));
     }
@@ -23,7 +37,7 @@ export const toBytes = (source?: ByteArraySource | ArrayLike<number> | Iterable<
         return new Uint8Array(source);
     }
 
-    return new Uint8Array(isArrayBuffer(source) ? source : toArray(source));
+    return new Uint8Array(isArrayBufferLike(source) ? source : toArray(source));
 };
 
 export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer | ArrayBufferView, to: T) => {
@@ -35,9 +49,8 @@ export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer 
     return new to(tmp.buffer) as Instance<T>;
 };
 
-export const toUTF =
-    (input?: ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive) =>
-        isPrimitive(input) ? stringifyVar(input) : new TextDecoder().decode(toBytes(input));
+export const toUTF = (input?: ByteInput) =>
+    isPrimitive(input) ? stringifyVar(input) : new TextDecoder().decode(toBytes(input));
 
 export const isUTF8String = (source: string) =>
     tryCatch(() => source === decodeURIComponent(encodeURIComponent(source)), false);

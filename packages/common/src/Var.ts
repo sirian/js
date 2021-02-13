@@ -171,8 +171,8 @@ export const isIterable = (value: any): value is Iterable<any> =>
 export const instanceOfGuard = <C extends Array<Ctor | Newable>>(...ctor: C) =>
     (value: any): value is Instance<C[number]> => isInstanceOf(value, ...ctor);
 
-export const isRegExp = instanceOfGuard(RegExp);
-export const isArrayBuffer = instanceOfGuard(ArrayBuffer);
+export const isRegExp = (value: any): value is RegExp => isInstanceOf(value, RegExp);
+export const isArrayBuffer = (value: any): value is ArrayBuffer => isInstanceOf(value, ArrayBuffer);
 export const isArrayBufferView = (v: any): v is ArrayBufferView => ArrayBuffer.isView(v);
 
 export const isArrayBufferLike = (arg: any): arg is ArrayBufferLike =>

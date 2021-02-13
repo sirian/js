@@ -1,6 +1,5 @@
 export * from "./Arr";
 export * from "./BiMap";
-export * from "./ByteArray";
 export * from "./Descriptor";
 export * from "./Entries";
 export * from "./Fn";
