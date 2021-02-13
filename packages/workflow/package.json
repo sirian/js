@@ -1,7 +1,7 @@
 {
     "name": "@sirian/workflow",
     "description": "",
-    "version": "1.4.22",
+    "version": "1.4.23",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,9 +21,9 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^5.18.0",
+        "@sirian/common": "^5.18.1",
         "@sirian/error": "^2.2.7",
-        "@sirian/event-dispatcher": "^5.1.24",
+        "@sirian/event-dispatcher": "^5.1.25",
         "@sirian/ts-extra-types": "^3.60.1"
     }
 }

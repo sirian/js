@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/sirian/js/compare/@sirian/lzf@1.2.20...@sirian/lzf@1.3.0) (2021-02-13)
+
+
+### Features
+
+* **lzf:** universal lzfCompress, lzfDecompress ([cb49792](https://github.com/sirian/js/commit/cb4979275cca3e6f0ffd1579bef85481c298cdd1))
+
+
+
+
+
 ## [1.2.20](https://github.com/sirian/js/compare/@sirian/lzf@1.2.19...@sirian/lzf@1.2.20) (2021-02-12)
 
 **Note:** Version bump only for package @sirian/lzf

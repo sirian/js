@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/sirian/js/compare/@sirian/xxtea@1.2.21...@sirian/xxtea@1.3.0) (2021-02-13)
+
+
+### Features
+
+* **xxtea:** universal xxteaCompress, xxteaDecompress ([82e57e1](https://github.com/sirian/js/commit/82e57e100e7f3b3ac3b44959b856fb6418abe42e))
+
+
+
+
+
 ## [1.2.21](https://github.com/sirian/js/compare/@sirian/xxtea@1.2.20...@sirian/xxtea@1.2.21) (2021-02-12)
 
 **Note:** Version bump only for package @sirian/xxtea
