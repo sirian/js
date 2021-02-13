@@ -21,7 +21,9 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/base64": "^2.3.2",
         "@sirian/common": "^5.18.0"
+    },
+    "devDependencies": {
+        "@sirian/base64": "^2.3.2"
     }
 }

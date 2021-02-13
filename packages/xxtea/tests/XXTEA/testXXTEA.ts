@@ -1,7 +1,7 @@
-import {Base64, base64Encode} from "@sirian/base64";
-import {ByteArray} from "@sirian/common";
+import {base64Decode, base64Encode} from "@sirian/base64";
+import {toBytes} from "@sirian/common";
 import {TestUtil} from "../../../common/tests/TestUtil";
-import {XXTEA} from "../../src";
+import {xxteaDecrypt, xxteaEncrypt} from "../../src";
 
 describe("XXTEA", () => {
     const data: string[] = [
@@ -13,10 +13,9 @@ describe("XXTEA", () => {
     ];
 
     function check(value: string, key: any) {
-        const xxtea = new XXTEA(key);
-        const encrypted = xxtea.encrypt(value);
-        const decrypted = xxtea.decrypt(encrypted);
-        expect(decrypted).toStrictEqual(ByteArray.from(value));
+        const encrypted = xxteaEncrypt(value, key);
+        const decrypted = xxteaDecrypt(encrypted, key);
+        expect(decrypted).toStrictEqual(toBytes(value));
     }
 
     test.each(data)("xxtea.decrypt(xxtea.encrypt(%o)) should be same string", (value: string) => {
@@ -29,11 +28,9 @@ describe("XXTEA", () => {
         const expectedBase64 = "D4t0rVXUDl3bnWdERhqJmFIanfn/6zAxAY9jD6n9MSMQNoD8TOS4rHHcGuE=";
         const key = "1234567890";
 
-        const xxtea = new XXTEA(key);
-
-        const expected = Base64.decode(dataBase64);
-        const encrypted = xxtea.encrypt(expected);
-        const decrypted = xxtea.decrypt(encrypted);
+        const expected = base64Decode(dataBase64);
+        const encrypted = xxteaEncrypt(expected, key);
+        const decrypted = xxteaDecrypt(encrypted, key);
         expect(decrypted).toStrictEqual(expected);
 
         expect(base64Encode(encrypted)).toBe(expectedBase64);

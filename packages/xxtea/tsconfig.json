@@ -12,10 +12,10 @@
     },
     "references": [
         {
-            "path": "../base64"
+            "path": "../common"
         },
         {
-            "path": "../common"
+            "path": "../base64"
         }
     ]
 }
