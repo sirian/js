@@ -1,8 +1,7 @@
-export function lzfCompress(bytes?: Uint8Array | null) {
-    const U8Array = Uint8Array;
-    if (bytes == null || !bytes.length) {
-        return new U8Array();
-    }
+import {ByteInput, toBytes} from "@sirian/common";
+
+export const lzfCompress = (input: ByteInput) => {
+    const bytes = toBytes(input);
 
     const HLOG = 16;
     const HSIZE = (1 << HLOG);
@@ -108,7 +107,5 @@ export function lzfCompress(bytes?: Uint8Array | null) {
         output[op - lit - 1] = (lit - 1) & 255; /* stop run */
     }
 
-    const res = new U8Array(output.length);
-    res.set(output);
-    return res;
-}
+    return new Uint8Array(output);
+};

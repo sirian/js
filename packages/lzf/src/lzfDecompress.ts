@@ -1,51 +1,48 @@
-export function lzfDecompress(bytes?: Uint8Array | null) {
-    const ByteArray = Uint8Array;
-    if (null == bytes || !bytes.length) {
-        return new ByteArray();
+import {ByteInput, toBytes} from "@sirian/common";
+
+const assert = (value: boolean) => {
+    if (!value) {
+        throw new Error("sInvalid input");
     }
-    const input = new ByteArray(bytes);
+};
+
+export const lzfDecompress = (input2: ByteInput) => {
+    const bytes = toBytes(input2);
     const output: number[] = [];
 
     let ip = 0;
     let op = 0;
 
-    const throwError = () => {throw new Error("Invalid input"); };
-
-    const inputLength = input.length;
+    const inputLength = bytes.length;
+    if (!inputLength) {
+        return new Uint8Array();
+    }
     do {
-        let ctrl = input[ip++];
+        let ctrl = bytes[ip++];
 
         if (ctrl < (1 << 5)) { /* literal run */
             ctrl++;
 
-            if (ip + ctrl > inputLength) {
-                throwError();
-            }
+            assert(ip + ctrl <= inputLength);
 
             while (ctrl--) {
-                output[op++] = input[ip++];
+                output[op++] = bytes[ip++];
             }
         } else { /* back reference */
             let len = ctrl >> 5;
             let ref = op - ((ctrl & 0x1f) << 8) - 1;
 
-            if (ip >= inputLength) {
-                throwError();
-            }
+            assert(ip < inputLength);
 
             if (len === 7) {
-                len += input[ip++];
+                len += bytes[ip++];
 
-                if (ip >= inputLength) {
-                    throwError();
-                }
+                assert(ip < inputLength);
             }
 
-            ref -= input[ip++];
+            ref -= bytes[ip++];
 
-            if (ref < 0) {
-                throwError();
-            }
+            assert(ref >= 0);
 
             len += 2;
 
@@ -55,7 +52,5 @@ export function lzfDecompress(bytes?: Uint8Array | null) {
         }
     } while (ip < inputLength);
 
-    const res = new ByteArray(output.length);
-    res.set(output);
-    return res;
-}
+    return new Uint8Array(output);
+};
