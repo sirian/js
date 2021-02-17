@@ -16,11 +16,9 @@ export class DisposableMap<K = any, V = any> extends BiMap<K, V> {
 
             this.delete(target);
             const keys = this.reverse.get(target);
-            if (keys) {
-                keys.forEach((key) => this.delete(key));
-            }
+            keys?.forEach((key) => this.delete(key));
         };
 
-        Disposer.addListener("disposed", listener);
+        Disposer.on("disposed", listener);
     }
 }

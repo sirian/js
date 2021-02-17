@@ -200,4 +200,12 @@ export class Disposer extends StaticEventEmitter {
         this.disposedFully = true;
         Disposer.emit("disposed", this);
     }
+
+    public handle(callback: DisposeCallback) {
+        try {
+            callback(this);
+        } catch (e) {
+            Disposer.emit("error", e, this, callback);
+        }
+    }
 }

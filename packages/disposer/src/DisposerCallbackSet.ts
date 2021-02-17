@@ -15,32 +15,23 @@ export class DisposerCallbackSet {
     }
 
     public apply() {
-        if (this.applying) {
-            return;
+        if (!this.applying) {
+            this.applying = true;
+            this.callbacks.pickAll().forEach((fn) => this.handle(fn));
         }
-        this.applying = true;
-        this.callbacks.pickAll().forEach((fn) => this.applyCallback(fn));
     }
 
     public add(callback: DisposeCallback) {
         if (this.applying) {
-            this.applyCallback(callback);
+            this.handle(callback);
         } else {
             this.callbacks.add(callback);
         }
     }
 
-    protected applyCallback(callback: DisposeCallback) {
-        const {applied, disposer} = this;
-
-        if (!applied.insert(callback)) {
-            return;
-        }
-
-        try {
-            callback(disposer);
-        } catch (e) {
-            Disposer.emit("error", e, disposer, callback);
+    protected handle(callback: DisposeCallback) {
+        if (this.applied.insert(callback)) {
+            this.disposer.handle(callback);
         }
     }
 }
