@@ -1,4 +1,4 @@
-import {Json} from "../../src";
+import {jsonStringify} from "../../src";
 
 describe("", () => {
     const data: Array<[any, string]> = [
@@ -13,7 +13,7 @@ describe("", () => {
         [[undefined], `[null]`],
     ];
 
-    test.each(data)("Json.stringify(%o) === %o", (value, expected) => {
-        expect(Json.stringify(value)).toBe(expected);
+    test.each(data)("Json.Stringify(%o) === %o", (value, expected) => {
+        expect(jsonStringify(value)).toBe(expected);
     });
 });

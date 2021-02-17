@@ -14,6 +14,7 @@ describe("isEqualTuple", () => {
     ];
 
     const falseData: Array<[any, any]> = [
+        [Array(3), [null, null, null]],
         [[{x: 1}], [{x: 1}]],
         [[null], []],
     ];

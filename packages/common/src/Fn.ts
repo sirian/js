@@ -1,7 +1,8 @@
 import {Args, Func, Func0, Func1, Get, Negate, Return, Splice} from "@sirian/ts-extra-types";
+import {isFunction} from "./Is";
 import {keysOf} from "./Obj";
 import {apply} from "./Ref";
-import {isFunction, isPromiseLike} from "./Var";
+import {isPromiseLike} from "./Var";
 
 export const noop = (() => {}) as Func;
 

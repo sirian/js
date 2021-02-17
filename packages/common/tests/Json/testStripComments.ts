@@ -1,4 +1,4 @@
-import {Json} from "../../src";
+import {jsonStripComments} from "../../src";
 
 describe("Json.stripComments", () => {
     const data: Array<{ source: string, expected: string }> = [
@@ -55,6 +55,6 @@ describe("Json.stripComments", () => {
     ];
 
     test.each(data.map((x) => [x.source, x.expected]))("Json.stripComments(%o) === %o", (value, expected) => {
-        expect(Json.stripComments(value)).toBe(expected);
+        expect(jsonStripComments(value)).toBe(expected);
     });
 });

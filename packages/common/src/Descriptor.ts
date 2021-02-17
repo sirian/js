@@ -1,7 +1,8 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
+import {isNotNullish} from "./Is";
 import {entriesOf} from "./Obj";
 import {apply, defineProp, getDescriptor} from "./Ref";
-import {isNotNullish, isPlainObject} from "./Var";
+import {isPlainObject} from "./Var";
 
 export enum DescriptorType {
     NONE = "NONE",
@@ -19,7 +20,8 @@ export class Descriptor {
     public static wrap<T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
     public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) {
         const desc = getDescriptor(target, key);
-        const {get, set} = wrapper;
+        const get = wrapper.get;
+        const set = wrapper.set;
 
         const descriptor = Descriptor.extend(desc, {
             get(this: T) {
@@ -46,24 +48,21 @@ export class Descriptor {
     public static extend<D extends TypedPropertyDescriptor<any>>(desc: D, data: D): D;
     public static extend(desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
     public static extend(desc: PropertyDescriptor = {}, newDesc: PropertyDescriptor = {}) {
-        const {
-            configurable = true,
-            enumerable = false,
-            writable = true,
-            get,
-            set,
-            value,
-        } = desc;
-
         if (Descriptor.isAccessorDescriptor(newDesc)) {
-            desc = {get, set};
+            desc = {
+                get: desc.get,
+                set: desc.set,
+            };
         } else if (Descriptor.isDataDescriptor(newDesc)) {
-            desc = {writable, value};
+            desc = {
+                writable: desc.writable ?? true,
+                value: desc.value,
+            };
         }
 
         return {
-            configurable,
-            enumerable,
+            configurable: true,
+            enumerable: false,
             ...desc,
             ...newDesc,
         };
@@ -74,8 +73,7 @@ export class Descriptor {
 
     public static read(desc: PropertyDescriptor | undefined, obj: any) {
         if (desc && isNotNullish(obj)) {
-            const {get, value} = desc;
-            return get ? apply(get, obj) : value;
+            return desc.get ? apply(desc.get, obj) : desc.value;
         }
     }
 

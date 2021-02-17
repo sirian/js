@@ -1,17 +1,8 @@
 import {AnyKey, Ctor, Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
 import {tryCatch} from "./Fn";
-import {TypedPropertyDescriptorMap} from "./Obj";
-import {
-    ifSatisfy,
-    isConstructor,
-    isFunction,
-    isNotNullish,
-    isNullish,
-    isObjectOrFunction,
-    isPrimitive,
-    isString,
-    isSymbol,
-} from "./Var";
+import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
+
+export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 
 export interface ProtoChainOptions {
     self?: boolean;
@@ -63,12 +54,14 @@ export const ownNames = <T>(target: T) =>
 
 export function ownDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
 export function ownDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
+
 export function ownDescriptor(target: any, key: PropertyKey) {
     return Object.getOwnPropertyDescriptor(target, key);
 }
 
 export function getDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
 export function getDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
+
 export function getDescriptor(target: any, key: PropertyKey) {
     let descriptor;
     while (!descriptor && isNotNullish(target)) {
@@ -99,8 +92,7 @@ export function defineProp(t: object, k: PropertyKey, d: PropertyDescriptor) {
     return Reflect.defineProperty(t, k, d);
 }
 
-export const getConstructor = <T extends any>(target: T): Newable<T> | undefined =>
-    ifSatisfy(target && (target as any).constructor, isConstructor);
+export const getConstructor = <T extends any>(target: T): Newable<T> | undefined => (target as any)?.constructor;
 
 export function apply<R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
 export function apply<R>(target: () => R, thisArg?: any, args?: []): R;
@@ -120,9 +112,8 @@ export function construct(target: any, args: any = [], newTarget?: Function) {
 
 }
 
-export function hasProp<T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> {
-    return isNotNullish(target) && (key in Object(target));
-}
+export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
+    isNotNullish(target) && (key in Object(target));
 
 export const getProp = <T, K extends AnyKey>(target: T, key: K) => (target as any)?.[key] as Get<T, K>;
 
@@ -136,7 +127,7 @@ export function setProp(target: any, key: PropertyKey, value: any) {
 export const deleteProp = <T>(target: T, key: (keyof T) | PropertyKey) =>
     tryCatch(() => { delete (target as any)?.[key]; }, false);
 
-export function isPropWritable(target: any, property: PropertyKey) {
+export const isPropWritable = (target: any, property: PropertyKey) => {
     if (isNullish(target)) {
         return false;
     }
@@ -147,27 +138,4 @@ export function isPropWritable(target: any, property: PropertyKey) {
     }
 
     return desc.writable || isFunction(desc.set);
-}
-
-export const Ref = {
-    apply,
-    construct,
-    define: defineProp,
-    delete: deleteProp,
-    descriptor: getDescriptor,
-    descriptors: getDescriptors,
-    get: getProp,
-    getConstructor,
-    getPrototype,
-    getPrototypes,
-    has: hasProp,
-    hasMethod,
-    hasOwn,
-    ownDescriptor,
-    ownDescriptors,
-    ownKeys,
-    ownNames,
-    ownSymbols,
-    set: setProp,
-    setPrototype,
 };

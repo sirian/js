@@ -2,6 +2,7 @@ import {
     AnyKey,
     Assign,
     Entry,
+    ExtractByObjectTag,
     FromEntries,
     ObjectZip,
     ObjEntryOf,
@@ -10,12 +11,18 @@ import {
     ToPrimitive,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {deleteProp, getPrototypes, hasMethod, hasOwn, hasProp, ownDescriptors, ownKeys, ProtoChainOptions} from "./Ref";
+import {isArray, isNullish, isPrimitive} from "./Is";
+import {
+    deleteProp,
+    getPrototypes,
+    hasMethod,
+    hasOwn,
+    hasProp,
+    ownDescriptors,
+    ownKeys,
+    ProtoChainOptions,
+} from "./Ref";
 import {stringifyObj} from "./Stringify";
-import {isArray, isNullish, isPrimitive} from "./Var";
-import {XSet} from "./XSet";
-
-export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 
 export interface SnapshotOptions {
     maxDepth?: number;
@@ -27,13 +34,13 @@ export const valuesOf = <T>(target: T) => Object.values(target) as Array<ObjValu
 export const entriesOf = <T>(target: T) => Object.entries(target) as Array<ObjEntryOf<T>>;
 
 export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> {
-    const keySet = new XSet<AnyKey>(keysOf(target));
+    const keySet = new Set<AnyKey>(keysOf(target));
 
     for (const source of sources) {
         if (isNullish(source)) {
             continue;
         }
-        keySet.add(...keysOf(source));
+        keysOf(source).forEach((key) => keySet.add(key));
 
         for (const key of keySet) {
             if (hasProp(source, key)) {
@@ -85,17 +92,10 @@ export const pick = <T, K extends keyof T>(target: T, k: Iterable<K>): Pick<T, K
     return obj;
 };
 
-export class Obj {
-    public static keys = keysOf;
-    public static values = valuesOf;
-    public static entries = entriesOf;
-    public static stringify = stringifyObj;
-    public static toPrimitive = toPrimitive;
-    /** @deprecated */
-    public static getStringTag = getObjectTag;
-    public static wrap = toObject;
-    public static fromEntries = fromEntries;
+export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
+    tag === getObjectTag(obj);
 
+export class Obj {
     public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
         const k = keysOf(target) as Array<keyof T>;
         for (const source of sources) {
@@ -105,13 +105,12 @@ export class Obj {
     }
 
     public static snapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
-        const keySet = new XSet(keysOf(target) as Array<keyof T>);
-        const {stopAt = Object.prototype, maxDepth} = options;
+        const keySet = new Set(keysOf(target) as Array<keyof T>);
 
         const protoOpts: ProtoChainOptions = {
             self: true,
-            stopAt,
-            maxDepth,
+            stopAt: Object.prototype,
+            ...options,
         };
 
         for (const x of getPrototypes(target, protoOpts)) {
@@ -126,12 +125,6 @@ export class Obj {
         }
 
         return pick(target, [...keySet]);
-    }
-
-    public static create(o?: null): Record<any, any>;
-    public static create<T extends object | null | undefined, U>(o: T, properties?: TypedPropertyDescriptorMap<U>): T & U;
-    public static create(o?: object | null, properties: any = {}) {
-        return Object.create(o || null, properties);
     }
 
     public static clear<T extends object>(target: T): Partial<T> {

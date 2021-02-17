@@ -59,11 +59,7 @@ describe("sprintfjs", () => {
 
     test("should throw own Error when expression evaluation would raise TypeError", () => {
         const fmt = "%(x.y)s";
-        try {
-            sprintf(fmt, [{}]);
-        } catch (e) {
-            expect(e.message.includes("[sprintf]")).toBe(true);
-        }
+        expect(() => sprintf(fmt, [{}])).toThrow("Cannot access property \"y\" of undefined value \"x\"");
     });
 
     test("should not throw when accessing properties on the prototype", () => {

@@ -1,82 +1,69 @@
-import {JSONValue} from "@sirian/ts-extra-types";
-import {isSome, stringifyVar} from "./Var";
+import {stringifyVar} from "./Stringify";
 
-export class Json {
-    public static stringify(value: any, replacer?: (key: string, value: any) => any, space?: string | number): string;
-    public static stringify(value: any, replacer?: Array<number | string> | null, space?: string | number): string;
+export const jsonStringify = (value: any, ...args: any[]) => JSON.stringify(value ?? null, ...args);
 
-    public static stringify(value: any, ...args: any[]) {
-        if (undefined === value) {
-            value = null;
-        }
-
-        // todo: make safe circular data
-        return JSON.stringify(value, ...args);
+export const jsonParse = (text?: string | null, fn?: (key: any, value: any) => any) => {
+    if (null === text) {
+        return null;
     }
 
-    public static parse<T extends JSONValue | undefined>(text?: string | null, fn?: (key: any, value: any) => any) {
-        if (null === text) {
-            return null;
-        }
-
-        if (isSome(text, [undefined, "", "undefined"])) {
-            return undefined;
-        }
-
-        return JSON.parse(text, fn);
+    if (undefined === text || "" === text || "undefined" === text) {
+        return undefined;
     }
 
-    public static stripComments(value: string) {
-        value = stringifyVar(value);
+    return JSON.parse(text, fn);
+};
 
-        const tokenizer = /"|(?:\/\*)|(?:\*\/)|(?:\/\/)|\n|\r/g;
+export const jsonStripComments = (value: string) => {
+    value = stringifyVar(value);
 
-        let inString = false;
-        let lineComment = false;
-        let multiComment = false;
+    const tokenizer = /"|(?:\/\*)|(?:\*\/)|(?:\/\/)|\n|\r/g;
 
-        let pos = 0;
+    let inString = false;
+    let lineComment = false;
+    let multiComment = false;
 
-        const result = [];
+    let pos = 0;
 
-        while (true) {
-            const match = tokenizer.exec(value);
-            if (!match) {
-                break;
-            }
-            const left = value.substring(0, match.index);
-            const text = match[0];
+    const result = [];
 
-            if (!lineComment && !multiComment) {
-                let tmp = left.substring(pos);
-                if (!inString) {
-                    tmp = tmp.replace(/(\n|\r|\s)*/g, "");
-                }
-                result.push(tmp);
-            }
-
-            pos = tokenizer.lastIndex;
-
-            if (text === "\"" && !lineComment && !multiComment) {
-                const tmp = left.match(/(\\)*$/);
-                // start of string with ", or unescaped " character found to end string
-                if (!inString || !tmp || (tmp[0].length % 2) === 0) {
-                    inString = !inString;
-                }
-                pos--; // include " character in next catch
-            } else if (text === "/*" && !inString && !lineComment && !multiComment) {
-                lineComment = true;
-            } else if (text === "*/" && !inString && lineComment && !multiComment) {
-                lineComment = false;
-            } else if (text === "//" && !inString && !lineComment && !multiComment) {
-                multiComment = true;
-            } else if ((text === "\n" || text === "\r") && !inString && !lineComment && multiComment) {
-                multiComment = false;
-            } else if (!lineComment && !multiComment && !(/\n|\r|\s/.test(text))) {
-                result.push(text);
-            }
+    while (true) {
+        const match = tokenizer.exec(value);
+        if (!match) {
+            break;
         }
-        result.push(value.substring(pos));
-        return result.join("");
+        const left = value.substring(0, match.index);
+        const text = match[0];
+
+        if (!lineComment && !multiComment) {
+            let tmp = left.substring(pos);
+            if (!inString) {
+                tmp = tmp.replace(/(\n|\r|\s)*/g, "");
+            }
+            result.push(tmp);
+        }
+
+        pos = tokenizer.lastIndex;
+
+        if (text === "\"" && !lineComment && !multiComment) {
+            const tmp = left.match(/(\\)*$/);
+            // start of string with ", or unescaped " character found to end string
+            if (!inString || !tmp || (tmp[0].length % 2) === 0) {
+                inString = !inString;
+            }
+            pos--; // include " character in next catch
+        } else if (text === "/*" && !inString && !lineComment && !multiComment) {
+            lineComment = true;
+        } else if (text === "*/" && !inString && lineComment && !multiComment) {
+            lineComment = false;
+        } else if (text === "//" && !inString && !lineComment && !multiComment) {
+            multiComment = true;
+        } else if ((text === "\n" || text === "\r") && !inString && !lineComment && multiComment) {
+            multiComment = false;
+        } else if (!lineComment && !multiComment && !(/\n|\r|\s/.test(text))) {
+            result.push(text);
+        }
     }
-}
+    result.push(value.substring(pos));
+    return result.join("");
+};

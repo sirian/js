@@ -1,47 +1,30 @@
 import {isEqualNaN} from "./Var";
 
-export class Num {
-    public static parse(value?: boolean | string | number | null, defaultValue: number = NaN): number {
-        value ??= 0;
+export const toInt = (x: number) => Math.trunc(x);
+export const toInt32 = (x: number) => x | 0;
+export const toUint32 = (v: number) => v >>> 0;
 
-        switch (typeof value) {
-            case "boolean":
-            case "number":
-            case "string":
-                const x = +value;
+export const parseNumber = (value?: boolean | string | number | null, defaultValue: number = NaN): number => {
+    value ??= 0;
 
-                return isEqualNaN(x) ? defaultValue : x;
-            default:
-                return defaultValue;
-        }
+    switch (typeof value) {
+        case "boolean":
+        case "number":
+        case "bigint":
+        case "string":
+            const x = +value;
+
+            return isEqualNaN(x) ? defaultValue : x;
+        default:
+            return defaultValue;
     }
+};
 
-    public static parseInt(value?: boolean | string | number | null, defaultValue?: number) {
-        return Num.toInt(Num.parse(value, defaultValue));
+export const parseInt = (value?: boolean | string | number | null, defaultValue?: number) =>
+    toInt(parseNumber(value, defaultValue));
 
-    }
+export const isInt = (value: any): value is number => isFinite(value) && !(value % 1);
 
-    public static toInt(x: number) {
-        return Math.trunc(x);
-    }
+export const isFinite = (value: any): value is number => +value === value && value !== -(1 / 0) && value !== (1 / 0);
 
-    public static toInt32(x: number) {
-        return x | 0;
-    }
-
-    public static toUint32(v: number) {
-        return v >>> 0;
-    }
-
-    public static isInt(value: any): value is number {
-        return Num.isFinite(value) && !(value % 1);
-    }
-
-    public static isFinite(value: any): value is number {
-        return +value === value && value !== -(1 / 0) && value !== (1 / 0);
-    }
-
-    public static isInt32(value: any): value is number {
-        return Num.toInt32(value) === value;
-    }
-}
+export const isInt32 = (value: any): value is number => toInt32(value) === value;

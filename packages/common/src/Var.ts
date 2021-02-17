@@ -1,71 +1,13 @@
-import {
-    AnyFunc,
-    Ctor,
-    ExtractByObjectTag,
-    ExtractByTypeName,
-    ExtractByXTypeName,
-    Instance,
-    Newable,
-    Nullish,
-    Predicate,
-    Primitive,
-    TypeGuard,
-    TypeName,
-    XTypeName,
-    XTypeNameOf,
-} from "@sirian/ts-extra-types";
+import {Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
+import {isArray, isFunction, isNumber, isObject, isString, isType} from "./Is";
 import {getObjectTag} from "./Obj";
-import {getPrototype, hasMethod, hasProp} from "./Ref";
-import {stringifyObj} from "./Stringify";
-
-export const isNull = (value: any): value is null => null === value;
-
-export const isUndefined = (value: any): value is undefined => undefined === value;
-
-export const isNullish = (value: any): value is Nullish => null == value;
-
-export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => !isNullish(value);
-
-export const getXType = <T>(value: T): XTypeNameOf<T> => {
-    if (null === value) {
-        return "null" as XTypeNameOf<T>;
-    }
-
-    if (isArray(value)) {
-        return "array" as XTypeNameOf<T>;
-    }
-
-    return typeof value as XTypeNameOf<T>;
-};
-
-export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> =>
-    isArray(types) ? isSome(getXType(v), types) : getXType<any>(v) === types;
-
-export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> =>
-    isArray(types) ? isSome(typeof v, types) : typeof v === types;
-
-export const isSome = <U>(value: any, values: U[]): value is U => values.includes(value);
-
-export const isNumber = (value: any): value is number => isType(value, "number");
-
-export const isBigInt = (value: any): value is bigint => isType(value, "bigint");
-
-export const isBoolean = (value: any): value is boolean => isType(value, "boolean");
-
-export const isString = (value: any): value is string => isType(value, "string");
-
-export const isSymbol = (value: any): value is symbol => isType(value, "symbol");
-
-export const isFunction = <T extends any>(value: T): value is Function & Extract<T, AnyFunc> => isType(value, "function");
-
-export const isPrimitive = (value: any): value is Primitive => !isObjectOrFunction(value);
-
-export const isPropertyKey = (value: any): value is PropertyKey => isType(value, ["string", "number", "symbol"]);
+import {getPrototype, hasMethod} from "./Ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
-    (condition(v) ? v : otherwise) as P extends TypeGuard<infer U>
-                                      ? (T extends U ? T : O)
-                                      : T | O;
+    (condition(v) ? v : otherwise) as
+        P extends TypeGuard<infer U>
+        ? (T extends U ? T : O)
+        : T | O;
 
 export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
     if (!isFunction(value)) {
@@ -83,21 +25,10 @@ export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
     }
 };
 
-export const isTruthy = (a: any) => !!a;
-
-export const isFalsy = (a: any) => !a;
-
-export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> =>
-    null !== value && isType(value, "object");
-
 export const isNumeric = (value: any): value is string | number =>
     isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
 
-export const isPromiseLike = (value: any): value is PromiseLike<any> =>
-    hasMethod(value, "then");
-
-export const isObjectOrFunction = (value: any): value is object =>
-    isObject(value) || isFunction(value);
+export const isPromiseLike = (value: any): value is PromiseLike<any> => hasMethod(value, "then");
 
 export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
     ctor.some((c) => isFunction(c) && (obj instanceof c));
@@ -105,13 +36,15 @@ export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor:
 export const isEqualNaN = (value: any): value is number => value !== value;
 
 export const isEqualTuple = <T extends any[]>(x: T, y: any[]) => {
-    if (!isArray(x) || !isArray(y)) {
+    if (!isArray(x) || !isArray(y) || x.length !== y.length) {
         return false;
     }
-    if (x.length !== y.length) {
-        return false;
+    for (let i = 0; i < x.length; i++) {
+        if (!isEqual(x[i], y[i])) {
+            return false;
+        }
     }
-    return x.every((v, i) => isEqual(v, y[i]));
+    return true;
 };
 
 export const isSubclassOf = <A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> =>
@@ -125,17 +58,15 @@ export const isSameType = <T>(x: any, value: T): value is T =>
 export const isBetween = <T extends string | number | bigint>(x: T, min: T, max: T) =>
     isSameType(x, min) && isSameType(x, max) && x >= min && x <= max;
 
-export const isArray = (v: any): v is any[] => Array.isArray(v);
-
 export const isArrayLike = (value: any, strict: boolean = true): value is ArrayLike<any> => {
     if (isString(value)) {
         return true;
     }
-    if (!isObject(value) || !hasProp(value, "length")) {
+    if (!isObject(value)) {
         return false;
     }
 
-    const length = value.length;
+    const length = value?.length;
 
     if (!strict) {
         return isNumeric(length);
@@ -188,7 +119,7 @@ export const isPlainObject = (x: any) => {
 
     const prototype = getPrototype(x);
 
-    if (!prototype || stringifyObj(x) !== "[object Object]") {
+    if (!prototype || getObjectTag(x) !== "Object") {
         return !prototype;
     }
 
@@ -199,122 +130,4 @@ export const isPlainObject = (x: any) => {
     const ctor = x.constructor;
 
     return !isFunction(ctor) || ctor.prototype !== x;
-};
-
-export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
-    tag === getObjectTag(obj);
-
-export const stringifyVar = (value: any) => isNullish(value) || isSymbol(value) ? "" : "" + value;
-
-export const Var = {
-    /** @deprecated use isNull */
-    isNull,
-
-    /** @deprecated use isUndefined */
-    isUndefined,
-
-    /** @deprecated use isNullish */
-    isNullable: isNullish,
-
-    /** @deprecated use getXType */
-    getXType,
-
-    /** @deprecated use isXType */
-    isXType,
-
-    /** @deprecated use isType */
-    isType,
-
-    /** @deprecated use isSome */
-    isSome,
-
-    /** @deprecated use isNumber */
-    isNumber,
-
-    /** @deprecated use isBigInt */
-    isBigInt,
-
-    /** @deprecated use isBoolean */
-    isBoolean,
-
-    /** @deprecated use isString */
-    isString,
-
-    /** @deprecated use isPropertyKey */
-    isPropertyKey,
-
-    /** @deprecated use isPrimitive */
-    isPrimitive,
-
-    /** @deprecated use isSymbol */
-    isSymbol,
-
-    /** @deprecated use isFunction */
-    isFunction,
-
-    /** @deprecated use isConstructor */
-    isConstructor,
-
-    /** @deprecated use isTruthy */
-    isTruthy,
-
-    /** @deprecated use isFalsy */
-    isFalsy,
-
-    /** @deprecated use isObject */
-    isObject,
-
-    /** @deprecated use isNumeric */
-    isNumeric,
-
-    /** @deprecated use isPromiseLike */
-    isPromiseLike,
-
-    /** @deprecated use isObjectOrFunction */
-    isObjectOrFunction,
-
-    /** @deprecated use isInstanceOf */
-    isInstanceOf,
-
-    /** @deprecated use isEqualNaN */
-    isEqualNaN,
-
-    /** @deprecated use isSubclassOf */
-    isSubclassOf,
-
-    /** @deprecated use isSameType */
-    isSameType,
-
-    /** @deprecated use isBetween */
-    isBetween,
-
-    /** @deprecated use isArray */
-    isArray,
-
-    /** @deprecated use isArrayLike */
-    isArrayLike,
-
-    /** @deprecated use isPlain */
-    isPlain,
-
-    /** @deprecated use isPlainArray */
-    isPlainArray,
-
-    /** @deprecated use isRegExp */
-    isRegExp,
-
-    /** @deprecated use isAsyncIterable */
-    isAsyncIterable,
-
-    /** @deprecated use isIterable */
-    isIterable,
-
-    /** @deprecated use isEqual */
-    isEqual,
-
-    /** @deprecated use isPlainObject */
-    isPlainObject,
-
-    /** @deprecated use stringifyVar */
-    stringify: stringifyVar,
 };

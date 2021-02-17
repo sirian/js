@@ -1,4 +1,4 @@
-import {Json} from "../../src";
+import {jsonParse} from "../../src";
 
 describe("", () => {
     const data: Array<[any, any]> = [
@@ -15,6 +15,6 @@ describe("", () => {
     ];
 
     test.each(data)("Json.parse(%o) === %o", (value, expected) => {
-        expect(Json.parse(value)).toStrictEqual(expected);
+        expect(jsonParse(value)).toStrictEqual(expected);
     });
 });

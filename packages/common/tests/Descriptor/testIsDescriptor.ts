@@ -1,10 +1,10 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor} from "@sirian/ts-extra-types";
-import {Descriptor, Obj, ownDescriptors, valuesOf} from "../../src";
+import {Descriptor, ownDescriptors, valuesOf} from "../../src";
 
 describe("Descriptor", () => {
     const dataDescriptors: DataPropertyDescriptor[] = [
         {},
-        Obj.create(),
+        Object.create(null),
         {configurable: true},
         {configurable: false},
         {configurable: undefined},

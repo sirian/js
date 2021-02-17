@@ -1,5 +1,6 @@
 import {ArrayRO, LastElement, Nullish, TupleOf} from "@sirian/ts-extra-types";
-import {isArray, isArrayLike, isEqual, isIterable, isNullish} from "./Var";
+import {isArray, isNullish} from "./Is";
+import {isArrayLike, isEqual, isIterable} from "./Var";
 
 export const range = (from: number, to: number, step: number = 1) => {
     const result = [];
@@ -16,14 +17,6 @@ type First<T> =
     T extends { 0?: infer V2 } ? V2 | undefined :
     T extends Iterable<infer V3> | ArrayLike<infer V3> ? V3 | undefined :
     never;
-
-export const each = <T>(value: Iterable<T>, fn: (value: T) => boolean | void) => {
-    for (const x of value) {
-        if (false === fn(x)) {
-            break;
-        }
-    }
-};
 
 export const first = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
     if (isIterable(value)) {

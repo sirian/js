@@ -1,4 +1,4 @@
-import {Num} from "../../src";
+import {parseNumber} from "../../src";
 
 describe("", () => {
     const data: Array<[any, any]> = [
@@ -26,12 +26,12 @@ describe("", () => {
     ];
 
     test.each(data)("Num.parse(%p) === %p", (value, expected) => {
-        const res = Num.parse(value, NaN);
+        const res = parseNumber(value, NaN);
         expect(res).toBe(expected);
     });
 
     test.each(invalidData)("Num.parse(%p, 1234) returns 1234", (value) => {
-        expect(Num.parse(value, 1234)).toBe(1234);
-        expect(Num.parse(value)).toBe(NaN);
+        expect(parseNumber(value, 1234)).toBe(1234);
+        expect(parseNumber(value)).toBe(NaN);
     });
 });

@@ -1,8 +1,8 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
+import {isNotNullish, isString} from "./Is";
 import {entriesOf, fromEntries} from "./Obj";
 import {hasMethod} from "./Ref";
-import {isNotNullish, isString} from "./Var";
 
 export class Entries<T extends Entry> {
     protected items: T[];

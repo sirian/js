@@ -12,7 +12,7 @@ describe("Arr.range", () => {
         [1, 0, -1, [1, 0]],
     ];
 
-    test.each(data)("Arr.range(%o, %o, %o) === %o", (from, to, step, expected) => {
+    test.each(data)("Arr.range(%O, %O, %O) === %O", (from, to, step, expected) => {
         expect(range(from, to, step)).toStrictEqual(expected);
     });
 });

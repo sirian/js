@@ -14,7 +14,7 @@ describe("Obj.clear", () => {
     const data: Array<[any, any]> = [
         [[1, 2, 3], []],
         [{x: 1}, {}],
-        [new Foo(), Obj.create(Foo.prototype)],
+        [new Foo(), Object.create(Foo.prototype)],
         [Object("foo"), Object("foo")],
     ];
 

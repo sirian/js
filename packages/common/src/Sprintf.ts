@@ -1,8 +1,9 @@
 import {tryCatch} from "./Fn";
-import {Json} from "./Json";
-import {Num} from "./Num";
+import {isFunction, isNullish} from "./Is";
+import {jsonStringify} from "./Json";
+import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Obj";
-import {isFunction} from "./Var";
+import {stringifyVar} from "./Stringify";
 
 interface Placeholder {
     placeholder: string;
@@ -19,39 +20,42 @@ interface Placeholder {
 type ParsedItem = Placeholder | string;
 type ParsedTree = ParsedItem[];
 
-export class Sprintf {
-    public static readonly patterns = {
-        number: /[diefg]/,
-        json: /[j]/,
-        text: /^[^%]+/,
-        escapedPercent: /^%%/,
-        placeholder: /^%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/,
-        key: /^([a-z_][a-z_\d]*)/i,
-        key_access: /^\.([a-z_][a-z_\d]*)/i,
-        index_access: /^\[(\d+)]/,
-    };
+export const sprintf = (format: string, ...args: any[]) => Sprintf.format(format, args);
+export const vsprintf = (format: string, args: any[] = []) => Sprintf.format(format, args);
 
+const substr = (arg: any, ph: Placeholder) => stringifyVar(arg).substr(0, ph.precision || stringifyVar(arg).length);
+
+const rgxNumber = /[diefg]/;
+const rgxJson = /[j]/;
+const rgxText = /^[^%]+/;
+const rgxEscapedPercent = /^%%/;
+const rgxPlaceholder = /^%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/;
+const rgxKey = /^([a-z_][a-z_\d]*)/i;
+const rgxKeyAccess = /^\.([a-z_][a-z_\d]*)/i;
+const rgxIndexAccess = /^\[(\d+)]/;
+
+export class Sprintf {
     public static readonly cache: Map<string, Sprintf> = new Map();
 
     protected tree: ParsedTree;
 
     protected placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
-        b: (arg) => Num.toInt(arg).toString(2),
-        c: (arg) => String.fromCharCode(Num.toInt(arg)),
-        i: (arg) => Num.toInt(arg),
-        d: (arg) => Num.toInt(arg),
-        j: (arg, ph) => Json.stringify(arg, null, ph.width),
-        e: (arg, ph) => Num.parse(arg).toExponential(ph.precision),
-        f: (arg, ph) => ph.precision ? Num.parse(arg).toFixed(ph.precision) : Num.parse(arg),
-        g: (arg, ph) => ph.precision ? +arg.toPrecision(ph.precision) : Num.parse(arg),
-        o: (arg) => Num.toUint32(arg).toString(8),
-        s: (arg, ph) => this.substr(arg, ph),
-        t: (arg, ph) => this.substr(!!arg, ph),
-        T: (arg, ph) => this.substr(getObjectTag(arg).toLowerCase(), ph),
-        u: (arg) => Num.toUint32(arg),
-        v: (arg, ph) => this.substr(arg.valueOf(), ph),
-        x: (arg) => Num.toUint32(arg).toString(16),
-        X: (arg) => Num.toUint32(arg).toString(16).toUpperCase(),
+        b: (arg) => toInt(arg).toString(2),
+        c: (arg) => String.fromCharCode(toInt(arg)),
+        i: (arg) => toInt(arg),
+        d: (arg) => toInt(arg),
+        j: (arg, ph) => jsonStringify(arg, null, ph.width),
+        e: (arg, ph) => parseNumber(arg).toExponential(ph.precision),
+        f: (arg, ph) => ph.precision ? parseNumber(arg).toFixed(ph.precision) : parseNumber(arg),
+        g: (arg, ph) => ph.precision ? +arg.toPrecision(ph.precision) : parseNumber(arg),
+        o: (arg) => toUint32(arg).toString(8),
+        s: (arg, ph) => substr(arg, ph),
+        t: (arg, ph) => substr(!!arg, ph),
+        T: (arg, ph) => substr(getObjectTag(arg).toLowerCase(), ph),
+        u: (arg) => toUint32(arg),
+        v: (arg, ph) => substr(arg.valueOf(), ph),
+        x: (arg) => toUint32(arg).toString(16),
+        X: (arg) => toUint32(arg).toString(16).toUpperCase(),
     };
 
     private cursor: number = 0;
@@ -100,8 +104,8 @@ export class Sprintf {
         let arg = argv[this.cursor];
 
         for (const [index, key] of keys.entries()) {
-            if (null === arg || undefined === arg) {
-                throw new Error(`[sprintf] Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
+            if (isNullish(arg)) {
+                throw new Error(`Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
             }
 
             arg = arg[key];
@@ -114,12 +118,11 @@ export class Sprintf {
         const tree: ParsedTree = [];
 
         let index = 0;
-        const re = Sprintf.patterns;
 
         while (index < format.length) {
             const str = format.substring(index);
 
-            const textMatch = re.text.exec(str);
+            const textMatch = rgxText.exec(str);
 
             if (textMatch) {
                 const tmp = textMatch[0];
@@ -128,14 +131,14 @@ export class Sprintf {
                 continue;
             }
 
-            const moduleMatch = re.escapedPercent.exec(str);
+            const moduleMatch = rgxEscapedPercent.exec(str);
             if (moduleMatch) {
                 tree.push("%");
                 index += moduleMatch[0].length;
                 continue;
             }
 
-            const match = re.placeholder.exec(str);
+            const match = rgxPlaceholder.exec(str);
 
             if (!match) {
                 throw new SyntaxError(`Sprintf unexpected placeholder at index ${index}`);
@@ -145,13 +148,13 @@ export class Sprintf {
 
             const item: Placeholder = {
                 placeholder: text,
-                paramNum: Num.parseInt(paramNum, 0),
+                paramNum: parseInt(paramNum, 0),
                 keys: this.parseKeys(replacementField),
                 sign: !!sign,
                 padChar: (rawPadChar || " ").slice(-1),
                 align: !!align,
-                width: Num.parseInt(width, 0),
-                precision: Num.parseInt(precision, 0),
+                width: parseInt(width, 0),
+                precision: parseInt(precision, 0),
                 type,
             };
 
@@ -170,13 +173,11 @@ export class Sprintf {
 
         const keys: string[] = [];
 
-        const re = Sprintf.patterns;
-
-        let match = re.key.exec(field);
+        let match = rgxKey.exec(field);
 
         while (true) {
             if (!match) {
-                throw new SyntaxError("[sprintf] failed to parse named argument key");
+                throw new SyntaxError("Failed to parse named argument key");
             }
 
             const [text, key] = match;
@@ -189,7 +190,7 @@ export class Sprintf {
                 break;
             }
 
-            match = re.key_access.exec(field) || re.index_access.exec(field);
+            match = rgxKeyAccess.exec(field) || rgxIndexAccess.exec(field);
         }
 
         return keys;
@@ -208,17 +209,16 @@ export class Sprintf {
         }
 
         if (/[bcdiefguxX]/.test(type) && typeof arg !== "number" && isNaN(arg)) {
-            throw new TypeError(`[sprintf] expecting number, given ${typeof arg} "${arg}"`);
+            throw new TypeError(`Expecting number, given ${typeof arg} "${arg}"`);
         }
 
-        return String(callback(arg, ph));
+        return stringifyVar(callback(arg, ph));
     }
 
     protected format(args: any[]) {
         this.cursor = 0;
 
         const output: string[] = [];
-        const re = Sprintf.patterns;
 
         for (const ph of this.tree) {
             if ("string" === typeof ph) {
@@ -230,15 +230,15 @@ export class Sprintf {
 
             const type = ph.type;
 
-            let argText = String(this.handlePlaceholder(ph, arg));
+            let argText = stringifyVar(this.handlePlaceholder(ph, arg));
 
-            if (re.json.test(type)) {
+            if (rgxJson.test(type)) {
                 output.push(argText);
                 continue;
             }
 
             let sign = "";
-            if (re.number.test(type)) {
+            if (rgxNumber.test(type)) {
                 const isPositive = arg >= 0;
 
                 if (ph.sign || !isPositive) {
@@ -264,11 +264,4 @@ export class Sprintf {
         return output.join("");
     }
 
-    private substr(arg: any, ph: Placeholder) {
-        const v = String(arg);
-        return v.substr(0, ph.precision || v.length);
-    }
 }
-
-export const sprintf = (format: string, ...args: any[]) => Sprintf.format(format, args);
-export const vsprintf = (format: string, args: any[] = []) => Sprintf.format(format, args);

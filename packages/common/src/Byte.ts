@@ -1,7 +1,9 @@
 import {Instance, Primitive} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
 import {tryCatch} from "./Fn";
-import {isArrayBufferLike, isArrayBufferView, isPrimitive, stringifyVar} from "./Var";
+import {isPrimitive} from "./Is";
+import {stringifyVar} from "./Stringify";
+import {isArrayBufferLike, isArrayBufferView} from "./Var";
 
 declare class TextEncoder {
     public encode(input?: string): Uint8Array;
@@ -26,15 +28,13 @@ export type ByteArraySource = null | undefined | string | ArrayBuffer | ArrayBuf
 
 export type ByteInput = ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive;
 
-export const toBytes = (source?: ByteInput) => {
+export const toBytes = (source?: ByteInput): Uint8Array => {
     if (isPrimitive(source)) {
         return new TextEncoder().encode(stringifyVar(source));
     }
 
     if (isArrayBufferView(source)) {
-        const {buffer, byteOffset = 0, byteLength} = source;
-        source = buffer.slice(byteOffset, byteOffset + byteLength);
-        return new Uint8Array(source);
+        return new Uint8Array(source.buffer.slice(source.byteOffset, source.byteOffset + source.byteLength));
     }
 
     return new Uint8Array(isArrayBufferLike(source) ? source : toArray(source));

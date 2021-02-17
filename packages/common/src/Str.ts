@@ -1,6 +1,7 @@
+import {isFunction, isString} from "./Is";
 import {keysOf} from "./Obj";
-import {Rgx} from "./Rgx";
-import {isFunction, isString, stringifyVar} from "./Var";
+import {rgxEscape} from "./Rgx";
+import {stringifyVar} from "./Stringify";
 
 export const enum StrSide {
     LEFT = "left",
@@ -18,8 +19,8 @@ export class Str {
     }
 
     public static wrap(value: any, wrapChar: string, escapeChar: string = "\\") {
-        const escapeCharRgx = Rgx.create(Rgx.escape(escapeChar), "g");
-        const wrapCharRgx = Rgx.create(Rgx.escape(wrapChar), "g");
+        const escapeCharRgx = new RegExp(rgxEscape(escapeChar), "g");
+        const wrapCharRgx = new RegExp(rgxEscape(wrapChar), "g");
 
         const escaped = stringifyVar(value)
             .replace(escapeCharRgx, escapeChar + escapeChar)
@@ -83,7 +84,7 @@ export class Str {
     public static trim(value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) {
         const str = stringifyVar(value);
 
-        const maskPattern = [...mask].map(Rgx.escape).join("|");
+        const maskPattern = [...mask].map(rgxEscape).join("|");
 
         const parts = [];
 
@@ -99,9 +100,7 @@ export class Str {
             return str;
         }
 
-        const re = Rgx.create(parts.join("|"), "gu");
-
-        return str.replace(re, "");
+        return str.replace(new RegExp(parts.join("|"), "gu"), "");
     }
 
     public static camelCase(value: any) {
@@ -119,20 +118,12 @@ export class Str {
     public static caseFirst(value: any, type: "lower" | "upper", locale: boolean = false) {
         const str = stringifyVar(value);
 
-        if (!str) {
-            return "";
-        }
+        const ch = str.charAt(0);
+        const first = type === "lower"
+                      ? (locale ? ch.toLocaleLowerCase() : ch.toLowerCase())
+                      : (locale ? ch.toLocaleUpperCase() : ch.toUpperCase());
 
-        const chars = [...str];
-        const ch = chars[0];
-
-        if (type === "lower") {
-            chars[0] = locale ? ch.toLocaleLowerCase() : ch.toLowerCase();
-        } else {
-            chars[0] = locale ? ch.toLocaleUpperCase() : ch.toUpperCase();
-        }
-
-        return chars.join("");
+        return first + str.slice(1);
     }
 
     public static lowerFirst(value: any, locale: boolean = false) {
@@ -154,9 +145,9 @@ export class Str {
             .sort()
             .reverse();
 
-        const pattern = keys.map(Rgx.escape).join("|");
+        const pattern = keys.map(rgxEscape).join("|");
 
-        const re = Rgx.create(pattern, "g");
+        const re = new RegExp(pattern, "g");
 
         return str.replace(re, (key) => {
             const v = pairs[key];
@@ -193,10 +184,10 @@ export class Str {
         const res = [];
         let lastIndex = 0;
 
-        for (const match of Rgx.matchAll(str, re)) {
+        for (const match of str.matchAll(new RegExp(re, "g"))) {
             const delimiter = match[0];
 
-            const index = match.index;
+            const index = match.index!;
 
             const part = str.substr(lastIndex, index - lastIndex);
 

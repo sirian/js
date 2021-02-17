@@ -1,7 +1,8 @@
 import {Nullish} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
+import {isFunction, isPropertyKey} from "./Is";
 import {entriesOf} from "./Obj";
-import {isEqual, isFunction, isPlainObject, isPropertyKey} from "./Var";
+import {isEqual, isPlainObject} from "./Var";
 
 export type XMapInitializer<K, V> = (key: K) => V;
 export type XMapSource<K = any, V = any> =

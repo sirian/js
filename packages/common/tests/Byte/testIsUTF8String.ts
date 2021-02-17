@@ -1,6 +1,6 @@
 import {isUTF8String} from "../../src";
 
-describe("Unicode.isUTF8", () => {
+describe("Byte.isUTF8", () => {
     const data: Array<[string, boolean]> = [
         ["", true],
         ["\uD83D\uDC69\u200D\u2764\uFE0F\u200D\uD83D\uDC69", true],
@@ -15,7 +15,7 @@ describe("Unicode.isUTF8", () => {
 
     const escaped = data.map(([v, e]) => [escape(v), e] as [string, boolean]);
 
-    test.each(escaped)("Unicode.isUTF(%p) === %p", (str, expected) => {
+    test.each(escaped)("Byte.isUTF(%p) === %p", (str, expected) => {
         expect(isUTF8String(unescape(str))).toBe(expected);
     });
 });
