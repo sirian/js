@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.44](https://github.com/sirian/js/compare/@sirian/dumper@0.3.43...@sirian/dumper@0.3.44) (2021-02-17)
+
+**Note:** Version bump only for package @sirian/dumper
+
+
+
+
+
 ## [0.3.43](https://github.com/sirian/js/compare/@sirian/dumper@0.3.42...@sirian/dumper@0.3.43) (2021-02-13)
 
 **Note:** Version bump only for package @sirian/dumper

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/sirian/js/compare/@sirian/common@5.18.1...@sirian/common@6.0.0) (2021-02-17)
+
+
+### Features
+
+* **common:** move some methods to constants ([4cf1569](https://github.com/sirian/js/commit/4cf15698d2fd55927a083b9ab8f651c77fb6bb5b))
+
+
+### BREAKING CHANGES
+
+* **common:** Exports changed
+
+
+
+
+
 ## [5.18.1](https://github.com/sirian/js/compare/@sirian/common@5.18.0...@sirian/common@5.18.1) (2021-02-13)
 
 **Note:** Version bump only for package @sirian/common
