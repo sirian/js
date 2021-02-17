@@ -1,4 +1,4 @@
-import {Obj} from "../../src";
+import {objZip} from "../../src";
 
 describe("Obj.zip", () => {
     const data: Array<[any[], any[], object]> = [
@@ -11,6 +11,6 @@ describe("Obj.zip", () => {
     ];
 
     test.each(data)("Obj.zip(%o) === %o", (keys, values, expected) => {
-        expect(Obj.zip(keys, values)).toStrictEqual(expected);
+        expect(objZip(keys, values)).toStrictEqual(expected);
     });
 });

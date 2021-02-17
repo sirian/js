@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {strSplit} from "../../src";
 
 describe("", () => {
     const N = undefined;
@@ -31,6 +31,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.split(%p, %p, %p) === %p", (subject, pattern, limit, expected) => {
-        expect(Str.split(subject, pattern, limit)).toStrictEqual(expected);
+        expect(strSplit(subject, pattern, limit)).toStrictEqual(expected);
     });
 });

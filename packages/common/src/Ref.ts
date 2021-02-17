@@ -1,6 +1,6 @@
 import {AnyKey, Ctor, Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
-import {tryCatch} from "./Fn";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
+import {tryCatch} from "./Try";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 

@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {lowerFirst} from "../../src";
 
 describe("", () => {
     const data: Array<[any, string]> = [
@@ -13,6 +13,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.lowerFirst(%p) === %p", (value, expected) => {
-        expect(Str.lowerFirst(value)).toBe(expected);
+        expect(lowerFirst(value)).toBe(expected);
     });
 });

@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {strRepeat} from "../../src";
 
 describe("", () => {
     const data: Array<[string, number, string]> = [
@@ -12,6 +12,6 @@ describe("", () => {
     ];
 
     test.each(data)("", (str, max, expected) => {
-        expect(Str.repeat(str, max)).toBe(expected);
+        expect(strRepeat(str, max)).toBe(expected);
     });
 });

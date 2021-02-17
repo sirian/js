@@ -1,4 +1,4 @@
-import {Obj} from "../../src";
+import {objReplace} from "../../src";
 
 const data: Array<[object, object[], object]> = [
     [{}, [], {}],
@@ -17,5 +17,5 @@ const data: Array<[object, object[], object]> = [
 ];
 
 test.each(data)("Obj.replace(%p, ...%p) === %p", (target, sources, expected) => {
-    expect(Obj.replace(target, ...sources)).toStrictEqual(expected);
+    expect(objReplace(target, ...sources)).toStrictEqual(expected);
 });

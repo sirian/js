@@ -1,5 +1,4 @@
-import {throwError} from "../../src";
-import {tryCatch} from "../../src/Fn";
+import {throwError, tryCatch} from "../../src";
 
 describe("Fn.try", () => {
     const err1 = new Error("err1");

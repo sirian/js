@@ -1,4 +1,4 @@
-import {Arr} from "../../src";
+import {arrRemoveItem} from "../../src";
 
 describe("", () => {
     const o1 = new Date(0);
@@ -16,7 +16,7 @@ describe("", () => {
     ];
 
     test.each(data)("", (arr, remove, expected) => {
-        const res = Arr.removeItem(arr, remove);
+        const res = arrRemoveItem(arr, remove);
         expect(res).toBe(arr);
         expect(res).toStrictEqual(expected);
     });

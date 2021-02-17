@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {substrCount} from "../../src";
 
 describe("", () => {
     const data: Array<[string, string, number]> = [
@@ -13,6 +13,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.substringCount(%o, %o) === %o", (x, y, expected) => {
-        expect(Str.substringCount(x, y)).toBe(expected);
+        expect(substrCount(x, y)).toBe(expected);
     });
 });

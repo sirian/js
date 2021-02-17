@@ -1,6 +1,7 @@
 export * from "./Arr";
 export * from "./BiMap";
 export * from "./Byte";
+export * from "./Const";
 export * from "./Descriptor";
 export * from "./Entries";
 export * from "./Fn";
@@ -13,6 +14,7 @@ export * from "./Ref";
 export * from "./Rgx";
 export * from "./Sprintf";
 export * from "./Str";
+export * from "./Try";
 export * from "./Stringify";
 export * from "./Var";
 export * from "./XMap";

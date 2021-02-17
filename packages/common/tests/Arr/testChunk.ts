@@ -1,4 +1,4 @@
-import {Arr} from "../../src";
+import {arrChunk} from "../../src";
 
 describe("", () => {
     const data: Array<[number, any[]]> = [
@@ -11,6 +11,6 @@ describe("", () => {
     ];
 
     test.each(data)("Arr.chunk([a,b,c,d,e], %o) === %j", (size, expected) => {
-        expect(Arr.chunk(["a", "b", "c", "d", "e"], size)).toStrictEqual(expected);
+        expect(arrChunk(["a", "b", "c", "d", "e"], size)).toStrictEqual(expected);
     });
 });

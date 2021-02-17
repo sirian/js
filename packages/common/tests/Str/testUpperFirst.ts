@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {upperFirst} from "../../src";
 
 describe("", () => {
     const data: Array<[any, string]> = [
@@ -13,6 +13,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.upperFirst(%p) === %p", (value, expected) => {
-        expect(Str.upperFirst(value)).toBe(expected);
+        expect(upperFirst(value)).toBe(expected);
     });
 });

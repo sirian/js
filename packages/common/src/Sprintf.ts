@@ -1,9 +1,9 @@
-import {tryCatch} from "./Fn";
 import {isFunction, isNullish} from "./Is";
 import {jsonStringify} from "./Json";
 import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Obj";
 import {stringifyVar} from "./Stringify";
+import {tryCatch} from "./Try";
 
 interface Placeholder {
     placeholder: string;

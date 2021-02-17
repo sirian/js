@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {strWrap} from "../../src";
 
 describe("", () => {
     const data = [
@@ -13,6 +13,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.wrap(%o, %o) == %o", (str, wrap, expected) => {
-        expect(Str.wrap(str, wrap)).toBe(expected);
+        expect(strWrap(str, wrap)).toBe(expected);
     });
 });

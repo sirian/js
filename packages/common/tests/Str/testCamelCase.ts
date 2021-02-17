@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {camelCase} from "../../src";
 
 describe("", () => {
     const data: Array<[any, string]> = [
@@ -22,6 +22,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.camelize(%p) === %p", (value, expected) => {
-        expect(Str.camelCase(value)).toBe(expected);
+        expect(camelCase(value)).toBe(expected);
     });
 });

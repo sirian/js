@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {strReplace} from "../../src";
 
 describe("", () => {
     const data: Array<[string, Record<string, any>, string]> = [
@@ -15,6 +15,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.replace(%s, %j) === %s", (value, pairs, expected) => {
-        expect(Str.replace(value, pairs)).toBe(expected);
+        expect(strReplace(value, pairs)).toBe(expected);
     });
 });

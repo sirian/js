@@ -64,35 +64,32 @@ export const intersect = <T>(array: Iterable<T>, ...arrays: Array<Iterable<T>>):
 
 export const swap = (arr: any[], i: number, j: number) => [arr[i], arr[j]] = [arr[j], arr[i]];
 
-export class Arr {
-    public static removeItem<T>(array: T[], value: T, limit?: number) {
-        return Arr.remove(array, (item) => isEqual(item, value), limit);
-    }
+export const arrRemoveItem = <T>(array: T[], value: T, limit?: number) =>
+    arrRemove(array, (item) => isEqual(item, value), limit);
 
-    public static remove<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) {
-        let removed = 0;
+export const arrRemove = <T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean, limit = 1 / 0) => {
+    let removed = 0;
 
-        for (let i = 0; i < array.length && removed < limit;) {
-            const remove = predicate(array[i], i, array);
+    for (let i = 0; i < array.length && removed < limit;) {
+        const remove = predicate(array[i], i, array);
 
-            if (!remove) {
-                i++;
-                continue;
-            }
-
-            removed++;
-            array.splice(i, 1);
+        if (!remove) {
+            i++;
+            continue;
         }
 
-        return array;
+        removed++;
+        array.splice(i, 1);
     }
 
-    public static chunk(value: any[], size: number) {
-        const result = [];
+    return array;
+};
 
-        for (let i = 0; i < value.length; i += size) {
-            result.push(value.slice(i, i + size));
-        }
-        return result;
+export const arrChunk = (value: any[], size: number) => {
+    const result = [];
+
+    for (let i = 0; i < value.length; i += size) {
+        result.push(value.slice(i, i + size));
     }
-}
+    return result;
+};

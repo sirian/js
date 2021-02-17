@@ -12,16 +12,7 @@ import {
     Wrap,
 } from "@sirian/ts-extra-types";
 import {isArray, isNullish, isPrimitive} from "./Is";
-import {
-    deleteProp,
-    getPrototypes,
-    hasMethod,
-    hasOwn,
-    hasProp,
-    ownDescriptors,
-    ownKeys,
-    ProtoChainOptions,
-} from "./Ref";
+import {deleteProp, getPrototypes, hasMethod, hasOwn, hasProp, ownDescriptors, ownKeys, ProtoChainOptions} from "./Ref";
 import {stringifyObj} from "./Stringify";
 
 export interface SnapshotOptions {
@@ -33,7 +24,7 @@ export const keysOf = <T>(target: T) => Object.keys(target) as Array<ObjKeyOf<T>
 export const valuesOf = <T>(target: T) => Object.values(target) as Array<ObjValueOf<T>>;
 export const entriesOf = <T>(target: T) => Object.entries(target) as Array<ObjEntryOf<T>>;
 
-export function assign<T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> {
+export const assign = <T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> => {
     const keySet = new Set<AnyKey>(keysOf(target));
 
     for (const source of sources) {
@@ -50,7 +41,7 @@ export function assign<T extends any, U extends any[]>(target: T, ...sources: U)
     }
 
     return target as any;
-}
+};
 
 export const toPrimitive = <T>(target: T): ToPrimitive<T> => {
     if (isPrimitive(target)) {
@@ -95,64 +86,61 @@ export const pick = <T, K extends keyof T>(target: T, k: Iterable<K>): Pick<T, K
 export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
     tag === getObjectTag(obj);
 
-export class Obj {
-    public static replace<T extends object>(target: T, ...sources: Array<Partial<T>>) {
-        const k = keysOf(target) as Array<keyof T>;
-        for (const source of sources) {
-            assign(target, pick(source, k));
-        }
-        return target;
-    }
+export const objZip = <K extends PropertyKey[], V extends any[]>(k: K, v: V): ObjectZip<K, V> =>
+    k.reduce((obj, key, index) => {
+        obj[key] = v[index];
+        return obj;
+    }, {} as any);
 
-    public static snapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
-        const keySet = new Set(keysOf(target) as Array<keyof T>);
+export function objSnapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
+    const keySet = new Set(keysOf(target) as Array<keyof T>);
 
-        const protoOpts: ProtoChainOptions = {
-            self: true,
-            stopAt: Object.prototype,
-            ...options,
-        };
+    const protoOpts: ProtoChainOptions = {
+        self: true,
+        stopAt: Object.prototype,
+        ...options,
+    };
 
-        for (const x of getPrototypes(target, protoOpts)) {
-            for (const [key, desc] of entriesOf(ownDescriptors(x))) {
-                if ("__proto__" === key) {
-                    continue;
-                }
-                if (hasMethod(desc, "get")) {
-                    keySet.add(key as keyof T);
-                }
+    for (const x of getPrototypes(target, protoOpts)) {
+        for (const [key, desc] of entriesOf(ownDescriptors(x))) {
+            if ("__proto__" === key) {
+                continue;
+            }
+            if (hasMethod(desc, "get")) {
+                keySet.add(key as keyof T);
             }
         }
-
-        return pick(target, [...keySet]);
     }
 
-    public static clear<T extends object>(target: T): Partial<T> {
-        if (isArray(target)) {
-            target.length = 0;
-        }
-
-        for (const key of ownKeys(target)) {
-            deleteProp(target, key);
-        }
-
-        return target as Partial<T>;
-    }
-
-    public static isEmpty(obj: object) {
-        // noinspection LoopStatementThatDoesntLoopJS
-        for (const key in obj) { // tslint:disable-line:forin
-            // noinspection JSUnfilteredForInLoop
-            return !hasOwn(obj, key);
-        }
-
-        return true;
-    }
-
-    public static zip<K extends PropertyKey[], V extends any[]>(k: K, v: V): ObjectZip<K, V> {
-        return k.reduce((obj, key, index) => {
-            obj[key] = v[index];
-            return obj;
-        }, {} as any);
-    }
+    return pick(target, [...keySet]);
 }
+
+export const objReplace = <T extends object>(target: T, ...sources: Array<Partial<T>>) => {
+    const k = keysOf(target);
+    for (const source of sources) {
+        assign(target, pick(source, k as Array<keyof T>));
+    }
+    return target;
+};
+
+export const objClear = <T extends object>(target: T): Partial<T> => {
+    if (isArray(target)) {
+        target.length = 0;
+    }
+
+    for (const key of ownKeys(target)) {
+        deleteProp(target, key);
+    }
+
+    return target as Partial<T>;
+};
+
+export const isEmptyObject = (obj: object) => {
+    // noinspection LoopStatementThatDoesntLoopJS
+    for (const key in obj) { // tslint:disable-line:forin
+        // noinspection JSUnfilteredForInLoop
+        return !hasOwn(obj, key);
+    }
+
+    return true;
+};

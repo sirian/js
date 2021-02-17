@@ -1,4 +1,4 @@
-import {Str, StrSide} from "../../src";
+import {pad, StrSide} from "../../src";
 
 describe("", () => {
     const data: Array<[any, string]> = [
@@ -19,6 +19,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.pad(...%j) === %o", (args: [string, number, ...any[]], expected) => {
-        expect(Str.pad(...args)).toBe(expected);
+        expect(pad(...args)).toBe(expected);
     });
 });

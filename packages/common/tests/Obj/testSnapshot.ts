@@ -1,4 +1,4 @@
-import {Obj} from "../../src";
+import {objSnapshot} from "../../src";
 
 describe("Obj.snapshot", () => {
     test("Obj.snapshot", () => {
@@ -24,8 +24,8 @@ describe("Obj.snapshot", () => {
         expect({...target}).toStrictEqual({x: 1});
         expect(JSON.stringify(target)).toStrictEqual(JSON.stringify({x: 1}));
 
-        expect(Obj.snapshot(target)).toStrictEqual(expected);
-        expect(JSON.stringify(Obj.snapshot(target))).toStrictEqual(JSON.stringify(expected));
+        expect(objSnapshot(target)).toStrictEqual(expected);
+        expect(JSON.stringify(objSnapshot(target))).toStrictEqual(JSON.stringify(expected));
     });
 
     test("Obj.snapshot(URL)", () => {
@@ -45,6 +45,6 @@ describe("Obj.snapshot", () => {
             searchParams: url.searchParams,
             username: "",
         };
-        expect(Obj.snapshot(url)).toStrictEqual(expected);
+        expect(objSnapshot(url)).toStrictEqual(expected);
     });
 });

@@ -1,5 +1,4 @@
-import {throwError} from "../../src";
-import {tryAsync} from "../../src/Fn";
+import {throwError, tryAsync} from "../../src";
 
 describe("Fn.try", () => {
     const err1 = new Error("err1");

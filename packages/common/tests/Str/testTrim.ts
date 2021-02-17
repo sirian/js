@@ -1,22 +1,22 @@
-import {Str} from "../../src";
+import {trim, trimLeft, trimRight} from "../../src";
 
-type TrimFn = typeof Str.trim | typeof Str.trimLeft | typeof Str.trimRight;
+type TrimFn = typeof trim | typeof trimLeft | typeof trimRight;
 
 describe("", () => {
     const data: Array<[TrimFn, [any, ...any[]], string]> = [
-        [Str.trim, ["  \tfoo \n "], "foo"],
-        [Str.trim, ["  \tfoo \n ", []], "  \tfoo \n "],
-        [Str.trim, [" undefined", undefined], "undefined"],
-        [Str.trim, [" undefined"], "undefined"],
-        [Str.trim, ["  \tfoo \n ", ""], "  \tfoo \n "],
-        [Str.trimLeft, ["  \tfoo \n "], "foo \n "],
-        [Str.trimRight, ["  \tfoo \n "], "  \tfoo"],
-        [Str.trimRight, ["/foo///", "/"], "/foo"],
-        [Str.trimRight, ["/foo///", ["/"]], "/foo"],
-        [Str.trimRight, ["/foo  ", "/"], "/foo  "],
+        [trim, ["  \tfoo \n "], "foo"],
+        [trim, ["  \tfoo \n ", []], "  \tfoo \n "],
+        [trim, [" undefined", undefined], "undefined"],
+        [trim, [" undefined"], "undefined"],
+        [trim, ["  \tfoo \n ", ""], "  \tfoo \n "],
+        [trimLeft, ["  \tfoo \n "], "foo \n "],
+        [trimRight, ["  \tfoo \n "], "  \tfoo"],
+        [trimRight, ["/foo///", "/"], "/foo"],
+        [trimRight, ["/foo///", ["/"]], "/foo"],
+        [trimRight, ["/foo  ", "/"], "/foo  "],
 
-        [Str.trimRight, ["fooabca", "abc"], "foo"],
-        [Str.trimRight, ["fooabca", ["a", "b", "c"]], "foo"],
+        [trimRight, ["fooabca", "abc"], "foo"],
+        [trimRight, ["fooabca", ["a", "b", "c"]], "foo"],
     ];
 
     test.each(data)("%p(%j) === %s", (fn, args, expected) => {
@@ -26,6 +26,6 @@ describe("", () => {
 
     test("", () => {
         const invalidTrim = "" as any;
-        expect(Str.trim("/foo/", "/", invalidTrim)).toBe("/foo/");
+        expect(trim("/foo/", "/", invalidTrim)).toBe("/foo/");
     });
 });

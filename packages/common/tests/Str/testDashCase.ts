@@ -1,4 +1,4 @@
-import {Str} from "../../src";
+import {dashCase} from "../../src";
 
 describe("", () => {
     const data: Array<[any, string]> = [
@@ -20,6 +20,6 @@ describe("", () => {
     ];
 
     test.each(data)("Str.dashCash(%p) === %p", (value, expected) => {
-        expect(Str.dashCase(value)).toBe(expected);
+        expect(dashCase(value)).toBe(expected);
     });
 });

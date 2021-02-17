@@ -1,4 +1,4 @@
-import {Obj} from "../../src";
+import {objClear} from "../../src";
 
 describe("Obj.clear", () => {
     class Foo {
@@ -19,7 +19,7 @@ describe("Obj.clear", () => {
     ];
 
     test.each(data)("Obj.clear(%o) === %o", (value, expected) => {
-        const result = Obj.clear(value);
+        const result = objClear(value);
         expect(result).toBe(value);
         expect(result).toStrictEqual(expected);
     });
