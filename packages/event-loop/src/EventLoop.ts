@@ -4,28 +4,12 @@ import {NextTick} from "./NextTick";
 import {TaskCallback} from "./TaskQueue";
 import {Timeout} from "./Timeout";
 
-export class EventLoop {
-    public static waitTimeout(ms: number) {
-        return new Promise((resolve) => EventLoop.setTimeout(ms, resolve as TaskCallback));
-    }
+export const startImmediate = (callback: TaskCallback) => Immediate.start(callback);
 
-    // public static waitNextEventLoop() {
-    //     return new Promise((resolve) => Immediate.set(resolve));
-    // }
+export const startTimeout = (ms: number, callback: TaskCallback) => Timeout.start(ms, callback);
 
-    public static nextTick(callback: TaskCallback) {
-        return NextTick.start(callback);
-    }
+export const startInterval = (ms: number, callback: TaskCallback) => Interval.start(ms, callback);
 
-    public static setImmediate(callback: TaskCallback) {
-        return Immediate.start(callback);
-    }
+export const nextTick = (callback: TaskCallback) => NextTick.start(callback);
 
-    public static setTimeout(ms: number, callback: TaskCallback) {
-        return Timeout.start(ms, callback);
-    }
-
-    public static setInterval(ms: number, callback: TaskCallback) {
-        return Interval.start(ms, callback);
-    }
-}
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

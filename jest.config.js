@@ -1,5 +1,6 @@
-{
+module.exports = async () => ({
     "cacheDirectory": "tmp/jest-cache",
+    "rootDir": __dirname,
     "roots": [
         "<rootDir>/packages"
     ],
@@ -27,6 +28,6 @@
         "ts-jest": {
             "isolatedModules": true,
             "tsconfig": "./tsconfig.test.json"
-        }
-    }
-}
+        },
+    },
+});

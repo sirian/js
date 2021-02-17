@@ -1,4 +1,4 @@
-import {isNumber, isString, Json, stringifyVar} from "@sirian/common";
+import {isNumber, isString, jsonStringify, stringifyVar} from "@sirian/common";
 import {DateTime} from "@sirian/datetime";
 import prettyFormat from "pretty-format";
 import {LogRecord} from "../LogRecord";
@@ -29,8 +29,8 @@ export class LineFormatter extends LogFormatter {
             p: (value) => LineFormatter.pretty(value, {min: true}),
             P: (value) => LineFormatter.pretty(value),
 
-            j: (value) => Json.stringify(value),
-            J: (value, ph) => Json.stringify(value, null, +ph.options || 2),
+            j: (value) => jsonStringify(value),
+            J: (value, ph) => jsonStringify(value, null, +ph.options || 2),
 
             date: (value, ph) => DateTime.from(value).format(ph.options),
         });

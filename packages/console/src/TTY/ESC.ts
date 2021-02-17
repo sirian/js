@@ -1,4 +1,4 @@
-import {Num} from "@sirian/common";
+import {toUint32} from "@sirian/common";
 
 function encode(str: string): string;
 function encode(str: string, n1: number, s1: string): string;
@@ -7,7 +7,7 @@ function encode(str: string, n1: number, s1: string, n2: number, s2: string): st
 function encode(str: string, ...args: []) {
     const res: Array<string | number> = [str];
     for (let i = 0; i < args.length; i += 2) {
-        res.push(Num.toUint32(args[i]), args[i + 1]);
+        res.push(toUint32(args[i]), args[i + 1]);
     }
     return res.join("");
 }

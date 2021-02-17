@@ -1,33 +1,32 @@
-import {EventLoop} from "../../src";
-import {NextTick} from "../../src/NextTick";
+import {nextTick, sleep} from "../../src";
 
-describe("NextTick.start", () => {
-    test("NextTick.start", async () => {
+describe("nextTick", () => {
+    test("nextTick", async () => {
         const ids: number[] = [];
 
-        const nextTick = (fn: any) => {
+        const nextTickPromise = (fn: any) => {
             Promise.resolve().then(fn);
         };
 
-        NextTick.start(() => {
-            ids.push(1);
-            NextTick.start(() => ids.push(11));
-        });
-
         nextTick(() => {
-            ids.push(2);
-            nextTick(() => ids.push(21));
-            NextTick.start(() => ids.push(31));
+            ids.push(1);
+            nextTick(() => ids.push(11));
         });
 
-        NextTick.start(() => ids.push(3));
-        NextTick.start(() => ids.push(4));
+        nextTickPromise(() => {
+            ids.push(2);
+            nextTickPromise(() => ids.push(21));
+            nextTick(() => ids.push(31));
+        });
 
-        nextTick(() => ids.push(7));
+        nextTick(() => ids.push(3));
+        nextTick(() => ids.push(4));
 
-        NextTick.start(() => ids.push(8));
+        nextTickPromise(() => ids.push(7));
 
-        await EventLoop.waitTimeout(0);
+        nextTick(() => ids.push(8));
+
+        await sleep(0);
 
         expect(ids).toStrictEqual([1, 2, 3, 4, 7, 8, 11, 21, 31]);
     });

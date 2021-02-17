@@ -1,4 +1,4 @@
-import {Rgx, sprintf, Str, stringifyVar, XSet} from "@sirian/common";
+import {rgxEscape, sprintf, Str, stringifyVar, XSet} from "@sirian/common";
 import {EventDispatcher} from "@sirian/event-dispatcher";
 import {CommandDefinition, HelpCommand, ICommandConstructor, ICommandLoader, ListCommand} from "./Command";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
@@ -187,7 +187,7 @@ export class Application {
 
     public findNamespace(namespace: string) {
         const allNamespaces = this.getNamespaces();
-        const expr = namespace.replace(/([^:]+|)/, (text) => Rgx.escape(text) + "[^:]*");
+        const expr = namespace.replace(/([^:]+|)/, (text) => rgxEscape(text) + "[^:]*");
         const re = new RegExp("^" + expr);
         const namespaces = allNamespaces.filter((n) => re.test(n));
 
@@ -230,7 +230,7 @@ export class Application {
             commandNames.push(...this.commandLoader.getNames());
         }
 
-        const expr = name.replace(/([^:]+|)/, (text) => Rgx.escape(text) + "[^:]*");
+        const expr = name.replace(/([^:]+|)/, (text) => rgxEscape(text) + "[^:]*");
 
         const re = new RegExp("^" + expr);
         const rei = new RegExp("^" + expr, "i");

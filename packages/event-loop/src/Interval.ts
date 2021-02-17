@@ -15,11 +15,11 @@ export class Interval extends AsyncTask {
         return super.restart();
     }
 
-    protected clearTask() {
+    protected doClear() {
         clearInterval(this.intervalId);
     }
 
-    protected startTask(callback: TaskCallback) {
+    protected doStart(callback: TaskCallback) {
         this.intervalId = setInterval(callback, this.ms);
     }
 
@@ -27,6 +27,8 @@ export class Interval extends AsyncTask {
         if (this.id !== id) {
             return;
         }
-        this.applyCallback();
+        if (!this.destroyed && this.callback) {
+            this.callback();
+        }
     }
 }

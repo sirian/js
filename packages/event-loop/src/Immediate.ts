@@ -1,31 +1,30 @@
 import {AsyncTask} from "./AsyncTask";
 import {TaskCallback, TaskQueue} from "./TaskQueue";
 
-const tasks = new TaskQueue((callback) => {
-    const {setImmediate, MessageChannel} = globalThis as any;
-    if ("function" === typeof setImmediate) {
-        setImmediate(callback);
-        return;
-    }
-
-    if ("function" === typeof MessageChannel) {
-        const {port1, port2} = new MessageChannel();
-        port1.onmessage = callback;
-        port2.postMessage("");
-        return;
-    }
-
-    return setTimeout(callback);
-});
+declare const setImmediate: any;
 
 export class Immediate<T = any> extends AsyncTask {
+    protected static queue?: TaskQueue;
+
     protected taskId?: number;
 
-    protected clearTask() {
-        tasks.cancel(this.taskId);
+    protected static getQueue() {
+        return Immediate.queue ??= new TaskQueue((callback) => {
+            if ("function" === typeof setImmediate) {
+                setImmediate(callback);
+            } else {
+                const {port1, port2} = new MessageChannel();
+                port1.onmessage = callback;
+                port2.postMessage("");
+            }
+        });
     }
 
-    protected startTask(callback: TaskCallback) {
-        this.taskId = tasks.add(callback);
+    protected doClear() {
+        Immediate.getQueue().cancel(this.taskId);
+    }
+
+    protected doStart(callback: TaskCallback) {
+        this.taskId = Immediate.getQueue().add(callback);
     }
 }

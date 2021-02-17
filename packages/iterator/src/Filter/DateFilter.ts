@@ -1,4 +1,3 @@
-import {Num} from "@sirian/common";
 import {CompareFilter, Operator} from "./CompareFilter";
 
 export class DateFilter extends CompareFilter {
@@ -16,7 +15,7 @@ export class DateFilter extends CompareFilter {
 
         const time = date.getTime();
 
-        if (!Num.isFinite(time)) {
+        if (!isFinite(time)) {
             throw new Error(`"${dt}" is not a valid date.`);
         }
 

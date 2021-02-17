@@ -1,4 +1,3 @@
-import {Obj} from "@sirian/common";
 import {TestUtil} from "../../../common/tests/TestUtil";
 import {cloner, cloneSymbol} from "../../src";
 
@@ -27,7 +26,7 @@ const trueData = [
     /42/i,
     [1, 2, 3],
     {},
-    Obj.create(null),
+    Object.create(null),
     new Uint8Array([1, 2, 3]),
     new Set(),
     new Map(),

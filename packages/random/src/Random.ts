@@ -1,4 +1,4 @@
-import {isArray, Num} from "@sirian/common";
+import {isArray} from "@sirian/common";
 import {IterableEntries} from "@sirian/ts-extra-types";
 import {NativeMathSource} from "./NativeMathSource";
 
@@ -52,7 +52,7 @@ export class Random {
 
         const range = iMax - iMin;
 
-        if (range < 0 || !Num.isFinite(range)) {
+        if (range < 0 || !isFinite(range)) {
             throw new RangeError(`Invalid range [${min}, ${max}]`);
         }
 

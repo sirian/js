@@ -6,11 +6,9 @@ import {
     hasProp,
     isObject,
     isPrimitive,
-    Obj,
     ownDescriptor,
     ownKeys,
     setPrototype,
-    XMap,
 } from "@sirian/common";
 import {cloneSymbol} from "./Cloneable";
 import {CloneError} from "./CloneError";
@@ -18,23 +16,17 @@ import {Cloner, ICloneHandler} from "./Cloner";
 import {CloneOptions} from "./ICloner";
 
 export class CloneContext {
-    protected stack: object[];
-    protected map: XMap<any, any>;
-    protected cloner: Cloner;
-    protected maxDepth: number;
-    protected bypass: (object: object, ctx: CloneContext) => boolean;
+    private readonly stack: object[];
+    private readonly map: Map<any, any>;
+    private readonly cloner: Cloner;
+    private readonly maxDepth: number;
+    private readonly bypass: (object: object, ctx: CloneContext) => boolean;
 
     constructor(cloner: Cloner, options: Partial<CloneOptions> = {}) {
-        const {maxDepth = 0, bypass = () => false} = options;
-        this.maxDepth = maxDepth;
-        this.bypass = bypass;
-
-        if (!(maxDepth >= 0)) {
-            throw new CloneError("Cloner.clone option maxDepth should be >= 0");
-        }
-
+        this.maxDepth = options.maxDepth ?? 0;
+        this.bypass = options.bypass ?? (() => false);
         this.cloner = cloner;
-        this.map = new XMap();
+        this.map = new Map();
         this.stack = [];
     }
 
@@ -136,7 +128,7 @@ export class CloneContext {
         const proto = getPrototype(src);
 
         if (!proto || !hasMethod(handler, "create")) {
-            return Obj.create(proto) as T;
+            return Object.create(proto ?? null) as T;
         }
 
         const stub = handler.create(src);

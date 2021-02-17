@@ -1,4 +1,4 @@
-import {clone, CloneError} from "../../src";
+import {clone} from "../../src";
 import {TestCloner} from "../TestCloner";
 
 describe("Cloner.clone with maxDepth", () => {
@@ -11,11 +11,6 @@ describe("Cloner.clone with maxDepth", () => {
     };
 
     TestCloner.multiTest(obj);
-
-    test("maxDepth = -1", () => {
-        const expectedErr = new CloneError("Cloner.clone option maxDepth should be >= 0");
-        expect(() => clone(obj, {maxDepth: -1})).toThrow(expectedErr);
-    });
 
     test("maxDepth = undefined", () => {
         const copy = clone(obj, {maxDepth: undefined});

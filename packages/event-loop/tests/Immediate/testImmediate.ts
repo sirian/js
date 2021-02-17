@@ -1,25 +1,25 @@
-import {Immediate} from "../../src";
+import {Immediate, startImmediate} from "../../src";
 
 describe("Immediate", () => {
     test("Immediate", () => {
         jest.useFakeTimers();
         const ids: number[] = [];
 
-        Immediate.start(() => {
+        startImmediate(() => {
             ids.push(1);
-            Immediate.start(() => ids.push(11));
+            startImmediate(() => ids.push(11));
         });
 
         setImmediate(() => {
             ids.push(2);
             setImmediate(() => ids.push(21));
-            Immediate.start(() => ids.push(31));
+            startImmediate(() => ids.push(31));
         });
 
-        Immediate.start(() => ids.push(3));
-        Immediate.start(() => ids.push(4));
+        startImmediate(() => ids.push(3));
+        startImmediate(() => ids.push(4));
         setImmediate(() => ids.push(7));
-        Immediate.start(() => ids.push(8));
+        startImmediate(() => ids.push(8));
 
         jest.runAllImmediates();
 
@@ -29,7 +29,7 @@ describe("Immediate", () => {
     test("", () => {
         jest.useFakeTimers();
         const fn = jest.fn();
-        Immediate.start(fn).clear();
+        startImmediate(fn).clear();
         jest.runAllImmediates();
         expect(fn).not.toHaveBeenCalled();
     });
@@ -40,7 +40,7 @@ describe("Immediate", () => {
 
         let immCounter = 0;
         let fooCounter = 0;
-        const imm = Immediate.start(() => {
+        const imm = startImmediate(() => {
             ids.push(++immCounter);
             if (immCounter < 3) {
                 imm.start();

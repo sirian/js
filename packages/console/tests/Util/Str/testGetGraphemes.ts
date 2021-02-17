@@ -12,7 +12,7 @@ describe("", () => {
         ["\uD83C\uDF1F\u5FCD\u8005\u306E\u653B\u6483\uD83C\uDF1F", ["🌟", "忍", "者", "の", "攻", "撃", "🌟"]],
     ];
 
-    test.each(data)("Unicode.getGraphemes(%p) === %p", (str, expected) => {
+    test.each(data)("Byte.getGraphemes(%p) === %p", (str, expected) => {
         expect(StrUtil.getGraphemes(str)).toStrictEqual(expected);
     });
 });

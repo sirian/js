@@ -9,6 +9,6 @@ const data: Array<[any, string]> = [
     [new Uint8Array([102, 111, 111]), "foo"],
 ];
 
-test.each(data)("Path.stringify(%o) === %o", (path, expected) => {
+test.each(data)("Path.Stringify(%o) === %o", (path, expected) => {
     expect(Path.stringify(path)).toBe(expected);
 });

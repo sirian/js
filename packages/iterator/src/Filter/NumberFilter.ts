@@ -1,4 +1,4 @@
-import {Num, stringifyVar} from "@sirian/common";
+import {parseNumber, stringifyVar} from "@sirian/common";
 import {CompareFilter, Operator} from "./CompareFilter";
 
 export class NumberFilter extends CompareFilter {
@@ -14,7 +14,7 @@ export class NumberFilter extends CompareFilter {
 
         const [/*text*/, op, val, suffix, pow2] = match;
 
-        let target = Num.parse(val);
+        let target = parseNumber(val);
 
         if (suffix) {
             const power = "kmg".indexOf(suffix[0].toLowerCase());

@@ -45,15 +45,11 @@ export class TaskQueue {
         this.scheduled = false;
         this.running = true;
 
-        const tasks = this.tasks;
-
-        const apply = async (fn: TaskCallback) => fn();
-
-        const entries = Object.entries(tasks);
-        for (const [id, {canceled, fn}] of entries) {
-            delete tasks[id];
-            if (!canceled) {
-                apply(fn);
+        const entries = Object.entries(this.tasks);
+        for (const [id, task] of entries) {
+            delete this.tasks[id];
+            if (!task.canceled) {
+                (async () => task.fn())();
             }
         }
         this.running = false;

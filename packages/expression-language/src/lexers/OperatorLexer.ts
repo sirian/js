@@ -1,4 +1,4 @@
-import {Rgx} from "@sirian/common";
+import {rgxEscape} from "@sirian/common";
 import {AbstractRegExpLexer, Reader, Token} from "@sirian/parser";
 import {Operators} from "../Operators";
 import {TokenType, TokenTypes} from "../Token";
@@ -13,7 +13,7 @@ export class OperatorLexer extends AbstractRegExpLexer<TokenTypes> {
         const pattern = operators
             .getOperatorNames()
             .sort((a, b) => a.length - b.length)
-            .map(Rgx.escape)
+            .map(rgxEscape)
             .map((o) => /[a-z]$/i.test(o) ? o + "(?=[\\s(])" : o)
             .join("|");
 

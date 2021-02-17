@@ -27,18 +27,16 @@ export abstract class AsyncTask {
             const id = ++AsyncTask.lastId;
             this.id = id;
             AsyncTask.tasks.set(id, this);
-            this.startTask(() => this.handle(id));
+            this.doStart(() => this.handle(id));
         }
         return this;
     }
 
     public clear() {
         const id = this.id;
-        if (undefined !== id) {
-            AsyncTask.tasks.delete(id);
-            delete this.id;
-            this.clearTask();
-        }
+        AsyncTask.tasks.delete(id);
+        delete this.id;
+        this.doClear();
         return this;
     }
 
@@ -69,16 +67,12 @@ export abstract class AsyncTask {
             return;
         }
         this.clear();
-        this.applyCallback();
-    }
-
-    protected async applyCallback() {
         if (!this.destroyed && this.callback) {
             this.callback();
         }
     }
 
-    protected abstract startTask(callback: TaskCallback): any;
+    protected abstract doStart(callback: TaskCallback): any;
 
-    protected abstract clearTask(): any;
+    protected abstract doClear(): any;
 }

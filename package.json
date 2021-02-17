@@ -40,7 +40,7 @@
         "tslint:fix": "yarn tslint:lint --fix",
         "test": "yarn test:jest && lerna run test --parallel",
         "test:clean": "yarn test:jest --clearCache",
-        "test:jest": "jest --config jest.config.json",
+        "test:jest": "jest --config jest.config.js",
         "test:watch": "yarn test:jest --watch --maxWorkers=2",
         "lerna:publish": "yarn lerna publish --conventional-commits --yes"
     },

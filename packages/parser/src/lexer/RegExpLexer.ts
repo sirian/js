@@ -1,4 +1,3 @@
-import {Rgx} from "@sirian/common";
 import {Reader} from "../Reader";
 import {Token, TokenTypes} from "../Token";
 import {TokenStream} from "../TokenStream";
@@ -12,7 +11,7 @@ export class RegExpLexer<T extends TokenTypes = TokenTypes, K extends keyof T = 
     constructor(pattern: RegExp | string, type: K) {
         super();
         this.type = type;
-        this.regexp = Rgx.create(pattern);
+        this.regexp = new RegExp(pattern);
     }
 
     protected handleMatch(match: RegExpMatchArray, reader: Reader, stream: TokenStream<T>) {
