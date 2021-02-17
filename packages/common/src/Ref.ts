@@ -1,6 +1,17 @@
-import {AnyKey, Ctor, Ctor0, CtorArgs, Ensure, Func, Get, Instance, Newable} from "@sirian/ts-extra-types";
+import {
+    AnyKey,
+    Ctor,
+    Ctor0,
+    CtorArgs,
+    Ensure,
+    Func,
+    Func0,
+    Func1,
+    Get,
+    Instance,
+    Newable,
+} from "@sirian/ts-extra-types";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
-import {tryCatch} from "./Try";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 
@@ -139,3 +150,17 @@ export const isPropWritable = (target: any, property: PropertyKey) => {
 
     return desc.writable || isFunction(desc.set);
 };
+
+export function tryCatch<T>(fn: () => T): T | undefined;
+export function tryCatch<T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): T | R;
+export function tryCatch(fn: Func0, onError?: Func1) {
+    try {
+        return fn();
+    } catch (error) {
+        return isFunction(onError) ? onError(error) : onError;
+    }
+}
+
+export function throwError(err: any): never {
+    throw err;
+}

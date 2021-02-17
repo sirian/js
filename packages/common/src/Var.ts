@@ -28,8 +28,6 @@ export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
 export const isNumeric = (value: any): value is string | number =>
     isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
 
-export const isPromiseLike = (value: any): value is PromiseLike<any> => hasMethod(value, "then");
-
 export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
     ctor.some((c) => isFunction(c) && (obj instanceof c));
 

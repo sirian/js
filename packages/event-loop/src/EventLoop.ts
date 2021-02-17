@@ -12,4 +12,4 @@ export const startInterval = (ms: number, callback: TaskCallback) => Interval.st
 
 export const nextTick = (callback: TaskCallback) => NextTick.start(callback);
 
-export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
