@@ -1,4 +1,4 @@
-import {castArray, Str, stringifyVar} from "@sirian/common";
+import {castArray, padRight, stringifyVar} from "@sirian/common";
 import {Formatter, FormatterStyleDefinition} from "../Formatter";
 import {Output} from "../Output";
 import {StrUtil} from "../Util";
@@ -34,9 +34,9 @@ export class Block {
 
         const padding = options.padding || [];
         const padTop = padding.length > 0 ? padding[0] : 0;
-        const padRight = padding.length > 1 ? padding[1] : padTop;
+        const padR = padding.length > 1 ? padding[1] : padTop;
         const padBottom = padding.length > 2 ? padding[2] : padTop;
-        const padLeft = padding.length > 3 ? padding[3] : padRight;
+        const padL = padding.length > 3 ? padding[3] : padR;
 
         const lines: string[] = [];
         const output = this.output;
@@ -53,10 +53,10 @@ export class Block {
         const maxWidth = Math.min(
             output.getWidth(),
             options.maxWidth,
-            maxMessageWidth + typeWidth + padRight + padLeft,
+            maxMessageWidth + typeWidth + padR + padL,
         );
 
-        const chunkWidth = maxWidth - typeWidth - padLeft - padRight;
+        const chunkWidth = maxWidth - typeWidth - padL - padR;
 
         for (const message of messages) {
             const chunks = StrUtil.splitByWidth(message, chunkWidth);
@@ -65,10 +65,10 @@ export class Block {
                 const prefix = 0 === lines.length ? type : "";
 
                 const parts = [
-                    StrUtil.spaces(padLeft),
-                    Str.padRight(prefix, typeWidth),
-                    Str.padRight(chunk, chunkWidth),
-                    StrUtil.spaces(padRight),
+                    StrUtil.spaces(padL),
+                    padRight(prefix, typeWidth),
+                    padRight(chunk, chunkWidth),
+                    StrUtil.spaces(padR),
                 ];
 
                 lines.push(parts.join(""));

@@ -1,4 +1,4 @@
-import {Str} from "@sirian/common";
+import {strReplace} from "@sirian/common";
 import {Argument, InputDefinition, Option} from "../Input";
 
 export class CommandDefinition {
@@ -29,7 +29,7 @@ export class CommandDefinition {
             "%name%": this.name,
         };
 
-        return Str.replace(this.help, tokens);
+        return strReplace(this.help, tokens);
     }
 
     public setHelp(help: string) {

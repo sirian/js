@@ -1,4 +1,4 @@
-import {Arr, Str, stringifyVar} from "@sirian/common";
+import {arrChunk, padRight, stringifyVar} from "@sirian/common";
 
 export class StrUtil {
     public static stripTags(text: string) {
@@ -21,8 +21,8 @@ export class StrUtil {
 
         const graphemes = StrUtil.getGraphemes(str);
 
-        return Arr.chunk(graphemes, width)
-            .map((a) => Str.padRight(a.join(""), width, " "));
+        return arrChunk(graphemes, width)
+            .map((a) => padRight(a.join(""), width, " "));
     }
 
     public static getGraphemes(str: any) {

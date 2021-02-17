@@ -1,4 +1,4 @@
-import {entriesOf, Str, valuesOf} from "@sirian/common";
+import {entriesOf, stringifyStr, valuesOf} from "@sirian/common";
 import {Compiler} from "../Compiler";
 import {IExpressionFunction} from "../IExpressionFunction";
 
@@ -17,7 +17,7 @@ export class Node<N extends Nodes = Nodes, A extends Record<string, any> = Recor
         const options = [];
 
         for (const [name, value] of entriesOf(this.options)) {
-            options.push(`${name}: ${Str.stringify(value).replace(/\n/g, "")}`);
+            options.push(`${name}: ${stringifyStr(value).replace(/\n/g, "")}`);
         }
 
         const repr = [this.constructor.name + "(" + options.join(", ")];
@@ -25,7 +25,7 @@ export class Node<N extends Nodes = Nodes, A extends Record<string, any> = Recor
         const nodes = valuesOf(this.nodes);
         if (nodes.length) {
             for (const node of nodes) {
-                for (const line of Str.stringify(node).split("\n")) {
+                for (const line of stringifyStr(node).split("\n")) {
                     repr.push("    " + line);
                 }
             }

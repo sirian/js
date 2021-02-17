@@ -1,4 +1,4 @@
-import {entriesOf, hasOwn, isObject, Str, stringifyVar} from "@sirian/common";
+import {dashCase, entriesOf, hasOwn, isObject, stringifyVar} from "@sirian/common";
 import {StyleInit} from "./StyleStack";
 
 export class Styler {
@@ -16,7 +16,7 @@ export class Styler {
 
         const result = [];
         for (const [key, value] of entriesOf(style)) {
-            result.push(Str.dashCase(key), ":", value, ";");
+            result.push(dashCase(key), ":", value, ";");
         }
         return result.join("");
     }

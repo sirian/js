@@ -1,4 +1,4 @@
-import {sprintf, Str, stringifyVar} from "@sirian/common";
+import {padLeft, sprintf, stringifyVar, substrCount} from "@sirian/common";
 import {LogicError} from "../Error";
 import {Output, OutputVerbosity} from "../Output";
 import {ESC} from "../TTY";
@@ -39,7 +39,7 @@ export class ProgressBar {
 
             return display;
         },
-        current: (bar) => Str.padLeft(bar.getProgress(), bar.getStepWidth()),
+        current: (bar) => padLeft(bar.getProgress(), bar.getStepWidth()),
         elapsed: (bar) => bar.formatTime((Perf.now() - bar.getStartTime()) / 1000),
         max: (bar) => bar.getMaxSteps(),
         memory: (bar) => Units.formatBytes(process.memoryUsage().heapUsed),
@@ -317,7 +317,7 @@ export class ProgressBar {
 
         this.format = (!this.max && ProgressBar.nomaxFormats[format]) || ProgressBar.formats[format] || format;
 
-        this.formatLineCount = Str.substringCount(this.format, "\n");
+        this.formatLineCount = substrCount(this.format, "\n");
     }
 
     protected setMaxSteps(max: number) {

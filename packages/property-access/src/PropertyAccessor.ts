@@ -1,4 +1,13 @@
-import {hasMethod, isInstanceOf, isObjectOrFunction, isPrimitive, isPropWritable, Str} from "@sirian/common";
+import {
+    camelCase,
+    hasMethod,
+    isInstanceOf,
+    isObjectOrFunction,
+    isPrimitive,
+    isPropWritable,
+    lowerFirst,
+    upperFirst,
+} from "@sirian/common";
 import {Get, GetDeep} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
 import {Path, PathElement, PathKey, PropertyPath} from "./PropertyPath";
@@ -116,7 +125,7 @@ export class PropertyAccessor {
     }
 
     private getReadAccessInfo(target: any, path: PathElement) {
-        const camelProp = Str.upperFirst(Str.camelCase(path));
+        const camelProp = upperFirst(camelCase(path));
 
         return this.getAccessInfo(target, path, [
             "get" + camelProp, // get method: obj.getParent()
@@ -126,11 +135,11 @@ export class PropertyAccessor {
     }
 
     private getWriteAccessInfo(target: any, path: PathElement) {
-        const camelProp = Str.upperFirst(Str.camelCase(path));
+        const camelProp = upperFirst(camelCase(path));
 
         return this.getAccessInfo(target, path, [
             "set" + camelProp, // set method: obj.setParent(node)
-            Str.lowerFirst(camelProp), // getsetter: obj.parent(node)
+            lowerFirst(camelProp), // getsetter: obj.parent(node)
         ]);
     }
 

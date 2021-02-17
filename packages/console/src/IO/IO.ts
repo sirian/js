@@ -1,4 +1,4 @@
-import {Str, stringifyVar} from "@sirian/common";
+import {padRight, stringifyVar} from "@sirian/common";
 import ErrorStackParser from "error-stack-parser";
 import {Formatter} from "../Formatter";
 import {ArgvInput, Input} from "../Input";
@@ -127,7 +127,7 @@ export class IO {
         messages.push(emptyLine);
 
         if ("" === message || output.isVerbose()) {
-            messages.push(`<error>${Str.padRight(title, len)}</error>`);
+            messages.push(`<error>${padRight(title, len)}</error>`);
         }
 
         for (const [line, lineLength] of lines) {

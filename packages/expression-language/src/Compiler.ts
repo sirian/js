@@ -1,4 +1,4 @@
-import {entriesOf, isArray, isObject, isPrimitive, isString, Str} from "@sirian/common";
+import {entriesOf, isArray, isObject, isPrimitive, isString, stringifyStr, strWrap} from "@sirian/common";
 import {IExpressionFunction} from "./IExpressionFunction";
 import {Node} from "./nodes";
 
@@ -43,13 +43,13 @@ export class Compiler {
     }
 
     public raw(value: any) {
-        this.source += Str.stringify(value);
+        this.source += stringifyStr(value);
 
         return this;
     }
 
     public string(value: string) {
-        this.source += Str.wrap(value, `"`);
+        this.source += strWrap(value, `"`);
 
         return this;
     }

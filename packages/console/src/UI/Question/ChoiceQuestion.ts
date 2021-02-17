@@ -1,4 +1,4 @@
-import {isArray, Str, stringifyVar} from "@sirian/common";
+import {isArray, padLeft, stringifyVar} from "@sirian/common";
 import {InvalidArgumentError} from "../../Error";
 import {KV, StrUtil} from "../../Util";
 import {AbstractQuestion, IQuestionOptions} from "./AbstractQuestion";
@@ -45,7 +45,7 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
 
         for (const [key, value] of KV.entries(choices)) {
             const k = stringifyVar(key);
-            messages.push(`  [<comment>${Str.padLeft(k, width)}</comment>] ${value}`);
+            messages.push(`  [<comment>${padLeft(k, width)}</comment>] ${value}`);
         }
         return messages.join("\n");
     }

@@ -1,4 +1,4 @@
-import {isArrayBuffer, isArrayBufferView, isNullish, Str} from "@sirian/common";
+import {isArrayBuffer, isArrayBufferView, isNullish, stringifyStr} from "@sirian/common";
 import {PathLike} from "fs";
 import * as pathUtil from "path";
 import * as util from "util";
@@ -23,13 +23,13 @@ export class Path {
         }
 
         if (part instanceof Buffer) {
-            return Str.stringify(part);
+            return stringifyStr(part);
         }
 
         if (isArrayBufferView(part) || isArrayBuffer(part)) {
             return Path.decoder.decode(part as DataView | ArrayBuffer);
         }
 
-        return Str.stringify(part);
+        return stringifyStr(part);
     }
 }

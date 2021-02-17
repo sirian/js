@@ -1,4 +1,4 @@
-import {castArray, Str} from "@sirian/common";
+import {castArray, stringifyStr} from "@sirian/common";
 import {TagToken} from "../../parser/token";
 
 export class JML {
@@ -23,7 +23,7 @@ export class JML {
     }
 
     public static normalizeTagName(tagName: string) {
-        return Str.stringify(tagName).toLowerCase();
+        return stringifyStr(tagName).toLowerCase();
     }
 
     public addClass(name: string) {

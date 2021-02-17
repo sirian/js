@@ -1,4 +1,4 @@
-import {sprintf, Str} from "@sirian/common";
+import {pad, sprintf} from "@sirian/common";
 import {InvalidArgumentError} from "../../Error";
 import {Output} from "../../Output";
 import {KV, StrUtil} from "../../Util";
@@ -223,7 +223,7 @@ export class Table {
 
         const content = sprintf(style.getCellRowContentFormat(), str);
 
-        const formatted = sprintf(cellFormat, Str.pad(content, width, style.getPaddingChar(), style.getPadType()));
+        const formatted = sprintf(cellFormat, pad(content, width, style.getPaddingChar(), style.getPadType()));
 
         this.output.write(formatted);
     }

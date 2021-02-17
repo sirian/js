@@ -1,4 +1,4 @@
-import {hasOwn, keysOf, Obj} from "@sirian/common";
+import {hasOwn, isEmptyObject, keysOf} from "@sirian/common";
 
 export type MarkingPlaces<S extends string = any> = Partial<Record<S, number>>;
 
@@ -31,6 +31,6 @@ export class Marking<S extends string = any> {
     }
 
     public isEmpty() {
-        return Obj.isEmpty(this.places);
+        return isEmptyObject(this.places);
     }
 }

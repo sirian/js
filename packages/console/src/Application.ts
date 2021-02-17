@@ -1,4 +1,4 @@
-import {rgxEscape, sprintf, Str, stringifyVar, XSet} from "@sirian/common";
+import {padRight, rgxEscape, stringifyVar, substrCount, XSet} from "@sirian/common";
 import {EventDispatcher} from "@sirian/event-dispatcher";
 import {CommandDefinition, HelpCommand, ICommandConstructor, ICommandLoader, ListCommand} from "./Command";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
@@ -298,7 +298,7 @@ export class Application {
                 const command = await this.getCommand(cmdName);
 
                 const description = command.getDefinition().getDescription();
-                const abbr = sprintf("%s %s", Str.padRight(cmdName, maxLen), description);
+                const abbr = padRight(cmdName, maxLen) + " " + description;
                 abbrevs.push(abbr);
             }
 
@@ -322,7 +322,7 @@ export class Application {
         }
 
         for (const name of names) {
-            if (!ns || ns === this.extractNamespace(name, Str.substringCount(ns, ":") + 1)) {
+            if (!ns || ns === this.extractNamespace(name, substrCount(ns, ":") + 1)) {
                 commands.add(name);
             }
         }
