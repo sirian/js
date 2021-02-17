@@ -1,4 +1,5 @@
 import {Func} from "./function";
+import {NotFunc, Primitive} from "./types";
 
 export interface Lengthwise<L extends number = number> {
     length: L;
@@ -23,3 +24,5 @@ export interface IterableValues<V = any> {
 export interface Thenable {
     then: Func;
 }
+
+export type NotThenable = Primitive | object & { then?: NotFunc };
