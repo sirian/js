@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/sirian/js/compare/@sirian/common@6.0.0...@sirian/common@6.1.0) (2021-02-17)
+
+
+### Features
+
+* **common:** refactoring ([7af5039](https://github.com/sirian/js/commit/7af50398176c243965eac1336e6f231b6a9b0dc1))
+
+
+
+
+
 # [6.0.0](https://github.com/sirian/js/compare/@sirian/common@5.18.1...@sirian/common@6.0.0) (2021-02-17)
 
 
