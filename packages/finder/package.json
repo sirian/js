@@ -1,7 +1,7 @@
 {
     "name": "@sirian/finder",
     "description": "",
-    "version": "1.3.30",
+    "version": "1.3.31",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -18,7 +18,7 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^6.2.0",
-        "@sirian/filesystem": "^1.10.21",
+        "@sirian/filesystem": "^1.10.22",
         "@sirian/iterator": "^1.13.29",
         "@sirian/ts-extra-types": "^3.61.0"
     },

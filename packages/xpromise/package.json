@@ -1,7 +1,7 @@
 {
     "name": "@sirian/xpromise",
     "description": "",
-    "version": "2.10.9",
+    "version": "2.11.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"

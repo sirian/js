@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.11.0](https://github.com/sirian/js/compare/@sirian/xpromise@2.10.9...@sirian/xpromise@2.11.0) (2021-02-19)
+
+
+### Features
+
+* **xpromise:** Drop XPromiseError ([bf5f78f](https://github.com/sirian/js/commit/bf5f78fb495dcc4bf7c45498c901935b00a90296))
+
+
+
+
+
 ## [2.10.9](https://github.com/sirian/js/compare/@sirian/xpromise@2.10.8...@sirian/xpromise@2.10.9) (2021-02-19)
 
 **Note:** Version bump only for package @sirian/xpromise
