@@ -160,7 +160,3 @@ export function tryCatch(fn: Func0, onError?: Func1) {
         return isFunction(onError) ? onError(error) : onError;
     }
 }
-
-export function throwError(err: any): never {
-    throw err;
-}

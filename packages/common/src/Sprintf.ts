@@ -1,4 +1,5 @@
-import {isFunction, isNullish} from "./Is";
+import {assert} from "./Error";
+import {isFunction, isString} from "./Is";
 import {jsonStringify} from "./Json";
 import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Obj";
@@ -104,9 +105,7 @@ export class Sprintf {
         let arg = argv[this.cursor];
 
         for (const [index, key] of keys.entries()) {
-            if (isNullish(arg)) {
-                throw new Error(`Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
-            }
+            assert(arg, `Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
 
             arg = arg[key];
         }
@@ -140,27 +139,23 @@ export class Sprintf {
 
             const match = rgxPlaceholder.exec(str);
 
-            if (!match) {
-                throw new SyntaxError(`Sprintf unexpected placeholder at index ${index}`);
-            }
-
-            const [text, paramNum, replacementField, sign, rawPadChar, align, width, precision, type] = match;
+            assert(match, "Unexpected " + str);
 
             const item: Placeholder = {
-                placeholder: text,
-                paramNum: parseInt(paramNum, 0),
-                keys: this.parseKeys(replacementField),
-                sign: !!sign,
-                padChar: (rawPadChar || " ").slice(-1),
-                align: !!align,
-                width: parseInt(width, 0),
-                precision: parseInt(precision, 0),
-                type,
+                placeholder: match[0],
+                paramNum: parseInt(match[1], 0),
+                keys: this.parseKeys(match[2]),
+                sign: !!match[3],
+                padChar: (match[4] || " ").slice(-1),
+                align: !!match[5],
+                width: parseInt(match[6], 0),
+                precision: parseInt(match[7], 0),
+                type: match[8],
             };
 
             tree.push(item);
 
-            index += text.length;
+            index += match[0].length;
         }
 
         return tree;
@@ -168,7 +163,7 @@ export class Sprintf {
 
     protected parseKeys(field: string) {
         if (!field) {
-            return undefined;
+            return;
         }
 
         const keys: string[] = [];
@@ -176,15 +171,11 @@ export class Sprintf {
         let match = rgxKey.exec(field);
 
         while (true) {
-            if (!match) {
-                throw new SyntaxError("Failed to parse named argument key");
-            }
+            assert(match, "Failed to parse named argument key");
 
-            const [text, key] = match;
+            keys.push(match[1]);
 
-            keys.push(key);
-
-            field = field.substring(text.length);
+            field = field.substring(match[0].length);
 
             if ("" === field) {
                 break;
@@ -199,17 +190,10 @@ export class Sprintf {
     protected handlePlaceholder(ph: Placeholder, arg: any) {
         const type = ph.type;
         const callback = this.placeholders[type];
-
-        if (!callback) {
-            throw new Error(`Formatter for "${type}" not found`);
-        }
+        assert(callback, `Formatter for "${type}" not found`);
 
         if (!/^[Tv]/.test(type) && isFunction(arg)) {
             arg = arg();
-        }
-
-        if (/[bcdiefguxX]/.test(type) && typeof arg !== "number" && isNaN(arg)) {
-            throw new TypeError(`Expecting number, given ${typeof arg} "${arg}"`);
         }
 
         return stringifyVar(callback(arg, ph));
@@ -221,7 +205,7 @@ export class Sprintf {
         const output: string[] = [];
 
         for (const ph of this.tree) {
-            if ("string" === typeof ph) {
+            if (isString(ph)) {
                 output.push(ph);
                 continue;
             }
@@ -263,5 +247,4 @@ export class Sprintf {
 
         return output.join("");
     }
-
 }

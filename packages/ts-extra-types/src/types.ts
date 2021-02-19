@@ -6,6 +6,7 @@ import {ArrayRO} from "./tuple";
 
 export type Primitive = boolean | bigint | number | string | symbol | null | undefined | void;
 export type Nullish = void | null | undefined;
+export type Falsy = 0 | 0n | null | undefined | false | "";
 
 export type Widen<T> =
     T extends null ? T :

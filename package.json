@@ -14,14 +14,14 @@
     },
     "devDependencies": {
         "@types/jest": "^26.0.20",
-        "husky": "^4.3.8",
+        "husky": "^4.0",
         "jest": "^26.6.3",
         "lerna": "^3.22.1",
         "rimraf": "^3.0.2",
         "ts-jest": "^26.5.1",
         "ts-node": "^9.1.1",
         "tslint": "^5.0",
-        "typescript": "^4.3.0-dev.20210212"
+        "typescript": "^4.3.0-dev.20210218"
     },
     "scripts": {
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build:all",
@@ -40,8 +40,8 @@
         "tslint:fix": "yarn tslint:lint --fix",
         "test": "yarn test:jest && lerna run test --parallel",
         "test:clean": "yarn test:jest --clearCache",
-        "test:jest": "jest --config jest.config.js",
-        "test:watch": "yarn test:jest --watch --maxWorkers=2",
+        "test:jest": "jest",
+        "test:watch": "jest --watch",
         "lerna:publish": "yarn lerna publish --conventional-commits --yes"
     },
     "resolutions": {

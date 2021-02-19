@@ -21,8 +21,8 @@ describe("", () => {
         [-Infinity, -Infinity],
     ];
 
-    const invalidData: any[] = [
-        "[]", "0b2", NaN, Symbol.iterator, [], {}, new Date(), /./,
+    const invalidData = [
+        "[]", "0b2", NaN,
     ];
 
     test.each(data)("Num.parse(%p) === %p", (value, expected) => {

@@ -23,26 +23,19 @@ describe("sprintfjs cache", () => {
 describe("sprintfjs", () => {
 
     test("should throw SyntaxError for placeholders", () => {
-        throws("%", [], SyntaxError);
-        throws("%A", [], SyntaxError);
-        throws("%s%", [], SyntaxError);
-        throws("%(s", [], SyntaxError);
-        throws("%)s", [], SyntaxError);
-        throws("%$s", [], SyntaxError);
-        throws("%()s", [], SyntaxError);
-        throws("%(12)s", [], SyntaxError);
+        throws("%", [], Error);
+        throws("%A", [], Error);
+        throws("%s%", [], Error);
+        throws("%(s", [], Error);
+        throws("%)s", [], Error);
+        throws("%$s", [], Error);
+        throws("%()s", [], Error);
+        throws("%(12)s", [], Error);
     });
 
     const numeric = "bcdiefguxX".split("");
     for (const specifier of numeric) {
         const fmt = sprintf("%%%s", specifier);
-
-        test(fmt + " should throw TypeError for invalid numbers", () => {
-            throws(fmt, [], TypeError);
-            throws(fmt, ["str"], TypeError);
-            throws(fmt, [{}], TypeError);
-            throws(fmt, ["s"], TypeError);
-        });
 
         test(fmt + " should not throw TypeError for something implicitly castable to number", () => {
             notThrow(fmt, [1 / 0]);

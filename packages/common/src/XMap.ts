@@ -1,6 +1,7 @@
 import {Nullish} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
-import {isFunction, isPropertyKey} from "./Is";
+import {assert} from "./Error";
+import {isFunction} from "./Is";
 import {entriesOf} from "./Obj";
 import {isEqual, isPlainObject} from "./Var";
 
@@ -58,9 +59,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
     public static pick<K, V>(map: IMapMini<K, V>, key: K, strict: true): V;
     public static pick<K, V>(map: IMapMini<K, V>, key: K, strict?: boolean): V | undefined;
     public static pick<K, V>(map: IMapMini<K, V>, key: K, throws = false) {
-        if (throws && !map.has(key)) {
-            throw new Error(`Key ${key} not found`);
-        }
+        assert(!throws || map.has(key), `Key ${key} not found`);
         const result = map.get(key);
         map.delete(key);
         return result;
@@ -68,13 +67,8 @@ export class XMap<K = any, V = any> extends Map<K, V> {
 
     public static ensure<K, V>(map: IMapMini<K, V>, key: K, initializer: XMapInitializer<K, V>) {
         if (!map.has(key)) {
-            if (!isFunction(initializer)) {
-                throw new Error(`Could not ensure key "${key}" - initializer is not a function`);
-            }
-
-            const value = initializer(key);
-
-            map.set(key, value);
+            assert(isFunction(initializer));
+            map.set(key, initializer(key));
         }
 
         return map.get(key)!;
@@ -107,9 +101,6 @@ export class XMap<K = any, V = any> extends Map<K, V> {
         const result: any = {};
 
         for (const [key, value] of this) {
-            if (!isPropertyKey(key)) {
-                throw new Error(`Could not convert map to object. ${key} is not a number|string|symbol`);
-            }
             result[key] = value;
         }
 

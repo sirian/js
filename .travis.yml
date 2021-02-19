@@ -3,8 +3,6 @@ node_js:
     - '15'
 cache:
     yarn: true
-    directories:
-        - "node_modules"
 
 before_install:
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s
@@ -19,7 +17,6 @@ before_script:
 
 script:
     - yarn ci:build
-    - lerna updated -l
 
 before_deploy:
     - git config --global user.email ${GITHUB_EMAIL}
@@ -28,10 +25,10 @@ before_deploy:
     - npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
     - git checkout release
 
-deploy:
-    provider: script
-    script: "yarn lerna:publish"
-    skip_cleanup: true
-    on:
-        node: "14"
-        branch: "release"
+#deploy:
+#    provider: script
+#    script: "yarn lerna:publish"
+#    skip_cleanup: true
+#    on:
+#        node: "15"
+#        branch: "master"

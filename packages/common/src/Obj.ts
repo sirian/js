@@ -8,10 +8,9 @@ import {
     ObjEntryOf,
     ObjKeyOf,
     ObjValueOf,
-    ToPrimitive,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {isArray, isNullish, isPrimitive} from "./Is";
+import {isArray, isNullish} from "./Is";
 import {deleteProp, getPrototypes, hasMethod, hasOwn, hasProp, ownDescriptors, ownKeys, ProtoChainOptions} from "./Ref";
 import {stringifyObj} from "./Stringify";
 
@@ -41,24 +40,6 @@ export const assign = <T extends any, U extends any[]>(target: T, ...sources: U)
     }
 
     return target as any;
-};
-
-export const toPrimitive = <T>(target: T): ToPrimitive<T> => {
-    if (isPrimitive(target)) {
-        return target as ToPrimitive<T>;
-    }
-
-    const symbol = Symbol.toPrimitive;
-
-    if (hasMethod(target, symbol)) {
-        return (target as any)[symbol]("default");
-    }
-
-    if (hasMethod(target, "valueOf")) {
-        return (target as any).valueOf();
-    }
-
-    throw new Error(`Could not convert ${getObjectTag(target)} to primitive value`);
 };
 
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);

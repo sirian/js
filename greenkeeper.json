@@ -2,7 +2,6 @@
     "groups": {
         "default": {
             "packages": [
-                "packages/assert/package.json",
                 "packages/base64/package.json",
                 "packages/clone/package.json",
                 "packages/common/package.json",
@@ -32,7 +31,6 @@
                 "packages/parser/package.json",
                 "packages/performance/package.json",
                 "packages/property-access/package.json",
-                "packages/random/package.json",
                 "packages/rpc/package.json",
                 "packages/shared-store/package.json",
                 "packages/timer/package.json",

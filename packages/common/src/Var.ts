@@ -33,6 +33,8 @@ export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor:
 
 export const isEqualNaN = (value: any): value is number => value !== value;
 
+export const ifEqualNaN = <T, U>(value: T, defaultValue: U) => isEqualNaN(value) ? defaultValue : value;
+
 export const isEqualTuple = <T extends any[]>(x: T, y: any[]) => {
     if (!isArray(x) || !isArray(y) || x.length !== y.length) {
         return false;

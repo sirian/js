@@ -1,3 +1,6 @@
+import {first} from "./Arr";
+import {assert} from "./Error";
+
 export interface ISetMini<T> {
     delete(value: T): boolean;
 
@@ -15,18 +18,14 @@ export class XSet<T> extends Set<T> {
     public static pick<T>(set: ISetMini<T>, value: T, strict?: boolean): T | undefined;
     public static pick<T>(set: ISetMini<T>, value: T, throws = false) {
         if (set.has(value)) {
+            assert(!throws);
             set.delete(value);
             return value;
-        }
-        if (throws) {
-            throw new Error(`Value ${value} not found`);
         }
     }
 
     public first() {
-        for (const x of this) {
-            return x;
-        }
+        return first(this);
     }
 
     public add(...values: T[]) {
