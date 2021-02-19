@@ -21,7 +21,5 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^6.1.1",
-        "@sirian/ts-extra-types": "^3.60.2"
     }
 }

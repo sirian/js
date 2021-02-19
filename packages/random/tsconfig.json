@@ -18,11 +18,5 @@
         "declarationDir": "build/types"
     },
     "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../ts-extra-types"
-        }
     ]
 }
