@@ -1,4 +1,3 @@
-import {XPromiseTimeoutError} from "@sirian/xpromise";
 import {RPCProtocolFromHandlers, Server} from "../../src";
 import {CallbackTransport} from "../../src/CallbackTransport";
 import Client from "../../src/Client";
@@ -33,7 +32,7 @@ describe("Server", () => {
             method: "timeout",
             params: [3],
             timeoutMS: 3,
-        })).rejects.toThrow(XPromiseTimeoutError);
+        })).rejects.toThrow(Error);
     });
 
     test("", async () => {
