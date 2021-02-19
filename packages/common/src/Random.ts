@@ -1,4 +1,5 @@
-import {assert, swap} from "@sirian/common";
+import {swap} from "./Arr";
+import {assert} from "./Error";
 
 export const randomBits = (bits: number) => (2 ** bits) * randomReal01();
 export const randomReal01 = () => Math.random();
