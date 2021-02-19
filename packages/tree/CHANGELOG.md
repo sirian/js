@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.42](https://github.com/sirian/js/compare/@sirian/tree@1.1.41...@sirian/tree@1.1.42) (2021-02-19)
+
+**Note:** Version bump only for package @sirian/tree
+
+
+
+
+
 ## [1.1.41](https://github.com/sirian/js/compare/@sirian/tree@1.1.40...@sirian/tree@1.1.41) (2021-02-19)
 
 **Note:** Version bump only for package @sirian/tree
