@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.61.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.60.2...@sirian/ts-extra-types@3.61.0) (2021-02-19)
+
+
+### Features
+
+* **common:** assert, shuffle, randoms etc... ([ac57459](https://github.com/sirian/js/commit/ac57459232eee84711b0481d8d4aa1d2c46d76ae))
+
+
+
+
+
 ## [3.60.2](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.60.1...@sirian/ts-extra-types@3.60.2) (2021-02-17)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

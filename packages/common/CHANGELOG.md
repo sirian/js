@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/sirian/js/compare/@sirian/common@6.1.1...@sirian/common@6.2.0) (2021-02-19)
+
+
+### Features
+
+* **common:** assert, shuffle, randoms etc... ([ac57459](https://github.com/sirian/js/commit/ac57459232eee84711b0481d8d4aa1d2c46d76ae))
+
+
+
+
+
 ## [6.1.1](https://github.com/sirian/js/compare/@sirian/common@6.1.0...@sirian/common@6.1.1) (2021-02-17)
 
 **Note:** Version bump only for package @sirian/common
