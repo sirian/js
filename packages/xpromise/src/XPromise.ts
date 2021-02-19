@@ -1,6 +1,4 @@
 import {Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
-import {XPromiseError} from "./XPromiseError";
-import {XPromiseTimeoutError} from "./XPromiseTimeoutError";
 
 export type OnFulfill<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
 export type OnReject<R> = undefined | null | ((reason: any) => R | PromiseLike<R>);
@@ -173,7 +171,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 error = e;
             }
 
-            this.reject(error || new XPromiseTimeoutError(`XPromise rejected by timeout (${ms}ms)`));
+            this.reject(error || new Error(`Rejected by timeout (${ms}ms)`));
         }, ms);
 
         return this;
@@ -219,7 +217,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         if (this.isFulfilled()) {
             return value;
         }
-        throw this.isRejected() ? value : new XPromiseError("Could not get value of pending promise");
+        throw this.isRejected() ? value : new Error("Could not get value of pending promise");
     }
 
     public then<R1 = T, R2 = never>(onFulfilled?: OnFulfill<T, R1>, onRejected?: OnReject<R2>) {

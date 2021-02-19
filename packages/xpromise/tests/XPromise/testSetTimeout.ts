@@ -1,5 +1,4 @@
 import {XPromise} from "../../src";
-import {XPromiseTimeoutError} from "../../src/XPromiseTimeoutError";
 
 describe("XPromise.setTimeout", () => {
     jest.useFakeTimers();
@@ -16,7 +15,7 @@ describe("XPromise.setTimeout", () => {
         promise.setTimeout(1);
         setTimeout(() => promise.resolve(1), 2);
         jest.runAllTimers();
-        expect(promise).rejects.toThrow(XPromiseTimeoutError);
+        expect(promise).rejects.toThrow(Error);
     });
 
     test("promise.setTimeout(0) should be rejected on next tick", async () => {
@@ -24,14 +23,14 @@ describe("XPromise.setTimeout", () => {
         promise.setTimeout(0);
         expect(promise.isPending()).toBe(true);
         jest.runAllTimers();
-        await expect(promise).rejects.toThrow(new XPromiseTimeoutError("XPromise rejected by timeout (0ms)"));
+        await expect(promise).rejects.toThrow(new Error("Rejected by timeout (0ms)"));
     });
 
     test("empty callback", () => {
         const promise = new XPromise();
         promise.setTimeout(1);
         jest.runAllTimers();
-        expect(promise).rejects.toThrow(new XPromiseTimeoutError());
+        expect(promise).rejects.toThrow(new Error());
     });
 
     test("custom error callback", () => {
@@ -59,7 +58,7 @@ describe("XPromise.setTimeout", () => {
         const promise = new XPromise();
         promise.setTimeout(1, () => {});
         jest.runAllTimers();
-        await expect(promise).rejects.toThrow(new XPromiseTimeoutError("XPromise rejected by timeout (1ms)"));
+        await expect(promise).rejects.toThrow(new Error("Rejected by timeout (1ms)"));
     });
 
     test("custom error callback throws", () => {
