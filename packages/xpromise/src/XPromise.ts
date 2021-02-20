@@ -55,7 +55,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public static any<T>(it: Iterable<T | PromiseLike<T>>) {
-        return XPromise.create<T>((resolve, reject) => {
+        return new XPromise<T>((resolve, reject) => {
             const promises = [...it];
 
             const length = promises.length;
@@ -252,15 +252,39 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    protected settleFulfilled(value?: T | PromiseLike<T>) {
+    protected react(reaction: PromiseReaction<T>) {
+        const {promise, onFulfilled, onRejected} = reaction;
+        const value = this.value;
+
+        try {
+            if (this.isFulfilled()) {
+                if (!isFunction(onFulfilled)) {
+                    promise.settleFulfilled(value);
+                } else {
+                    promise.doResolve(onFulfilled(value));
+                }
+            }
+            if (this.isRejected()) {
+                if (!isFunction(onRejected)) {
+                    promise.settleRejected(value);
+                } else {
+                    promise.doResolve(onRejected(value));
+                }
+            }
+        } catch (e) {
+            promise.reject(e);
+        }
+    }
+
+    private settleFulfilled(value?: T | PromiseLike<T>) {
         this.settle(PromiseStatus.FULFILLED, value);
     }
 
-    protected settleRejected(reason?: any) {
+    private settleRejected(reason?: any) {
         this.settle(PromiseStatus.REJECTED, reason);
     }
 
-    protected doResolve(x: any) {
+    private doResolve(x: any) {
         this.resolved = true;
         try {
             if (null === x || ("object" !== typeof x && !isFunction(x))) {
@@ -295,7 +319,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    protected settle(status: PromiseStatus.FULFILLED | PromiseStatus.REJECTED, value: any) {
+    private settle(status: PromiseStatus.FULFILLED | PromiseStatus.REJECTED, value: any) {
         if (!this.isPending()) {
             return;
         }
@@ -308,30 +332,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
         for (const reaction of this.reactions) {
             this.react(reaction);
-        }
-    }
-
-    protected react(reaction: PromiseReaction<T>) {
-        const {promise, onFulfilled, onRejected} = reaction;
-        const value = this.value;
-
-        try {
-            if (this.isFulfilled()) {
-                if (!isFunction(onFulfilled)) {
-                    promise.settleFulfilled(value);
-                } else {
-                    promise.doResolve(onFulfilled(value));
-                }
-            }
-            if (this.isRejected()) {
-                if (!isFunction(onRejected)) {
-                    promise.settleRejected(value);
-                } else {
-                    promise.doResolve(onRejected(value));
-                }
-            }
-        } catch (e) {
-            promise.reject(e);
         }
     }
 }
