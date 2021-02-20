@@ -1,5 +1,5 @@
 import {ArrayRO, LastElement, Nullish, TupleOf} from "@sirian/ts-extra-types";
-import {isArray, isNullish} from "./Is";
+import {isArray} from "./Is";
 import {isArrayLike, isEqual, isIterable} from "./Var";
 
 export const range = (from: number, to: number, step: number = 1) => {
@@ -49,7 +49,7 @@ export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] =>
     isArray(value) ? value : Array.from(value ?? []);
 
 export const castArray = <T>(value: T): T extends ArrayRO ? T : T extends Nullish ? [] : [T] =>
-    isArray(value) ? value : (isNullish(value) ? [] : [value]) as any;
+    [].concat((value ?? []) as any) as any;
 
 export const uniq = <T>(input: Iterable<T>) => [...new Set(input)];
 

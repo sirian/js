@@ -44,13 +44,8 @@ export const assign = <T extends any, U extends any[]>(target: T, ...sources: U)
 
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 
-export const fromEntries = <E extends Entry>(data: E[] | Iterable<E>): FromEntries<E[]> => {
-    const obj: any = {};
-    for (const [key, value] of data) {
-        obj[key] = value;
-    }
-    return obj as FromEntries<E[]>;
-};
+export const fromEntries = <E extends Entry[]>(entries: E): FromEntries<E> =>
+    Object.fromEntries(entries) as FromEntries<E>;
 
 export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");
 

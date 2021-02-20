@@ -16,6 +16,10 @@ describe("randomInt", () => {
     };
     test("randomInt(0, 0)", () => {
         expect(() => generate(0, 0, false)).toThrow("Invalid range");
+        expect(() => generate(1, 0, false)).toThrow("Invalid range");
+        expect(() => generate(2, 0, false)).toThrow("Invalid range");
+        expect(() => generate(2, 1, false)).toThrow("Invalid range");
+        expect(() => generate(2, 2, false)).toThrow("Invalid range");
         for (let i = 0; i < 100; i++) {
             expect(generate(0, 0, true)).toBe(0);
             expect(generate(0, 1, false)).toBe(0);

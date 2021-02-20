@@ -14,13 +14,7 @@ describe("", () => {
     });
 
     test("Arr.cast preserve reference", () => {
-        const a: any[] = [];
-        expect(castArray(a)).toBe(a);
-        expect(castArray(a)).toStrictEqual([]);
-
-        const b = [a, 1];
-        const bCasted = castArray(b);
-        expect(bCasted).toBe(b);
-        expect(bCasted).toStrictEqual([a, 1]);
+        expect(castArray([])).toStrictEqual([]);
+        expect(castArray([[2, 3], 1])).toStrictEqual([[2, 3], 1]);
     });
 });

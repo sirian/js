@@ -17,17 +17,13 @@ export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => !isNu
 export const getType = <T>(value: T) => typeof value as TypeNameOf<T>;
 export const isSome = <U>(value: any, values: U[]): value is U => values.includes(value);
 export const isArray = (v: any): v is any[] => Array.isArray(v);
-export const getXType = <T>(value: T): XTypeNameOf<T> => {
-    if (null === value) {
-        return "null" as XTypeNameOf<T>;
-    }
+export const getXType = <T>(value: T) =>
+    (null === value
+     ? "null"
+     : (isArray(value)
+        ? "array"
+        : getType(value))) as XTypeNameOf<T>;
 
-    if (isArray(value)) {
-        return "array" as XTypeNameOf<T>;
-    }
-
-    return getType(value) as XTypeNameOf<T>;
-};
 export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> =>
     isArray(types) ? isSome(getXType(v), types) : isXType(v, [types]);
 export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> =>
