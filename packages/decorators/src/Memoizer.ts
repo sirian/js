@@ -29,7 +29,7 @@ export class Memoizer<F extends Func> {
         const map = this.map.ensure(thisArg, () => new HybridMap());
         const resolving = this.resolving;
 
-        const hashKey = this.getHashKey(thisArg, args);
+        const hashKey = this.options.hasher?.(...args);
 
         if (!map.has(hashKey)) {
             if (!resolving.insert(hashKey)) {
@@ -41,8 +41,4 @@ export class Memoizer<F extends Func> {
         return map.get(hashKey)!;
     }
 
-    protected getHashKey(thisArg: ThisArg<F>, args: Args<F>) {
-        const hasher = this.options.hasher;
-        return hasher && apply(hasher, thisArg, args);
-    }
 }
