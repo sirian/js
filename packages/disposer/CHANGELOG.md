@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/sirian/js/compare/@sirian/disposer@2.3.35...@sirian/disposer@2.4.0) (2021-02-20)
+
+
+### Features
+
+* **disposer:** Drop DisposableMap ([6de0648](https://github.com/sirian/js/commit/6de0648eaf680de33160cce649faef2245302081))
+
+
+
+
+
 ## [2.3.35](https://github.com/sirian/js/compare/@sirian/disposer@2.3.34...@sirian/disposer@2.3.35) (2021-02-19)
 
 **Note:** Version bump only for package @sirian/disposer

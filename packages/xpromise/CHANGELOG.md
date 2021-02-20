@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.11.1](https://github.com/sirian/js/compare/@sirian/xpromise@2.11.0...@sirian/xpromise@2.11.1) (2021-02-20)
+
+**Note:** Version bump only for package @sirian/xpromise
+
+
+
+
+
 # [2.11.0](https://github.com/sirian/js/compare/@sirian/xpromise@2.10.9...@sirian/xpromise@2.11.0) (2021-02-19)
 
 

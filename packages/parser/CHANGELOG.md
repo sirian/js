@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.30](https://github.com/sirian/js/compare/@sirian/parser@1.4.29...@sirian/parser@1.4.30) (2021-02-20)
+
+**Note:** Version bump only for package @sirian/parser
+
+
+
+
+
 ## [1.4.29](https://github.com/sirian/js/compare/@sirian/parser@1.4.28...@sirian/parser@1.4.29) (2021-02-19)
 
 **Note:** Version bump only for package @sirian/parser
