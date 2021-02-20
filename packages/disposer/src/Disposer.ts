@@ -1,4 +1,4 @@
-import {defineProp, hasOwn, XSet} from "@sirian/common";
+import {defineProp, hasOwn} from "@sirian/common";
 import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerCallbackSet} from "./DisposerCallbackSet";
@@ -22,8 +22,8 @@ export class Disposer extends StaticEventEmitter {
     public static readonly emitter = new EventEmitter<DisposerEvents>();
 
     public readonly target: object;
-    protected children: XSet<Disposer>;
-    protected sources: XSet<Disposer>;
+    protected children: Set<Disposer>;
+    protected sources: Set<Disposer>;
     protected disposed: boolean;
     protected disposedFully: boolean;
     protected before: DisposerCallbackSet;
@@ -35,8 +35,8 @@ export class Disposer extends StaticEventEmitter {
         this.target = target;
         this.disposed = false;
         this.disposedFully = false;
-        this.children = new XSet();
-        this.sources = new XSet();
+        this.children = new Set();
+        this.sources = new Set();
         this.before = new DisposerCallbackSet(this);
         this.after = new DisposerCallbackSet(this);
     }
@@ -177,8 +177,11 @@ export class Disposer extends StaticEventEmitter {
         this.disposed = true;
         this.clearTimeout();
 
-        const sources = this.sources.pickAll();
-        const children = this.children.pickAll();
+        const sources = [...this.sources];
+        const children = [...this.children];
+
+        this.sources.clear();
+        this.children.clear();
 
         for (const source of sources) {
             source.children.delete(this);

@@ -1,23 +1,24 @@
-import {XSet, XWeakSet} from "@sirian/common";
 import {DisposeCallback, Disposer} from "./Disposer";
 
 export class DisposerCallbackSet {
-    protected callbacks: XSet<DisposeCallback>;
-    protected applied: XWeakSet<DisposeCallback>;
+    protected callbacks: Set<DisposeCallback>;
+    protected applied: WeakSet<DisposeCallback>;
     protected disposer: Disposer;
     protected applying: boolean;
 
     constructor(disposer: Disposer) {
         this.applying = false;
         this.disposer = disposer;
-        this.callbacks = new XSet();
-        this.applied = new XWeakSet();
+        this.callbacks = new Set();
+        this.applied = new WeakSet();
     }
 
     public apply() {
         if (!this.applying) {
             this.applying = true;
-            this.callbacks.pickAll().forEach((fn) => this.handle(fn));
+            const callbacks = [...this.callbacks.values()];
+            this.callbacks.clear();
+            callbacks.forEach((fn) => this.handle(fn));
         }
     }
 
@@ -30,7 +31,7 @@ export class DisposerCallbackSet {
     }
 
     protected handle(callback: DisposeCallback) {
-        if (this.applied.insert(callback)) {
+        if (this.applied.add(callback)) {
             this.disposer.handle(callback);
         }
     }
