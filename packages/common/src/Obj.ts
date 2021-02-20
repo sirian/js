@@ -1,5 +1,5 @@
 import {
-    AnyKey,
+    AnyKey, ArrayRO,
     Assign,
     Entry,
     ExtractByObjectTag,
@@ -44,7 +44,7 @@ export const assign = <T extends any, U extends any[]>(target: T, ...sources: U)
 
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 
-export const fromEntries = <E extends Entry[]>(entries: E): FromEntries<E> =>
+export const fromEntries = <E extends ArrayRO<Entry>>(entries: E): FromEntries<E> =>
     Object.fromEntries(entries) as FromEntries<E>;
 
 export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");

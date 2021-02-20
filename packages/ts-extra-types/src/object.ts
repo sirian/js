@@ -156,7 +156,7 @@ export type FromEntry<E extends Partial<Entry>> =
     ? Rec<Head<E>, E[1]>
     : never;
 
-export type FromEntries<L extends Entry[]> =
+export type FromEntries<L extends ArrayRO<Entry>> =
     L extends [] ? {} :
     L extends [MustBe<infer H, Entry>, ...infer R]
     ? R extends Entry[]
