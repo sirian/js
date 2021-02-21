@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.26](https://github.com/sirian/js/compare/@sirian/rpc@1.1.25...@sirian/rpc@1.1.26) (2021-02-21)
+
+**Note:** Version bump only for package @sirian/rpc
+
+
+
+
+
 ## [1.1.25](https://github.com/sirian/js/compare/@sirian/rpc@1.1.24...@sirian/rpc@1.1.25) (2021-02-20)
 
 **Note:** Version bump only for package @sirian/rpc

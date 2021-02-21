@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.49](https://github.com/sirian/js/compare/@sirian/format@1.0.48...@sirian/format@1.0.49) (2021-02-21)
+
+**Note:** Version bump only for package @sirian/format
+
+
+
+
+
 ## [1.0.48](https://github.com/sirian/js/compare/@sirian/format@1.0.47...@sirian/format@1.0.48) (2021-02-20)
 
 **Note:** Version bump only for package @sirian/format
