@@ -1,5 +1,6 @@
 import {
-    AnyKey, ArrayRO,
+    AnyKey,
+    ArrayRO,
     Assign,
     Entry,
     ExtractByObjectTag,

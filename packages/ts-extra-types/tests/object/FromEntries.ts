@@ -13,6 +13,7 @@ type Test = [
     AssertExact<{ [id: number]: string }, FromEntries<Array<[number, string]>>>,
 
     AssertExact<Record<number, string>, FromEntries<Array<[number, string]>>>,
+    AssertExact<Record<string, string>, FromEntries<Iterable<[string, string]>>>,
 
     AssertExact<{ a: number | undefined }, FromEntries<Array<["a", number | undefined]>>>
 ];

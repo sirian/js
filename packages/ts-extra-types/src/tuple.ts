@@ -1,5 +1,5 @@
 import {Lengthwise} from "./interfaces";
-import {Dec, Decs, SNumber} from "./number";
+import {Dec, Decs} from "./number";
 import {KeyOf, OmitIndexSignature} from "./object";
 import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
 
@@ -68,7 +68,7 @@ export type IsOpenTuple<T> = T extends ArrayRO ? IsWide<Length<T>> : false;
 export type IsEmptyTuple<T> = IsExtends<T, []>;
 export type IsRepeatedTuple<T> = T extends ArrayRO<infer V> ? IsExact<T, V[]> : false;
 
-export type TupleKeyOf<T> = KeyOf<T, SNumber>;
+export type TupleKeyOf<T> = KeyOf<T, `${number}`>;
 
 export type TupleGet<T extends ArrayRO, N extends number> =
     number extends N ? T[N] :
@@ -97,6 +97,9 @@ export type Range<N extends number> =
     N extends 0 ? [0] :
     number extends N ? number[] :
     [...Range<Dec<N>>, N];
+
+export type IterableToArray<T extends Iterable<any>> =
+    T extends Iterable<infer V> ? V[] : never;
 
 export type UnionToTuple<U, T extends ArrayRO = []> =
     IfNever<U, T, _UnionToTuple<T, U, U>>;

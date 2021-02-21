@@ -2,7 +2,6 @@ import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-
 import {toArray} from "./Arr";
 import {isNotNullish, isString} from "./Is";
 import {entriesOf, fromEntries} from "./Obj";
-import {hasMethod} from "./Ref";
 
 export class Entries<T extends Entry> {
     protected items: T[];
@@ -11,17 +10,15 @@ export class Entries<T extends Entry> {
         this.items = toArray(entries).filter(isNotNullish);
     }
 
+    public static from(value: string): Entries<Entry<number, string>>;
     public static from<E extends Entry>(value: IterableEntries<E>): Entries<E>;
-    public static from(value: string): Entries<[number, string]>;
     public static from<T extends object>(value: T): Entries<ObjEntryOf<T>>;
     public static from(value: any) {
         if (isString(value)) {
             value = [...value];
         }
 
-        const entries = hasMethod(value, "entries")
-                        ? value.entries()
-                        : entriesOf(value);
+        const entries = value.entries?.() ?? entriesOf(value);
 
         return new this(entries);
     }

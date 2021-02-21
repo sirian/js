@@ -1,7 +1,7 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBe, MustBeString} from "./mustbe";
-import {ArrayRO, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
+import {ArrayRO, GetRest, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
@@ -48,7 +48,7 @@ export type BuiltinObjTagMap = {
 
 export type ObjKeyOf<T> =
     T extends ArrayRO
-    ? TupleKeyOf<T> | If<IsOpenTuple<T>, string>
+    ? TupleKeyOf<T> | If<IsOpenTuple<T>, `${number}`>
     : KeyToString<KeyOf<T>>;
 
 export type ObjValueOf<T> =
@@ -56,8 +56,9 @@ export type ObjValueOf<T> =
 
 export type ObjEntryOf<T> =
     T extends ArrayRO
-    ? { [P in TupleKeyOf<T>]: [P, T[P]] }[TupleKeyOf<T>]
-    : { [P in KeyOf<T>]: [KeyToString<P>, T[P]] }[KeyOf<T>];
+    ? { [P in TupleKeyOf<T>]: Entry<P, T[P]> }[TupleKeyOf<T>]
+        | (IsOpenTuple<T> extends true ? Entry<`${number}`, GetRest<T>[number]> : never)
+    : { [P in KeyOf<T>]: Entry<KeyToString<P>, T[P]> }[KeyOf<T>];
 
 export type Get<T, K extends AnyKey, TDefault = never> =
     K extends keyof T ? T[K] :
@@ -144,25 +145,17 @@ export type Ensure<T, K extends AnyKey> = {
     [P in K]-?: Get<T, K, unknown>
 } & T;
 
-export type Entry<K extends AnyKey | undefined = any, V = any> = [K, V];
+export type Entry<K extends AnyKey = any, V = any> = [K, V];
 
 export type Rec<K, V = any> =
     undefined extends K
     ? { [P in K & AnyKey]?: V }
     : { [P in K & AnyKey]: V };
 
-export type FromEntry<E extends Partial<Entry>> =
-    E extends [any?, any?]
-    ? Rec<Head<E>, E[1]>
-    : never;
+export type FromEntry<E extends Entry> = { [P in E[0]]: E extends [P, infer V] ? V : never };
 
-export type FromEntries<L extends ArrayRO<Entry>> =
-    L extends [] ? {} :
-    L extends [MustBe<infer H, Entry>, ...infer R]
-    ? R extends Entry[]
-      ? FromEntry<H> & FromEntries<R>
-      : never
-    : FromEntry<L[number]>;
+export type FromEntries<L extends Iterable<Entry>> =
+    L extends Iterable<MustBe<infer V, Entry>> ? FromEntry<V> : never;
 
 export type Exclusive<T, U> =
     (T | U) extends any
