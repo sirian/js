@@ -1,7 +1,7 @@
 {
     "name": "@sirian/property-access",
     "description": "",
-    "version": "1.5.12",
+    "version": "1.5.13",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,7 +21,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^6.2.4",
+        "@sirian/common": "^6.3.0",
         "@sirian/error": "^2.2.11",
         "@sirian/ts-extra-types": "^3.61.2"
     }

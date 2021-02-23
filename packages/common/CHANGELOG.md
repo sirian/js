@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/sirian/js/compare/@sirian/common@6.2.4...@sirian/common@6.3.0) (2021-02-23)
+
+
+### Features
+
+* **common:** compare, sortBy, weightedShuffle ([8e36549](https://github.com/sirian/js/commit/8e36549c7468d0bc7626b79ebc89dfda7bb9be9f))
+
+
+
+
+
 ## [6.2.4](https://github.com/sirian/js/compare/@sirian/common@6.2.3...@sirian/common@6.2.4) (2021-02-21)
 
 **Note:** Version bump only for package @sirian/common
