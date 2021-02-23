@@ -1,4 +1,4 @@
-import {isInstanceOf, isString} from "@sirian/common";
+import {isFinite, isInstanceOf, isString, toInt} from "@sirian/common";
 import {DateTimeDiff} from "./DateTimeDiff";
 import {DateTimeFormatter} from "./DateTimeFormatter";
 import {DateTimeInterval} from "./DateTimeInterval";
@@ -51,9 +51,9 @@ export class DateTimeImmutable implements IDateTime {
 
     public static dayFromYear(y: number) {
         return 365 * (y - 1970)
-            + Math.floor((y - 1969) / 4)
-            - Math.floor((y - 1901) / 100)
-            + Math.floor((y - 1601) / 400);
+            + toInt((y - 1969) / 4)
+            - toInt((y - 1901) / 100)
+            + toInt((y - 1601) / 400);
     }
 
     public static getTimestampMs() {
@@ -63,7 +63,7 @@ export class DateTimeImmutable implements IDateTime {
     public static getTimestampSec(truncate: boolean = true) {
         const sec = this.getTimestampMs() / 1000;
 
-        return truncate ? Math.trunc(sec) : sec;
+        return truncate ? toInt(sec) : sec;
     }
 
     public static daysInMonth(year: number, month: number) {
@@ -118,7 +118,7 @@ export class DateTimeImmutable implements IDateTime {
     public get timestampSec() {
         const sec = this.timestampMs / 1000;
 
-        return Math.trunc(sec);
+        return toInt(sec);
     }
 
     public get timestampMs() {
@@ -138,7 +138,7 @@ export class DateTimeImmutable implements IDateTime {
     }
 
     public isValid() {
-        return Number.isFinite(this.timestampMs);
+        return isFinite(this.timestampMs);
     }
 
     public toString() {
