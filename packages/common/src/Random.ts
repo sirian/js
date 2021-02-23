@@ -1,10 +1,12 @@
 import {swap} from "./Arr";
 import {assert} from "./Error";
+import {toInt} from "./Num";
 
-export const randomBits = (bits: number) => (2 ** bits) * randomReal01();
 export const randomReal01 = () => Math.random();
+
+export const randomBits = (bits: number) => toInt((2 ** bits) * randomReal01());
 export const randomUint8 = () => randomBits(8);
-export const randomUint16 = () => randomBits(8);
+export const randomUint16 = () => randomBits(16);
 export const randomUint32 = () => randomBits(32);
 
 export const randomInt = (amin: number = 0, amax: number = 2 ** 32 - 1, inclusive: boolean = true) => {
@@ -14,7 +16,7 @@ export const randomInt = (amin: number = 0, amax: number = 2 ** 32 - 1, inclusiv
     const delta = (imax - imin) + (inclusive ? 1 : 0);
     assert(inclusive ? delta >= 0 : delta > 0, `Invalid range [${amin}, ${amax}]`);
 
-    return imin + Math.trunc(delta * randomReal01());
+    return imin + toInt(delta * randomReal01());
 };
 
 export const randomReal = (min: number, max: number) => {
