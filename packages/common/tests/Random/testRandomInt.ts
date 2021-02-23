@@ -34,7 +34,7 @@ describe("randomInt", () => {
 
     test("randomInt(3, 7, true)", () => {
         const randoms = {};
-        const total = 10000;
+        const total = 1000;
         const min = 3;
         const max = 7;
         for (let i = 0; i < total; i++) {
@@ -42,17 +42,16 @@ describe("randomInt", () => {
             randoms[v] ??= 0;
             randoms[v]++;
         }
-        const normal = total / (max - min + 1);
-        const eps = 0.1;
+        const normal = 1 / (max - min + 1);
+
         for (let i = min; i <= max; i++) {
-            expect(randoms[i]).toBeGreaterThan(normal * (1 - eps));
-            expect(randoms[i]).toBeLessThan(normal * (1 + eps));
+            expect(Math.abs(randoms[i] / total - normal)).toBeLessThan(0.05);
         }
     });
 
     test("randomInt(3, 7, false)", () => {
         const randoms = {};
-        const total = 10000;
+        const total = 1000;
         const min = 3;
         const max = 7;
         for (let i = 0; i < total; i++) {
@@ -60,11 +59,11 @@ describe("randomInt", () => {
             randoms[v] ??= 0;
             randoms[v]++;
         }
-        const normal = total / (max - min);
-        const eps = 0.1;
+
+        const normal = 1 / (max - min);
+
         for (let i = min; i < max; i++) {
-            expect(randoms[i]).toBeGreaterThan(normal * (1 - eps));
-            expect(randoms[i]).toBeLessThan(normal * (1 + eps));
+            expect(Math.abs(randoms[i] / total - normal)).toBeLessThan(0.05);
         }
     });
 });

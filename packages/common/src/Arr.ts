@@ -1,6 +1,6 @@
 import {ArrayRO, LastElement, Nullish, TupleOf} from "@sirian/ts-extra-types";
 import {isArray} from "./Is";
-import {isArrayLike, isEqual, isIterable} from "./Var";
+import {compare, isArrayLike, isEqual, isIterable} from "./Var";
 
 export const range = (from: number, to: number, step: number = 1) => {
     const result = [];
@@ -92,4 +92,13 @@ export const arrChunk = (value: any[], size: number) => {
         result.push(value.slice(i, i + size));
     }
     return result;
+};
+
+export const sortBy = <T>(array: T[], fn: (v: T) => any) => {
+    [...array]
+        .map((v) => [fn(v), v])
+        .sort((a, b) => compare(a[0], b[0]))
+        .forEach((x, i) => array[i] = x[1]);
+
+    return array;
 };

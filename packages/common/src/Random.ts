@@ -33,11 +33,35 @@ export const shuffle = <T extends any[]>(array: T): T => {
     return array;
 };
 
-export const weightShuffle = <T extends any[]>(array: T, weight: (value: T[number], index: number) => number): T => {
-    array
-        .map((v, i) => [weight(v, i) * randomReal01(), v])
-        .sort((a, b) => b[0] - a[0])
-        .forEach(([w, v], i) => array[i] = v)
-    ;
+const weightedPickIndex = (array: number[]) => {
+    const total = array.reduce((cur, a) => cur + a, 0);
+    const threshold = randomReal(0, total);
+
+    let sum = 0;
+    for (let i = 0; i < array.length; i++) {
+        sum += array[i];
+        if (sum >= threshold) {
+            return i;
+        }
+    }
+
+    return array.length - 1;
+};
+
+export const weightedShuffle = <T>(array: T[], weight: (value: T) => number) => {
+    const weights = array.map((v) => weight(v));
+    const values = array.splice(0);
+    while (weights.length) {
+        const index = weightedPickIndex(weights);
+        weights.splice(index, 1);
+        const [v] = values.splice(index, 1);
+        array.push(v);
+    }
     return array;
+};
+
+export const weightedPick = <T>(array: T[], weight: (value: T) => number): T => {
+    const tmp = array.map((v) => weight(v));
+    const index = weightedPickIndex(tmp);
+    return array[index];
 };

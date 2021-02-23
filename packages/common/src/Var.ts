@@ -131,3 +131,11 @@ export const isPlainObject = (x: any) => {
 
     return !isFunction(ctor) || ctor.prototype !== x;
 };
+
+export const compare = (x: any, y: any): -1 | 0 | 1 => {
+    if (isEqual(x, y)) {
+        return 0;
+    }
+    const tmp = [x, y].sort();
+    return isEqual(x, tmp[0]) ? -1 : 1;
+};
