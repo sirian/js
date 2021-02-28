@@ -1,8 +1,8 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBe, MustBeString} from "./mustbe";
-import {ArrayRO, GetRest, Head, IsOpenTuple, IsRepeatedTuple, Tail, Tuple, TupleKeyOf} from "./tuple";
-import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide} from "./types";
+import {ArrayRO, GetRest, IsOpenTuple, Tail, TupleKeyOf} from "./tuple";
+import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide, UnionToIntersection} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
 
@@ -62,12 +62,9 @@ export type ObjEntryOf<T> =
 
 export type Get<T, K extends AnyKey, TDefault = never> =
     K extends keyof T ? T[K] :
-    T extends { [P in K]: infer V } ? V :
-        // T extends { [P in K]?: infer V } ? V | undefined :
+    T extends Record<K, infer V1> ? V1 :
+    Required<T> extends Record<K, infer V2> ? V2 | undefined :
     TDefault;
-
-export type Has<T, K extends AnyKey> =
-    K extends keyof T ? true : IsExtends<T, Rec<K>>;
 
 export type GetDeep<T, L extends AnyKey[]> =
     L extends [] ? T :
@@ -99,12 +96,6 @@ export type Replace<T, U> = MyPick<Overwrite<T, U>, keyof T>;
 
 export type ExcludeWide<T> =
     T extends any ? If<IsWide<T>, never, T> : never;
-
-// ? Omit<T, number>
-//     & {[P in NumberToString<Extract<OptionalKeys<O>, number>>]?: Get<T, P>}
-//     & {[P in NumberToString<Extract<RequiredKeys<O>, number>>]: Get<T, P>}
-// & Partialize<{ [P in NumberToString<NumberKeyOf<T>>]: Get<Required<T>, P}, >
-// & (number extends keyof T ? { [id: string]: GetIndexSignature<T> } : {});
 
 export type MatchingKeys<T, U> = _MatchingKeys<T, U> & _MatchingKeys<U, T>;
 
@@ -147,14 +138,11 @@ export type Ensure<T, K extends AnyKey> = {
 
 export type Entry<K extends AnyKey = any, V = any> = [K, V];
 
-export type Rec<K, V = any> =
-    undefined extends K
-    ? { [P in K & AnyKey]?: V }
-    : { [P in K & AnyKey]: V };
-
-export type FromEntry<E extends Entry> = { [P in E[0]]: E extends [P, infer V] ? V : never };
+export type FromEntry<E extends Entry> =
+    UnionToIntersection<E extends Entry ? Record<E[0], E[1]> : never>;
 
 export type FromEntries<L extends Iterable<Entry>> =
+    L extends readonly [] ? {} :
     L extends Iterable<MustBe<infer V, Entry>> ? FromEntry<V> : never;
 
 export type Exclusive<T, U> =
@@ -164,12 +152,12 @@ export type Exclusive<T, U> =
 
 export type Without<T, U> = { [K in Exclude<keyof T, keyof U>]?: never };
 
-export type ObjectZip<K extends ArrayRO, V extends ArrayRO> =
-    K extends [] ? {} :
-    IsRepeatedTuple<K> extends true ? Rec<K[number], V[number]> :
-    Rec<Head<K>, Head<V>> & ObjectZip<Tail<K>, Tail<V>>;
+export type ObjectZip<T extends ArrayRO, V extends ArrayRO> =
+    T extends [] ? {} :
+    T extends [any, ...infer R] ? FromEntry<[T[0], V[0]]> & ObjectZip<R, Tail<V>> :
+    FromEntry<[T[number], V[number]]>;
 
 export type Assign<T, S extends ArrayRO> =
-    S extends [] ? T :
-    S extends Tuple<infer H, infer R> ? Assign<Overwrite<T, H>, R> :
+    S extends readonly [] ? T :
+    S extends readonly [infer H, ...infer R] ? Assign<Overwrite<T, H>, R> :
     Overwrite<T, S[number]>;

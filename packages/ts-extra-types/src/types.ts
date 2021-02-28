@@ -97,10 +97,9 @@ export type IfNotExtends<X, Y, T = X, F = never> = IfExtends<X, Y, F, T>;
 export type HasKey<T, K extends AnyKey> = K extends keyof T ? true : false;
 export type HasExactKey<T, K extends AnyKey> = { [P in keyof T]-?: IfExact<P, K, true, never> }[keyof T];
 
-export type IsSubType<V, T> =
-    And<IsExtends<V, T>, Not<IsExtends<T, V>>>;
+export type IsSubType<V, T> = And<IsExtends<V, T>, Not<IsExtends<T, V>>>;
 export type IsFiniteNumber<V> = IsSubType<V, number>;
-export type IsWide<T> = IsExact<Widen<T>, T>;
+export type IsWide<T> = Widen<T> extends T ? true : false;
 
 export type ToPrimitive<T> =
     T extends Primitive ? T :

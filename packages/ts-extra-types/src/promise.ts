@@ -5,7 +5,4 @@ export type Awaited<T> =
     T extends PromiseLike<infer U> ? Awaited<U> :
     T;
 
-export type AwaitedArray<T extends ArrayRO> =
-    T extends [] ? [] :
-    T extends [infer H, ...infer R] ? [Awaited<H>, ...AwaitedArray<R>] :
-    Array<Awaited<T[number]>>;
+export type AwaitedArray<T extends ArrayRO> = { [K in keyof T]: Awaited<T[K]> };

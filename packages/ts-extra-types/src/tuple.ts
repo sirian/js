@@ -8,16 +8,20 @@ export type ArrayRW<T = unknown> = T[];
 
 export type Tuple<H = any, R extends ArrayRO = any> = [H, ...R];
 
-export type Head<T extends ArrayRO> = T extends [infer H, ...any] ? H : T[0] | undefined;
+export type Head<T extends ArrayRO> = T extends readonly [infer H, ...any] ? H : T[0] | undefined;
 
 export type Tail<L extends ArrayRO> =
-    L extends [] ? [] :
-    L extends [any?, ...infer U1] ? U1 : never;
+    L extends readonly [] ? L :
+    L extends [any?, ...infer U1] ? U1 :
+    L extends readonly [any?, ...infer U2] ? Readonly<U2> :
+    never;
 
 export type ReplaceTail<T extends ArrayRO, L extends ArrayRO> =
-    T extends [] ? L :
+    T extends readonly [] ? L :
     T extends [infer H1, ...any] ? [H1, ...L] :
-    T extends [(infer H2)?, ...any] ? [H2?, ...L] :
+    T extends readonly [infer H2, ...any] ? readonly [H2, ...L] :
+    T extends [(infer H3)?, ...any] ? [H3?, ...L] :
+    T extends readonly [(infer H4)?, ...any] ? readonly [H4?, ...L] :
     never;
 
 export type Reverse<L extends ArrayRO> =
@@ -34,7 +38,7 @@ export type LastElement<T extends ArrayRO> =
     LastElement<DropRest<T>> | GetRest<T>[number];
 
 export type DropLast<L extends ArrayRO> =
-    L extends [] ? [] :
+    L extends readonly [] ? L :
     IsOpenTuple<L> extends true ? L :
     L extends ([...infer R, any] | [...infer R, any?]) ? R :
     L;
@@ -66,7 +70,10 @@ export type IsArray<T> = IsExtends<T, ArrayRO>;
 export type IsFiniteTuple<T> = T extends ArrayRO ? IsFiniteNumber<Length<T>> : false;
 export type IsOpenTuple<T> = T extends ArrayRO ? IsWide<Length<T>> : false;
 export type IsEmptyTuple<T> = IsExtends<T, []>;
-export type IsRepeatedTuple<T> = T extends ArrayRO<infer V> ? IsExact<T, V[]> : false;
+export type IsRepeatedTuple<T> =
+    T extends Array<infer V2> ? IsExact<T, V2[]> :
+    T extends ArrayRO<infer V1> ? IsExact<T, ArrayRO<V1>> :
+    false;
 
 export type TupleKeyOf<T> = KeyOf<T, `${number}`>;
 
@@ -84,7 +91,7 @@ export type ArrayToObject<T> =
 export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
 
 export type DropRest<T extends ArrayRO> =
-    T extends [] ? [] :
+    T extends readonly [] ? T :
     IsRepeatedTuple<T> extends true ? [] :
     ReplaceTail<T, DropRest<Tail<T>>>;
 
