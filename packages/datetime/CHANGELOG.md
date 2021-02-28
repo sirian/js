@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.7.0](https://github.com/sirian/js/compare/@sirian/datetime@3.6.33...@sirian/datetime@3.7.0) (2021-02-28)
+
+
+### Features
+
+* **datetime:** DateFormat ([5b9d44a](https://github.com/sirian/js/commit/5b9d44a82b5332f20cc8dd16d4e33006cc3ef96f))
+
+
+
+
+
 ## [3.6.33](https://github.com/sirian/js/compare/@sirian/datetime@3.6.32...@sirian/datetime@3.6.33) (2021-02-28)
 
 **Note:** Version bump only for package @sirian/datetime
