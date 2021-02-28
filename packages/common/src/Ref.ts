@@ -12,6 +12,7 @@ import {
     Newable,
 } from "@sirian/ts-extra-types";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
+import {stringifyObj} from "./Stringify";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 
@@ -160,3 +161,5 @@ export function tryCatch(fn: Func0, onError?: Func1) {
         return isFunction(onError) ? onError(error) : onError;
     }
 }
+
+export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");

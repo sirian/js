@@ -1,5 +1,5 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
-import {isNotNullish} from "./Is";
+import {isBoolean, isFunction, isNotNullish} from "./Is";
 import {entriesOf} from "./Obj";
 import {apply, defineProp, getDescriptor} from "./Ref";
 import {isPlainObject} from "./Var";
@@ -112,18 +112,17 @@ export class Descriptor {
         let hasValueOrWritable = false;
 
         for (const [key, v] of entriesOf(d)) {
-            const type = typeof v;
             const defined = undefined !== v;
 
             switch (key) {
                 case "enumerable":
                 case "configurable":
-                    if (defined && "boolean" !== type) {
+                    if (defined && !isBoolean(v)) {
                         return DescriptorType.NONE;
                     }
                     break;
                 case "writable":
-                    if (defined && "boolean" !== type) {
+                    if (defined && !isBoolean(v)) {
                         return DescriptorType.NONE;
                     }
                     hasValueOrWritable = true;
@@ -133,7 +132,7 @@ export class Descriptor {
                     break;
                 case "get":
                 case "set":
-                    if (defined && "function" !== type) {
+                    if (defined && !isFunction(v)) {
                         return DescriptorType.NONE;
                     }
                     hasAccessor = true;

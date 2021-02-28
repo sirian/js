@@ -13,8 +13,7 @@ import {
 } from "@sirian/ts-extra-types";
 import {uniq} from "./Arr";
 import {isArray, isNotNullish} from "./Is";
-import {deleteProp, getPrototypes, hasOwn, hasProp, ownDescriptor, ownKeys, ownNames} from "./Ref";
-import {stringifyObj} from "./Stringify";
+import {deleteProp, getObjectTag, getPrototypes, hasOwn, hasProp, ownDescriptor, ownKeys, ownNames} from "./Ref";
 
 export interface SnapshotOptions {
     maxDepth?: number;
@@ -37,8 +36,6 @@ export const fromEntries = <E extends Iterable<Entry>>(entries: E) =>
 
 export const objMap = <T, E extends Entry>(obj: T, fn: <K extends keyof T>(k: K, v: T[K]) => E | false) =>
     fromEntries(entriesOf(obj).map(([k, v]: any) => fn(k, v)).filter(isArray) as E[]);
-
-export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");
 
 export const pick = <T, K extends keyof T>(target: T, keys: Iterable<K>) => {
     const entries = uniq(keys)

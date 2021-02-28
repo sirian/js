@@ -2,8 +2,7 @@ import {assert} from "./Error";
 import {isFunction, isString} from "./Is";
 import {jsonStringify} from "./Json";
 import {parseNumber, toInt, toUint32} from "./Num";
-import {getObjectTag} from "./Obj";
-import {tryCatch} from "./Ref";
+import {getObjectTag, tryCatch} from "./Ref";
 import {stringifyVar} from "./Stringify";
 
 interface Placeholder {

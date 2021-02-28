@@ -1,7 +1,6 @@
 import {Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
 import {isArray, isFunction, isNumber, isObject, isString, isType} from "./Is";
-import {getObjectTag} from "./Obj";
-import {getPrototype, hasMethod} from "./Ref";
+import {getObjectTag, getPrototype, hasMethod} from "./Ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
     (condition(v) ? v : otherwise) as
