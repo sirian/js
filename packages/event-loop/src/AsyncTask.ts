@@ -3,15 +3,18 @@ import {TaskCallback} from "./TaskQueue";
 export abstract class AsyncTask {
     public static readonly tasks = new Map();
 
+    // tslint:disable:member-ordering member-access
     private static lastId = 0;
 
-    protected callback?: TaskCallback;
-    protected id?: any;
-    protected destroyed: boolean;
+    #callback: TaskCallback | undefined;
+    #id: any;
+    #destroyed: boolean;
+
+    // tslint:enable
 
     constructor(callback?: TaskCallback) {
-        this.callback = callback;
-        this.destroyed = false;
+        this.#callback = callback;
+        this.#destroyed = false;
     }
 
     public static create<T extends AsyncTask, A extends any[]>(this: new(...args: A) => T, ...args: A) {
@@ -23,19 +26,18 @@ export abstract class AsyncTask {
     }
 
     public start() {
-        if (!this.destroyed && !this.isScheduled()) {
+        if (!this.#destroyed && !this.isScheduled()) {
             const id = ++AsyncTask.lastId;
-            this.id = id;
+            this.#id = id;
             AsyncTask.tasks.set(id, this);
-            this.doStart(() => this.handle(id));
+            this.doStart(() => !this.#destroyed && id === this.#id && this.handle());
         }
         return this;
     }
 
     public clear() {
-        const id = this.id;
-        AsyncTask.tasks.delete(id);
-        delete this.id;
+        AsyncTask.tasks.delete(this.#id);
+        this.#id = undefined;
         this.doClear();
         return this;
     }
@@ -45,13 +47,13 @@ export abstract class AsyncTask {
     }
 
     public destroy() {
-        this.destroyed = true;
+        this.#destroyed = true;
         this.clear();
-        delete this.callback;
+        this.#callback = undefined;
     }
 
     public setCallback(callback?: TaskCallback) {
-        this.callback = callback;
+        this.#callback = callback;
         if (!callback) {
             this.clear();
         }
@@ -59,17 +61,11 @@ export abstract class AsyncTask {
     }
 
     public isScheduled() {
-        return undefined !== this.id;
+        return undefined !== this.#id;
     }
 
-    protected handle(id: any) {
-        if (this.id !== id) {
-            return;
-        }
-        this.clear();
-        if (!this.destroyed && this.callback) {
-            this.callback();
-        }
+    protected handle() {
+        this.#callback?.();
     }
 
     protected abstract doStart(callback: TaskCallback): any;

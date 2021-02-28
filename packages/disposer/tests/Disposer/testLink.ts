@@ -4,7 +4,7 @@ describe("Disposer.link", () => {
     test("Disposer.link", () => {
 
         const stack: any[] = [];
-        Disposer.on("dispose", (d) => stack.push(d.target));
+        Disposer.events.on("dispose", (d) => stack.push(d.target));
 
         let x = 0;
         const o1 = {x: x++};
@@ -23,6 +23,6 @@ describe("Disposer.link", () => {
 
         expect(stack).toStrictEqual([o2, o1, o3, o4, o5]);
 
-        Disposer.removeAllListeners();
+        Disposer.events.removeAllListeners();
     });
 });

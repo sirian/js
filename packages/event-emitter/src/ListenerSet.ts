@@ -12,18 +12,21 @@ export interface ListenerObj<A extends any[]> extends Required<ListenerOptions> 
 }
 
 export class ListenerSet<A extends any[] = any> {
-    protected readonly map: Map<any, ListenerObj<A>>;
-    protected listeners: Array<ListenerObj<A>>;
-    protected dirty: boolean;
+    // tslint:disable:member-ordering member-access
+    #map: Map<any, ListenerObj<A>>;
+    #listeners: Array<ListenerObj<A>>;
+    #dirty: boolean;
+
+    // tslint:enable
 
     constructor() {
-        this.map = new Map();
-        this.dirty = false;
-        this.listeners = [];
+        this.#map = new Map();
+        this.#dirty = false;
+        this.#listeners = [];
     }
 
     public get size() {
-        return this.map.size;
+        return this.#map.size;
     }
 
     public once(callback: ListenerCallback<A>, opts?: ListenerOptions) {
@@ -31,54 +34,55 @@ export class ListenerSet<A extends any[] = any> {
     }
 
     public addListener(callback: ListenerCallback<A>, opts?: ListenerOptions) {
-        const obj = this.map.get(callback) || ({} as any);
+        const obj = this.#map.get(callback) ?? ({} as any);
 
         Object.assign(obj, {
             priority: 0,
             passive: false,
-            times: 0,
             limit: 0,
+            ...opts,
+            times: 0,
             callback,
-        }, opts);
+        });
 
-        if (!this.map.get(callback)) {
-            this.listeners.push(obj);
+        if (!this.#map.get(callback)) {
+            this.#listeners.push(obj);
         }
 
-        this.map.set(callback, obj);
-        this.dirty = true;
+        this.#map.set(callback, obj);
+        this.#dirty = true;
 
         return this;
     }
 
     public getListener(listener: ListenerCallback<A>) {
-        return this.map.get(listener);
+        return this.#map.get(listener);
     }
 
     public hasListener(listener: ListenerCallback<A>) {
-        return this.map.has(listener);
+        return this.#map.has(listener);
     }
 
     public all() {
-        if (this.dirty) {
-            this.dirty = false;
-            this.listeners.sort((a, b) => b.priority - a.priority);
+        if (this.#dirty) {
+            this.#dirty = false;
+            this.#listeners.sort((a, b) => b.priority - a.priority);
         }
 
-        return this.listeners.slice();
+        return this.#listeners.slice();
     }
 
     public removeListeners() {
-        this.map.clear();
-        this.dirty = false;
+        this.#map.clear();
+        this.#dirty = false;
         return this;
     }
 
     public removeListener(callback: ListenerCallback<A>) {
-        if (this.map.has(callback)) {
-            const index = this.listeners.findIndex((obj) => obj.callback === callback);
-            this.listeners.splice(index, 1);
-            this.map.delete(callback);
+        if (this.#map.has(callback)) {
+            const index = this.#listeners.findIndex((obj) => obj.callback === callback);
+            this.#listeners.splice(index, 1);
+            this.#map.delete(callback);
         }
 
         return this;

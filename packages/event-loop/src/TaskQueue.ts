@@ -7,51 +7,50 @@ interface Task {
 
 export class TaskQueue {
     protected static lastId: number = 0;
-    protected tasks: Record<string, Task> = {};
 
-    protected scheduled: boolean;
-    protected running: boolean;
-    protected scheduler: (callback: () => void) => void;
+    // tslint:disable:member-ordering member-access
+    #tasks: Record<string, Task> = {};
+    #scheduled: boolean;
+    #scheduler: (callback: () => void) => void;
+
+    // tslint:enable
 
     constructor(scheduler: (callback: () => void) => void) {
-        this.scheduled = false;
-        this.running = false;
-        this.scheduler = scheduler;
+        this.#scheduled = false;
+        this.#scheduler = scheduler;
     }
 
     public add(callback: TaskCallback) {
         const id = ++TaskQueue.lastId;
-        this.tasks[id] = {
+        this.#tasks[id] = {
             fn: callback,
             canceled: false,
         };
-        if (!this.scheduled) {
-            this.scheduled = true;
-            this.scheduler(() => this.run());
+        if (!this.#scheduled) {
+            this.#scheduled = true;
+            this.#scheduler(() => this.run());
         }
         return id;
     }
 
     public cancel(id: any) {
-        const task = this.tasks[id];
+        const task = this.#tasks[id];
         if (task) {
             task.canceled = true;
         }
-        delete this.tasks[id];
+        delete this.#tasks[id];
         return this;
     }
 
     protected run() {
-        this.scheduled = false;
-        this.running = true;
+        this.#scheduled = false;
 
-        const entries = Object.entries(this.tasks);
+        const entries = Object.entries(this.#tasks);
         for (const [id, task] of entries) {
-            delete this.tasks[id];
+            delete this.#tasks[id];
             if (!task.canceled) {
                 (async () => task.fn())();
             }
         }
-        this.running = false;
     }
 }

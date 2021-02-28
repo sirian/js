@@ -1,7 +1,6 @@
 import {defineProp, hasOwn} from "@sirian/common";
-import {EventEmitter, StaticEventEmitter} from "@sirian/event-emitter";
+import {EventEmitter} from "@sirian/event-emitter";
 import {Return} from "@sirian/ts-extra-types";
-import {DisposerCallbackSet} from "./DisposerCallbackSet";
 
 export type DisposeCallback = (disposer: Disposer) => void;
 
@@ -18,27 +17,37 @@ export type DisposerEvents = {
 
 export const disposerSymbol: unique symbol = Symbol.for("disposer");
 
-export class Disposer extends StaticEventEmitter {
-    public static readonly emitter = new EventEmitter<DisposerEvents>();
+const enum DisposerState {
+    INITIAL,
+    BEFORE_CHILDREN,
+    CHILDREN,
+    AFTER_CHILDREN,
+    DISPOSED,
+}
+
+export class Disposer {
+    public static readonly events = new EventEmitter<DisposerEvents>();
 
     public readonly target: object;
-    protected children: Set<Disposer>;
-    protected sources: Set<Disposer>;
-    protected disposed: boolean;
-    protected disposedFully: boolean;
-    protected before: DisposerCallbackSet;
-    protected after: DisposerCallbackSet;
-    protected timeoutId?: Return<typeof setTimeout>;
+
+    // tslint:disable:member-ordering member-access
+    #before: Set<DisposeCallback>;
+    #after: Set<DisposeCallback>;
+    #applied: WeakSet<DisposeCallback>;
+    #children: Set<Disposer>;
+    #sources: Set<Disposer>;
+    #timeoutId?: Return<typeof setTimeout>;
+    #state: DisposerState = DisposerState.INITIAL;
+
+    // tslint:enable
 
     constructor(target: object) {
-        super();
         this.target = target;
-        this.disposed = false;
-        this.disposedFully = false;
-        this.children = new Set();
-        this.sources = new Set();
-        this.before = new DisposerCallbackSet(this);
-        this.after = new DisposerCallbackSet(this);
+        this.#applied = new WeakSet();
+        this.#children = new Set();
+        this.#sources = new Set();
+        this.#before = new Set();
+        this.#after = new Set();
     }
 
     public static onDispose(target: object, callback: DisposeCallback) {
@@ -74,9 +83,7 @@ export class Disposer extends StaticEventEmitter {
     }
 
     public static dispose(...targets: object[]) {
-        for (const target of targets) {
-            Disposer.for(target).dispose();
-        }
+        targets.forEach((t) => Disposer.for(t).dispose());
     }
 
     public static has(target: object): target is Record<typeof disposerSymbol, Disposer> {
@@ -89,6 +96,7 @@ export class Disposer extends StaticEventEmitter {
         }
 
         const disposer = new Disposer(target);
+
         const desc: TypedPropertyDescriptor<Disposer> = {
             configurable: true,
             writable: false,
@@ -98,117 +106,124 @@ export class Disposer extends StaticEventEmitter {
 
         defineProp(target, disposerSymbol, desc);
         defineProp(disposer, disposerSymbol, desc);
-        Disposer.emit("created", disposer);
+        Disposer.events.emit("created", disposer);
         return disposer;
     }
 
     public static link(...targets: any[]) {
-        for (const target of targets) {
-            Disposer.addChild(target, ...targets);
-        }
+        targets.forEach((t) => Disposer.addChild(t, ...targets));
     }
 
     public setTimeout(ms: number) {
         this.clearTimeout();
 
         if (!this.isDisposed()) {
-            this.timeoutId = setTimeout(() => this.dispose(), ms);
+            this.#timeoutId = setTimeout(() => this.dispose(), ms);
         }
 
         return this;
     }
 
     public clearTimeout() {
-        clearTimeout(this.timeoutId);
+        clearTimeout(this.#timeoutId);
     }
 
     public isDisposed() {
-        return this.disposed;
+        return this.#state > DisposerState.INITIAL;
     }
 
     public isDisposing() {
-        return this.disposed && !this.disposedFully;
+        return this.#state > DisposerState.INITIAL && !this.isDisposedFully();
     }
 
     public isDisposedFully() {
-        return this.disposedFully;
+        return DisposerState.DISPOSED === this.#state;
     }
 
     public onDispose(callback: DisposeCallback) {
-        this.before.add(callback);
+        if (this.#state >= DisposerState.BEFORE_CHILDREN) {
+            this.handle(callback);
+        } else {
+            this.#before.add(callback);
+        }
         return this;
     }
 
     public onDisposed(callback: DisposeCallback) {
-        this.after.add(callback);
+        if (this.#state >= DisposerState.AFTER_CHILDREN) {
+            this.handle(callback);
+        } else {
+            this.#after.add(callback);
+        }
 
         return this;
     }
 
     public addChild(...children: object[]) {
-        const disposers = children.map((child) => Disposer.for(child));
-        if (this.disposed) {
-            disposers.forEach((d) => d.dispose());
+        if (this.#state >= DisposerState.CHILDREN) {
+            Disposer.dispose(...children);
             return this;
         }
-        for (const disposer of disposers) {
-            if (disposer.disposed) {
-                continue;
-            }
 
-            this.children.add(disposer);
-            disposer.sources.add(this);
-        }
+        const disposers = children.map(Disposer.for);
+
+        disposers.forEach((disposer) => {
+            if (!disposer.isDisposed()) {
+                this.#children.add(disposer);
+                disposer.#sources.add(this);
+            }
+        });
 
         return this;
     }
 
     public addSource(...sources: object[]) {
-        for (const source of sources) {
-            Disposer.for(source).addChild(this);
-        }
+        sources.forEach((source) => Disposer.addChild(source, this));
         return this;
     }
 
     public dispose() {
-        if (this.disposed) {
+        if (DisposerState.INITIAL !== this.#state) {
             return;
         }
-        this.disposed = true;
+
+        this.#state = DisposerState.BEFORE_CHILDREN;
+        const events = Disposer.events;
+
         this.clearTimeout();
 
-        const sources = [...this.sources];
-        const children = [...this.children];
+        events.emit("dispose", this);
 
-        this.sources.clear();
-        this.children.clear();
+        this.#before.forEach((fn) => this.handle(fn));
+        this.#before.clear();
 
-        for (const source of sources) {
-            source.children.delete(this);
-        }
+        this.#state = DisposerState.CHILDREN;
+        const sources = [...this.#sources];
+        const children = [...this.#children];
 
-        Disposer.emit("dispose", this);
+        this.#sources.clear();
+        this.#children.clear();
 
-        this.before.apply();
+        sources.forEach((source) => source.#children.delete(this));
+        children.forEach((child) => child.handle(() => child.dispose()));
 
-        for (const child of children) {
-            try {
-                child.dispose();
-            } catch (e) {
-                Disposer.emit("error", e, child);
-            }
-        }
+        this.#state = DisposerState.AFTER_CHILDREN;
+        const after = [...this.#after];
+        this.#after.clear();
+        after.forEach((fn) => this.handle(fn));
 
-        this.after.apply();
-        this.disposedFully = true;
-        Disposer.emit("disposed", this);
+        this.#state = DisposerState.DISPOSED;
+        events.emit("disposed", this);
     }
 
-    public handle(callback: DisposeCallback) {
+    private handle(callback: DisposeCallback) {
         try {
-            callback(this);
+            if (!this.#applied.has(callback)) {
+                this.#applied.add(callback);
+                callback(this);
+            }
         } catch (e) {
-            Disposer.emit("error", e, this, callback);
+            Disposer.events.emit("error", e, this, callback);
         }
     }
 }

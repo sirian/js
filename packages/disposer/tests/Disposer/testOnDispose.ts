@@ -43,7 +43,7 @@ describe("callback", () => {
         const results: any[] = [];
 
         const onError = jest.fn();
-        Disposer.once("error", onError);
+        Disposer.events.once("error", onError);
 
         const err = new Error("foo");
 

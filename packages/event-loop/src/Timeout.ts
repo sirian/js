@@ -22,4 +22,9 @@ export class Timeout extends AsyncTask {
     protected doStart(callback: TaskCallback) {
         this.timeoutId = setTimeout(callback, this.ms);
     }
+
+    protected handle() {
+        this.clear();
+        super.handle();
+    }
 }
