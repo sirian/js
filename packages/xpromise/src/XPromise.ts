@@ -8,8 +8,8 @@ export type Rejector = (reason?: any) => void;
 export type PromiseExecutor<T> = (resolve: Resolver<T>, reject: Rejector) => void;
 export type AllSettled<T extends any[]> = {
     [P in keyof T]:
-    { status: PromiseStatus.FULFILLED, value: Awaited<T[P]> } |
-    { status: PromiseStatus.REJECTED, reason: any }
+    { status: "fulfilled", value: Awaited<T[P]> } |
+    { status: "rejected", reason: any }
 };
 
 export interface IDeferred<T> {
@@ -18,17 +18,17 @@ export interface IDeferred<T> {
     promise: PromiseLike<T>;
 }
 
-export interface PromiseReaction<T, R1 = any, R2 = any> {
-    promise: XPromise<R1 | R2>;
-    onFulfilled: OnFulfill<T, R1>;
-    onRejected: OnReject<R2>;
-}
+export type PromiseReaction<T, R1 = any, R2 = any> = [
+    promise: XPromise<R1 | R2>,
+    onFulfilled: OnFulfill<T, R1>,
+    onRejected: OnReject<R2>,
+];
 
-export enum PromiseStatus {
-    PENDING = "pending",
-    FULFILLED = "fulfilled",
-    REJECTED = "rejected",
-}
+const PENDING = "pending";
+const FULFILLED = "fulfilled";
+const REJECTED = "rejected";
+
+export type PromiseStatus = "pending" | "fulfilled" | "rejected";
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
 
@@ -39,7 +39,7 @@ const isFunction = (x: any): x is Func => "function" === typeof x;
 export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     public readonly promise = this;
 
-    protected status: PromiseStatus = PromiseStatus.PENDING;
+    protected status: PromiseStatus = PENDING;
     protected reactions: Array<PromiseReaction<any>> = [];
     protected resolved = false;
     protected timeout?: any;
@@ -127,8 +127,8 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             const wrapped = promises
                 .map(XPromise.resolve)
                 .map((promise) => promise.then(
-                    (value) => ({status: PromiseStatus.FULFILLED, value}),
-                    (reason) => ({status: PromiseStatus.REJECTED, reason}),
+                    (value) => ({status: FULFILLED, value}),
+                    (reason) => ({status: REJECTED, reason}),
                 ));
 
             return XPromise.all(wrapped);
@@ -197,15 +197,15 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public isPending() {
-        return PromiseStatus.PENDING === this.status;
+        return PENDING === this.status;
     }
 
     public isFulfilled() {
-        return PromiseStatus.FULFILLED === this.status;
+        return FULFILLED === this.status;
     }
 
     public isRejected() {
-        return PromiseStatus.REJECTED === this.status;
+        return REJECTED === this.status;
     }
 
     public isSettled() {
@@ -223,11 +223,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     public then<R1 = T, R2 = never>(onFulfilled?: OnFulfill<T, R1>, onRejected?: OnReject<R2>) {
         const promise = new XPromise<R1 | R2>();
 
-        const reaction: PromiseReaction<T, R1, R2> = {
-            promise,
-            onFulfilled,
-            onRejected,
-        };
+        const reaction: PromiseReaction<T, R1, R2> = [promise, onFulfilled, onRejected];
 
         if (this.isPending()) {
             this.reactions.push(reaction);
@@ -253,7 +249,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     protected react(reaction: PromiseReaction<T>) {
-        const {promise, onFulfilled, onRejected} = reaction;
+        const [promise, onFulfilled, onRejected] = reaction;
         const value = this.value;
 
         try {
@@ -277,11 +273,11 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     private settleFulfilled(value?: T | PromiseLike<T>) {
-        this.settle(PromiseStatus.FULFILLED, value);
+        this.settle(FULFILLED, value);
     }
 
     private settleRejected(reason?: any) {
-        this.settle(PromiseStatus.REJECTED, reason);
+        this.settle(REJECTED, reason);
     }
 
     private doResolve(x: any) {
@@ -319,7 +315,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    private settle(status: PromiseStatus.FULFILLED | PromiseStatus.REJECTED, value: any) {
+    private settle(status: "fulfilled" | "rejected", value: any) {
         if (!this.isPending()) {
             return;
         }
