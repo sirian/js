@@ -1,10 +1,10 @@
 import {Descriptor, XMap} from "@sirian/common";
 import {Debouncer, IDebouncerOptions} from "./Debouncer";
 import {DecorateError} from "./DecorateError";
-import {Decorator} from "./Decorator";
+import {methodDecorator} from "./Decorator";
 
-export const debounce = Decorator.forMethod(<A extends any[]>(options: number | IDebouncerOptions<A> = {}) => {
-    return (target, key, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
+export const debounce = methodDecorator(<A extends any[]>(options: number | IDebouncerOptions<A> = {}) =>
+    (target, key, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
         if (!desc) {
             throw new DecorateError("@debounce requires descriptor");
         }
@@ -14,5 +14,4 @@ export const debounce = Decorator.forMethod(<A extends any[]>(options: number | 
         return Descriptor.wrap(target, key, {
             get: (object, parent) => map.ensure(parent()),
         }) as any;
-    };
-});
+    });

@@ -1,10 +1,10 @@
-import {Decorator} from "../../src";
-
 // tslint:disable:max-classes-per-file
 // tslint:disable:no-empty
 
+import {parameterDecorator} from "../../src";
+
 const map = new Map();
-const decorator = Decorator.forParameter((foo?: string, bar: number = 3) => {
+const decorator = parameterDecorator((foo?: string, bar: number = 3) => {
     return (target, key, index) => {
         map.set(target, [target, key, index, foo, bar]);
     };

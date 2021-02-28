@@ -1,10 +1,10 @@
-import {Decorator} from "../../src";
-
 // tslint:disable:max-classes-per-file
 // tslint:disable:no-empty
 
+import {methodDecorator} from "../../src";
+
 const map = new Map();
-const decorator = Decorator.forMethod((foo?: string, bar: number = 3) => {
+const decorator = methodDecorator((foo?: string, bar: number = 3) => {
     return (target, key, descriptor: PropertyDescriptor) => {
         map.set(target, [target, key, descriptor, foo, bar]);
     };

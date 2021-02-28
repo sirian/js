@@ -1,9 +1,9 @@
-import {Decorator} from "../../src";
-
 // tslint:disable:max-classes-per-file
 
+import {classDecorator} from "../../src";
+
 const map = new Map();
-const decorator = Decorator.forClass((foo?: string, bar: number = 3, ...args: any[]) => {
+const decorator = classDecorator((foo?: string, bar: number = 3, ...args: any[]) => {
     return (target) => {
         map.set(target, [target, foo, bar, ...args]);
         return target;

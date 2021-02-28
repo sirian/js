@@ -1,6 +1,6 @@
 import {valuesOf} from "@sirian/common";
 import {Args} from "@sirian/ts-extra-types";
-import {Decorator, Decorators, DecoratorType} from "../../src";
+import {Decorators, DecoratorType, parseDecoratorArgs} from "../../src";
 // tslint:disable:un
 
 describe("", () => {
@@ -36,7 +36,7 @@ describe("", () => {
     expect(Foo).toBe(Foo);
 
     test.each(data)("Decorator.parseArgs(%s, %O)", (type, args) => {
-        const params = Decorator.parseArgs(type, args);
+        const params = parseDecoratorArgs(type, args);
         expect(valuesOf(params)).toStrictEqual(args);
     });
 
