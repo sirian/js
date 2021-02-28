@@ -25,9 +25,11 @@ export const getXType = <T>(value: T) =>
         : getType(value))) as XTypeNameOf<T>;
 
 export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> =>
-    isArray(types) ? isSome(getXType(v), types) : isXType(v, [types]);
+    ([] as any[]).concat(types).includes(getXType(v));
+
 export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> =>
-    isArray(types) ? isSome(getType(v), types) : isType(v, [types]);
+    ([] as any[]).concat(types).includes(getType(v));
+
 export const isNumber = (value: any): value is number => isType(value, "number");
 export const isBigInt = (value: any): value is bigint => isType(value, "bigint");
 export const isBoolean = (value: any): value is boolean => isType(value, "boolean");
