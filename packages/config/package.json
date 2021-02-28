@@ -1,7 +1,7 @@
 {
     "name": "@sirian/config",
     "description": "",
-    "version": "1.5.31",
+    "version": "1.5.32",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,9 +17,9 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^6.3.0",
-        "@sirian/error": "^2.2.11",
-        "@sirian/ts-extra-types": "^3.61.2"
+        "@sirian/common": "^6.3.1",
+        "@sirian/error": "^2.2.12",
+        "@sirian/ts-extra-types": "^3.61.3"
     },
     "scripts": {},
     "publishConfig": {
