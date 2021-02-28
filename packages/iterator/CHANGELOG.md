@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.38](https://github.com/sirian/js/compare/@sirian/iterator@1.13.37...@sirian/iterator@1.13.38) (2021-02-28)
+
+**Note:** Version bump only for package @sirian/iterator
+
+
+
+
+
 ## [1.13.37](https://github.com/sirian/js/compare/@sirian/iterator@1.13.36...@sirian/iterator@1.13.37) (2021-02-28)
 
 **Note:** Version bump only for package @sirian/iterator

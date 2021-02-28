@@ -1,7 +1,7 @@
 {
     "name": "@sirian/devtools",
     "description": "",
-    "version": "1.2.24",
+    "version": "1.2.25",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,7 +17,7 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^6.3.3",
+        "@sirian/common": "^6.3.4",
         "@sirian/ts-extra-types": "^3.61.3"
     },
     "scripts": {},
