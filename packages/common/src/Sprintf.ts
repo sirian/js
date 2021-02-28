@@ -37,11 +37,10 @@ const rgxIndexAccess = /^\[(\d+)]/;
 export class Sprintf {
     public static readonly cache: Map<string, Sprintf> = new Map();
 
-    // tslint:disable:member-ordering member-access
-    #tree: ParsedTree;
-    #cursor: number = 0;
+    private tree: ParsedTree;
+    private cursor: number = 0;
 
-    #placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
+    private placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
         b: (arg) => toInt(arg).toString(2),
         c: (arg) => String.fromCharCode(toInt(arg)),
         i: (arg) => toInt(arg),
@@ -60,10 +59,8 @@ export class Sprintf {
         X: (arg) => toUint32(arg).toString(16).toUpperCase(),
     };
 
-    // tslint:enable
-
     constructor(format: string) {
-        this.#tree = this.parse(format);
+        this.tree = this.parse(format);
     }
 
     public static format(format = "", args: any[]) {
@@ -98,12 +95,12 @@ export class Sprintf {
             if (ph.paramNum) { // positional argument (explicit)
                 return argv[ph.paramNum - 1];
             } else { // positional argument (implicit)
-                return argv[this.#cursor++];
+                return argv[this.cursor++];
             }
         }
 
         // keyword argument
-        let arg = argv[this.#cursor];
+        let arg = argv[this.cursor];
 
         for (const [index, key] of keys.entries()) {
             assert(arg, `Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
@@ -190,7 +187,7 @@ export class Sprintf {
 
     protected handlePlaceholder(ph: Placeholder, arg: any) {
         const type = ph.type;
-        const callback = this.#placeholders[type];
+        const callback = this.placeholders[type];
         assert(callback, `Formatter for "${type}" not found`);
 
         if (!/^[Tv]/.test(type) && isFunction(arg)) {
@@ -201,11 +198,11 @@ export class Sprintf {
     }
 
     protected format(args: any[]) {
-        this.#cursor = 0;
+        this.cursor = 0;
 
         const output: string[] = [];
 
-        for (const ph of this.#tree) {
+        for (const ph of this.tree) {
             if (isString(ph)) {
                 output.push(ph);
                 continue;

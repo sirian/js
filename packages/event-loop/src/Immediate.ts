@@ -5,13 +5,11 @@ declare const setImmediate: any;
 
 export class Immediate<T = any> extends AsyncTask {
     protected static queue?: TaskQueue;
-    // tslint:disable:member-ordering member-access
-    #taskId?: number;
 
-    // tslint:enable
+    private taskId?: number;
 
     protected doClear() {
-        Immediate.queue?.cancel(this.#taskId);
+        Immediate.queue?.cancel(this.taskId);
     }
 
     protected doStart(callback: TaskCallback) {
@@ -25,7 +23,7 @@ export class Immediate<T = any> extends AsyncTask {
             }
         });
 
-        this.#taskId = Immediate.queue.add(callback);
+        this.taskId = Immediate.queue.add(callback);
     }
 
     protected handle() {
