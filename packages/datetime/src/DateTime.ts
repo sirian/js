@@ -4,13 +4,6 @@ import {DateTimeInterval, IDateInterval} from "./DateTimeInterval";
 import {DateTimeModifier} from "./DateTimeModifier";
 
 export class DateTime extends DateTimeImmutable {
-    public static readonly formats = {
-        default: "YYYY-MM-DD HH:mm:ss",
-        date: "YYYY-MM-DD",
-        time: "HH:mm:ss",
-        iso: "YYYY-MM-DDTHH:mm:ssZ",
-    };
-
     public get year() {
         return this.date.getUTCFullYear();
     }
