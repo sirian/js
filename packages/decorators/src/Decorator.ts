@@ -1,6 +1,5 @@
 import {Descriptor, isArray, isConstructor, isNumber, isObjectOrFunction, isString, isSymbol} from "@sirian/common";
 import {Args, Return} from "@sirian/ts-extra-types";
-import {DecorateError} from "./DecorateError";
 
 export const enum DecoratorType {
     CLASS,
@@ -92,24 +91,3 @@ export const parameterDecorator = <F extends DecoratorFactory<DecoratorType.PARA
 
 export const propertyDecorator = <F extends DecoratorFactory<DecoratorType.PROPERTY>>(callback: F) =>
     createDecorator(DecoratorType.PROPERTY, callback);
-
-export const parseDecoratorArgs = <T extends DecoratorType>(type: T, args: Args<Decorators[T]>): DecoratorParams[T] => {
-    if (!isDecoratorArgs(type, args)) {
-        throw new DecorateError(`Could not parse ${type} decorator args "${args}"`);
-    }
-
-    if (DecoratorType.CLASS === type) {
-        return {class: args[0]} as any;
-    }
-
-    const [proto, propertyKey, arg3] = args;
-
-    if (DecoratorType.METHOD === type || DecoratorType.PROPERTY === type) {
-        return {proto, propertyKey, descriptor: arg3} as any;
-    }
-    if (DecoratorType.PARAMETER === type) {
-        return {proto, propertyKey, parameterIndex: arg3} as any;
-    }
-
-    throw new DecorateError(`Invalid decorator type "${type}"`);
-};

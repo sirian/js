@@ -1,9 +1,9 @@
-import {Memoizer} from "../../src";
+import {createMemoizer} from "../../src";
 
 describe("", () => {
     const fn = jest.fn(() => 1);
 
-    const memoized = Memoizer.memoize(fn, {});
+    const memoized = createMemoizer(fn, {});
 
     test("", () => {
         expect(memoized()).toBe(1);
@@ -14,7 +14,7 @@ describe("", () => {
     });
 
     test("", () => {
-        const memoized2 = Memoizer.memoize(fn);
+        const memoized2 = createMemoizer(fn);
         expect(memoized2()).toBe(1);
 
         expect(fn).toBeCalledTimes(2);

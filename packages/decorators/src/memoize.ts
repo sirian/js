@@ -1,7 +1,6 @@
 import {isFunction} from "@sirian/common";
-import {DecorateError} from "./DecorateError";
-import {methodDecorator} from "./Decorator";
-import {IMemoizerOptions, Memoizer} from "./Memoizer";
+import {createMemoizer, IMemoizerOptions} from "./createMemoizer";
+import {methodDecorator} from "./decorator";
 
 export const memoize = methodDecorator((options?: IMemoizerOptions<any>) =>
     (target, key, descriptor) => {
@@ -10,10 +9,8 @@ export const memoize = methodDecorator((options?: IMemoizerOptions<any>) =>
             if (isFunction(v)) {
                 return {
                     ...descriptor,
-                    [k]: Memoizer.memoize(v, options),
+                    [k]: createMemoizer(v, options),
                 };
             }
         }
-
-        throw new DecorateError("Only put a @memoize decorator on a method or get accessor.");
     });

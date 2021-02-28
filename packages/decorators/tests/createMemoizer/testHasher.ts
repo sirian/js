@@ -1,9 +1,9 @@
-import {Memoizer} from "../../src";
+import {createMemoizer} from "../../src";
 
 test("", () => {
     const fn: (x: number, y: number) => number = jest.fn((x, y) => x + y);
 
-    const memoized = Memoizer.memoize(fn, {
+    const memoized = createMemoizer(fn, {
         hasher: (...args) => args[0],
     });
 

@@ -1,17 +1,25 @@
-import {Descriptor, XWeakMap} from "@sirian/common";
-import {Func} from "@sirian/ts-extra-types";
-import {DecorateError} from "./DecorateError";
-import {methodDecorator} from "./Decorator";
+import {assert, Descriptor} from "@sirian/common";
+import {methodDecorator} from "./decorator";
 
 export const bind = methodDecorator(() =>
     (proto, key, desc) => {
-        if (!desc) {
-            throw new DecorateError("@bind requires descriptor");
-        }
+        assert(!!desc, "@bind requires descriptor");
 
-        const map = new XWeakMap((obj) => new XWeakMap((fn: Func) => fn.bind(obj)));
+        const map = new WeakMap();
 
         return Descriptor.wrap(proto, key, {
-            get: (object, previous) => map.ensure(object).ensure(previous()),
+            get: (object, previous) => {
+                if (!map.has(object)) {
+                    map.set(object, new WeakMap());
+                }
+                const objMap = map.get(object);
+
+                const fn = previous();
+                if (!objMap.has(fn)) {
+                    objMap.set(fn, fn.bind(object));
+                }
+
+                return objMap.get(fn);
+            },
         });
     });
