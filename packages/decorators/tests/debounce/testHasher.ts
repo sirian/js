@@ -1,4 +1,4 @@
-import {Debouncer} from "../../src";
+import {createDebouncer} from "../../src";
 
 test("", () => {
     jest.useFakeTimers();
@@ -8,8 +8,8 @@ test("", () => {
     const calls: Array<[string, number]> = [];
     const fn = (x: string) => calls.push([x, now]);
 
-    const debounced = Debouncer.debounce(fn, {
-        hasher: (obj, args) => args[0],
+    const debounced = createDebouncer(fn, {
+        hasher: (...args) => args[0],
     });
 
     debounced("zoo");

@@ -1,7 +1,7 @@
 import {memoize} from "../../src";
 
-describe("", () => {
-    test("", () => {
+describe("memoize()", () => {
+    test("test circular", () => {
         class Foo {
             @memoize
             public get foo(): any {

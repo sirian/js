@@ -1,6 +1,38 @@
-import {assert, Descriptor, isFunction} from "@sirian/common";
-import {Debouncer, IDebouncerOptions} from "./Debouncer";
+import {assert, Descriptor, HybridMap, isFunction, isNumber} from "@sirian/common";
+import {Func} from "@sirian/ts-extra-types";
 import {methodDecorator} from "./decorator";
+
+declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
+
+export interface IDebouncerOptions<A extends any[]> {
+    ms?: number | Func<number, [any, A]>;
+    hasher?: Func<any, A>;
+}
+
+export const createDebouncer = <A extends any[]>(fn: (...args: A) => any, options: number | IDebouncerOptions<A> = {}) => {
+    const map = new HybridMap(() => new HybridMap<any, A>());
+
+    if (isNumber(options)) {
+        options = {ms: options};
+    }
+
+    const ms = options.ms ?? 300;
+    const hasher = options.hasher;
+
+    return new Proxy(fn, {
+        apply: (target, thisArg, args: A) => {
+            const m = map.ensure(thisArg);
+            const hashKey = hasher?.(...args);
+
+            if (!m.has(hashKey)) {
+                const timeoutMs = isFunction(ms) ? ms(thisArg, args) : ms;
+                setTimeout(() => fn.apply(thisArg, m.pick(hashKey, true)), timeoutMs);
+            }
+
+            m.set(hashKey, args);
+        },
+    });
+};
 
 export const debounce = methodDecorator(<A extends any[]>(options: number | IDebouncerOptions<A> = {}) =>
     (target, key, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
@@ -15,7 +47,7 @@ export const debounce = methodDecorator(<A extends any[]>(options: number | IDeb
                 assert(isFunction(fn));
 
                 if (!map.has(fn)) {
-                    map.set(fn, Debouncer.debounce(fn, options));
+                    map.set(fn, createDebouncer(fn, options));
                 }
 
                 return map.get(fn);

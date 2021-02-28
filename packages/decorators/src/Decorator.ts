@@ -8,31 +8,6 @@ export const enum DecoratorType {
     PARAMETER,
 }
 
-export interface IClassDecoratorParams {
-    class: Function;
-}
-
-export interface IPropertyDecoratorParams {
-    proto: object;
-    propertyKey: PropertyKey;
-    descriptor?: PropertyDescriptor;
-}
-
-export interface IMethodDecoratorParams extends IPropertyDecoratorParams {
-    descriptor: PropertyDescriptor;
-}
-
-export interface IParameterDecoratorParams {
-    parameterIndex: number;
-}
-
-export type DecoratorParams = {
-    [DecoratorType.CLASS]: IClassDecoratorParams,
-    [DecoratorType.PROPERTY]: IPropertyDecoratorParams,
-    [DecoratorType.METHOD]: IMethodDecoratorParams,
-    [DecoratorType.PARAMETER]: IParameterDecoratorParams,
-};
-
 export type Decorators = {
     [DecoratorType.CLASS]: <T extends Function>(fn: T) => T | void,
     [DecoratorType.PROPERTY]: (proto: object, key: PropertyKey, desc?: PropertyDescriptor) => void,

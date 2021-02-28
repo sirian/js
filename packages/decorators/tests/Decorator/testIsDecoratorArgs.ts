@@ -1,6 +1,6 @@
 import {DecoratorType, isDecoratorArgs} from "../../src";
 
-describe("Decorator.isDecoratorArgs('class')", () => {
+describe("decorator.isDecoratorArgs('class')", () => {
     const data: Array<[any[], boolean]> = [
         [[], false],
         [[{}], false],
@@ -11,7 +11,7 @@ describe("Decorator.isDecoratorArgs('class')", () => {
         [[class extends Date {}], true],
     ];
 
-    test.each(data)("Decorator.isDecoratorArgs('class', %p) === %p", (args, expected) => {
+    test.each(data)("decorator.isDecoratorArgs('class', %p) === %p", (args, expected) => {
         expect(isDecoratorArgs(DecoratorType.CLASS, args)).toBe(expected);
     });
 });
