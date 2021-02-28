@@ -13,7 +13,7 @@ import {ParameterBagError, ParameterCircularReferenceError, ParameterNotFoundErr
 import {ParameterBag} from "./ParameterBag";
 import {StrictObject} from "./StrictObject";
 
-export class ResolvableParameterBag<T extends object> extends ParameterBag<T> {
+export class ResolvableParameterBag<T extends Record<string | number, any>> extends ParameterBag<T> {
     protected resolved?: T;
 
     constructor(params?: T) {
