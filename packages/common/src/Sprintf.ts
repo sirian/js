@@ -37,10 +37,10 @@ const rgxIndexAccess = /^\[(\d+)]/;
 export class Sprintf {
     public static readonly cache: Map<string, Sprintf> = new Map();
 
-    private tree: ParsedTree;
-    private cursor: number = 0;
+    private _tree: ParsedTree;
+    private _cursor: number = 0;
 
-    private placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
+    private _placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
         b: (arg) => toInt(arg).toString(2),
         c: (arg) => String.fromCharCode(toInt(arg)),
         i: (arg) => toInt(arg),
@@ -60,11 +60,11 @@ export class Sprintf {
     };
 
     constructor(format: string) {
-        this.tree = this.parse(format);
+        this._tree = this._parse(format);
     }
 
     public static format(format = "", args: any[]) {
-        return Sprintf.parse(format).format(args);
+        return Sprintf.parse(format)._format(args);
     }
 
     public static parse(format: string) {
@@ -95,12 +95,12 @@ export class Sprintf {
             if (ph.paramNum) { // positional argument (explicit)
                 return argv[ph.paramNum - 1];
             } else { // positional argument (implicit)
-                return argv[this.cursor++];
+                return argv[this._cursor++];
             }
         }
 
         // keyword argument
-        let arg = argv[this.cursor];
+        let arg = argv[this._cursor];
 
         for (const [index, key] of keys.entries()) {
             assert(arg, `Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
@@ -111,7 +111,7 @@ export class Sprintf {
         return arg;
     }
 
-    protected parse(format: string) {
+    private _parse(format: string) {
         const tree: ParsedTree = [];
 
         let index = 0;
@@ -142,7 +142,7 @@ export class Sprintf {
             const item: Placeholder = {
                 placeholder: match[0],
                 paramNum: parseInt(match[1], 0),
-                keys: this.parseKeys(match[2]),
+                keys: this._parseKeys(match[2]),
                 sign: !!match[3],
                 padChar: (match[4] || " ").slice(-1),
                 align: !!match[5],
@@ -159,7 +159,7 @@ export class Sprintf {
         return tree;
     }
 
-    protected parseKeys(field: string) {
+    private _parseKeys(field: string) {
         if (!field) {
             return;
         }
@@ -185,9 +185,9 @@ export class Sprintf {
         return keys;
     }
 
-    protected handlePlaceholder(ph: Placeholder, arg: any) {
+    private _handlePlaceholder(ph: Placeholder, arg: any) {
         const type = ph.type;
-        const callback = this.placeholders[type];
+        const callback = this._placeholders[type];
         assert(callback, `Formatter for "${type}" not found`);
 
         if (!/^[Tv]/.test(type) && isFunction(arg)) {
@@ -197,12 +197,12 @@ export class Sprintf {
         return stringifyVar(callback(arg, ph));
     }
 
-    protected format(args: any[]) {
-        this.cursor = 0;
+    private _format(args: any[]) {
+        this._cursor = 0;
 
         const output: string[] = [];
 
-        for (const ph of this.tree) {
+        for (const ph of this._tree) {
             if (isString(ph)) {
                 output.push(ph);
                 continue;
@@ -212,7 +212,7 @@ export class Sprintf {
 
             const type = ph.type;
 
-            let argText = stringifyVar(this.handlePlaceholder(ph, arg));
+            let argText = stringifyVar(this._handlePlaceholder(ph, arg));
 
             if (rgxJson.test(type)) {
                 output.push(argText);

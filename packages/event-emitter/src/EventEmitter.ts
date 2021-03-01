@@ -10,12 +10,12 @@ export interface EventEmitterInit<T extends EventEmitterEventMap> {
 
 export class EventEmitter<T extends EventEmitterEventMap = any> {
 
-    private listeners: Map<keyof T, ListenerSet>;
-    private onError: EventEmitterInit<T>["onError"];
+    private readonly _listeners: Map<keyof T, ListenerSet>;
+    private readonly _onError: EventEmitterInit<T>["onError"];
 
     constructor(init: Partial<EventEmitterInit<T>> = {}) {
-        this.listeners = new Map();
-        this.onError = init.onError || ((e) => Promise.reject(e));
+        this._listeners = new Map();
+        this._onError = init.onError || ((e) => Promise.reject(e));
     }
 
     public on<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>, opts?: ListenerOptions) {
@@ -23,7 +23,7 @@ export class EventEmitter<T extends EventEmitterEventMap = any> {
     }
 
     public addListener<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>, opts?: ListenerOptions) {
-        const listeners = this.listeners;
+        const listeners = this._listeners;
         if (!listeners.has(event)) {
             listeners.set(event, new ListenerSet());
         }
@@ -32,12 +32,12 @@ export class EventEmitter<T extends EventEmitterEventMap = any> {
     }
 
     public getListeners<K extends keyof T>(event: K) {
-        const set = this.listeners.get(event) as ListenerSet<T[K]> | undefined;
+        const set = this._listeners.get(event) as ListenerSet<T[K]> | undefined;
         return set ? set.all() : [];
     }
 
     public emit<K extends keyof T>(event: K, ...args: T[K]) {
-        const set = this.listeners.get(event) as ListenerSet<T[K]> | undefined;
+        const set = this._listeners.get(event) as ListenerSet<T[K]> | undefined;
 
         if (!set) {
             return;
@@ -47,7 +47,7 @@ export class EventEmitter<T extends EventEmitterEventMap = any> {
             try {
                 set.applyListener(obj.callback, [...args] as T[K]);
             } catch (e) {
-                this.onError(e, event, [...args] as T[K], obj);
+                this._onError(e, event, [...args] as T[K], obj);
                 if (!obj.passive) {
                     throw e;
                 }
@@ -60,12 +60,12 @@ export class EventEmitter<T extends EventEmitterEventMap = any> {
     }
 
     public hasListener<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>) {
-        return this.listeners.has(event) && this.listeners.get(event)!.hasListener(listener);
+        return this._listeners.has(event) && this._listeners.get(event)!.hasListener(listener);
     }
 
     public hasListeners(event?: keyof T): boolean;
     public hasListeners(...args: any[]) {
-        return args.length ? this.listeners.has(args[0]) : this.listeners.size > 0;
+        return args.length ? this._listeners.has(args[0]) : this._listeners.size > 0;
     }
 
     public off<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>) {
@@ -73,18 +73,18 @@ export class EventEmitter<T extends EventEmitterEventMap = any> {
     }
 
     public removeListener<K extends keyof T>(event: K, listener: EventEmitterCallback<T, K>) {
-        const set = this.listeners.get(event);
+        const set = this._listeners.get(event);
         if (set) {
             set.removeListener(listener);
             if (!set.size) {
-                this.listeners.delete(event);
+                this._listeners.delete(event);
             }
         }
         return this;
     }
 
     public removeAllListeners() {
-        this.listeners.clear();
+        this._listeners.clear();
         return this;
     }
 }

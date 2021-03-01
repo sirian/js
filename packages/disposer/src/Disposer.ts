@@ -30,21 +30,21 @@ export class Disposer {
 
     public readonly target: object;
 
-    private before: Set<DisposeCallback>;
-    private after: Set<DisposeCallback>;
-    private applied: WeakSet<DisposeCallback>;
-    private children: Set<Disposer>;
-    private sources: Set<Disposer>;
-    private timeoutId?: Return<typeof setTimeout>;
-    private state: DisposerState = DisposerState.INITIAL;
+    private readonly _before: Set<DisposeCallback>;
+    private readonly _after: Set<DisposeCallback>;
+    private readonly _applied: WeakSet<DisposeCallback>;
+    private readonly _children: Set<Disposer>;
+    private readonly _sources: Set<Disposer>;
+    private _timeoutId?: Return<typeof setTimeout>;
+    private _state: DisposerState = DisposerState.INITIAL;
 
     constructor(target: object) {
         this.target = target;
-        this.applied = new WeakSet();
-        this.children = new Set();
-        this.sources = new Set();
-        this.before = new Set();
-        this.after = new Set();
+        this._applied = new WeakSet();
+        this._children = new Set();
+        this._sources = new Set();
+        this._before = new Set();
+        this._after = new Set();
     }
 
     public static onDispose(target: object, callback: DisposeCallback) {
@@ -115,49 +115,49 @@ export class Disposer {
         this.clearTimeout();
 
         if (!this.isDisposed()) {
-            this.timeoutId = setTimeout(() => this.dispose(), ms);
+            this._timeoutId = setTimeout(() => this.dispose(), ms);
         }
 
         return this;
     }
 
     public clearTimeout() {
-        clearTimeout(this.timeoutId);
+        clearTimeout(this._timeoutId);
     }
 
     public isDisposed() {
-        return this.state > DisposerState.INITIAL;
+        return this._state > DisposerState.INITIAL;
     }
 
     public isDisposing() {
-        return this.state > DisposerState.INITIAL && !this.isDisposedFully();
+        return this._state > DisposerState.INITIAL && !this.isDisposedFully();
     }
 
     public isDisposedFully() {
-        return DisposerState.DISPOSED === this.state;
+        return DisposerState.DISPOSED === this._state;
     }
 
     public onDispose(callback: DisposeCallback) {
-        if (this.state >= DisposerState.BEFORE_CHILDREN) {
-            this.handle(callback);
+        if (this._state >= DisposerState.BEFORE_CHILDREN) {
+            this._handle(callback);
         } else {
-            this.before.add(callback);
+            this._before.add(callback);
         }
         return this;
     }
 
     public onDisposed(callback: DisposeCallback) {
-        if (this.state >= DisposerState.AFTER_CHILDREN) {
-            this.handle(callback);
+        if (this._state >= DisposerState.AFTER_CHILDREN) {
+            this._handle(callback);
         } else {
-            this.after.add(callback);
+            this._after.add(callback);
         }
 
         return this;
     }
 
     public addChild(...children: object[]) {
-        if (this.state >= DisposerState.CHILDREN) {
+        if (this._state >= DisposerState.CHILDREN) {
             Disposer.dispose(...children);
             return this;
         }
@@ -166,8 +166,8 @@ export class Disposer {
 
         disposers.forEach((disposer) => {
             if (!disposer.isDisposed()) {
-                this.children.add(disposer);
-                disposer.sources.add(this);
+                this._children.add(disposer);
+                disposer._sources.add(this);
             }
         });
 
@@ -180,43 +180,43 @@ export class Disposer {
     }
 
     public dispose() {
-        if (DisposerState.INITIAL !== this.state) {
+        if (DisposerState.INITIAL !== this._state) {
             return;
         }
 
-        this.state = DisposerState.BEFORE_CHILDREN;
+        this._state = DisposerState.BEFORE_CHILDREN;
         const events = Disposer.events;
 
         this.clearTimeout();
 
         events.emit("dispose", this);
 
-        this.before.forEach((fn) => this.handle(fn));
-        this.before.clear();
+        this._before.forEach((fn) => this._handle(fn));
+        this._before.clear();
 
-        this.state = DisposerState.CHILDREN;
-        const sources = [...this.sources];
-        const children = [...this.children];
+        this._state = DisposerState.CHILDREN;
+        const sources = [...this._sources];
+        const children = [...this._children];
 
-        this.sources.clear();
-        this.children.clear();
+        this._sources.clear();
+        this._children.clear();
 
-        sources.forEach((source) => source.children.delete(this));
-        children.forEach((child) => child.handle(() => child.dispose()));
+        sources.forEach((source) => source._children.delete(this));
+        children.forEach((child) => child._handle(() => child.dispose()));
 
-        this.state = DisposerState.AFTER_CHILDREN;
-        const after = [...this.after];
-        this.after.clear();
-        after.forEach((fn) => this.handle(fn));
+        this._state = DisposerState.AFTER_CHILDREN;
+        const after = [...this._after];
+        this._after.clear();
+        after.forEach((fn) => this._handle(fn));
 
-        this.state = DisposerState.DISPOSED;
+        this._state = DisposerState.DISPOSED;
         events.emit("disposed", this);
     }
 
-    private handle(callback: DisposeCallback) {
+    private _handle(callback: DisposeCallback) {
         try {
-            if (!this.applied.has(callback)) {
-                this.applied.add(callback);
+            if (!this._applied.has(callback)) {
+                this._applied.add(callback);
                 callback(this);
             }
         } catch (e) {

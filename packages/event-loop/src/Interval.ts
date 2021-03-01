@@ -3,24 +3,24 @@ import {TaskCallback} from "./TaskQueue";
 
 export class Interval extends AsyncTask {
 
-    private ms: number;
-    private intervalId: any;
+    private _ms: number;
+    private _intervalId: any;
 
     constructor(ms: number, callback?: TaskCallback) {
         super(callback);
-        this.ms = ms;
+        this._ms = ms;
     }
 
-    public restart(ms: number = this.ms) {
-        this.ms = ms;
+    public restart(ms: number = this._ms) {
+        this._ms = ms;
         return super.restart();
     }
 
     protected doClear() {
-        clearInterval(this.intervalId);
+        clearInterval(this._intervalId);
     }
 
     protected doStart(callback: TaskCallback) {
-        this.intervalId = setInterval(callback, this.ms);
+        this._intervalId = setInterval(callback, this._ms);
     }
 }

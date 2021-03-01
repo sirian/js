@@ -13,6 +13,9 @@
         "interface-over-type-literal": false,
         "only-arrow-functions": false,
         "no-empty": false,
+        "variable-name": {
+            "options": ["allow-leading-underscore", "allow-pascal-case"]
+        },
         "callable-types": false,
         "array-type": [false, "array-simple"],
         "no-shadowed-variable": [true, {"class": false}],

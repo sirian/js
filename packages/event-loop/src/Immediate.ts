@@ -4,16 +4,16 @@ import {TaskCallback, TaskQueue} from "./TaskQueue";
 declare const setImmediate: any;
 
 export class Immediate<T = any> extends AsyncTask {
-    protected static queue?: TaskQueue;
+    private static _queue?: TaskQueue;
 
-    private taskId?: number;
+    private _taskId?: number;
 
     protected doClear() {
-        Immediate.queue?.cancel(this.taskId);
+        Immediate._queue?.cancel(this._taskId);
     }
 
     protected doStart(callback: TaskCallback) {
-        Immediate.queue ??= new TaskQueue((fn) => {
+        Immediate._queue ??= new TaskQueue((fn) => {
             if ("function" === typeof setImmediate) {
                 setImmediate(fn);
             } else {
@@ -23,7 +23,7 @@ export class Immediate<T = any> extends AsyncTask {
             }
         });
 
-        this.taskId = Immediate.queue.add(callback);
+        this._taskId = Immediate._queue.add(callback);
     }
 
     protected handle() {

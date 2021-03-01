@@ -5,7 +5,7 @@ import {isFunction} from "./Is";
 import {entriesOf} from "./Obj";
 import {isEqual, isPlainObject} from "./Var";
 
-export type XMapInitializer<K, V> = (key: K) => V;
+export type XMapInitializer<K = any, V = any> = (key: K) => V;
 export type XMapSource<K = any, V = any> =
     | Nullish
     | Iterable<readonly [K, V]>
@@ -22,38 +22,28 @@ export interface IMapMini<K, V> {
     set(key: K, value: V): this;
 }
 
+export const parseMapArgs = (args: any[]): [Array<[any, any]>, XMapInitializer | undefined] => {
+    const [src, initializer] = args;
+
+    if (isFunction(src)) {
+        return [[], src];
+    }
+
+    const entries = (isPlainObject(src) ? entriesOf(src) : toArray(src)) as Array<[any, any]>;
+
+    return [entries, initializer];
+};
+
 export class XMap<K = any, V = any> extends Map<K, V> {
-    protected initializer?: XMapInitializer<K, V>;
+    private readonly _initializer?: XMapInitializer<K, V>;
 
     constructor(initializer?: XMapInitializer<K, V>);
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
     constructor(...args: any[]) {
-        const [src, initializer] = XMap.parseArgs(args);
+        const [src, initializer] = parseMapArgs(args);
         super(src);
 
-        this.initializer = initializer;
-    }
-
-    public static parseArgs(args: any[]): [Array<[any, any]>, XMapInitializer<any, any> | undefined] {
-        const [src, initializer] = args;
-
-        if (isFunction(src)) {
-            return [[], src];
-        }
-
-        return [XMap.normalizeSource(src), initializer];
-    }
-
-    public static normalizeSource<K, V>(src?: XMapSource<K, V>): Array<[K, V]> {
-        if (!src) {
-            return [];
-        }
-
-        if (isPlainObject(src)) {
-            return entriesOf(src) as any;
-        }
-
-        return toArray(src as any);
+        this._initializer = initializer;
     }
 
     public static pick<K, V>(map: IMapMini<K, V>, key: K, strict: true): V;
@@ -89,7 +79,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
     }
 
     public ensure(key: K, initializer?: XMapInitializer<K, V>) {
-        return XMap.ensure(this, key, initializer || this.initializer!);
+        return XMap.ensure(this, key, initializer || this._initializer!);
     }
 
     public sort(compareFn: (a: [K, V], b: [K, V]) => number) {

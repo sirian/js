@@ -3,25 +3,25 @@ import {IDeferred, OnFinally, OnFulfill, OnReject, Rejector, Resolver} from "./X
 export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
     public readonly promise: PromiseLike<T>;
 
-    protected resolver!: Resolver<T>;
-    protected rejector!: Rejector;
-    protected factory: PromiseConstructorLike;
+    private _resolver!: Resolver<T>;
+    private _rejector!: Rejector;
+    private readonly _factory: PromiseConstructorLike;
 
     constructor(factory: PromiseConstructorLike = Promise) {
-        this.factory = factory;
+        this._factory = factory;
 
         this.promise = new factory((res, rej) => {
-            this.resolver = res as Resolver<T>;
-            this.rejector = rej;
+            this._resolver = res as Resolver<T>;
+            this._rejector = rej;
         });
     }
 
     public resolve(v?: T | PromiseLike<T>) {
-        this.resolver(v);
+        this._resolver(v);
     }
 
     public reject(reason?: any) {
-        this.rejector(reason);
+        this._rejector(reason);
     }
 
     public then<R1 = T, R2 = never>(onFulfill?: OnFulfill<T, R1>, onReject?: OnReject<R2>) {
@@ -34,12 +34,12 @@ export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
         }
 
         return this.then(
-            (value) => this.wrap(f).then(() => value),
-            (err) => this.wrap(f).then(() => { throw err; }),
+            (value) => this._wrap(f).then(() => value),
+            (err) => this._wrap(f).then(() => { throw err; }),
         );
     }
 
-    protected wrap<U>(fn: () => U) {
-        return new this.factory<U>((resolve) => resolve(fn()));
+    private _wrap<U>(fn: () => U) {
+        return new this._factory<U>((resolve) => resolve(fn()));
     }
 }

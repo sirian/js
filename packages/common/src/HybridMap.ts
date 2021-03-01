@@ -1,20 +1,21 @@
-import {IMapMini, XMap, XMapInitializer, XMapSource} from "./XMap";
+import {isObjectOrFunction} from "./Is";
+import {IMapMini, parseMapArgs, XMap, XMapInitializer, XMapSource} from "./XMap";
 import {XWeakMap} from "./XWeakMap";
 
 export type HybridMapStore<K, V> = K extends object ? XWeakMap<any, V> : XMap<any, V>;
 
 export class HybridMap<K, V> implements IMapMini<K, V> {
-    public weakMap: XWeakMap<any, V>;
-    public strongMap: XMap<any, V>;
+    private readonly _strongMap: XMap<any, V>;
+    private _weakMap: XWeakMap<any, V>;
 
     constructor(initializer?: XMapInitializer<K, V>);
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
 
     constructor(...args: any[]) {
-        const [src, initializer] = XMap.parseArgs(args);
+        const [src, initializer] = parseMapArgs(args);
 
-        this.weakMap = new XWeakMap(initializer);
-        this.strongMap = new XMap(initializer);
+        this._weakMap = new XWeakMap(initializer);
+        this._strongMap = new XMap(initializer);
 
         for (const [key, value] of src) {
             this.set(key, value);
@@ -36,7 +37,7 @@ export class HybridMap<K, V> implements IMapMini<K, V> {
     }
 
     public has(key: K) {
-        return this.strongMap.has(key) || this.weakMap.has(key);
+        return this._strongMap.has(key) || this._weakMap.has(key);
     }
 
     public set(key: K, value: V) {
@@ -46,19 +47,15 @@ export class HybridMap<K, V> implements IMapMini<K, V> {
     }
 
     public delete(key: K) {
-        return this.weakMap.delete(key) || this.strongMap.delete(key);
+        return this._weakMap.delete(key) || this._strongMap.delete(key);
     }
 
     public clear() {
-        this.strongMap.clear();
-        this.weakMap = new XWeakMap();
+        this._strongMap.clear();
+        this._weakMap = new XWeakMap();
     }
 
     public getMap(key: K) {
-        if (key === null || "object" !== typeof key && "function" !== typeof key) {
-            return this.strongMap as HybridMapStore<K, V>;
-        }
-
-        return this.weakMap as HybridMapStore<K, V>;
+        return (isObjectOrFunction(key) ? this._weakMap : this._strongMap) as HybridMapStore<K, V>;
     }
 }

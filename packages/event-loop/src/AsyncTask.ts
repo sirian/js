@@ -3,15 +3,15 @@ import {TaskCallback} from "./TaskQueue";
 export abstract class AsyncTask {
     public static readonly tasks = new Map();
 
-    private static lastId = 0;
+    private static _lastId = 0;
 
-    private callback: TaskCallback | undefined;
-    private id: any;
-    private destroyed: boolean;
+    private _callback: TaskCallback | undefined;
+    private _id: any;
+    private _destroyed: boolean;
 
     constructor(callback?: TaskCallback) {
-        this.callback = callback;
-        this.destroyed = false;
+        this._callback = callback;
+        this._destroyed = false;
     }
 
     public static create<T extends AsyncTask, A extends any[]>(this: new(...args: A) => T, ...args: A) {
@@ -23,18 +23,18 @@ export abstract class AsyncTask {
     }
 
     public start() {
-        if (!this.destroyed && !this.isScheduled()) {
-            const id = ++AsyncTask.lastId;
-            this.id = id;
+        if (!this._destroyed && !this.isScheduled()) {
+            const id = ++AsyncTask._lastId;
+            this._id = id;
             AsyncTask.tasks.set(id, this);
-            this.doStart(() => !this.destroyed && id === this.id && this.handle());
+            this.doStart(() => !this._destroyed && id === this._id && this.handle());
         }
         return this;
     }
 
     public clear() {
-        AsyncTask.tasks.delete(this.id);
-        this.id = undefined;
+        AsyncTask.tasks.delete(this._id);
+        this._id = undefined;
         this.doClear();
         return this;
     }
@@ -44,13 +44,13 @@ export abstract class AsyncTask {
     }
 
     public destroy() {
-        this.destroyed = true;
+        this._destroyed = true;
         this.clear();
-        this.callback = undefined;
+        this._callback = undefined;
     }
 
     public setCallback(callback?: TaskCallback) {
-        this.callback = callback;
+        this._callback = callback;
         if (!callback) {
             this.clear();
         }
@@ -58,11 +58,11 @@ export abstract class AsyncTask {
     }
 
     public isScheduled() {
-        return undefined !== this.id;
+        return undefined !== this._id;
     }
 
     protected handle() {
-        this.callback?.();
+        this._callback?.();
     }
 
     protected abstract doStart(callback: TaskCallback): any;
