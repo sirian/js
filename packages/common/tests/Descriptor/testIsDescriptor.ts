@@ -1,5 +1,5 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor} from "@sirian/ts-extra-types";
-import {Descriptor, ownDescriptors, valuesOf} from "../../src";
+import {isAccessorDescriptor, isDataDescriptor, isDescriptor, ownDescriptors, valuesOf} from "../../src";
 
 describe("Descriptor", () => {
     const dataDescriptors: DataPropertyDescriptor[] = [
@@ -56,24 +56,24 @@ describe("Descriptor", () => {
     ];
 
     test.each(accessorDescriptors)("Descriptor.isAccessorDescriptor(%o) === true", (value) => {
-        expect(Descriptor.isDescriptor(value)).toBe(true);
-        expect(Descriptor.isAccessorDescriptor(value)).toBe(true);
-        expect(Descriptor.isDataDescriptor(value)).toBe(false);
+        expect(isDescriptor(value)).toBe(true);
+        expect(isAccessorDescriptor(value)).toBe(true);
+        expect(isDataDescriptor(value)).toBe(false);
     });
 
     test.each(dataDescriptors)("Descriptor.isDataDescriptor(%o) === true", (value) => {
-        expect(Descriptor.isDescriptor(value)).toBe(true);
-        expect(Descriptor.isDataDescriptor(value)).toBe(true);
-        expect(Descriptor.isAccessorDescriptor(value)).toBe(false);
+        expect(isDescriptor(value)).toBe(true);
+        expect(isDataDescriptor(value)).toBe(true);
+        expect(isAccessorDescriptor(value)).toBe(false);
     });
 
     test.each(descriptors)("Descriptor.isDescriptor(%o) === true", (value) => {
-        expect(Descriptor.isDescriptor(value)).toBe(true);
+        expect(isDescriptor(value)).toBe(true);
     });
 
     test.each(invalidDescriptors)("Descriptor.isDescriptor(%p) === false", (value) => {
-        expect(Descriptor.isDescriptor(value)).toBe(false);
-        expect(Descriptor.isAccessorDescriptor(value)).toBe(false);
-        expect(Descriptor.isDataDescriptor(value)).toBe(false);
+        expect(isDescriptor(value)).toBe(false);
+        expect(isAccessorDescriptor(value)).toBe(false);
+        expect(isDataDescriptor(value)).toBe(false);
     });
 });

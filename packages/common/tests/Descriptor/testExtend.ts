@@ -1,4 +1,4 @@
-import {Descriptor} from "../../src";
+import {extendDescriptor} from "../../src";
 
 describe("Descriptor.extend", () => {
     const def = {configurable: true, enumerable: false};
@@ -17,6 +17,6 @@ describe("Descriptor.extend", () => {
     ];
 
     test.each(data)("Descriptor.extend(%p, %p) === %p", (desc, value, expected) => {
-        expect(Descriptor.extend(desc, value)).toStrictEqual(expected);
+        expect(extendDescriptor(desc, value)).toStrictEqual(expected);
     });
 });

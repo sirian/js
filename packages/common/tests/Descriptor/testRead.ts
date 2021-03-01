@@ -1,4 +1,4 @@
-import {Descriptor} from "../../src";
+import {readDescriptor} from "../../src";
 
 describe("", () => {
     const desc = {
@@ -18,8 +18,8 @@ describe("", () => {
         [{}, {}, undefined],
 
         [{value: 1}, {}, 1],
-        [{value: 1}, null, undefined],
-        [{value: 1}, undefined, undefined],
+        [{value: 1}, null, 1],
+        [{value: 1}, undefined, 1],
 
         [{get: () => 1}, {}, 1],
         [{get: () => 1}, null, undefined],
@@ -36,6 +36,6 @@ describe("", () => {
     ];
 
     test.each(data)("Descriptor.read(%o, %o) === %o", (descriptor, obj, expected) => {
-        expect(Descriptor.read(descriptor, obj)).toBe(expected);
+        expect(readDescriptor(descriptor, obj)).toBe(expected);
     });
 });

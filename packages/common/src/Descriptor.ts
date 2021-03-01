@@ -1,7 +1,7 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
-import {isBoolean, isFunction, isNotNullish} from "./Is";
+import {isBoolean, isFunction, isNullish} from "./Is";
 import {entriesOf} from "./Obj";
-import {apply, defineProp, getDescriptor} from "./Ref";
+import {defineProp, getDescriptor} from "./Ref";
 import {isPlainObject} from "./Var";
 
 export enum DescriptorType {
@@ -15,137 +15,121 @@ export type DescriptorWrapper<T, V> = {
     set?(object: T, value: V, parent: (value: V) => void): V;
 };
 
-export class Descriptor {
-    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
-    public static wrap<T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
-    public static wrap<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) {
-        const desc = getDescriptor(target, key);
-        const get = wrapper.get;
-        const set = wrapper.set;
+export function isDescriptor(d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor {
+    return DescriptorType.NONE !== getDescriptorType(d);
+}
 
-        const descriptor = Descriptor.extend(desc, {
-            get(this: T) {
-                const parent = () => Descriptor.read(desc, this);
-                return get ? get(this, parent) : parent();
-            },
-            set(this: T, value: V) {
-                const object = this;
-                const parent = (v: V) => Descriptor.write(desc, this, key, v);
+export function isAccessorDescriptor(d: any): d is AccessorPropertyDescriptor {
+    return DescriptorType.ACCESSOR === getDescriptorType(d);
+}
 
-                if (set) {
-                    set(object, value, parent);
-                } else {
-                    parent(value);
-                }
-            },
-        });
+export function isDataDescriptor(d: any): d is DataPropertyDescriptor {
+    return DescriptorType.DATA === getDescriptorType(d);
+}
 
-        defineProp(target, key, descriptor);
-
-        return descriptor;
+export function getDescriptorType(d: any) {
+    if (!isPlainObject(d)) {
+        return DescriptorType.NONE;
     }
 
-    public static extend<D extends TypedPropertyDescriptor<any>>(desc: D, data: D): D;
-    public static extend(desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
-    public static extend(desc: PropertyDescriptor = {}, newDesc: PropertyDescriptor = {}) {
-        if (Descriptor.isAccessorDescriptor(newDesc)) {
-            desc = {
-                get: desc.get,
-                set: desc.set,
-            };
-        } else if (Descriptor.isDataDescriptor(newDesc)) {
-            desc = {
-                writable: desc.writable ?? true,
-                value: desc.value,
-            };
-        }
+    let hasAccessor = false;
+    let hasValueOrWritable = false;
 
+    for (const [key, v] of entriesOf(d)) {
+        const defined = undefined !== v;
+
+        switch (key) {
+            case "enumerable":
+            case "configurable":
+                if (defined && !isBoolean(v)) {
+                    return DescriptorType.NONE;
+                }
+                break;
+            case "writable":
+                if (defined && !isBoolean(v)) {
+                    return DescriptorType.NONE;
+                }
+                hasValueOrWritable = true;
+                break;
+            case "value":
+                hasValueOrWritable = true;
+                break;
+            case "get":
+            case "set":
+                if (defined && !isFunction(v)) {
+                    return DescriptorType.NONE;
+                }
+                hasAccessor = true;
+                break;
+            default:
+                return DescriptorType.NONE;
+        }
+    }
+
+    if (hasAccessor && hasValueOrWritable) {
+        return DescriptorType.NONE;
+    }
+
+    return hasAccessor ? DescriptorType.ACCESSOR : DescriptorType.DATA;
+}
+
+export function extendDescriptor<D extends TypedPropertyDescriptor<any>>(desc: D, data: D): D;
+export function extendDescriptor(desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
+export function extendDescriptor(desc: PropertyDescriptor = {}, newDesc: PropertyDescriptor = {}) {
+    const base = {
+        configurable: true,
+        enumerable: false,
+    };
+
+    if (isAccessorDescriptor(newDesc)) {
         return {
-            configurable: true,
-            enumerable: false,
-            ...desc,
+            ...base,
+            get: desc.get,
+            set: desc.set,
             ...newDesc,
         };
     }
 
-    public static read<T>(desc: TypedPropertyDescriptor<T>, obj: any): T;
-    public static read(desc: PropertyDescriptor | undefined, obj: any): any;
+    return {
+        ...base,
+        writable: desc.writable ?? true,
+        value: desc.value,
+        ...newDesc,
+    };
+}
 
-    public static read(desc: PropertyDescriptor | undefined, obj: any) {
-        if (desc && isNotNullish(obj)) {
-            return desc.get ? apply(desc.get, obj) : desc.value;
-        }
-    }
+export const readDescriptor = <D extends PropertyDescriptor>(desc: D | undefined, obj: any) =>
+    (desc?.get && !isNullish(obj)
+     ? desc.get.call(obj)
+     : desc?.value) as D extends TypedPropertyDescriptor<infer T> ? T : any;
 
-    public static write<T, K extends keyof T>(desc: TypedPropertyDescriptor<T[K]>, object: T, key: K, value: T[K]): void;
-    public static write<T>(desc: TypedPropertyDescriptor<T>, object: any, key: PropertyKey, value: T): void;
-    public static write(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any): void;
-    public static write(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any) {
-        if (!Descriptor.isAccessorDescriptor(desc)) {
-            defineProp(object, key, Descriptor.extend(desc, {value}));
-            return;
-        }
-        const setter = desc.set;
-        if (setter) {
-            apply(setter, object, [value]);
-        }
-    }
+export function wrapDescriptor<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
+export function wrapDescriptor<T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
+export function wrapDescriptor<T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) {
+    const desc = getDescriptor(target, key);
+    const get = wrapper.get;
+    const set = wrapper.set;
 
-    public static isDescriptor(d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor {
-        return DescriptorType.NONE !== Descriptor.getDescriptorType(d);
-    }
+    const descriptor = extendDescriptor(desc, {
+        get(this: T) {
+            const parent = () => readDescriptor(desc, this);
+            return get ? get(this, parent) : parent();
+        },
+        set(this: T, value: V) {
+            const parent = (v: V) => writeDescriptor(desc, this, key, v);
 
-    public static isAccessorDescriptor(d: any): d is AccessorPropertyDescriptor {
-        return DescriptorType.ACCESSOR === Descriptor.getDescriptorType(d);
-    }
+            set ? set(this, value, parent) : parent(value);
+        },
+    });
 
-    public static isDataDescriptor(d: any): d is DataPropertyDescriptor {
-        return DescriptorType.DATA === Descriptor.getDescriptorType(d);
-    }
+    defineProp(target, key, descriptor);
 
-    public static getDescriptorType(d: any) {
-        if (!isPlainObject(d)) {
-            return DescriptorType.NONE;
-        }
+    return descriptor;
+}
 
-        let hasAccessor = false;
-        let hasValueOrWritable = false;
-
-        for (const [key, v] of entriesOf(d)) {
-            const defined = undefined !== v;
-
-            switch (key) {
-                case "enumerable":
-                case "configurable":
-                    if (defined && !isBoolean(v)) {
-                        return DescriptorType.NONE;
-                    }
-                    break;
-                case "writable":
-                    if (defined && !isBoolean(v)) {
-                        return DescriptorType.NONE;
-                    }
-                    hasValueOrWritable = true;
-                    break;
-                case "value":
-                    hasValueOrWritable = true;
-                    break;
-                case "get":
-                case "set":
-                    if (defined && !isFunction(v)) {
-                        return DescriptorType.NONE;
-                    }
-                    hasAccessor = true;
-                    break;
-                default:
-                    return DescriptorType.NONE;
-            }
-        }
-
-        if (hasAccessor) {
-            return hasValueOrWritable ? DescriptorType.NONE : DescriptorType.ACCESSOR;
-        } else {
-            return DescriptorType.DATA;
-        }
-    }
+export function writeDescriptor<T, K extends keyof T>(desc: TypedPropertyDescriptor<T[K]>, object: T, key: K, value: T[K]): void;
+export function writeDescriptor<T>(desc: TypedPropertyDescriptor<T>, object: any, key: PropertyKey, value: T): void;
+export function writeDescriptor(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any): void;
+export function writeDescriptor(desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any) {
+    desc?.set ? desc.set.call(object, value) : defineProp(object, key, extendDescriptor(desc, {value}));
 }
