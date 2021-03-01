@@ -1,4 +1,4 @@
-import {assert, Descriptor, HybridMap, isFunction, isNumber} from "@sirian/common";
+import {assert, HybridMap, isFunction, isNumber, wrapDescriptor} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 import {methodDecorator} from "./decorator";
 
@@ -40,7 +40,7 @@ export const debounce = methodDecorator(<A extends any[]>(options: number | IDeb
 
         const map = new Map();
 
-        return Descriptor.wrap(target, key, {
+        return wrapDescriptor(target, key, {
             get: (object, parent) => {
                 const fn = parent();
 

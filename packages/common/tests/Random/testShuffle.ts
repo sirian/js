@@ -19,7 +19,7 @@ describe("shuffle", () => {
         const normal = 1 / input.length;
         for (const x of input) {
             for (let i = 0; i < input.length; i++) {
-                expect(Math.abs(tmp[i][x] / N - normal)).toBeLessThan(0.05);
+                expect(Math.abs(tmp[i][x] / N - normal)).toBeLessThan(0.1);
             }
         }
     });

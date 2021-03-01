@@ -1,4 +1,4 @@
-import {Descriptor, isArray, isConstructor, isNumber, isObjectOrFunction, isString, isSymbol} from "@sirian/common";
+import {isArray, isConstructor, isDescriptor, isNumber, isObjectOrFunction, isString, isSymbol} from "@sirian/common";
 import {Args, Return} from "@sirian/ts-extra-types";
 
 export const enum DecoratorType {
@@ -36,10 +36,10 @@ export const isDecoratorArgs = <T extends DecoratorType>(type: T, args: any[]): 
         }
 
         if (DecoratorType.PROPERTY === type) {
-            return undefined === a3 || Descriptor.isDescriptor(a3);
+            return undefined === a3 || isDescriptor(a3);
         }
         if (DecoratorType.METHOD === type) {
-            return Descriptor.isDescriptor(a3);
+            return isDescriptor(a3);
         }
         if (DecoratorType.PARAMETER === type) {
             return isNumber(a3);

@@ -1,4 +1,4 @@
-import {assert, Descriptor} from "@sirian/common";
+import {assert, wrapDescriptor} from "@sirian/common";
 import {methodDecorator} from "./decorator";
 
 export const bind = methodDecorator(() =>
@@ -7,7 +7,7 @@ export const bind = methodDecorator(() =>
 
         const map = new WeakMap();
 
-        return Descriptor.wrap(proto, key, {
+        return wrapDescriptor(proto, key, {
             get: (object, previous) => {
                 if (!map.has(object)) {
                     map.set(object, new WeakMap());
