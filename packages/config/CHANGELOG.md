@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.37](https://github.com/sirian/js/compare/@sirian/config@1.5.36...@sirian/config@1.5.37) (2021-03-01)
+
+**Note:** Version bump only for package @sirian/config
+
+
+
+
+
 ## [1.5.36](https://github.com/sirian/js/compare/@sirian/config@1.5.35...@sirian/config@1.5.36) (2021-03-01)
 
 **Note:** Version bump only for package @sirian/config
