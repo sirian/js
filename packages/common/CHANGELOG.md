@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.0.0](https://github.com/sirian/js/compare/@sirian/common@6.3.4...@sirian/common@7.0.0) (2021-03-01)
+
+
+### Features
+
+* **common:** refactored descriptor ([7a414f3](https://github.com/sirian/js/commit/7a414f3fc460656d47daa08067f8e011093d10c5))
+
+
+### BREAKING CHANGES
+
+* **common:** Descriptor class dropped
+
+
+
+
+
 ## [6.3.4](https://github.com/sirian/js/compare/@sirian/common@6.3.3...@sirian/common@6.3.4) (2021-02-28)
 
 **Note:** Version bump only for package @sirian/common
