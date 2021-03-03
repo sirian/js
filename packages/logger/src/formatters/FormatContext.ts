@@ -1,5 +1,5 @@
 import {isNullish, isNumber} from "@sirian/common";
-import {Property} from "@sirian/property-access";
+import {PropertyAccessor} from "@sirian/property-access";
 import {StyleStack} from "./StyleStack";
 
 export class FormatContext {
@@ -45,8 +45,8 @@ export class FormatContext {
         }
 
         const arg = this.getArgument(0);
-
-        return Property.read(arg, path);
+        const accessor = new PropertyAccessor();
+        return accessor.read(arg, path);
     }
 
     public getExtraArgs() {
