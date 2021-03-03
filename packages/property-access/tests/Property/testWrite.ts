@@ -1,4 +1,4 @@
-import {Property} from "../../src";
+import {PropertyAccessor} from "../../src";
 
 const data: Array<[any, string | number, any, any]> = [
     [{}, "foo", 1, {foo: 1}],
@@ -17,8 +17,9 @@ const data: Array<[any, string | number, any, any]> = [
 ];
 
 test.each(data)("Property.setValue(%p, %p, %p)", (target, path, value, expected) => {
-    Property.write(target, path, value);
+    const accessor = new PropertyAccessor();
+    accessor.write(target, path, value);
 
     expect(target).toStrictEqual(expected);
-    expect(Property.read(target, path)).toBe(value);
+    expect(accessor.read(target, path)).toBe(value);
 });

@@ -1,3 +1,2 @@
-export * from "./Property";
-export * from "./PropertyPath";
+export * from "./PropertyAccessor";
 export * from "./Error";

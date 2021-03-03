@@ -1,4 +1,4 @@
-import {PropertyPath} from "../../src";
+import {parsePropertyPath} from "../../src/PropertyPath";
 
 const data: Array<[string, Array<string | number>]> = [
     ["x", ["x"]],
@@ -14,7 +14,7 @@ const data: Array<[string, Array<string | number>]> = [
 ];
 
 test.each(data)("PropertyPath.from(%p).parts === %p", (path, expected) => {
-    const p = new PropertyPath(path);
-    expect(p.getKeys()).toStrictEqual(expected);
+    const p = parsePropertyPath(path);
+    expect(p.map((v) => v[0])).toStrictEqual(expected);
     expect(p.length).toBe(expected.length);
 });

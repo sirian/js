@@ -1,4 +1,4 @@
-import {PropertyPath} from "../../src";
+import {parsePropertyPath} from "../../src/PropertyPath";
 
 const data: Array<[string, boolean[]]> = [
     ["foo", [false]],
@@ -13,8 +13,8 @@ const data: Array<[string, boolean[]]> = [
 ];
 
 test.each(data)("new PropertyPath(%p) indexes is %o", (path, expected) => {
-    const p = new PropertyPath(path);
+    const p = parsePropertyPath(path);
     for (let i = 0; i < expected.length; i++) {
-        expect(p[i].asIndex).toBe(expected[i]);
+        expect(p[i][1]).toBe(expected[i]);
     }
 });

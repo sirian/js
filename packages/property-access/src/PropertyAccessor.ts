@@ -5,12 +5,13 @@ import {
     isObjectOrFunction,
     isPrimitive,
     isPropWritable,
+    last,
     lowerFirst,
     upperFirst,
 } from "@sirian/common";
 import {Get, GetDeep} from "@sirian/ts-extra-types";
 import {PropertyAccessError, UnexpectedTypeError} from "./Error";
-import {Path, PathElement, PathKey, PropertyPath} from "./PropertyPath";
+import {parsePropertyPath, Path, PathElement, PathKey} from "./PropertyPath";
 
 export type DeepType<T, P extends Path> =
     P extends PathKey ? Get<T, P> :
@@ -23,10 +24,7 @@ export const enum AccessType {
     METHOD,
 }
 
-export interface AccessInfo {
-    type: AccessType;
-    key: PathKey;
-}
+export type AccessInfo = [type: AccessType, key: PathKey];
 
 export class PropertyAccessor {
     public modify<T, P extends Path>(target: T, path: P, fn: (value?: DeepType<T, P>) => DeepType<T, P>) {
@@ -35,43 +33,43 @@ export class PropertyAccessor {
     }
 
     public read<T, P extends Path>(target: T, path: P): DeepType<T, P> {
-        const pPath = PropertyPath.from(path);
+        const pPath = parsePropertyPath(path);
 
-        const props = this.readPropertiesUntil(target, pPath, pPath.length);
+        const props = this._readPropertiesUntil(target, pPath, pPath.length);
 
         return props.pop();
     }
 
     public write<T, P extends Path>(target: T, path: P, value: DeepType<T, P>) {
-        const pPath = PropertyPath.from(path);
+        const pPath = parsePropertyPath(path);
 
         let prop: any = target;
 
         for (let i = 0; i < pPath.length - 1; ++i) {
             const part = pPath[i];
 
-            const info = this.getReadAccessInfo(target, part);
+            const info = this._getReadAccessInfo(target, part);
 
-            if (AccessType.NOT_FOUND === info.type) {
+            if (AccessType.NOT_FOUND === info[0]) {
                 const nextPart = pPath[i + 1];
-                this.writeProperty(prop, part, nextPart.asIndex ? [] : {});
+                this._writeProperty(prop, part, nextPart[1] ? [] : {});
             }
 
-            prop = this.readProperty(prop, part);
+            prop = this._readProperty(prop, part);
 
             if (!isObjectOrFunction(prop)) {
                 throw new UnexpectedTypeError(prop, pPath, i + 1);
             }
         }
 
-        return this.writeProperty(prop, pPath.last, value);
+        return this._writeProperty(prop, last(pPath)!, value);
     }
 
     public isReadable(target: any, path: Path) {
-        const pPath = PropertyPath.from(path);
+        const pPath = parsePropertyPath(path);
 
         try {
-            this.readPropertiesUntil(target, pPath, pPath.length);
+            this._readPropertiesUntil(target, pPath, pPath.length);
             return true;
         } catch (e) {
             if (isInstanceOf(e, PropertyAccessError)) {
@@ -82,12 +80,12 @@ export class PropertyAccessor {
     }
 
     public isWritable(target: any, path: Path) {
-        const pPath = PropertyPath.from(path);
+        const pPath = parsePropertyPath(path);
 
         try {
-            const props = this.readPropertiesUntil(target, pPath, pPath.length - 1);
-            const last = props[props.length - 1];
-            return isPropWritable(last, pPath.last.key);
+            const props = this._readPropertiesUntil(target, pPath, pPath.length - 1);
+            const lastProp = props[props.length - 1];
+            return isPropWritable(lastProp, last(pPath)![0]);
         } catch (error) {
             if (isInstanceOf(error, PropertyAccessError)) {
                 return false;
@@ -96,55 +94,43 @@ export class PropertyAccessor {
         }
     }
 
-    private getAccessInfo(target: any, pathPart: PathElement, methods: string[]): AccessInfo {
-        const key = pathPart.key;
-
-        const access: AccessInfo = {
-            type: AccessType.NOT_FOUND,
-            key,
-        };
-
-        if (key in target) {
-            access.type = AccessType.PROPERTY;
-            access.key = key;
-        }
-
+    private _getAccessInfo(target: any, pathPart: PathElement, methods: string[]): AccessInfo {
         // if (Var.isPlainObject(object) || Var.isPlainArray(object)) {
         //     return access;
         // }
 
         for (const method of methods) {
             if (hasMethod(target, method)) {
-                access.type = AccessType.METHOD;
-                access.key = method;
-                break;
+                return [AccessType.METHOD, method];
             }
         }
 
-        return access;
+        const key = pathPart[0];
+
+        return [key in target ? AccessType.PROPERTY : AccessType.NOT_FOUND, key];
     }
 
-    private getReadAccessInfo(target: any, path: PathElement) {
+    private _getReadAccessInfo(target: any, path: PathElement) {
         const camelProp = upperFirst(camelCase(path));
 
-        return this.getAccessInfo(target, path, [
+        return this._getAccessInfo(target, path, [
             "get" + camelProp, // get method: obj.getParent()
             "is" + camelProp, // obj.isParent()
             "has" + camelProp, // obj.hasParent()
         ]);
     }
 
-    private getWriteAccessInfo(target: any, path: PathElement) {
+    private _getWriteAccessInfo(target: any, path: PathElement) {
         const camelProp = upperFirst(camelCase(path));
 
-        return this.getAccessInfo(target, path, [
+        return this._getAccessInfo(target, path, [
             "set" + camelProp, // set method: obj.setParent(node)
             lowerFirst(camelProp), // getsetter: obj.parent(node)
         ]);
     }
 
-    private readProperty(target: any, part: PathElement) {
-        const {key, type} = this.getReadAccessInfo(target, part);
+    private _readProperty(target: any, part: PathElement) {
+        const [type, key] = this._getReadAccessInfo(target, part);
 
         if (AccessType.METHOD === type) {
             return target[key]();
@@ -154,8 +140,8 @@ export class PropertyAccessor {
         }
     }
 
-    private writeProperty(target: any, part: PathElement, value: any) {
-        const {key, type} = this.getWriteAccessInfo(target, part);
+    private _writeProperty(target: any, part: PathElement, value: any) {
+        const [type, key] = this._getWriteAccessInfo(target, part);
 
         if (AccessType.METHOD === type) {
             target[key](value);
@@ -164,7 +150,7 @@ export class PropertyAccessor {
         }
     }
 
-    private readPropertiesUntil(target: any, pPath: PropertyPath, lastIndex: number) {
+    private _readPropertiesUntil(target: any, pPath: PathElement[], lastIndex: number) {
         if (isPrimitive(target)) {
             throw new UnexpectedTypeError(target, pPath, 0);
         }
@@ -174,7 +160,7 @@ export class PropertyAccessor {
         for (let i = 0; i < lastIndex; ++i) {
             const pKey = pPath[i];
 
-            target = this.readProperty(target, pKey);
+            target = this._readProperty(target, pKey);
             if (i < pPath.length - 1 && isPrimitive(target)) {
                 throw new UnexpectedTypeError(target, pPath, i + 1);
             }

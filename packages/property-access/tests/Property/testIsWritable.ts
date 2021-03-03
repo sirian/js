@@ -1,4 +1,4 @@
-import {Property} from "../../src";
+import {PropertyAccessor} from "../../src";
 
 const notWritableX = [
     null, undefined, "foo", 3,
@@ -40,5 +40,6 @@ const data = [
 ];
 
 test.each(data)(`PropertyAccessor.isWritable(%p, %p) === %p`, (o, path, expected) => {
-    expect(Property.isWritable(o, path)).toBe(expected);
+    const accessor = new PropertyAccessor();
+    expect(accessor.isWritable(o, path)).toBe(expected);
 });

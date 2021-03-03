@@ -1,9 +1,9 @@
 import {isNumber} from "@sirian/common";
-import {Path, PathElement, PropertyPath} from "../../src";
+import {parsePropertyPath, Path, PathElement} from "../../src/PropertyPath";
 
 describe("PropertyPath.parse", () => {
     function f(key: number | string, asIndex: boolean = isNumber(key)): PathElement {
-        return {key, asIndex};
+        return [key, asIndex];
     }
 
     const data: Array<[Path, PathElement[]]> = [
@@ -23,6 +23,6 @@ describe("PropertyPath.parse", () => {
     ];
 
     test.each(data)("PropertyPath.parse(%o) === %O", (value, expected) => {
-        expect(PropertyPath.parse(value)).toStrictEqual(expected);
+        expect(parsePropertyPath(value)).toStrictEqual(expected);
     });
 });

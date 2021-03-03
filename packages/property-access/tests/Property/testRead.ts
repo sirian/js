@@ -1,4 +1,4 @@
-import {Property, UnexpectedTypeError} from "../../src";
+import {PropertyAccessor, UnexpectedTypeError} from "../../src";
 
 const empty = Object.create(null);
 
@@ -39,11 +39,13 @@ const errorData: any[] = [
 ];
 
 test.each(data)(`PropertyAccessor.getValue(%j, %j) === %o`, (obj, path, expected) => {
-    expect(Property.isReadable(obj, path)).toBe(true);
-    expect(Property.read(obj, path)).toBe(expected);
+    const accessor = new PropertyAccessor();
+    expect(accessor.isReadable(obj, path)).toBe(true);
+    expect(accessor.read(obj, path)).toBe(expected);
 });
 
 test.each(errorData)(`PropertyAccessor.getValue(%j, %j) throws`, (obj, path) => {
-    expect(Property.isReadable(obj, path)).toBe(false);
-    expect(() => Property.read(obj, path)).toThrow(UnexpectedTypeError);
+    const accessor = new PropertyAccessor();
+    expect(accessor.isReadable(obj, path)).toBe(false);
+    expect(() => accessor.read(obj, path)).toThrow(UnexpectedTypeError);
 });

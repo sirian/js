@@ -1,4 +1,4 @@
-import {Property} from "../../src";
+import {PropertyAccessor} from "../../src";
 
 describe("Property.modify", () => {
     const data: Array<[any, string, (v: any) => any, any]> = [
@@ -9,7 +9,8 @@ describe("Property.modify", () => {
         [{x: 1, y: {}}, "y", () => 3, {x: 1, y: 3}],
     ];
     test.each(data)("Property.modify(%o, %o, %s) === %o", (o, path, fn, expected) => {
-        Property.modify(o, path, fn);
+        const accessor = new PropertyAccessor();
+        accessor.modify(o, path, fn);
         expect(o).toStrictEqual(expected);
     });
 });
