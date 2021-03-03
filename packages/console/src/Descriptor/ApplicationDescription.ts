@@ -90,7 +90,7 @@ export class ApplicationDescription {
             nsCommandNames.ensure(namespace).push(name);
         }
 
-        XMap.sort(nsCommandNames, ([k1], [k2]) => stringifyVar(k1).localeCompare(k2));
+        nsCommandNames.sort(([k1], [k2]) => stringifyVar(k1).localeCompare(k2));
 
         for (const nsNames of nsCommandNames.values()) {
             nsNames.sort((a, b) => stringifyVar(a).localeCompare(b));
