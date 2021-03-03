@@ -19,13 +19,9 @@ export const randomInt = (amin: number = 0, amax: number = 2 ** 32 - 1, inclusiv
     return imin + toInt(delta * randomReal01());
 };
 
-export const randomReal = (min: number, max: number) => {
-    return min + (max - min) * randomReal01();
-};
+export const randomReal = (min: number, max: number) => min + (max - min) * randomReal01();
 
-export const randomElement = <T>(items: ArrayLike<T>) => {
-    return items[randomInt(0, items.length - 1)];
-};
+export const randomElement = <T>(items: ArrayLike<T>) => items[randomInt(0, items.length - 1)];
 
 export const shuffle = <T extends any[]>(array: T): T => {
     for (let i = array.length - 1; i > 0; --i) {

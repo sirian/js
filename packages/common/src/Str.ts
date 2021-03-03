@@ -73,15 +73,11 @@ export const trimLeft = (value: any, mask?: string) => trim(value, mask, StrSide
 
 export const trimRight = (value: any, mask?: string) => trim(value, mask, StrSide.RIGHT);
 
-export const lowerFirst = <T extends string>(value: T) => {
-    const str = stringifyVar(value);
-    return str.charAt(0).toLowerCase() + str.slice(1) as `${Uncapitalize<ToString<T>>}`;
-};
+export const lowerFirst = <T extends string>(value: T) =>
+    (stringifyVar(value).charAt(0).toLowerCase() + stringifyVar(value).slice(1)) as `${Uncapitalize<ToString<T>>}`;
 
-export const upperFirst = <T extends string>(value: T) => {
-    const str = stringifyVar(value);
-    return str.charAt(0).toUpperCase() + str.slice(1) as `${Capitalize<T>}`;
-};
+export const upperFirst = <T extends string>(value: T) =>
+    (stringifyVar(value).charAt(0).toUpperCase() + stringifyVar(value).slice(1)) as `${Capitalize<T>}`;
 
 export const strReplace = (value: any, pairs: Record<string, string | ReplaceCallback>) => {
     const str = stringifyVar(value);

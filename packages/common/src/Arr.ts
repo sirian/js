@@ -102,3 +102,15 @@ export const sortBy = <T>(array: T[], fn: (v: T) => any) => {
 
     return array;
 };
+
+export const each = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].forEach(fn);
+
+export const every = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].every(fn);
+
+export const some = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].some(fn);
+
+export const isEqualTuple = <T extends any[]>(x: T, y: any[]): y is T =>
+    isArray(x)
+    && isArray(y)
+    && x.length === y.length
+    && every(x, (v, i) => isEqual(v, y[i]));

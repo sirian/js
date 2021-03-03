@@ -64,6 +64,8 @@ export const jsonStripComments = (value: string) => {
             result.push(text);
         }
     }
+
     result.push(value.substring(pos));
+
     return result.join("");
 };

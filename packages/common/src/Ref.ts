@@ -66,14 +66,12 @@ export const ownNames = <T>(target: T) =>
 
 export function ownDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
 export function ownDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
-
 export function ownDescriptor(target: any, key: PropertyKey) {
     return Object.getOwnPropertyDescriptor(target, key);
 }
 
 export function getDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
 export function getDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
-
 export function getDescriptor(target: any, key: PropertyKey) {
     let descriptor;
     while (!descriptor && isNotNullish(target)) {

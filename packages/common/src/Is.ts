@@ -38,7 +38,7 @@ export const isSymbol = (value: any): value is symbol => isType(value, "symbol")
 export const isFunction = <T extends any>(value: T): value is Function & Extract<T, AnyFunc> => isType(value, "function");
 export const isObjectOrFunction = (value: any): value is object => isObject(value) || isFunction(value);
 export const isPrimitive = (value: any): value is Primitive => !isObjectOrFunction(value);
-export const isPropertyKey = (value: any): value is PropertyKey => isType(value, ["string", "number", "symbol"]);
+export const isPropertyKey = (value: any): value is PropertyKey => isString(value) || isNumber(value) || isSymbol(value);
 export const isTruthy = (a: any) => !!a;
 export const isFalsy = (a: any) => !a;
 export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> =>

@@ -1,4 +1,4 @@
-import {XMap} from "../../src";
+import {compare, sortMap, XMap} from "../../src";
 
 describe("XMap.sort", () => {
     test("XMap.sort by value", () => {
@@ -29,7 +29,7 @@ describe("XMap.sort", () => {
             ["baz", 3],
         ]);
 
-        const res = XMap.sort(map, (a, b) => a[0].localeCompare(b[0]));
+        const res = sortMap(map, (a, b) => compare(a[0], b[0]));
 
         expect(res).toBe(map);
 

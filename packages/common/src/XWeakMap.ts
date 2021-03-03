@@ -1,4 +1,4 @@
-import {parseMapArgs, XMap, XMapInitializer, XMapSource} from "./XMap";
+import {ensureMap, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XMapUtils";
 
 export class XWeakMap<K extends object, V> extends WeakMap<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;
@@ -15,12 +15,12 @@ export class XWeakMap<K extends object, V> extends WeakMap<K, V> {
     }
 
     public ensure(key: K, initializer?: XMapInitializer<K, V>) {
-        return XMap.ensure(this, key, initializer || this._initializer!);
+        return ensureMap(this, key, initializer ?? this._initializer);
     }
 
-    public pick(key: K, strict: true): V;
-    public pick(key: K, strict?: boolean): V | undefined;
-    public pick(key: K, strict = false) {
-        return XMap.pick(this, key, strict);
+    public pick(key: K, throws: true): V;
+    public pick(key: K, throws?: boolean): V | undefined;
+    public pick(key: K, throws = false) {
+        return pickMap(this, key, throws);
     }
 }

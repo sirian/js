@@ -11,5 +11,7 @@ describe("XSet.pick", () => {
         expect(m.pick("foo")).toBe("foo");
         expect(m.has("foo")).toBe(false);
         expect(m.pick("foo")).toBe(undefined);
+
+        expect(() => m.pick("foo", true)).toThrow();
     });
 });

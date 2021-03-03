@@ -1,6 +1,6 @@
 import {Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
 import {isArray, isFunction, isNumber, isObject, isString, isType} from "./Is";
-import {getObjectTag, getPrototype, hasMethod} from "./Ref";
+import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./Ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
     (condition(v) ? v : otherwise) as
@@ -8,21 +8,10 @@ export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwi
         ? (T extends U ? T : O)
         : T | O;
 
-export const isConstructor = <T>(value: T): value is Extract<T, Newable> => {
-    if (!isFunction(value)) {
-        return false;
-    }
-
-    const p: any = new Proxy(value, {
+export const isConstructor = <T>(value: T): value is Extract<T, Newable> =>
+    isFunction(value) && tryCatch(() => value === new (new Proxy(value, {
         construct: (target) => target,
-    });
-
-    try {
-        return value === new p();
-    } catch (e) {
-        return false;
-    }
-};
+    }) as any), false);
 
 export const isNumeric = (value: any): value is string | number =>
     isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
@@ -33,18 +22,6 @@ export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor:
 export const isEqualNaN = (value: any): value is number => value !== value;
 
 export const ifEqualNaN = <T, U>(value: T, defaultValue: U) => isEqualNaN(value) ? defaultValue : value;
-
-export const isEqualTuple = <T extends any[]>(x: T, y: any[]) => {
-    if (!isArray(x) || !isArray(y) || x.length !== y.length) {
-        return false;
-    }
-    for (let i = 0; i < x.length; i++) {
-        if (!isEqual(x[i], y[i])) {
-            return false;
-        }
-    }
-    return true;
-};
 
 export const isSubclassOf = <A, B extends Ctor | NewableFunction>(a: A, b: B): a is Extract<A, B> =>
     isFunction(a) && (isEqual(a, b) || isInstanceOf(a.prototype, b));
@@ -108,8 +85,7 @@ export const isArrayBufferView = (v: any): v is ArrayBufferView => ArrayBuffer.i
 export const isArrayBufferLike = (arg: any): arg is ArrayBufferLike =>
     isObject(arg) && isNumber(arg.byteLength) && isFunction(arg.slice);
 
-export const isEqual = (x: any, y: any) =>
-    x === y || isEqualNaN(x) && isEqualNaN(y);
+export const isEqual = (x: any, y: any) => x === y || isEqualNaN(x) && isEqualNaN(y);
 
 export const isPlainObject = (x: any) => {
     if (!isObject(x)) {
@@ -131,10 +107,5 @@ export const isPlainObject = (x: any) => {
     return !isFunction(ctor) || ctor.prototype !== x;
 };
 
-export const compare = (x: any, y: any): -1 | 0 | 1 => {
-    if (isEqual(x, y)) {
-        return 0;
-    }
-    const tmp = [x, y].sort();
-    return isEqual(x, tmp[0]) ? -1 : 1;
-};
+export const compare = (x: any, y: any): -1 | 0 | 1 =>
+    isEqual(x, y) ? 0 : (isEqual(x, ([x, y].sort())[0]) ? -1 : 1);

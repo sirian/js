@@ -23,3 +23,5 @@ export * from "./XMap";
 export * from "./XSet";
 export * from "./XWeakMap";
 export * from "./XWeakSet";
+export * from "./XMapUtils";
+export * from "./XSetUtils";

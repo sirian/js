@@ -4,7 +4,7 @@ import {isNotNullish, isString} from "./Is";
 import {entriesOf, fromEntries} from "./Obj";
 
 export class Entries<T extends Entry> {
-    private _items: T[];
+    private readonly _items: T[];
 
     public constructor(entries: Iterable<T | undefined | null> = []) {
         this._items = toArray(entries).filter(isNotNullish);

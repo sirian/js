@@ -1,8 +1,8 @@
-import {assert} from "./Error";
+import {assert, ensureNotNull} from "./Error";
 import {isFunction, isString} from "./Is";
 import {jsonStringify} from "./Json";
 import {parseNumber, toInt, toUint32} from "./Num";
-import {getObjectTag, tryCatch} from "./Ref";
+import {getObjectTag} from "./Ref";
 import {stringifyVar} from "./Stringify";
 
 interface Placeholder {
@@ -35,9 +35,9 @@ const rgxKeyAccess = /^\.([a-z_][a-z_\d]*)/i;
 const rgxIndexAccess = /^\[(\d+)]/;
 
 export class Sprintf {
-    public static readonly cache: Map<string, Sprintf> = new Map();
+    private static readonly _cache: Map<string, ParsedTree> = new Map();
 
-    private _tree: ParsedTree;
+    private readonly _tree: ParsedTree;
     private _cursor: number = 0;
 
     private _placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
@@ -59,22 +59,18 @@ export class Sprintf {
         X: (arg) => toUint32(arg).toString(16).toUpperCase(),
     };
 
-    constructor(format: string) {
-        this._tree = this._parse(format);
+    private constructor(format: string) {
+        const map = Sprintf._cache;
+
+        if (!map.has(format)) {
+            map.set(format, this._parse(format));
+        }
+
+        this._tree = map.get(format)!;
     }
 
     public static format(format = "", args: any[]) {
-        return Sprintf.parse(format)._format(args);
-    }
-
-    public static parse(format: string) {
-        const map = Sprintf.cache;
-
-        if (!map.has(format)) {
-            map.set(format, new Sprintf(format));
-        }
-
-        return map.get(format)!;
+        return new Sprintf(format)._format(args);
     }
 
     public static escape(value: string) {
@@ -83,10 +79,6 @@ export class Sprintf {
 
     public static unescape(value: string) {
         return value.replace("%%", "%");
-    }
-
-    public static isValid(format: string) {
-        return !!tryCatch(() => this.parse(format));
     }
 
     public resolveArg(ph: Placeholder, argv: any[]) {
@@ -112,6 +104,7 @@ export class Sprintf {
     }
 
     private _parse(format: string) {
+
         const tree: ParsedTree = [];
 
         let index = 0;
@@ -187,8 +180,7 @@ export class Sprintf {
 
     private _handlePlaceholder(ph: Placeholder, arg: any) {
         const type = ph.type;
-        const callback = this._placeholders[type];
-        assert(callback, `Formatter for "${type}" not found`);
+        const callback = ensureNotNull(this._placeholders[type], `Unknown placeholder "${type}"`);
 
         if (!/^[Tv]/.test(type) && isFunction(arg)) {
             arg = arg();
@@ -221,10 +213,10 @@ export class Sprintf {
 
             let sign = "";
             if (rgxNumber.test(type)) {
-                const isPositive = arg >= 0;
+                const isNegative = arg < 0;
 
-                if (ph.sign || !isPositive) {
-                    sign = isPositive ? "+" : "-";
+                if (ph.sign || isNegative) {
+                    sign = isNegative ? "-" : "+";
                     argText = argText.replace(/^[+-]/, "");
                 }
             }

@@ -15,6 +15,7 @@ describe("Descriptor", () => {
         {enumerable: false},
         {enumerable: undefined},
         {value: undefined},
+        {foo: 1, value: 2},
     ];
 
     const accessorDescriptors: AccessorPropertyDescriptor[] = [
@@ -51,8 +52,6 @@ describe("Descriptor", () => {
         {value: undefined, set: undefined},
         {value: undefined, set: () => void 0},
         {value: undefined, get: () => void 0},
-        {foo: 1},
-        {foo: 1, value: 2},
     ];
 
     test.each(accessorDescriptors)("Descriptor.isAccessorDescriptor(%o) === true", (value) => {

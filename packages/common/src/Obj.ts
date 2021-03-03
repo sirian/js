@@ -51,13 +51,13 @@ export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is Extract
 export const objZip = <K extends ArrayRO<AnyKey>, V extends ArrayRO>(keys: K, values: V) =>
     fromEntries(keys.map((k, i) => [k, values[i]])) as ObjectZip<K, V>;
 
-export function objSnapshot<T extends object>(target: T, options: SnapshotOptions = {}) {
+export const objSnapshot = <T extends object>(target: T, options: SnapshotOptions = {}) => {
     const protoKeys = getPrototypes(target, options)
         .map((x) => ownNames(x).filter((k) => "__proto__" !== k && ownDescriptor(x, k)?.get))
         .flat() as Array<keyof T>;
 
     return pick(target, [...keysOf(target), ...protoKeys] as Array<keyof T>);
-}
+};
 
 export const objReplace = <T extends object>(target: T, ...sources: Array<Partial<T>>) =>
     assign(target, ...sources.map((s) => pick(s, keysOf(target) as Array<keyof T>)));

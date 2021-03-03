@@ -6,9 +6,9 @@ describe("XMap.pick", () => {
         expect(m.has("foo")).toBe(false);
         m.set("foo", "bar");
         expect(m.has("foo")).toBe(true);
-        const value = m.pick("foo");
-        expect(value).toBe("bar");
+        expect(m.pick("foo")).toBe("bar");
         expect(m.has("foo")).toBe(false);
+        expect(() => m.pick("foo", true)).toThrow();
     });
 
     test("XMap.pick doesn't call ensure", () => {

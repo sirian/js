@@ -1,62 +1,27 @@
 import {first} from "./Arr";
-import {assert} from "./Error";
-
-export interface ISetMini<T> {
-    delete(value: T): boolean;
-
-    has(value: T): boolean;
-
-    add(value: T): this;
-}
+import {insertSet, pickSet} from "./XSetUtils";
 
 export class XSet<T> extends Set<T> {
-    public static from<T>(v: Iterable<T>) {
-        return new this(v);
-    }
-
-    public static pick<T>(set: ISetMini<T>, value: T, strict: true): T;
-    public static pick<T>(set: ISetMini<T>, value: T, strict?: boolean): T | undefined;
-    public static pick<T>(set: ISetMini<T>, value: T, throws = false) {
-        if (set.has(value)) {
-            assert(!throws);
-            set.delete(value);
-            return value;
-        }
-    }
-
     public first() {
         return first(this);
     }
 
     public add(...values: T[]) {
-        for (const value of values) {
-            super.add(value);
-        }
+        values.forEach((v) => super.add(v));
         return this;
     }
 
     public insert(value: T) {
-        if (this.has(value)) {
-            return false;
-        }
-
-        this.add(value);
-        return true;
+        return insertSet(this, value);
     }
 
     public pick(value: T, strict: true): T;
     public pick(value: T, strict?: boolean): T | undefined;
     public pick(value: T, strict = false) {
-        return XSet.pick(this, value, strict);
+        return pickSet(this, value, strict);
     }
 
     public toArray(): T[] {
         return [...this];
-    }
-
-    public pickAll() {
-        const result = [...this];
-        this.clear();
-        return result;
     }
 }

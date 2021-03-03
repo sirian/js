@@ -15,63 +15,47 @@ export type DescriptorWrapper<T, V> = {
     set?(object: T, value: V, parent: (value: V) => void): V;
 };
 
-export function isDescriptor(d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor {
-    return DescriptorType.NONE !== getDescriptorType(d);
-}
-
-export function isAccessorDescriptor(d: any): d is AccessorPropertyDescriptor {
-    return DescriptorType.ACCESSOR === getDescriptorType(d);
-}
-
-export function isDataDescriptor(d: any): d is DataPropertyDescriptor {
-    return DescriptorType.DATA === getDescriptorType(d);
-}
-
-export function getDescriptorType(d: any) {
+export const getDescriptorType = (d: any) => {
     if (!isPlainObject(d)) {
         return DescriptorType.NONE;
     }
 
     let hasAccessor = false;
     let hasValueOrWritable = false;
+    let bad = false;
 
     for (const [key, v] of entriesOf(d)) {
         const defined = undefined !== v;
 
-        switch (key) {
-            case "enumerable":
-            case "configurable":
-                if (defined && !isBoolean(v)) {
-                    return DescriptorType.NONE;
-                }
-                break;
-            case "writable":
-                if (defined && !isBoolean(v)) {
-                    return DescriptorType.NONE;
-                }
-                hasValueOrWritable = true;
-                break;
-            case "value":
-                hasValueOrWritable = true;
-                break;
-            case "get":
-            case "set":
-                if (defined && !isFunction(v)) {
-                    return DescriptorType.NONE;
-                }
-                hasAccessor = true;
-                break;
-            default:
-                return DescriptorType.NONE;
+        if ("enumerable" === key || "configurable" === key || "writable" === key) {
+            bad = defined && !isBoolean(v);
+        }
+
+        if ("writable" === key || "value" === key) {
+            hasValueOrWritable = true;
+        }
+
+        if ("get" === key || "set" === key) {
+            bad = defined && !isFunction(v);
+            hasAccessor = true;
+        }
+
+        if (bad || hasAccessor && hasValueOrWritable) {
+            return DescriptorType.NONE;
         }
     }
 
-    if (hasAccessor && hasValueOrWritable) {
-        return DescriptorType.NONE;
-    }
-
     return hasAccessor ? DescriptorType.ACCESSOR : DescriptorType.DATA;
-}
+};
+
+export const isDescriptor = (d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor =>
+    DescriptorType.NONE !== getDescriptorType(d);
+
+export const isAccessorDescriptor = (d: any): d is AccessorPropertyDescriptor =>
+    DescriptorType.ACCESSOR === getDescriptorType(d);
+
+export const isDataDescriptor = (d: any): d is DataPropertyDescriptor =>
+    DescriptorType.DATA === getDescriptorType(d);
 
 export function extendDescriptor<D extends TypedPropertyDescriptor<any>>(desc: D, data: D): D;
 export function extendDescriptor(desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
