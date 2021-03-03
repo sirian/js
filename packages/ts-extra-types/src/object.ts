@@ -1,7 +1,7 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBe, MustBeString} from "./mustbe";
-import {ArrayRO, GetRest, IsOpenTuple, Tail, TupleKeyOf} from "./tuple";
+import {ArrayRO, GetRest, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide, UnionToIntersection} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
@@ -68,8 +68,8 @@ export type Get<T, K extends AnyKey, TDefault = never> =
 
 export type GetDeep<T, L extends AnyKey[]> =
     L extends [] ? T :
-    T extends any ? GetDeep<Get<T, L[0]>, Tail<L>> :
-    never;
+    number extends Length<L> ? unknown :
+    GetDeep<Get<T, L[0]>, Tail<L>>;
 
 export type ExpandKey<K extends AnyKey> =
     number extends K ? K :
