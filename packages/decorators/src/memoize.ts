@@ -1,6 +1,6 @@
 import {assert, HybridMap, isFunction} from "@sirian/common";
 import {Args, Func, Return} from "@sirian/ts-extra-types";
-import {methodDecorator} from "./";
+import {methodDecorator} from "./decorators";
 
 export interface IMemoizerOptions<A extends any[]> {
     hasher?: Func<any, A>;

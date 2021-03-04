@@ -1,6 +1,6 @@
 import {assert, HybridMap, isFunction, isNumber, wrapDescriptor} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
-import {methodDecorator} from "./";
+import {methodDecorator} from "./decorators";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 
