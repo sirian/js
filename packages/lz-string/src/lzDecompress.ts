@@ -1,4 +1,4 @@
-export function lzDecompress(bytes?: Uint8Array | null) {
+export const lzDecompress = (bytes?: Uint8Array | null) => {
     if (null == bytes) {
         return "";
     }
@@ -97,4 +97,4 @@ export function lzDecompress(bytes?: Uint8Array | null) {
     }
 
     return result.join("");
-}
+};

@@ -1,4 +1,4 @@
-export function lzCompress(input?: string | null) {
+export const lzCompress = (input?: string | null) => {
     if (input == null) {
         return new Uint8Array();
     }
@@ -77,4 +77,4 @@ export function lzCompress(input?: string | null) {
     } while (position);
 
     return new Uint8Array(resultBytes);
-}
+};
