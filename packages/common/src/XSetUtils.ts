@@ -17,12 +17,13 @@ export const insertSet = <T>(set: ISetMini<T>, value: T) => {
     return true;
 };
 
-export function pickSet<T>(set: ISetMini<T>, value: T, strict: true): T;
-export function pickSet<T>(set: ISetMini<T>, value: T, strict?: boolean): T | undefined;
-export function pickSet<T>(set: ISetMini<T>, value: T, throws = false) {
+export const pickSet: {
+    <T>(set: ISetMini<T>, value: T, strict: true): T;
+    <T>(set: ISetMini<T>, value: T, strict?: boolean): T | undefined;
+} = <T>(set: ISetMini<T>, value: T, throws = false) => {
     if (set.has(value)) {
         set.delete(value);
         return value;
     }
     assert(!throws);
-}
+};

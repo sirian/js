@@ -10,7 +10,7 @@ function notThrow(format: string, args: any, err?: any) {
     expect(() => sprintf(format, ...args)).not.toThrow(err);
 }
 
-describe("sprintfjs cache", () => {
+describe("sprintf", () => {
     test("should not throw Error (cache consistency)", () => {
         // redefine object properties to ensure that is not affect to the cache
         sprintf("hasOwnProperty");
@@ -18,9 +18,6 @@ describe("sprintfjs cache", () => {
         notThrow("%s", ["caching..."]);
         notThrow("%s", ["crash?"]);
     });
-});
-
-describe("sprintfjs", () => {
 
     test("should throw SyntaxError for placeholders", () => {
         throws("%", [], Error);
@@ -48,11 +45,6 @@ describe("sprintfjs", () => {
 
     test("should not throw Error for expression which evaluates to undefined", () => {
         notThrow("%(x.y)s", [{x: {}}]);
-    });
-
-    test("should throw own Error when expression evaluation would raise TypeError", () => {
-        const fmt = "%(x.y)s";
-        expect(() => sprintf(fmt, [{}])).toThrow("Cannot access property \"y\" of undefined value \"x\"");
     });
 
     test("should not throw when accessing properties on the prototype", () => {

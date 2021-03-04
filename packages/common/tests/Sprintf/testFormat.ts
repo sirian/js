@@ -101,9 +101,11 @@ describe("", () => {
         ["    x", ["%5.1s", "xxxxxx"]],
 
         ["foobar", ["%s", () => "foobar"]],
+
+        ["hi !", ["hi %(x.y)s!", {}]],
     ];
 
-    test.each(data)("%p === Sprintf.format(%p)", (expected, argv) => {
+    test.each(data)("%p === sprintf.format(...%p)", (expected, argv) => {
         const [format, ...args] = argv;
         expect(sprintf(format, ...args)).toBe(expected);
         expect(vsprintf(format, args)).toBe(expected);

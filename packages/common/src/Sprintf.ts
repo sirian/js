@@ -92,15 +92,7 @@ export class Sprintf {
         }
 
         // keyword argument
-        let arg = argv[this._cursor];
-
-        for (const [index, key] of keys.entries()) {
-            assert(arg, `Cannot access property "${key}" of undefined value "${keys[index - 1]}"`);
-
-            arg = arg[key];
-        }
-
-        return arg;
+        return keys.reduce((obj, key) => obj?.[key], argv[this._cursor]);
     }
 
     private _parse(format: string) {

@@ -64,22 +64,18 @@ export const ownSymbols = <S extends symbol>(target: { [P in S]: any }) =>
 export const ownNames = <T>(target: T) =>
     ownKeys(target).filter(isString) as Array<Extract<keyof T, string>>;
 
-export function ownDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
-export function ownDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
-export function ownDescriptor(target: any, key: PropertyKey) {
-    return Object.getOwnPropertyDescriptor(target, key);
-}
+export const ownDescriptor: {
+    <T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
+    (target: any, key: PropertyKey): PropertyDescriptor | undefined;
+} = (target: any, key: PropertyKey) => Object.getOwnPropertyDescriptor(target, key);
 
-export function getDescriptor<T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
-export function getDescriptor(target: any, key: PropertyKey): PropertyDescriptor | undefined;
-export function getDescriptor(target: any, key: PropertyKey) {
-    let descriptor;
-    while (!descriptor && isNotNullish(target)) {
-        descriptor = ownDescriptor(target, key);
-        target = getPrototype(target);
-    }
-    return descriptor;
-}
+export const getDescriptor: {
+    <T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
+    (target: any, key: PropertyKey): PropertyDescriptor | undefined;
+} = (target: any, key: PropertyKey) =>
+    isNotNullish(target)
+    ? ownDescriptor(target, key) ?? getDescriptor(getPrototype(target), key)
+    : void 0;
 
 export const getDescriptors = <T>(target: T) => {
     const result: Record<any, any> = {};
@@ -96,43 +92,38 @@ export const getDescriptors = <T>(target: T) => {
 
 export const ownDescriptors = <T>(target: T) => Object.getOwnPropertyDescriptors(target);
 
-export function defineProp<T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
-export function defineProp(t: object, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): boolean;
-export function defineProp(t: object, k: PropertyKey, d: PropertyDescriptor) {
-    return Reflect.defineProperty(t, k, d);
-}
+export const defineProp: {
+    <T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
+    (t: object, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): boolean;
+} = (t: object, k: PropertyKey, d: PropertyDescriptor) => Reflect.defineProperty(t, k, d);
 
 export const getConstructor = <T extends any>(target: T): Newable<T> | undefined => (target as any)?.constructor;
 
-export function apply<R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
-export function apply<R>(target: () => R, thisArg?: any, args?: []): R;
-export function apply(target: Func, thisArg?: any, args: any[] = []) {
-    return Reflect.apply(target, thisArg, args);
-}
+export const apply = ((target: Func, thisArg?: any, args: any[] = []) => target.apply(thisArg, args)) as {
+    <R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
+    <R>(target: () => R, thisArg?: any, args?: []): R
+};
 
 export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A): R =>
     apply(target, thisArg, args);
 
-export function construct<F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
-export function construct<F extends Newable | Ctor>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
-export function construct(target: any, args: any = [], newTarget?: Function) {
-    return isNullish(newTarget)
-           ? Reflect.construct(target, args)
-           : Reflect.construct(target, args, newTarget);
-
-}
+export const construct: {
+    <F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
+    <F extends Newable | Ctor>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
+} = (target: any, args: any = [], newTarget?: Function) =>
+    Reflect.construct(target, args, ...(isNullish(newTarget) ? [] : [newTarget]));
 
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
     isNotNullish(target) && (key in Object(target));
 
 export const getProp = <T, K extends AnyKey>(target: T, key: K) => (target as any)?.[key] as Get<T, K>;
 
-export function setProp<T, K extends keyof T>(target: T, key: K, value: T[K]): boolean;
-export function setProp<V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
-export function setProp(target: any, key: PropertyKey, value: any): boolean;
-export function setProp(target: any, key: PropertyKey, value: any) {
-    return isObjectOrFunction(target) && Reflect.set(target, key, value);
-}
+export const setProp: {
+    <T, K extends keyof T>(target: T, key: K, value: T[K]): boolean;
+    <V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
+    (target: any, key: PropertyKey, value: any): boolean;
+} = (target: any, key: PropertyKey, value: any) =>
+    isObjectOrFunction(target) && Reflect.set(target, key, value);
 
 export const deleteProp = <T>(target: T, key: (keyof T) | PropertyKey) =>
     tryCatch(() => { delete (target as any)?.[key]; }, false);
@@ -150,14 +141,15 @@ export const isPropWritable = (target: any, property: PropertyKey) => {
     return desc.writable || isFunction(desc.set);
 };
 
-export function tryCatch<T>(fn: () => T): T | undefined;
-export function tryCatch<T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): T | R;
-export function tryCatch(fn: Func0, onError?: Func1) {
+export const tryCatch: {
+    <T>(fn: () => T): T | undefined;
+    <T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): T | R;
+} = (fn: Func0, onError?: Func1) => {
     try {
         return fn();
     } catch (error) {
         return isFunction(onError) ? onError(error) : onError;
     }
-}
+};
 
 export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");

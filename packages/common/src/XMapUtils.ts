@@ -46,14 +46,15 @@ export const sortMap = <K, V>(map: Map<K, V>, compareFn: (a: [K, V], b: [K, V]) 
     return map;
 };
 
-export function pickMap<K, V>(map: IMapMini<K, V>, key: K, throws: true): V;
-export function pickMap<K, V>(map: IMapMini<K, V>, key: K, throws?: boolean): V | undefined;
-export function pickMap<K, V>(map: IMapMini<K, V>, key: K, throws = false) {
+export const pickMap: {
+    <K, V>(map: IMapMini<K, V>, key: K, throws: true): V;
+    <K, V>(map: IMapMini<K, V>, key: K, throws?: boolean): V | undefined;
+} = <K, V>(map: IMapMini<K, V>, key: K, throws = false) => {
     assert(!throws || map.has(key), `Key ${key} not found`);
     const result = map.get(key);
     map.delete(key);
     return result;
-}
+};
 
 export const ensureMap = <K, V>(map: IMapMini<K, V>, key: K, initializer?: XMapInitializer<K, V>) => {
     if (!map.has(key)) {
