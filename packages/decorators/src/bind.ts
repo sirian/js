@@ -1,5 +1,5 @@
 import {assert, wrapDescriptor} from "@sirian/common";
-import {methodDecorator} from "./decorator";
+import {methodDecorator} from "./";
 
 export const bind = methodDecorator(() =>
     (proto, key, desc) => {

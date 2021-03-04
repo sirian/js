@@ -1,8 +1,6 @@
 language: node_js
 node_js:
     - '15'
-cache:
-    yarn: true
 
 before_install:
     - curl -o- -L https://yarnpkg.com/install.sh | bash -s
