@@ -11,7 +11,7 @@ const revLookup = (b64: string, index: number) => {
     return base64Chars.indexOf(char);
 };
 
-export function base64Decode(b64: string): Uint8Array {
+export const base64Decode = (b64: string): Uint8Array => {
     let length = b64.length;
     if (!length) {
         return new Uint8Array();
@@ -65,4 +65,4 @@ export function base64Decode(b64: string): Uint8Array {
     }
 
     return bytes;
-}
+};

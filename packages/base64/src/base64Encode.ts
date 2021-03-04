@@ -1,6 +1,6 @@
 import {base64Chars} from "./const";
 
-export function base64Encode(uint8: Uint8Array): string {
+export const base64Encode = (uint8: Uint8Array): string => {
     const length = uint8.length;
     const extraBytes = length % 3; // if we have 1 byte left, pad 2 bytes
     let result = "";
@@ -49,4 +49,4 @@ export function base64Encode(uint8: Uint8Array): string {
     }
 
     return result;
-}
+};
