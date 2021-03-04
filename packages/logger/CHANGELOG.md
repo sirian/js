@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.40](https://github.com/sirian/js/compare/@sirian/logger@1.6.39...@sirian/logger@1.6.40) (2021-03-04)
+
+**Note:** Version bump only for package @sirian/logger
+
+
+
+
+
 ## [1.6.39](https://github.com/sirian/js/compare/@sirian/logger@1.6.38...@sirian/logger@1.6.39) (2021-03-03)
 
 **Note:** Version bump only for package @sirian/logger
