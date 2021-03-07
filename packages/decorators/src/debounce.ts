@@ -1,4 +1,4 @@
-import {assert, HybridMap, isFunction, isNumber, wrapDescriptor} from "@sirian/common";
+import {assert, ensureMap, HybridMap, isFunction, isNumber, wrapDescriptor} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
 import {methodDecorator} from "./decorators";
 
@@ -35,22 +35,18 @@ export const createDebouncer = <A extends any[]>(fn: (...args: A) => any, option
 };
 
 export const debounce = methodDecorator(<A extends any[]>(options: number | IDebouncerOptions<A> = {}) =>
-    (target, key, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
-        assert(!!desc, "@debounce requires descriptor");
+    (proto, key, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
+        assert(!!desc, "[debounce] requires descriptor", {proto, key});
 
         const map = new Map();
 
-        return wrapDescriptor(target, key, {
+        return wrapDescriptor(proto, key, {
             get: (object, parent) => {
                 const fn = parent();
 
-                assert(isFunction(fn));
+                assert(isFunction(fn), "[debounce] requires function", {proto, key});
 
-                if (!map.has(fn)) {
-                    map.set(fn, createDebouncer(fn, options));
-                }
-
-                return map.get(fn);
+                return ensureMap(map, fn, () => createDebouncer(fn, options));
             },
         }) as any;
     });

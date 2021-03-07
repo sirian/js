@@ -8,5 +8,5 @@ test("", () => {
         }
 
         return Foo;
-    }).toThrow("@debounce requires descriptor");
+    }).toThrow("[debounce] requires descriptor");
 });

@@ -25,5 +25,5 @@ export const pickSet: {
         set.delete(value);
         return value;
     }
-    assert(!throws);
+    assert(!throws, "[pickSet] Value not found", {value});
 };

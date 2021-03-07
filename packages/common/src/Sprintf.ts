@@ -4,6 +4,7 @@ import {jsonStringify} from "./Json";
 import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Ref";
 import {stringifyVar} from "./Stringify";
+import {ensureMap} from "./XMapUtils";
 
 interface Placeholder {
     placeholder: string;
@@ -37,6 +38,7 @@ const rgxIndexAccess = /^\[(\d+)]/;
 export class Sprintf {
     private static readonly _cache: Map<string, ParsedTree> = new Map();
 
+    private readonly _pattern: string;
     private readonly _tree: ParsedTree;
     private _cursor: number = 0;
 
@@ -59,14 +61,9 @@ export class Sprintf {
         X: (arg) => toUint32(arg).toString(16).toUpperCase(),
     };
 
-    private constructor(format: string) {
-        const map = Sprintf._cache;
-
-        if (!map.has(format)) {
-            map.set(format, this._parse(format));
-        }
-
-        this._tree = map.get(format)!;
+    private constructor(pattern: string) {
+        this._pattern = pattern;
+        this._tree = ensureMap(Sprintf._cache, pattern, () => this._parse());
     }
 
     public static format(format = "", args: any[]) {
@@ -95,14 +92,14 @@ export class Sprintf {
         return keys.reduce((obj, key) => obj?.[key], argv[this._cursor]);
     }
 
-    private _parse(format: string) {
-
+    private _parse() {
+        const pattern = this._pattern;
         const tree: ParsedTree = [];
 
         let index = 0;
 
-        while (index < format.length) {
-            const str = format.substring(index);
+        while (index < pattern.length) {
+            const str = pattern.substring(index);
 
             const textMatch = rgxText.exec(str);
 
@@ -120,9 +117,7 @@ export class Sprintf {
                 continue;
             }
 
-            const match = rgxPlaceholder.exec(str);
-
-            assert(match, "Unexpected " + str);
+            const match = ensureNotNull(rgxPlaceholder.exec(str), "[sprintf] Unexpected token", {pattern, index});
 
             const item: Placeholder = {
                 placeholder: match[0],
@@ -154,7 +149,7 @@ export class Sprintf {
         let match = rgxKey.exec(field);
 
         while (true) {
-            assert(match, "Failed to parse named argument key");
+            assert(match, "[sprintf] Failed to parse named argument key", {pattern: this._pattern, field});
 
             keys.push(match[1]);
 
@@ -172,7 +167,7 @@ export class Sprintf {
 
     private _handlePlaceholder(ph: Placeholder, arg: any) {
         const type = ph.type;
-        const callback = ensureNotNull(this._placeholders[type], `Unknown placeholder "${type}"`);
+        const callback = ensureNotNull(this._placeholders[type], "[sprintf] Unknown placeholder", {pattern: this._pattern, type});
 
         if (!/^[Tv]/.test(type) && isFunction(arg)) {
             arg = arg();

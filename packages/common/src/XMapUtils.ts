@@ -35,9 +35,7 @@ export const parseMapArgs = (args: any[]): [Array<[any, any]>, XMapInitializer |
 };
 
 export const sortMap = <K, V>(map: Map<K, V>, compareFn: (a: [K, V], b: [K, V]) => number) => {
-    const entries = [...map.entries()];
-
-    entries.sort(compareFn);
+    const entries = [...map.entries()].sort(compareFn);
 
     map.clear();
 
@@ -50,7 +48,7 @@ export const pickMap: {
     <K, V>(map: IMapMini<K, V>, key: K, throws: true): V;
     <K, V>(map: IMapMini<K, V>, key: K, throws?: boolean): V | undefined;
 } = <K, V>(map: IMapMini<K, V>, key: K, throws = false) => {
-    assert(!throws || map.has(key), `Key ${key} not found`);
+    assert(!throws || map.has(key), "[pickMap] Key not found", {key});
     const result = map.get(key);
     map.delete(key);
     return result;
@@ -58,9 +56,9 @@ export const pickMap: {
 
 export const ensureMap = <K, V>(map: IMapMini<K, V>, key: K, initializer?: XMapInitializer<K, V>) => {
     if (!map.has(key)) {
-        assert(isFunction(initializer));
+        assert(isFunction(initializer), "[ensureMap] Initializer is not a function", {key});
         map.set(key, initializer(key));
     }
 
-    return map.get(key)!;
+    return map.get(key) as V;
 };

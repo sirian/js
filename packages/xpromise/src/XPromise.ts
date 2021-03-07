@@ -171,7 +171,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 error = e;
             }
 
-            this.reject(error ?? new Error(`Timeout ${ms}ms`));
+            this.reject(error ?? new Error("Timeout " + ms + "ms"));
         }, ms);
 
         return this;

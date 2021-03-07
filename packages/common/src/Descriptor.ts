@@ -1,8 +1,6 @@
-import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get} from "@sirian/ts-extra-types";
-import {isBoolean, isFunction, isNullish} from "./Is";
-import {entriesOf} from "./Obj";
-import {defineProp, getDescriptor} from "./Ref";
-import {isPlainObject} from "./Var";
+import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get, Nullish} from "@sirian/ts-extra-types";
+import {isBoolean, isFunction, isObject, isUndefined} from "./Is";
+import {defineProp, deleteProps, getDescriptor, hasAnyProp} from "./Ref";
 
 export enum DescriptorType {
     NONE = "NONE",
@@ -15,34 +13,19 @@ export type DescriptorWrapper<T, V> = {
     set?(object: T, value: V, parent: (value: V) => void): V;
 };
 
+const GET_SET = ["get", "set"] as const;
+const VALUE_WRITABLE = ["value", "writable"] as const;
+
 export const getDescriptorType = (d: any) => {
-    if (!isPlainObject(d)) {
+    const hasAccessor = hasAnyProp(d, GET_SET);
+    const hasValueOrWritable = hasAnyProp(d, VALUE_WRITABLE);
+    const bad = !isObject(d)
+        || hasAccessor && hasValueOrWritable
+        || hasAccessor && [d.get, d.set].some((v) => !isUndefined(v) && !isFunction(v))
+        || [d.enumerable, d.configurable, d.writable].some((v) => !isUndefined(v) && !isBoolean(v));
+
+    if (bad) {
         return DescriptorType.NONE;
-    }
-
-    let hasAccessor = false;
-    let hasValueOrWritable = false;
-    let bad = false;
-
-    for (const [key, v] of entriesOf(d)) {
-        const defined = undefined !== v;
-
-        if ("enumerable" === key || "configurable" === key || "writable" === key) {
-            bad = defined && !isBoolean(v);
-        }
-
-        if ("writable" === key || "value" === key) {
-            hasValueOrWritable = true;
-        }
-
-        if ("get" === key || "set" === key) {
-            bad = defined && !isFunction(v);
-            hasAccessor = true;
-        }
-
-        if (bad || hasAccessor && hasValueOrWritable) {
-            return DescriptorType.NONE;
-        }
     }
 
     return hasAccessor ? DescriptorType.ACCESSOR : DescriptorType.DATA;
@@ -58,25 +41,35 @@ export const isDataDescriptor = (d: any): d is DataPropertyDescriptor =>
     DescriptorType.DATA === getDescriptorType(d);
 
 export const extendDescriptor: {
-    <D extends TypedPropertyDescriptor<any>>(desc: D, data: D): D;
-    (desc: PropertyDescriptor | undefined, data: PropertyDescriptor): PropertyDescriptor;
-} = (desc: PropertyDescriptor = {}, newDesc: PropertyDescriptor = {}) => {
-    const d = isAccessorDescriptor(newDesc)
-              ? {get: desc.get, set: desc.set}
-              : {writable: desc.writable ?? true, value: desc.value};
-
-    return {
+    <D extends TypedPropertyDescriptor<any>>(desc: PropertyDescriptor | Nullish, data: D): D;
+    (desc: PropertyDescriptor | Nullish, data: PropertyDescriptor): PropertyDescriptor;
+} = (desc: PropertyDescriptor | Nullish, newDesc: PropertyDescriptor = {}) => {
+    desc = {
         configurable: true,
         enumerable: false,
-        ...d,
+        writable: true,
+        ...desc,
+    };
+
+    if (hasAnyProp(newDesc, GET_SET)) {
+        deleteProps(desc, VALUE_WRITABLE);
+    }
+
+    if (hasAnyProp(newDesc, VALUE_WRITABLE)) {
+        deleteProps(desc, GET_SET);
+    }
+
+    return {
+        ...desc,
         ...newDesc,
     };
 };
 
-export const readDescriptor = <D extends PropertyDescriptor>(desc: D | undefined, obj: any) =>
-    (desc?.get && !isNullish(obj)
-     ? desc.get.call(obj)
-     : desc?.value) as D extends TypedPropertyDescriptor<infer T> ? T : any;
+export const readDescriptor: {
+    <T>(desc: TypedPropertyDescriptor<T>, obj: any): T;
+    (desc: PropertyDescriptor | null | undefined, obj: any): any;
+} = (desc: PropertyDescriptor | null | undefined, obj: any) =>
+    desc?.get ? desc.get.call(obj) : desc?.value;
 
 export const wrapDescriptor: {
     <T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;

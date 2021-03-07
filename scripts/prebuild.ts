@@ -36,7 +36,7 @@ fs.writeFileSync(`${rootDir}/greenkeeper.json`, JSON.stringify(greenkeeper, null
 for (let i = 0; i < dirs.length; i++) {
     const dir = dirs[i];
     const pkgDirName = dir.name;
-    console.log("[%d/%d] %s", i, dirs.length, pkgDirName);
+    console.log("[%d/%d] %s", i + 1, dirs.length, pkgDirName);
     const pkgDir = path.resolve(packagesDir, pkgDirName);
     const packageFile = path.resolve(pkgDir, "package.json");
 

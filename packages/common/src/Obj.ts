@@ -12,7 +12,7 @@ import {
     Wrap,
 } from "@sirian/ts-extra-types";
 import {uniq} from "./Arr";
-import {isArray, isNotNullish} from "./Is";
+import {isArray} from "./Is";
 import {deleteProp, getObjectTag, getPrototypes, hasOwn, hasProp, ownDescriptor, ownKeys, ownNames} from "./Ref";
 
 export interface SnapshotOptions {
@@ -26,8 +26,7 @@ export const entriesOf = <T>(target: T) => Object.entries(target) as Array<ObjEn
 
 export const assign = <T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> =>
     sources
-        .filter(isNotNullish)
-        .reduce((o, source) => Object.assign(o, pick(source, keysOf(o).concat(keysOf(source)))), target);
+        .reduce((o, source) => Object.assign(o, source, pick(source, keysOf(o))), target);
 
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 

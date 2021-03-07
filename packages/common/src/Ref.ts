@@ -1,5 +1,6 @@
 import {
     AnyKey,
+    ArrayRO,
     Ctor,
     Ctor0,
     CtorArgs,
@@ -99,13 +100,14 @@ export const defineProp: {
 
 export const getConstructor = <T extends any>(target: T): Newable<T> | undefined => (target as any)?.constructor;
 
-export const apply = ((target: Func, thisArg?: any, args: any[] = []) => target.apply(thisArg, args)) as {
+export const apply: {
     <R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
     <R>(target: () => R, thisArg?: any, args?: []): R
-};
+} = ((target: Func, thisArg?: any, args: any[] = []) =>
+    target.apply(thisArg, args));
 
 export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A): R =>
-    apply(target, thisArg, args);
+    target.call(thisArg, ...args);
 
 export const construct: {
     <F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
@@ -115,6 +117,9 @@ export const construct: {
 
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
     isNotNullish(target) && (key in Object(target));
+
+export const hasAnyProp = <T, K extends PropertyKey>(target: T, keys: ArrayRO<K>): target is Ensure<T, K> =>
+    keys.some((k) => hasProp(target, k));
 
 export const getProp = <T, K extends AnyKey>(target: T, key: K) => (target as any)?.[key] as Get<T, K>;
 
@@ -126,7 +131,10 @@ export const setProp: {
     isObjectOrFunction(target) && Reflect.set(target, key, value);
 
 export const deleteProp = <T>(target: T, key: (keyof T) | PropertyKey) =>
-    tryCatch(() => { delete (target as any)?.[key]; }, false);
+    tryCatch(() => delete (target as any)[key], false);
+
+export const deleteProps = <T, K extends keyof T>(target: T, keys: ArrayRO<K>) =>
+    keys.forEach((key) => deleteProp(target, key));
 
 export const isPropWritable = (target: any, property: PropertyKey) => {
     if (isNullish(target)) {

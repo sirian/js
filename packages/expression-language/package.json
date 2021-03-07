@@ -22,7 +22,6 @@
     },
     "dependencies": {
         "@sirian/common": "^7.0.3",
-        "@sirian/error": "^2.2.13",
         "@sirian/parser": "^1.4.41",
         "@sirian/ts-extra-types": "^3.61.4"
     }

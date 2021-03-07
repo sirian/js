@@ -15,9 +15,6 @@
             "path": "../common"
         },
         {
-            "path": "../error"
-        },
-        {
             "path": "../parser"
         },
         {

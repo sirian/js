@@ -18,9 +18,6 @@
             "path": "../disposer"
         },
         {
-            "path": "../error"
-        },
-        {
             "path": "../event-emitter"
         },
         {

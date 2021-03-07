@@ -14,6 +14,6 @@ describe("memoize()", () => {
             }
         }
         const foo = new Foo();
-        expect(() => foo.foo).toThrow("Circular @memoize call detected");
+        expect(() => foo.foo).toThrow("[memoize] circular call");
     });
 });

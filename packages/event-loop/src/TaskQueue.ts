@@ -1,9 +1,6 @@
 export type TaskCallback = () => any;
 
-interface Task {
-    fn: TaskCallback;
-    canceled: boolean;
-}
+type Task = [fn: TaskCallback, canceled: boolean];
 
 export class TaskQueue {
     private static _lastId: number = 0;
@@ -19,10 +16,8 @@ export class TaskQueue {
 
     public add(callback: TaskCallback) {
         const id = ++TaskQueue._lastId;
-        this._tasks[id] = {
-            fn: callback,
-            canceled: false,
-        };
+        this._tasks[id] = [callback, false];
+
         if (!this._scheduled) {
             this._scheduled = true;
             this._scheduler(() => this._run());
@@ -33,7 +28,7 @@ export class TaskQueue {
     public cancel(id: any) {
         const task = this._tasks[id];
         if (task) {
-            task.canceled = true;
+            task[1] = true;
         }
         delete this._tasks[id];
         return this;
@@ -43,11 +38,11 @@ export class TaskQueue {
         this._scheduled = false;
 
         const entries = Object.entries(this._tasks);
-        for (const [id, task] of entries) {
+        entries.forEach(([id, [fn, canceled]]) => {
             delete this._tasks[id];
-            if (!task.canceled) {
-                (async () => task.fn())();
+            if (!canceled) {
+                (async () => fn())();
             }
-        }
+        });
     }
 }

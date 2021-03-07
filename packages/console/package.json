@@ -30,7 +30,6 @@
     "dependencies": {
         "@sirian/common": "^7.0.3",
         "@sirian/decorators": "^1.6.7",
-        "@sirian/error": "^2.2.13",
         "@sirian/event-dispatcher": "^5.1.44",
         "@sirian/ts-extra-types": "^3.61.4",
         "@sirian/xpromise": "^2.11.7",

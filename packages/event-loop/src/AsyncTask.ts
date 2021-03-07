@@ -1,12 +1,12 @@
 import {TaskCallback} from "./TaskQueue";
 
 export abstract class AsyncTask {
-    public static readonly tasks = new Map();
+    public static readonly tasks = new Map<number, AsyncTask>();
 
     private static _lastId = 0;
 
-    private _callback: TaskCallback | undefined;
-    private _id: any;
+    private _callback?: TaskCallback;
+    private _id?: number;
     private _destroyed: boolean;
 
     constructor(callback?: TaskCallback) {
@@ -27,15 +27,17 @@ export abstract class AsyncTask {
             const id = ++AsyncTask._lastId;
             this._id = id;
             AsyncTask.tasks.set(id, this);
-            this.doStart(() => !this._destroyed && id === this._id && this.handle());
+            this._start(() => !this._destroyed && id === this._id && this._handle());
         }
         return this;
     }
 
     public clear() {
-        AsyncTask.tasks.delete(this._id);
-        this._id = undefined;
-        this.doClear();
+        if (this._id) {
+            AsyncTask.tasks.delete(this._id);
+            delete this._id;
+        }
+        this._clear();
         return this;
     }
 
@@ -45,12 +47,14 @@ export abstract class AsyncTask {
 
     public destroy() {
         this._destroyed = true;
+        delete this._callback;
         this.clear();
-        this._callback = undefined;
     }
 
     public setCallback(callback?: TaskCallback) {
-        this._callback = callback;
+        if (!this._destroyed) {
+            this._callback = callback;
+        }
         if (!callback) {
             this.clear();
         }
@@ -58,14 +62,14 @@ export abstract class AsyncTask {
     }
 
     public isScheduled() {
-        return undefined !== this._id;
+        return !!this._id;
     }
 
-    protected handle() {
+    protected _handle() {
         this._callback?.();
     }
 
-    protected abstract doStart(callback: TaskCallback): any;
+    protected abstract _start(callback: TaskCallback): any;
 
-    protected abstract doClear(): any;
+    protected abstract _clear(): any;
 }

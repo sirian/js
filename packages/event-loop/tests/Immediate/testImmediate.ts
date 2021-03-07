@@ -1,8 +1,11 @@
-import {Immediate, startImmediate} from "../../src";
+import {Immediate, setImmediate, sleep, startImmediate} from "../../src";
+
+beforeAll(() => {
+    globalThis.MessageChannel = require("worker_threads").MessageChannel;
+});
 
 describe("Immediate", () => {
-    test("Immediate", () => {
-        jest.useFakeTimers();
+    test("Immediate", async () => {
         const ids: number[] = [];
 
         startImmediate(() => {
@@ -21,21 +24,19 @@ describe("Immediate", () => {
         setImmediate(() => ids.push(7));
         startImmediate(() => ids.push(8));
 
-        jest.runAllImmediates();
+        await sleep(10);
 
         expect(ids).toStrictEqual([1, 3, 4, 8, 2, 7, 11, 31, 21]);
     });
 
-    test("", () => {
-        jest.useFakeTimers();
+    test("", async () => {
         const fn = jest.fn();
         startImmediate(fn).clear();
-        jest.runAllImmediates();
+        await sleep(10);
         expect(fn).not.toHaveBeenCalled();
     });
 
-    test("", () => {
-        jest.useFakeTimers();
+    test("", async () => {
         const ids: any[] = [];
 
         let immCounter = 0;
@@ -51,7 +52,7 @@ describe("Immediate", () => {
             ids.push("bar1");
             setImmediate(() => ids.push("bar2"));
         });
-        jest.runAllImmediates();
+        await sleep(10);
         expect(ids).toStrictEqual([1, "bar1", 2, "foo1", "bar2", 3, "foo2", "foo3"]);
     });
 });

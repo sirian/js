@@ -24,7 +24,7 @@ export const createMemoizer = <F extends Func>(fn: F, options?: IMemoizerOptions
 
             const value = m.get(hashKey);
 
-            assert(tmp !== value, `Circular @memoize call detected at ` + fn.name);
+            assert(tmp !== value, "[memoize] circular call", {fn: fn.name});
 
             return value as Return<F>;
         },
@@ -32,11 +32,11 @@ export const createMemoizer = <F extends Func>(fn: F, options?: IMemoizerOptions
 };
 
 export const memoize = methodDecorator((options?: IMemoizerOptions<any>) =>
-    (target, key, descriptor) => {
+    (proto, key, descriptor) => {
         const descKey = descriptor?.get ? "get" : "value";
         const fn = descriptor[descKey];
 
-        assert(isFunction(fn));
+        assert(isFunction(fn), "[memoize] requires method or getter", {proto, key});
 
         return {
             ...descriptor,

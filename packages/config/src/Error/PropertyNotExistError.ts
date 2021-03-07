@@ -1,4 +1,4 @@
-import {CustomError} from "@sirian/error";
+import {CustomError} from "@sirian/common";
 
 export class PropertyNotExistError extends CustomError {
     public readonly target: any;

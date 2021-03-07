@@ -1,18 +1,19 @@
-import {readDescriptor} from "../../src";
+import {noop, readDescriptor} from "../../src";
 
 describe("", () => {
     const desc = {
         get(this: any) {
-            return this.x;
+            return this.length;
         },
     };
-
-    const noop = () => void 0;
 
     const data: Array<[PropertyDescriptor, any, any]> = [
         [undefined, undefined, undefined],
         [undefined, null, undefined],
         [undefined, {}, undefined],
+        [null, undefined, undefined],
+        [null, null, undefined],
+        [null, {}, undefined],
         [{}, undefined, undefined],
         [{}, null, undefined],
         [{}, {}, undefined],
@@ -22,20 +23,26 @@ describe("", () => {
         [{value: 1}, undefined, 1],
 
         [{get: () => 1}, {}, 1],
-        [{get: () => 1}, null, undefined],
-        [{get: () => 1}, undefined, undefined],
+        [{get: () => 1}, null, 1],
+        [{get: () => 1}, undefined, 1],
 
         [{set: noop}, {}, undefined],
         [{set: noop}, null, undefined],
         [{set: noop}, undefined, undefined],
 
-        [desc, undefined, undefined],
-        [desc, null, undefined],
         [desc, {}, undefined],
-        [desc, {x: 1}, 1],
+        [desc, {length: 1}, 1],
+        [desc, [1, 2, 3], 3],
+        [desc, "foo", 3],
+        [desc, 1, undefined],
     ];
 
-    test.each(data)("Descriptor.read(%o, %o) === %o", (descriptor, obj, expected) => {
+    test.each(data)("readDescriptor(%o, %o) === %o", (descriptor, obj, expected) => {
         expect(readDescriptor(descriptor, obj)).toBe(expected);
+    });
+
+    test("readDescriptor(desc, null | undefined)", () => {
+        expect(() => readDescriptor(desc, null)).toThrow();
+        expect(() => readDescriptor(desc, undefined)).toThrow();
     });
 });

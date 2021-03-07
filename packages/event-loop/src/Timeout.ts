@@ -15,16 +15,16 @@ export class Timeout extends AsyncTask {
         return super.restart();
     }
 
-    protected doClear() {
+    protected _clear() {
         clearTimeout(this._timeoutId);
     }
 
-    protected doStart(callback: TaskCallback) {
+    protected _start(callback: TaskCallback) {
         this._timeoutId = setTimeout(callback, this._ms);
     }
 
-    protected handle() {
+    protected _handle() {
         this.clear();
-        super.handle();
+        super._handle();
     }
 }

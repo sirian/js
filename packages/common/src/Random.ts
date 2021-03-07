@@ -9,12 +9,12 @@ export const randomUint8 = () => randomBits(8);
 export const randomUint16 = () => randomBits(16);
 export const randomUint32 = () => randomBits(32);
 
-export const randomInt = (amin: number = 0, amax: number = 2 ** 32 - 1, inclusive: boolean = true) => {
-    const imin = Math.ceil(amin);
-    const imax = Math.floor(amax);
+export const randomInt = (min: number = 0, max: number = 2 ** 32 - 1, inclusive: boolean = true) => {
+    const imin = Math.ceil(min);
+    const imax = Math.floor(max);
 
     const delta = (imax - imin) + (inclusive ? 1 : 0);
-    assert(inclusive ? delta >= 0 : delta > 0, `Invalid range [${amin}, ${amax}]`);
+    assert(inclusive ? delta >= 0 : delta > 0, "Invalid range", {min, max, inclusive});
 
     return imin + toInt(delta * randomReal01());
 };
