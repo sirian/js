@@ -109,3 +109,5 @@ export const isPlainObject = (x: any) => {
 
 export const compare = (x: any, y: any): -1 | 0 | 1 =>
     isEqual(x, y) ? 0 : (isEqual(x, ([x, y].sort())[0]) ? -1 : 1);
+
+export const isError = (value: any): value is Error => isInstanceOf(value, Error);

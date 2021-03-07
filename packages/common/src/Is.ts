@@ -9,7 +9,6 @@ import {
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
-import {isInstanceOf} from "./Var";
 
 export const isNull = (value: any): value is null => null === value;
 export const isUndefined = (value: any): value is undefined => undefined === value;
@@ -44,5 +43,3 @@ export const isTruthy = (a: any) => !!a;
 export const isFalsy = (a: any) => !a;
 export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> =>
     null !== value && isType(value, "object");
-
-export const isError = (value: any): value is Error => isInstanceOf(value, Error);
