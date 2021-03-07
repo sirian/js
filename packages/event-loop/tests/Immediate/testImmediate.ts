@@ -24,7 +24,7 @@ describe("Immediate", () => {
         setImmediate(() => ids.push(7));
         startImmediate(() => ids.push(8));
 
-        await sleep(10);
+        await sleep(20);
 
         expect(ids).toStrictEqual([1, 3, 4, 8, 2, 7, 11, 31, 21]);
     });
@@ -52,7 +52,7 @@ describe("Immediate", () => {
             ids.push("bar1");
             setImmediate(() => ids.push("bar2"));
         });
-        await sleep(10);
+        await sleep(20);
         expect(ids).toStrictEqual([1, "bar1", 2, "foo1", "bar2", 3, "foo2", "foo3"]);
     });
 });

@@ -17,6 +17,6 @@ export const setImmediate = (fn: TaskCallback) => {
         }
     };
 
-    const timeout = setTimeout(handle);
     setImmediateMessageChannel(handle);
+    const timeout = setTimeout(handle, 0);
 };
