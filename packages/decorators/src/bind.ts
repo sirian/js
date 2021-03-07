@@ -1,11 +1,12 @@
 import {assert, ensureMap, wrapDescriptor} from "@sirian/common";
+import {Func} from "@sirian/ts-extra-types";
 import {methodDecorator} from "./decorators";
 
 export const bind = methodDecorator(() =>
     (target, key, desc) => {
         assert(!!desc, "[bind] requires descriptor", {target, key});
 
-        const map = new WeakMap();
+        const map = new WeakMap<object, WeakMap<Func, any>>();
 
         return wrapDescriptor(target, key, {
             get: (object, previous) => {

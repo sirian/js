@@ -54,7 +54,7 @@ export const pickMap: {
     return result;
 };
 
-export const ensureMap = <K, V>(map: IMapMini<K, V>, key: K, initializer?: XMapInitializer<K, V>) => {
+export const ensureMap = <K, V>(map: IMapMini<K, V>, key: K, initializer?: XMapInitializer<K, V>): V => {
     if (!map.has(key)) {
         assert(isFunction(initializer), "[ensureMap] Initializer is not a function", {key});
         map.set(key, initializer(key));

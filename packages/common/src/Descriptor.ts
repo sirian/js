@@ -10,7 +10,7 @@ export enum DescriptorType {
 
 export type DescriptorWrapper<T, V> = {
     get?(object: T, parent: () => V): V;
-    set?(object: T, value: V, parent: (value: V) => void): V;
+    set?(object: T, value: V, parent: (value: V) => void): void;
 };
 
 const GET_SET = ["get", "set"] as const;
