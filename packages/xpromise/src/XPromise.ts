@@ -326,8 +326,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
         this.clearTimeout();
 
-        for (const reaction of this._reactions) {
-            this.react(reaction);
-        }
+        this._reactions.splice(0).forEach((r) => this.react(r));
     }
 }
