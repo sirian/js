@@ -1,6 +1,6 @@
 import {fromEntries} from "./Obj";
 import {isEqual} from "./Var";
-import {ensureMap, parseMapArgs, pickMap, sortMap, XMapInitializer, XMapSource} from "./XMapUtils";
+import {ensureMap, parseMapArgs, pickMap, sortMap, XMapInitializer, XMapSource} from "./XUtils";
 
 export class XMap<K = any, V = any> extends Map<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;

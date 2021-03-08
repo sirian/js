@@ -1,4 +1,4 @@
-import {insertSet, pickSet} from "./XSetUtils";
+import {insertSet, pickSet} from "./XUtils";
 
 export class XWeakSet<T extends object> extends WeakSet<T> {
     public add(...values: T[]) {

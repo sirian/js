@@ -1,4 +1,4 @@
-import {ArrayRO, LastElement, Nullish, TupleOf} from "@sirian/ts-extra-types";
+import {ArrayRO, LastElement, TupleOf} from "@sirian/ts-extra-types";
 import {isArray} from "./Is";
 import {compare, isArrayLike, isEqual, isIterable} from "./Var";
 
@@ -48,8 +48,8 @@ export const last = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
 export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] =>
     isArray(value) ? value : Array.from(value ?? []);
 
-export const castArray = <T>(value: T): T extends ArrayRO ? T : T extends Nullish ? [] : [T] =>
-    [].concat((value ?? []) as any) as any;
+export const castArray = <T>(value: T): T extends ArrayRO ? T : [T] =>
+    [].concat(value as any) as any;
 
 export const uniq = <T>(input: Iterable<T>) => [...new Set(input)];
 

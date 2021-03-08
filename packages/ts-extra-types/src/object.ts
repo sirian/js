@@ -90,9 +90,9 @@ export type GetIndexSignature<T, K extends string | number = string | number> = 
 export type OmitIndexSignature<T> = Pick<T, ExcludeWide<keyof T>>;
 export type OmitNever<T> = OmitTyped<T, never>;
 
-export type Rewrite<T> = { [P in keyof T]: T[P] };
 export type Overwrite<T, U> = MyOmit<T, keyof U> & U;
 export type Replace<T, U> = MyPick<Overwrite<T, U>, keyof T>;
+export type KeyExtract<T, K extends keyof T, U> = { [P in keyof T]: P extends K ? Extract<T[P], U> : T[P] };
 
 export type ExcludeWide<T> =
     T extends any ? If<IsWide<T>, never, T> : never;
@@ -132,9 +132,9 @@ export type Require<T, K extends AnyKey = keyof T> = Overwrite<T, Required<MyPic
 
 export type Partialize<T, K extends AnyKey = keyof T> = Overwrite<T, Partial<MyPick<T, K>>>;
 
-export type Ensure<T, K extends AnyKey> = {
-    [P in K]-?: Get<T, K, unknown>
-} & T;
+export type Ensure<T, K extends AnyKey, U = unknown> =
+    { [P in K]: P extends keyof T ? T[P] : U }
+    & { [P in keyof T]: P extends K ? Extract<T[P], U> : T[P] };
 
 export type Entry<K extends AnyKey = any, V = any> = [K, V];
 

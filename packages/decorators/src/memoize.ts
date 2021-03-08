@@ -1,28 +1,28 @@
-import {assert, HybridMap, isFunction} from "@sirian/common";
+import {argsToken, assert, isFunction} from "@sirian/common";
 import {Args, Func, Return} from "@sirian/ts-extra-types";
-import {methodDecorator} from "./decorators";
 
-export interface IMemoizerOptions<A extends any[]> {
-    hasher?: Func<any, A>;
+export type Hasher<F extends Func> = (this: any, thisArg: any, ...args: Args<F>) => any;
+
+export interface IMemoizerOptions<F extends Func> {
+    hasher?: Hasher<F>;
 }
 
-export const createMemoizer = <F extends Func>(fn: F, options?: IMemoizerOptions<Args<F>>) => {
+export const memoized = <F extends Func>(fn: F, options?: IMemoizerOptions<F>) => {
     const tmp: unique symbol = Symbol();
-    const map = new HybridMap(() => new HybridMap<any, Return<F> | typeof tmp>());
+    const map = new WeakMap<any, Return<F> | typeof tmp>();
     const hasher = options?.hasher;
 
-    return new Proxy(fn, {
+    return new Proxy<F>(fn, {
         apply: (target, thisArg, args: Args<F>) => {
-            const m = map.ensure(thisArg);
+            const hashKey = hasher?.call(thisArg, thisArg, ...args);
+            const token = argsToken(...[thisArg].concat(hashKey));
 
-            const hashKey = hasher?.(...args);
-
-            if (!m.has(hashKey)) {
-                m.set(hashKey, tmp);
-                m.set(hashKey, fn.apply(thisArg, args));
+            if (!map.has(token)) {
+                map.set(token, tmp);
+                map.set(token, fn.apply(thisArg, args));
             }
 
-            const value = m.get(hashKey);
+            const value = map.get(token);
 
             assert(tmp !== value, "[memoize] circular call", {fn: fn.name});
 
@@ -31,8 +31,8 @@ export const createMemoizer = <F extends Func>(fn: F, options?: IMemoizerOptions
     });
 };
 
-export const memoize = methodDecorator((options?: IMemoizerOptions<any>) =>
-    (proto, key, descriptor) => {
+export const memoize = <F extends Func>(options?: IMemoizerOptions<F>) =>
+    (proto: object, key: PropertyKey, descriptor: PropertyDescriptor) => {
         const descKey = descriptor?.get ? "get" : "value";
         const fn = descriptor[descKey];
 
@@ -40,6 +40,6 @@ export const memoize = methodDecorator((options?: IMemoizerOptions<any>) =>
 
         return {
             ...descriptor,
-            [descKey]: createMemoizer(fn, options),
+            [descKey]: memoized(fn, options),
         };
-    });
+    };

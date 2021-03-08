@@ -20,7 +20,7 @@ export class Entries<T extends Entry> {
 
         const entries = value.entries?.() ?? entriesOf(value);
 
-        return new this(entries);
+        return new Entries(entries);
     }
 
     public map<R extends Entry>(callback: <E extends T>(key: E[0], value: E[1]) => R | undefined) {
@@ -42,5 +42,9 @@ export class Entries<T extends Entry> {
 
     public entries() {
         return [...this._items];
+    }
+
+    public* [Symbol.iterator]() {
+        return yield* this.entries();
     }
 }

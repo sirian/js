@@ -1,10 +1,8 @@
 import {Primitive} from "@sirian/ts-extra-types";
 import {isPrimitive} from "./Is";
 import {XMap} from "./XMap";
-import {ensureMap, IMapMini, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XMapUtils";
+import {ensureMap, HybridMapStore, IMapMini, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XUtils";
 import {XWeakMap} from "./XWeakMap";
-
-export type HybridMapStore<K, V> = K extends object ? XWeakMap<K, V> : XMap<K, V>;
 
 export class HybridMap<K, V> implements IMapMini<K, V> {
     private readonly _initializer?: XMapInitializer;

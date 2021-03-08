@@ -4,7 +4,7 @@ import {jsonStringify} from "./Json";
 import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Ref";
 import {stringifyVar} from "./Stringify";
-import {ensureMap} from "./XMapUtils";
+import {ensureMap} from "./XUtils";
 
 interface Placeholder {
     placeholder: string;

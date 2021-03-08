@@ -1,6 +1,5 @@
-import {hasOwn, isArray, isInstanceOf, isNumber} from "@sirian/common";
+import {entriesOf, hasOwn, isArray, isInstanceOf, isNumber} from "@sirian/common";
 import {InvalidArgumentError, LogicError} from "../Error";
-import {KV} from "../Util";
 import {Argument} from "./Argument";
 import {Option} from "./Option";
 
@@ -42,7 +41,7 @@ export class InputDefinition {
                 this.addArgument(argument.getName(), argument);
             }
         } else {
-            for (const [name, argument] of KV.entries(args)) {
+            for (const [name, argument] of entriesOf(args)) {
                 this.addArgument(name, argument);
             }
         }
@@ -138,7 +137,7 @@ export class InputDefinition {
                 this.addOption(option.getName(), option);
             }
         } else {
-            for (const [name, option] of KV.entries(options)) {
+            for (const [name, option] of entriesOf(options)) {
                 this.addOption(name, option);
             }
         }

@@ -1,4 +1,4 @@
-import {ensureMap, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XMapUtils";
+import {ensureMap, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XUtils";
 
 export class XWeakMap<K extends object, V> extends WeakMap<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;

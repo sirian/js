@@ -7,7 +7,7 @@ test("", () => {
     const fn = jest.fn(() => x);
 
     class Foo {
-        @memoize
+        @memoize()
         public hugeTask() {
             return fn();
         }
@@ -30,7 +30,7 @@ test("", () => {
     const symbol = Symbol();
 
     class Foo {
-        @memoize
+        @memoize()
         public [symbol]() {
             return fn();
         }

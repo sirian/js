@@ -26,7 +26,6 @@ export class StrUtil {
     }
 
     public static getGraphemes(str: any) {
-        const re = /(\P{M}\p{M}*)/gu;
-        return stringifyVar(str).match(re) || [];
+        return stringifyVar(str).match(/(\P{M}\p{M}*)/gu) || [];
     }
 }

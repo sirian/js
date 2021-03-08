@@ -6,7 +6,7 @@ test("", () => {
 
         }
 
-        @memoize
+        @memoize()
         public getX() {
             return this.x;
         }

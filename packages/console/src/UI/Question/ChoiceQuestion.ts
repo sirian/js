@@ -1,6 +1,6 @@
-import {isArray, padLeft, stringifyVar} from "@sirian/common";
+import {entriesOf, isArray, keysOf, padLeft, stringifyVar, valuesOf} from "@sirian/common";
 import {InvalidArgumentError} from "../../Error";
-import {KV, StrUtil} from "../../Util";
+import {StrUtil} from "../../Util";
 import {AbstractQuestion, IQuestionOptions} from "./AbstractQuestion";
 
 export interface IChoiceQuestionOptions<T> extends IQuestionOptions<T> {
@@ -16,11 +16,10 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
             const autocomplete = [];
 
             if (!isArray(choices)) {
-                const keys = KV.keys(choices);
-                autocomplete.push(...keys);
+                autocomplete.push(...keysOf(choices));
             }
 
-            const values = KV.values(choices).map((v: any) => stringifyVar(v));
+            const values = valuesOf(choices).map(stringifyVar);
             autocomplete.push(...values);
 
             options.autocomplete = autocomplete;
@@ -38,14 +37,13 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
 
         const choices = this.getChoices();
 
-        const keys: any[] = KV.keys(choices); // todo: remove any[], typescript issue at keys.map
-        const widths = keys.map((key: any) => StrUtil.width(key));
+        const keys = keysOf(choices);
+        const widths = keys.map(StrUtil.width);
 
         const width = Math.max(...widths);
 
-        for (const [key, value] of KV.entries(choices)) {
-            const k = stringifyVar(key);
-            messages.push(`  [<comment>${padLeft(k, width)}</comment>] ${value}`);
+        for (const [key, value] of entriesOf(choices)) {
+            messages.push(`  [<comment>${padLeft(key, width)}</comment>] ${value}`);
         }
         return messages.join("\n");
     }
@@ -62,15 +60,15 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
 
         const strChoice = stringifyVar(selected);
 
-        for (const [key, choice] of KV.entries(choices)) {
-            if (stringifyVar(key) === strChoice) {
+        for (const [key, choice] of entriesOf(choices)) {
+            if (key === strChoice) {
                 return choice;
             }
         }
 
         const values = new Set<T>();
 
-        for (const choice of KV.values(choices)) {
+        for (const choice of valuesOf(choices)) {
             if (stringifyVar(choice) === strChoice) {
                 values.add(choice);
             }

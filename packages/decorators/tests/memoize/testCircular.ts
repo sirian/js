@@ -3,12 +3,12 @@ import {memoize} from "../../src";
 describe("memoize()", () => {
     test("test circular", () => {
         class Foo {
-            @memoize
+            @memoize()
             public get foo(): any {
                 return this.bar;
             }
 
-            @memoize
+            @memoize()
             public get bar(): any {
                 return this.foo;
             }

@@ -1,7 +1,7 @@
-import {castArray, isArray, sprintf, stringifyVar} from "@sirian/common";
+import {castArray, entriesOf, isArray, sprintf, stringifyVar} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
 import {TTYStyle} from "../TTY";
-import {KV, StrUtil} from "../Util";
+import {StrUtil} from "../Util";
 import {FormatterStyle} from "./FormatterStyle";
 import {FormatterStyleStack} from "./FormatterStyleStack";
 
@@ -124,7 +124,7 @@ export class Formatter {
     }
 
     public addStyles(styles: Record<string, FormatterStyle | TTYStyle[]>) {
-        for (const [name, style] of KV.entries(styles)) {
+        for (const [name, style] of entriesOf(styles)) {
             this.setStyle(name, style);
         }
     }

@@ -1,7 +1,7 @@
-import {pad, sprintf} from "@sirian/common";
+import {entriesOf, pad, sprintf} from "@sirian/common";
 import {InvalidArgumentError} from "../../Error";
 import {Output} from "../../Output";
-import {KV, StrUtil} from "../../Util";
+import {StrUtil} from "../../Util";
 import {TableRow} from "./TableRow";
 import {TableSeparator} from "./TableSeparator";
 import {TableStyle} from "./TableStyle";
@@ -65,7 +65,7 @@ export class Table {
     public setColumnWidths(widths: { [id: number]: number }) {
         this.columnWidths = [];
 
-        for (const [index, width] of KV.entries(widths)) {
+        for (const [index, width] of entriesOf(widths)) {
             this.setColumnWidth(+index, width);
         }
 

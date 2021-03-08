@@ -1,12 +1,10 @@
 import {Lengthwise} from "./interfaces";
 import {Dec, Decs} from "./number";
-import {KeyOf, OmitIndexSignature} from "./object";
+import {KeyOf} from "./object";
 import {IfNever, IsExact, IsExtends, IsFiniteNumber, IsWide} from "./types";
 
 export type ArrayRO<T = unknown> = readonly T[];
 export type ArrayRW<T = unknown> = T[];
-
-export type Tuple<H = any, R extends ArrayRO = any> = [H, ...R];
 
 export type Head<T extends ArrayRO> = T extends readonly [infer H, ...any] ? H : T[0] | undefined;
 
@@ -81,14 +79,12 @@ export type TupleGet<T extends ArrayRO, N extends number> =
     number extends N ? T[N] :
     N extends 0 ? Head<T> : TupleGet<Tail<T>, Dec<N>>;
 
-export type ArrayToObject<T> =
-    T extends ArrayRO
-    ? number extends Length<T>
-      ? OmitArrayProto<T>
-      : OmitIndexSignature<OmitArrayProto<T>>
-    : T;
+export type TupleToObject<T extends ArrayRO> = Pick<T, TupleKeyOf<T>>;
 
-export type OmitArrayProto<T> = Omit<T, Exclude<keyof any[], number>>;
+export type ArrayToObject<T extends ArrayRO> =
+    number extends Length<T>
+      ? TupleToObject<T> & Pick<T, number>
+      : TupleToObject<T>;
 
 export type DropRest<T extends ArrayRO> =
     T extends readonly [] ? T :

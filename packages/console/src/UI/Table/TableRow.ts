@@ -1,5 +1,5 @@
+import {entriesOf} from "@sirian/common";
 import {InvalidArgumentError} from "../../Error";
-import {KV} from "../../Util";
 import {TableCell} from "./TableCell";
 
 export class TableRow {
@@ -7,7 +7,7 @@ export class TableRow {
 
     constructor(values: any[] | Record<number, any> = []) {
         this.cells = [];
-        for (const [index, cell] of KV.entries(values)) {
+        for (const [index, cell] of entriesOf(values)) {
             this.set(+index, cell);
         }
     }

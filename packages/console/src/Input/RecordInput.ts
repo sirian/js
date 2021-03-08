@@ -1,6 +1,5 @@
-import {castArray, isNullish, isNumber} from "@sirian/common";
+import {castArray, entriesOf, isNullish, isNumber} from "@sirian/common";
 import {InvalidArgumentError, InvalidOptionError} from "../Error";
-import {KV} from "../Util";
 import {Input} from "./Input";
 import {InputDefinition} from "./InputDefinition";
 
@@ -10,7 +9,7 @@ export class RecordInput extends Input {
     constructor(parameters: Record<string, string> = {}, definition?: InputDefinition) {
         super(definition);
 
-        this.parameters = new Map(KV.entries(parameters));
+        this.parameters = new Map(entriesOf(parameters));
     }
 
     public getFirstArgument() {

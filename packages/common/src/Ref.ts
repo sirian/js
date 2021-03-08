@@ -48,10 +48,10 @@ export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Ar
     return [...result];
 };
 
-export const setPrototype = (target: object, proto: object | null) => Reflect.setPrototypeOf(target, proto);
+export const setPrototype = (target: object, proto: object | null | undefined) => Reflect.setPrototypeOf(target, proto ?? null);
 
-export const hasMethod = <T extends any, K extends PropertyKey>(target: T, key: K): target is T & Record<K, Func> =>
-    isNotNullish(target) && isFunction(target[key as any as keyof T]);
+export const hasMethod = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K, Function> =>
+    isFunction((target as any)?.[key]);
 
 export const hasOwn = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
     isNotNullish(target) && Object.prototype.hasOwnProperty.call(target, key);
@@ -68,24 +68,22 @@ export const ownNames = <T>(target: T) =>
 export const ownDescriptor: {
     <T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
     (target: any, key: PropertyKey): PropertyDescriptor | undefined;
-} = (target: any, key: PropertyKey) => Object.getOwnPropertyDescriptor(target, key);
+} = (target: any, key: PropertyKey) => isNullish(target) ? void 0 : Object.getOwnPropertyDescriptor(target, key);
 
 export const getDescriptor: {
     <T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
     (target: any, key: PropertyKey): PropertyDescriptor | undefined;
 } = (target: any, key: PropertyKey) =>
-    isNotNullish(target)
-    ? ownDescriptor(target, key) ?? getDescriptor(getPrototype(target), key)
-    : void 0;
+    isNullish(target)
+    ? void 0
+    : ownDescriptor(target, key) ?? getDescriptor(getPrototype(target), key);
 
 export const getDescriptors = <T>(target: T) => {
     const result: Record<any, any> = {};
 
     for (const obj of getPrototypes(target)) {
         for (const key of ownKeys(obj)) {
-            if (!hasOwn(result, key)) {
-                result[key] = ownDescriptor(obj, key);
-            }
+            result[key] ||= ownDescriptor(obj, key);
         }
     }
     return result as TypedPropertyDescriptorMap<T>;
@@ -106,6 +104,11 @@ export const apply: {
 } = ((target: Func, thisArg?: any, args: any[] = []) =>
     target.apply(thisArg, args));
 
+export const applyIfFunction: {
+    <A extends any[], R>(fn: (...args: A) => R, ...args: A): R;
+    <T>(value: T, ...args: any[]): T;
+} = (value: any, ...args: any[]) => isFunction(value) ? apply(value, null, args) : value;
+
 export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A): R =>
     target.call(thisArg, ...args);
 
@@ -113,7 +116,7 @@ export const construct: {
     <F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
     <F extends Newable | Ctor>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
 } = (target: any, args: any = [], newTarget?: Function) =>
-    Reflect.construct(target, args, ...(isNullish(newTarget) ? [] : [newTarget]));
+    isNullish(newTarget) ? new target(...args) : Reflect.construct(target, args, newTarget);
 
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
     isNotNullish(target) && (key in Object(target));
@@ -151,13 +154,13 @@ export const isPropWritable = (target: any, property: PropertyKey) => {
 
 export const tryCatch: {
     <T>(fn: () => T): T | undefined;
-    <T, R>(fn: () => T, onError: R | ((err: any, ...args: any[]) => R)): T | R;
+    <T, R>(fn: () => T, onError: R | Func1<R>): T | R;
 } = (fn: Func0, onError?: Func1) => {
     try {
         return fn();
     } catch (error) {
-        return isFunction(onError) ? onError(error) : onError;
+        return applyIfFunction(onError, error);
     }
 };
 
-export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/]$|^\[object /g, "");
+export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/^\[object |]$/g, "");

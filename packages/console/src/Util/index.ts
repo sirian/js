@@ -1,4 +1,3 @@
-export * from "./KV";
 export * from "./Perf";
 export * from "./Proc";
 export * from "./StrUtil";

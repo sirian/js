@@ -1,4 +1,4 @@
-import {padRight, rgxEscape, stringifyVar, substrCount, XSet} from "@sirian/common";
+import {entriesOf, padRight, rgxEscape, stringifyVar, substrCount, XSet} from "@sirian/common";
 import {EventDispatcher} from "@sirian/event-dispatcher";
 import {CommandDefinition, HelpCommand, ICommandConstructor, ICommandLoader, ListCommand} from "./Command";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
@@ -6,7 +6,7 @@ import {ErrorEvent} from "./Event";
 import {Argument, FlagOption, Input, InputDefinition, RecordInput} from "./Input";
 import {IO} from "./IO";
 import {OutputVerbosity} from "./Output";
-import {KV, StrUtil} from "./Util";
+import {StrUtil} from "./Util";
 
 export interface IApplicationInit {
     name?: string;
@@ -377,7 +377,7 @@ export class Application {
             "--verbose": OutputVerbosity.VERBOSE,
         };
 
-        for (const [option, verbosity] of KV.entries(verbosityLevels)) {
+        for (const [option, verbosity] of entriesOf(verbosityLevels)) {
             if (input.hasParameterOption(option, true)) {
                 output.setVerbosity(verbosity);
                 break;

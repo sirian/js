@@ -1,6 +1,5 @@
 import {assert, ensureMap, HybridMap, isFunction, isNumber, wrapDescriptor} from "@sirian/common";
 import {Func} from "@sirian/ts-extra-types";
-import {methodDecorator} from "./decorators";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 
@@ -34,8 +33,8 @@ export const createDebouncer = <A extends any[]>(fn: (...args: A) => any, option
     });
 };
 
-export const debounce = methodDecorator(<A extends any[]>(options: number | IDebouncerOptions<A> = {}) =>
-    (proto, key, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
+export const debounce = <A extends any[]>(options: number | IDebouncerOptions<A> = {}) =>
+    (proto: object, key: PropertyKey, desc: TypedPropertyDescriptor<(...args: A) => void>) => {
         assert(!!desc, "[debounce] requires descriptor", {proto, key});
 
         const map = new Map();
@@ -49,4 +48,4 @@ export const debounce = methodDecorator(<A extends any[]>(options: number | IDeb
                 return ensureMap(map, fn, () => createDebouncer(fn, options));
             },
         }) as any;
-    });
+    };

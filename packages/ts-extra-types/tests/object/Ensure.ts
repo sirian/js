@@ -1,28 +1,21 @@
 import {AssertExact, Ensure} from "../../src";
 
 type Test = [
+    AssertExact<{x: number}, Ensure<{}, "x", number>>,
+    AssertExact<{x: number}, Ensure<{x: string | number}, "x", number>>,
+    AssertExact<{x: never}, Ensure<{x: string}, "x", number>>,
+    AssertExact<{x: 3}, Ensure<{x: 3 | null}, "x", number>>,
     AssertExact<string, Ensure<string, "length">>,
-
     AssertExact<{ y: boolean | number | undefined }, Ensure<{ y?: boolean | number }, "y">>,
-
     AssertExact<{ y: boolean | number | undefined }, Ensure<{ y: boolean | number | undefined }, "y">>,
-
     AssertExact<{ y: unknown }, Ensure<{}, "y">>,
-
     AssertExact<{ x: number, y: unknown }, Ensure<{ x: number }, "y">>,
-
     AssertExact<{ x: number }, Ensure<{ x: number }, "x">>,
-
     AssertExact<{ x: number | undefined }, Ensure<{ x?: number }, "x">>,
-
     AssertExact<{ x: number | undefined }, Ensure<{ x?: number }, "x">>,
-
     AssertExact<{ y: unknown }, Ensure<{}, "y">>,
-
     AssertExact<{ y: unknown } & object, Ensure<object, "y">>,
-
     AssertExact<{ y: unknown } & number, Ensure<number, "y">>,
-
     AssertExact<{ length: number | undefined } | { foo: string, length: unknown },
         Ensure<{ length?: number } | { foo: string }, "length">>,
 

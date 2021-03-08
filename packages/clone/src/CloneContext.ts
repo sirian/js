@@ -113,22 +113,18 @@ export class CloneContext {
             return;
         }
 
-        if (hasMethod(handler, "init")) {
-            handler.init(stub, src, this);
-        }
+        handler?.init?.(stub, src, this);
 
         this.addProperties(stub, src);
 
-        if (hasMethod(stub, cloneSymbol)) {
-            stub[cloneSymbol]();
-        }
+        (stub as any)[cloneSymbol]?.();
     }
 
     protected createStub<T extends object>(src: T, handler?: ICloneHandler<T>): T {
-        const proto = getPrototype(src);
+        const proto = getPrototype(src) ?? null;
 
         if (!proto || !hasMethod(handler, "create")) {
-            return Object.create(proto ?? null) as T;
+            return Object.create(proto) as T;
         }
 
         const stub = handler.create(src);

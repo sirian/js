@@ -2,7 +2,7 @@ import {bind} from "../../src";
 
 test("", () => {
     class Foo {
-        @bind
+        @bind()
         public foo() {
             return this;
         }
@@ -30,7 +30,7 @@ test("", () => {
         // tslint:disable-line
         public x = 1;
 
-        @bind
+        @bind()
         public foo() {
             return this.x;
         }

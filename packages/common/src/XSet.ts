@@ -1,5 +1,5 @@
 import {first} from "./Arr";
-import {insertSet, pickSet} from "./XSetUtils";
+import {insertSet, pickSet} from "./XUtils";
 
 export class XSet<T> extends Set<T> {
     public first() {
