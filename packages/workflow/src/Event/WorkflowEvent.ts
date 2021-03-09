@@ -1,4 +1,4 @@
-import {Event} from "@sirian/event-dispatcher";
+import {BaseEvent} from "@sirian/event-dispatcher";
 import {Marking} from "../Marking";
 import {Transition} from "../Transition";
 import {Workflow} from "../Workflow";
@@ -10,7 +10,7 @@ interface WorkflowEventInit<S extends string = any> {
     workflow: Workflow<S>;
 }
 
-export class WorkflowEvent<S extends string = any> extends Event {
+export class WorkflowEvent<S extends string = any> extends BaseEvent {
     public readonly subject: object;
     public readonly marking: Marking<S>;
     public readonly transition: Transition<S>;

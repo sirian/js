@@ -1,5 +1,5 @@
 import {defineProp, hasOwn} from "@sirian/common";
-import {EventEmitter} from "@sirian/event-emitter";
+import {MultiDispatcher} from "@sirian/event-dispatcher";
 import {Return} from "@sirian/ts-extra-types";
 
 export type DisposeCallback = (disposer: Disposer) => void;
@@ -26,7 +26,7 @@ const enum DisposerState {
 }
 
 export class Disposer {
-    public static readonly events = new EventEmitter<DisposerEvents>();
+    public static readonly events = new MultiDispatcher<DisposerEvents>();
 
     public readonly target: object;
 

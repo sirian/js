@@ -15,7 +15,7 @@
             "path": "../common"
         },
         {
-            "path": "../event-emitter"
+            "path": "../event-dispatcher"
         },
         {
             "path": "../ts-extra-types"

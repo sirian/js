@@ -206,7 +206,7 @@ export class Workflow<S extends string = any> {
     private guardTransition(subject: object, marking: Marking, transition: Transition): GuardEvent | undefined {
         const event = new GuardEvent({subject, marking, transition, workflow: this});
 
-        this.onGuard.dispatchSync(event);
+        this.onGuard.emit(event);
 
         return event;
     }
@@ -215,7 +215,7 @@ export class Workflow<S extends string = any> {
         const places = transition.froms;
 
         const event = new WorkflowEvent({subject, marking, transition, workflow: this});
-        this.onLeave.dispatchSync(event);
+        this.onLeave.emit(event);
 
         for (const place of places) {
             marking.unmark(place);
@@ -225,14 +225,14 @@ export class Workflow<S extends string = any> {
     private transition(subject: object, transition: Transition, marking: Marking) {
         const event = new WorkflowEvent({subject, marking, transition, workflow: this});
 
-        this.onTransition.dispatchSync(event);
+        this.onTransition.emit(event);
     }
 
     private enter(subject: object, transition: Transition, marking: Marking): void {
         const places = transition.tos;
 
         const event = new WorkflowEvent({subject, marking, transition, workflow: this});
-        this.onEnter.dispatchSync(event);
+        this.onEnter.emit(event);
 
         for (const place of places) {
             marking.mark(place);
@@ -242,13 +242,13 @@ export class Workflow<S extends string = any> {
     private entered(subject: object, transition: Transition, marking: Marking) {
         const event = new WorkflowEvent({subject, marking, transition, workflow: this});
 
-        this.onEntered.dispatchSync(event);
+        this.onEntered.emit(event);
     }
 
     private completed(subject: object, transition: Transition, marking: Marking) {
         const event = new WorkflowEvent({subject, marking, transition, workflow: this});
 
-        this.onCompleted.dispatchSync(event);
+        this.onCompleted.emit(event);
     }
 
     private announce(subject: object, initialTransition: Transition, marking: Marking) {
@@ -259,6 +259,6 @@ export class Workflow<S extends string = any> {
             workflow: this,
         });
 
-        this.onAnnounce.dispatchSync(event);
+        this.onAnnounce.emit(event);
     }
 }

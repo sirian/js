@@ -1,5 +1,5 @@
 import {entriesOf, padRight, rgxEscape, stringifyVar, substrCount, XSet} from "@sirian/common";
-import {EventDispatcher} from "@sirian/event-dispatcher";
+import {Dispatcher, EventDispatcher} from "@sirian/event-dispatcher";
 import {CommandDefinition, HelpCommand, ICommandConstructor, ICommandLoader, ListCommand} from "./Command";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
 import {ErrorEvent} from "./Event";
@@ -17,7 +17,7 @@ export interface IApplicationInit {
 }
 
 export class Application {
-    public readonly onError: EventDispatcher;
+    public readonly onError: Dispatcher;
     protected name: string;
     protected version: string;
     protected inputDefinition: InputDefinition;

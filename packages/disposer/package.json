@@ -18,7 +18,7 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^7.0.7",
-        "@sirian/event-emitter": "^1.3.34",
+        "@sirian/event-dispatcher": "^5.1.48",
         "@sirian/ts-extra-types": "^3.61.5"
     },
     "scripts": {},

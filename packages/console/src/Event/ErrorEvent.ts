@@ -1,6 +1,6 @@
-import {Event} from "@sirian/event-dispatcher";
+import {BaseEvent} from "@sirian/event-dispatcher";
 
-export class ErrorEvent<E = any> extends Event {
+export class ErrorEvent<E = any> extends BaseEvent {
     protected error: E;
 
     constructor(error: E) {

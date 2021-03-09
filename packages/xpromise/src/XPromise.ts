@@ -166,7 +166,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             let error;
 
             try {
-                error = fn && fn(this);
+                error = fn?.(this);
             } catch (e) {
                 error = e;
             }
@@ -178,10 +178,8 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public clearTimeout(): this {
-        if (this._timeout) {
-            clearTimeout(this._timeout);
-            delete this._timeout;
-        }
+        clearTimeout(this._timeout);
+        delete this._timeout;
         return this;
     }
 
