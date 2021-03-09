@@ -1,4 +1,4 @@
-import {Event, EventsDispatcher} from "../../src";
+import {BaseEvent, EventsDispatcher} from "../../src";
 import {TestEventListener} from "../TestEventListener";
 
 test("testInitialState", () => {
@@ -14,7 +14,7 @@ test("testDispatch", async () => {
     dispatcher.addListener("pre.foo", (e) => testListener.preFoo(e));
     dispatcher.addListener("post.foo", (e) => testListener.postFoo(e));
 
-    dispatcher.dispatchSync("pre.foo", new Event());
+    dispatcher.emit("pre.foo", new BaseEvent());
     expect(testListener.preFooInvoked).toBe(true);
     expect(testListener.postFooInvoked).toBe(false);
 });
@@ -25,7 +25,7 @@ test("testDispatch", async () => {
     dispatcher.addListener("pre.foo", (e) => testListener.preFoo(e));
     dispatcher.addListener("post.foo", (e) => testListener.postFoo(e));
 
-    dispatcher.dispatchSync("noevent", new Event());
+    dispatcher.emit("noevent", new BaseEvent());
 
     expect(testListener.preFooInvoked).toBe(false);
     expect(testListener.postFooInvoked).toBe(false);

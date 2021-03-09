@@ -1,4 +1,4 @@
-import {Event, EventsDispatcher} from "../../src";
+import {BaseEvent, EventsDispatcher} from "../../src";
 import {TestEventListener} from "../TestEventListener";
 
 test("testStopEventPropagation", async () => {
@@ -11,7 +11,7 @@ test("testStopEventPropagation", async () => {
     dispatcher.addListener("post.foo", (e) => testListener.postFoo(e));
     dispatcher.addListener("post.foo", (e) => otherListener.postFoo(e));
 
-    await dispatcher.dispatch("post.foo", new Event());
+    await dispatcher.dispatch("post.foo", new BaseEvent());
     expect(testListener.postFooInvoked).toBe(true);
     expect(otherListener.postFooInvoked).toBe(false);
 });

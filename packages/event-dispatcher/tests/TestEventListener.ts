@@ -1,14 +1,14 @@
-import {Event} from "../src";
+import {BaseEvent} from "../src";
 
 export class TestEventListener {
     public preFooInvoked = false;
     public postFooInvoked = false;
 
-    public preFoo(e: Event) {
+    public preFoo(e: BaseEvent) {
         this.preFooInvoked = true;
     }
 
-    public postFoo(e: Event) {
+    public postFoo(e: BaseEvent) {
         this.postFooInvoked = true;
         e.stopPropagation();
     }

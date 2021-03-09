@@ -1,8 +1,8 @@
-import {EventEmitter} from "../../src";
+import {MultiDispatcher} from "../../src";
 
-describe("EventEmitter.once", () => {
-    test("EventEmitter.once", () => {
-        const e = new EventEmitter();
+describe("MultiDispatcher.once", () => {
+    test("MultiDispatcher.once", () => {
+        const e = new MultiDispatcher();
         const foo1 = jest.fn(() => e.emit("foo"));
         const foo2 = jest.fn(() => e.emit("bar"));
         const bar = jest.fn(() => e.emit("foo"));

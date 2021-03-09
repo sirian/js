@@ -15,12 +15,6 @@
             "path": "../common"
         },
         {
-            "path": "../disposer"
-        },
-        {
-            "path": "../event-emitter"
-        },
-        {
             "path": "../ts-extra-types"
         },
         {

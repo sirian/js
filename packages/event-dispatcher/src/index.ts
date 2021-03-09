@@ -1,4 +1,5 @@
-export * from "./DataEvent";
-export * from "./Event";
+export * from "./BaseEvent";
+export * from "./Dispatcher";
 export * from "./EventDispatcher";
+export * from "./MultiDispatcher";
 export * from "./EventsDispatcher";

@@ -18,8 +18,6 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^7.0.7",
-        "@sirian/disposer": "^2.4.15",
-        "@sirian/event-emitter": "^1.3.34",
         "@sirian/ts-extra-types": "^3.61.5",
         "@sirian/xpromise": "^2.11.10"
     },
