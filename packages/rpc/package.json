@@ -1,7 +1,7 @@
 {
     "name": "@sirian/rpc",
     "description": "",
-    "version": "1.1.29",
+    "version": "1.2.0",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -18,9 +18,9 @@
     "sideEffects": false,
     "dependencies": {
         "@sirian/common": "^7.0.7",
-        "@sirian/event-dispatcher": "^5.1.48",
+        "@sirian/event-dispatcher": "^5.1.49",
         "@sirian/ts-extra-types": "^3.61.5",
-        "@sirian/xpromise": "^2.11.10"
+        "@sirian/xpromise": "^2.11.11"
     },
     "scripts": {},
     "publishConfig": {
