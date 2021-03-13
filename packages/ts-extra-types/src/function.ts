@@ -1,6 +1,7 @@
 import {NotThenable, Thenable} from "./interfaces";
 import {Overwrite} from "./object";
 import {ArrayRO, LastElement, Length, TupleGet} from "./tuple";
+import {IsExact} from "./types";
 
 export type Ctor<T = any, A extends ArrayRO = any[]> = new(...args: A) => T;
 export type Ctor0<T = any> = Ctor<T, []>;
@@ -55,36 +56,80 @@ export type PromisifyNode<F> =
     ? Func<Promise<R>, A, ThisArg<F>>
     : never;
 
-export type Overloads<F extends Func> =
+export type CtorOverloads<F> =
+    F extends {
+          new(...a: infer A1): infer R1; new(...a: infer A2): infer R2; new(...a: infer A3): infer R3;
+          new(...a: infer A4): infer R4; new(...a: infer A5): infer R5; new(...a: infer A6): infer R6;
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5] | [A6, R6]> :
+    F extends {
+          new(...a: infer A1): infer R1; new(...a: infer A2): infer R2; new(...a: infer A3): infer R3;
+          new(...a: infer A4): infer R4; new(...a: infer A5): infer R5;
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5]> :
+    F extends {
+          new(...a: infer A1): infer R1; new(...a: infer A2): infer R2;
+          new(...a: infer A3): infer R3; new(...a: infer A4): infer R4;
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3] | [A4, R4]> :
+    F extends {
+          new(...a: infer A1): infer R1; new(...a: infer A2): infer R2; new(...a: infer A3): infer R3;
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3]> :
+    F extends {
+          new(...a: infer A1): infer R1; new(...a: infer A2): infer R2;
+      } ? FixOverloads<[A1, R1] | [A2, R2]> :
+    F extends {
+          new(...a: infer A1): infer R1;
+      } ? [A1, R1] :
+    never;
+
+type FixOverloads<T extends [any[], any]> =
+    IsExact<T, [unknown[], unknown]> extends true ? T :
+    T extends any
+    ? IsExact<T, [unknown[], unknown]> extends true
+      ? never
+      : T
+    : never;
+
+export type Overloads<F> =
     F extends {
           (...a: infer A1): infer R1; (...a: infer A2): infer R2; (...a: infer A3): infer R3;
           (...a: infer A4): infer R4; (...a: infer A5): infer R5; (...a: infer A6): infer R6;
-      } ? [A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5] | [A6, R6] :
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5] | [A6, R6]> :
     F extends {
           (...a: infer A1): infer R1; (...a: infer A2): infer R2; (...a: infer A3): infer R3;
           (...a: infer A4): infer R4; (...a: infer A5): infer R5;
-      } ? [A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5] :
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] | [A5, R5]> :
     F extends {
           (...a: infer A1): infer R1; (...a: infer A2): infer R2;
           (...a: infer A3): infer R3; (...a: infer A4): infer R4;
-      } ? [A1, R1] | [A2, R2] | [A3, R3] | [A4, R4] :
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3] | [A4, R4]> :
     F extends {
           (...a: infer A1): infer R1; (...a: infer A2): infer R2; (...a: infer A3): infer R3;
-      } ? [A1, R1] | [A2, R2] | [A3, R3] :
+      } ? FixOverloads<[A1, R1] | [A2, R2] | [A3, R3]> :
     F extends {
           (...a: infer A1): infer R1; (...a: infer A2): infer R2;
-      } ? [A1, R1] | [A2, R2] :
+      } ? FixOverloads<[A1, R1] | [A2, R2]> :
     F extends {
           (...a: infer A1): infer R1;
       } ? [A1, R1] :
     never;
 
-export type OverloadedArgs<F extends Func> = Overloads<F>[0];
-
-export type OverloadedReturn<F extends Func, TArgs extends ArrayRO> =
+export type OverloadedArgs<F> = Overloads<F>[0];
+export type OverloadedReturn<F, TArgs extends ArrayRO> =
     Overloads<F> extends infer O
     ? O extends [infer A, infer R]
-      ? TArgs extends A ? R : never
+      ? TArgs extends A
+        ? R
+        : never
+      : never
+    : never;
+
+export type OverloadedCtorArgs<F> = CtorOverloads<F>[0];
+
+export type OverloadedInstance<F, TArgs extends ArrayRO> =
+    CtorOverloads<F> extends infer O
+    ? O extends [infer A, infer R]
+      ? TArgs extends A
+        ? R
+        : never
       : never
     : never;
 

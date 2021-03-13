@@ -78,13 +78,12 @@ export type Negate<F extends Func> =
 
 export type GuardedType<T extends Func> = T extends TypeGuard<infer R> ? R : never;
 
-export type IsExact<X, Y> = And<IsExtendsStrict<X, Y>, IsExtendsStrict<Y, X>>;
 export type IsTrue<X> = IsExact<X, true>;
 
-export type IsExtendsStrict<X, Y> =
-    IsExtends<X, Y> extends true
-    ? (<T>() => T extends X ? 1 : 0) extends (<T>() => T extends Y ? 1 : 0)
-      ? IsExtends<keyof X, keyof Y>
+export type IsExact<X, Y> =
+    [X, Y] extends [Y, X]
+    ? (<T>() => T extends [X, keyof X, Y, keyof Y] ? 1 : 0) extends (<T>() => T extends [Y, keyof Y, X, keyof X] ? 1 : 0)
+      ? true
       : false
     : false;
 
