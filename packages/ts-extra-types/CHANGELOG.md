@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.62.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.61.5...@sirian/ts-extra-types@3.62.0) (2021-03-13)
+
+
+### Features
+
+* **ts-extra-types:** CtorOverloads ([dd515b5](https://github.com/sirian/js/commit/dd515b5f184e4424505921bc08aec824e318dfa7))
+
+
+
+
+
 ## [3.61.5](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.61.4...@sirian/ts-extra-types@3.61.5) (2021-03-08)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

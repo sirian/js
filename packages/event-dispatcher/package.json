@@ -1,7 +1,7 @@
 {
     "name": "@sirian/event-dispatcher",
     "description": "",
-    "version": "5.1.49",
+    "version": "5.1.50",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,9 +17,9 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^7.0.7",
-        "@sirian/ts-extra-types": "^3.61.5",
-        "@sirian/xpromise": "^2.11.11"
+        "@sirian/common": "^7.0.8",
+        "@sirian/ts-extra-types": "^3.62.0",
+        "@sirian/xpromise": "^2.11.12"
     },
     "scripts": {},
     "publishConfig": {

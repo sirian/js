@@ -1,7 +1,7 @@
 {
     "name": "@sirian/rpc",
     "description": "",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,10 +17,10 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^7.0.7",
-        "@sirian/event-dispatcher": "^5.1.49",
-        "@sirian/ts-extra-types": "^3.61.5",
-        "@sirian/xpromise": "^2.11.11"
+        "@sirian/common": "^7.0.8",
+        "@sirian/event-dispatcher": "^5.1.50",
+        "@sirian/ts-extra-types": "^3.62.0",
+        "@sirian/xpromise": "^2.11.12"
     },
     "scripts": {},
     "publishConfig": {
