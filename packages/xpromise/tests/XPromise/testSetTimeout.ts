@@ -23,7 +23,7 @@ describe("XPromise.setTimeout", () => {
         promise.setTimeout(0);
         expect(promise.isPending()).toBe(true);
         jest.runAllTimers();
-        await expect(promise).rejects.toThrow(new Error("Timeout 0ms"));
+        await expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
     });
 
     test("empty callback", () => {
@@ -58,7 +58,7 @@ describe("XPromise.setTimeout", () => {
         const promise = new XPromise();
         promise.setTimeout(1, () => {});
         jest.runAllTimers();
-        await expect(promise).rejects.toThrow(new Error("Timeout 1ms"));
+        await expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
     });
 
     test("custom error callback throws", () => {

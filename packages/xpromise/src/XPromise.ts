@@ -24,22 +24,18 @@ export type PromiseReaction<T, R1 = any, R2 = any> = [
     onRejected: OnReject<R2>,
 ];
 
-const PENDING = "pending";
-const FULFILLED = "fulfilled";
-const REJECTED = "rejected";
-
 export type PromiseStatus = "pending" | "fulfilled" | "rejected";
 
-declare function setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+declare function setTimeout(callback: (...args: any[]) => void, ms: number): any;
 
-declare function clearTimeout(timeoutId: any): void;
+declare function clearTimeout(timeoutId: any): any;
 
 const isFunction = (x: any): x is Func => "function" === typeof x;
 
 export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     public readonly promise = this;
 
-    private _status: PromiseStatus = PENDING;
+    private _status: PromiseStatus = "pending";
     private _reactions: Array<PromiseReaction<any>> = [];
     private _resolved = false;
     private _timeout?: any;
@@ -127,8 +123,8 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             const wrapped = promises
                 .map(XPromise.resolve)
                 .map((promise) => promise.then(
-                    (value) => ({status: FULFILLED, value}),
-                    (reason) => ({status: REJECTED, reason}),
+                    (value) => ({status: "fulfilled", value}),
+                    (reason) => ({status: "rejected", reason}),
                 ));
 
             return XPromise.all(wrapped);
@@ -171,7 +167,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 error = e;
             }
 
-            this.reject(error ?? new Error("Timeout " + ms + "ms"));
+            this.reject(error ?? new Error("XPromise timeout exceeded"));
         }, ms);
 
         return this;
@@ -195,15 +191,15 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public isPending() {
-        return PENDING === this._status;
+        return "pending" === this._status;
     }
 
     public isFulfilled() {
-        return FULFILLED === this._status;
+        return "fulfilled" === this._status;
     }
 
     public isRejected() {
-        return REJECTED === this._status;
+        return "rejected" === this._status;
     }
 
     public isSettled() {
@@ -271,11 +267,11 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     private _settleFulfilled(value?: T | PromiseLike<T>) {
-        this._settle(FULFILLED, value);
+        this._settle("fulfilled", value);
     }
 
     private _settleRejected(reason?: any) {
-        this._settle(REJECTED, reason);
+        this._settle("rejected", reason);
     }
 
     private _doResolve(x: any) {
@@ -287,7 +283,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             }
 
             if (x === this.promise) {
-                this._settleRejected(new TypeError("Cannot resolver promise with itself"));
+                this._settleRejected(new TypeError("Chaining cycle detected for XPromise"));
                 return;
             }
 
