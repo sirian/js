@@ -13,12 +13,9 @@ export type DescriptorWrapper<T, V> = {
     set?(object: T, value: V, parent: (value: V) => void): void;
 };
 
-const GET_SET = ["get", "set"] as const;
-const VALUE_WRITABLE = ["value", "writable"] as const;
-
 export const getDescriptorType = (d: any) => {
-    const hasAccessor = hasAnyProp(d, GET_SET);
-    const hasValueOrWritable = hasAnyProp(d, VALUE_WRITABLE);
+    const hasAccessor = hasAnyProp(d, ["get", "set"] as const);
+    const hasValueOrWritable = hasAnyProp(d, ["value", "writable"] as const);
     const bad = !isObject(d)
         || hasAccessor && hasValueOrWritable
         || hasAccessor && [d.get, d.set].some((v) => !isUndefined(v) && !isFunction(v))
@@ -51,12 +48,12 @@ export const extendDescriptor: {
         ...desc,
     };
 
-    if (hasAnyProp(newDesc, GET_SET)) {
-        deleteProps(desc, VALUE_WRITABLE);
+    if (hasAnyProp(newDesc, ["get", "set"] as const)) {
+        deleteProps(desc, ["value", "writable"] as const);
     }
 
-    if (hasAnyProp(newDesc, VALUE_WRITABLE)) {
-        deleteProps(desc, GET_SET);
+    if (hasAnyProp(newDesc, ["value", "writable"] as const)) {
+        deleteProps(desc, ["get", "set"] as const);
     }
 
     return {

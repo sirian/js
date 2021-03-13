@@ -1,17 +1,4 @@
-import {
-    AnyKey,
-    ArrayRO,
-    Ctor,
-    Ctor0,
-    CtorArgs,
-    Ensure,
-    Func,
-    Func0,
-    Func1,
-    Get,
-    Instance,
-    Newable,
-} from "@sirian/ts-extra-types";
+import {AnyKey, ArrayRO, Ensure, Func, Func0, Func1, Get, Newable} from "@sirian/ts-extra-types";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
 import {stringifyObj} from "./Stringify";
 
@@ -113,8 +100,9 @@ export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: an
     target.call(thisArg, ...args);
 
 export const construct: {
-    <F extends Ctor0>(constructor: F, args?: CtorArgs<F>, newTarget?: Function): Instance<F>;
-    <F extends Newable | Ctor>(constructor: F, args: CtorArgs<F>, newTarget?: Function): Instance<F>;
+    <T>(constructor: { new(): T }, args?: [], newTarget?: Function): T;
+    <A extends any[], T>(constructor: { new(...args: A): T }, args: A, newTarget?: Function): T;
+    <T>(constructor: Newable<T>, args: any[], newTarget?: Function): T;
 } = (target: any, args: any = [], newTarget?: Function) =>
     isNullish(newTarget) ? new target(...args) : Reflect.construct(target, args, newTarget);
 
