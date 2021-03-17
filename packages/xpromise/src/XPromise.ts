@@ -38,8 +38,9 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     private _status: PromiseStatus = "pending";
     private _reactions: Array<PromiseReaction<any>> = [];
     private _resolved = false;
-    private _timeout?: any;
+    private _timeoutId?: any;
     private _value?: any;
+    private _timedOut = false;
 
     constructor(executor?: PromiseExecutor<T>) {
         if (isFunction(executor)) {
@@ -101,7 +102,8 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             }
 
             let fulfilledCount = 0;
-            const results = Array(length);
+
+            const results: any[] = [];
 
             for (let i = 0; i < length; i++) {
                 const promise = promises[i];
@@ -119,75 +121,62 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public static allSettled<T extends any[]>(promises: T) {
-        return XPromise.wrap(() => {
-            const wrapped = promises
-                .map(XPromise.resolve)
-                .map((promise) => promise.then(
-                    (value) => ({status: "fulfilled", value}),
-                    (reason) => ({status: "rejected", reason}),
-                ));
-
-            return XPromise.all(wrapped);
-        }) as XPromise<AllSettled<T>>;
+        return XPromise.wrap(() => promises
+            .map((v) => XPromise.resolve(v).then(
+                (value) => ({status: "fulfilled", value}),
+                (reason) => ({status: "rejected", reason}),
+            )))
+            .then(XPromise.all) as XPromise<AllSettled<T>>;
     }
 
     public static race<T extends any[]>(promises: T) {
-        return new XPromise((resolve, reject) => {
-            if (!promises.length) {
-                return resolve([] as any);
-            }
-            for (const promise of promises) {
-                XPromise.resolve(promise).then(resolve, reject);
-            }
-        }) as XPromise<Awaited<T[number]>>;
+        return new XPromise<Awaited<T[number]>>((resolve, reject) =>
+            promises.length
+            ? promises.map((p) => XPromise.resolve(p).then(resolve, reject))
+            : resolve([] as any));
     }
 
     public static wrap<R>(fn: () => R | PromiseLike<R>): XPromise<R> {
-        try {
-            const value = fn();
-            return XPromise.resolve<R>(value);
-        } catch (e) {
-            return XPromise.reject(e);
-        }
+        return new XPromise<R>((resolve) => resolve(fn()));
     }
 
     public setTimeout(ms: number, fn?: Func1<any, this>): this {
-        if (!this.isPending()) {
-            return this;
+        if (this.isPending()) {
+            this.clearTimeout();
+            this._timedOut = false;
+
+            this._timeoutId = setTimeout(() => {
+                this.clearTimeout();
+                this._timedOut = true;
+                let error;
+
+                try {
+                    error = fn?.(this);
+                } catch (e) {
+                    error = e;
+                }
+
+                if (this._timedOut) {
+                    this.reject(error ?? new Error("XPromise timeout exceeded"));
+                }
+            }, ms);
         }
-
-        this.clearTimeout();
-
-        this._timeout = setTimeout(() => {
-            let error;
-
-            try {
-                error = fn?.(this);
-            } catch (e) {
-                error = e;
-            }
-
-            this.reject(error ?? new Error("XPromise timeout exceeded"));
-        }, ms);
 
         return this;
     }
 
     public clearTimeout(): this {
-        clearTimeout(this._timeout);
-        delete this._timeout;
+        clearTimeout(this._timeoutId);
+        delete this._timeoutId;
         return this;
     }
 
     public finally(f?: OnFinally) {
-        if (!isFunction(f)) {
-            return this.then(f, f);
-        }
-
-        return this.then(
-            (value) => XPromise.wrap(f).then(() => value),
-            (err) => XPromise.wrap(f).then(() => { throw err; }),
-        );
+        return !isFunction(f)
+               ? this.then(f, f)
+               : this.then(
+                (value) => XPromise.wrap(f).then(() => value),
+                (err) => XPromise.wrap(f).then(() => { throw err; }));
     }
 
     public isPending() {
@@ -206,12 +195,15 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         return !this.isPending();
     }
 
+    public isTimedOut() {
+        return this._timedOut;
+    }
+
     public getValue() {
-        const {_value} = this;
         if (this.isFulfilled()) {
-            return _value;
+            return this._value;
         }
-        throw this.isRejected() ? _value : new Error("Could not get value of pending promise");
+        throw this.isRejected() ? this._value : new Error("Could not get value of pending promise");
     }
 
     public then<R1 = T, R2 = never>(onFulfilled?: OnFulfill<T, R1>, onRejected?: OnReject<R2>) {
@@ -294,10 +286,10 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 return;
             }
 
-            let handled = 0;
+            let calls = 0;
 
-            const onFulfilled = (value: T) => handled++ || this._doResolve(value);
-            const onRejected = (r: any) => handled++ || this._settleRejected(r);
+            const onFulfilled = (value: T) => calls++ || this._doResolve(value);
+            const onRejected = (r: any) => calls++ || this._settleRejected(r);
 
             try {
                 thenFn.call(x, onFulfilled, onRejected);

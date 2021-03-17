@@ -7,64 +7,95 @@ describe("XPromise.setTimeout", () => {
         promise.setTimeout(2);
         setTimeout(() => promise.resolve(1), 1);
         jest.runAllTimers();
+        expect(promise.isRejected()).toBe(false);
+        expect(promise.isTimedOut()).toBe(false);
         expect(promise).resolves.toBe(1);
     });
 
-    test("Resolves before timeout", () => {
+    test("Resolves after timeout", () => {
         const promise = new XPromise();
         promise.setTimeout(1);
         setTimeout(() => promise.resolve(1), 2);
         jest.runAllTimers();
-        expect(promise).rejects.toThrow(Error);
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
     });
 
-    test("promise.setTimeout(0) should be rejected on next tick", async () => {
+    test("promise.setTimeout(0) should be rejected on next tick", () => {
         const promise = new XPromise();
         promise.setTimeout(0);
         expect(promise.isPending()).toBe(true);
         jest.runAllTimers();
-        await expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
     });
 
     test("empty callback", () => {
         const promise = new XPromise();
         promise.setTimeout(1);
         jest.runAllTimers();
-        expect(promise).rejects.toThrow(new Error());
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
     });
 
     test("custom error callback", () => {
         const promise = new XPromise();
         promise.setTimeout(1, () => new Error("foo"));
         jest.runAllTimers();
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
         expect(promise).rejects.toThrow(new Error("foo"));
     });
 
-    test("custom reject callback", () => {
+    test.only("custom reject callback", () => {
         const promise = new XPromise();
-        promise.setTimeout(1, (p) => p.reject(""));
+        promise.setTimeout(1, (p) => p.reject("foo"));
         jest.runAllTimers();
-        expect(promise).rejects.toThrow("");
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).rejects.toThrow("foo");
     });
 
-    test("custom resolve callback", async () => {
+    test("custom resolve callback", () => {
         const promise = new XPromise();
         promise.setTimeout(1, (p) => p.resolve(123));
         jest.runAllTimers();
-        expect(await promise).toBe(123);
+        expect(promise.isRejected()).toBe(false);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).resolves.toBe(123);
     });
 
-    test("custom noop callback", async () => {
+    test("custom noop callback", () => {
         const promise = new XPromise();
         promise.setTimeout(1, () => {});
         jest.runAllTimers();
-        await expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).rejects.toThrow(new Error("XPromise timeout exceeded"));
     });
 
     test("custom error callback throws", () => {
         const promise = new XPromise();
         promise.setTimeout(1, () => { throw new Error("foo"); });
         jest.runAllTimers();
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
+        expect(promise).rejects.toThrow(new Error("foo"));
+    });
+
+    test("setTimeout inside setTimeout", () => {
+        const promise = new XPromise();
+        promise.setTimeout(1, (p) => p.setTimeout(1, () => { throw new Error("foo"); }));
+        jest.advanceTimersByTime(1);
+        expect(promise.isRejected()).toBe(false);
+        expect(promise.isPending()).toBe(true);
+        expect(promise.isTimedOut()).toBe(false);
+        jest.advanceTimersByTime(1);
+        expect(promise.isRejected()).toBe(true);
+        expect(promise.isTimedOut()).toBe(true);
         expect(promise).rejects.toThrow(new Error("foo"));
     });
 });
