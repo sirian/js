@@ -32,7 +32,7 @@ export class MultiDispatcher<T extends MultiDispatcherEventMap = any> {
     }
 
     public addListener<K extends keyof T>(event: K, listener: MultiDispatcherCallback<T, K>, opts?: ListenerOptions) {
-        const dispatcher = this._map.ensure(event, () => this.createDispatcher(event));
+        const dispatcher = this._map.ensure(event, () => this._createDispatcher(event));
 
         dispatcher.addListener(listener, opts);
         return this;
@@ -85,7 +85,7 @@ export class MultiDispatcher<T extends MultiDispatcherEventMap = any> {
         return this;
     }
 
-    protected createDispatcher<K extends keyof T>(event: K): Dispatcher<T[K]> {
+    protected _createDispatcher<K extends keyof T>(event: K): Dispatcher<T[K]> {
         return new Dispatcher<T[K]>({
             onError: (error, fn, args) => this.options.onError?.(event, error, fn, args),
         });

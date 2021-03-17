@@ -18,7 +18,7 @@ export class EventsDispatcher<T extends EventsDispatcherEventMap> extends MultiD
         return super.dispatch(eventName, event).then(() => event);
     }
 
-    protected createDispatcher<K extends keyof T>(event: K) {
+    protected _createDispatcher<K extends keyof T>(event: K) {
         return new EventDispatcher<T[K]>();
     }
 }
