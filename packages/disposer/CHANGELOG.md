@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.5.0](https://github.com/sirian/js/compare/@sirian/disposer@2.4.17...@sirian/disposer@2.5.0) (2021-03-17)
+
+
+### Features
+
+* **disposer:** DisposerManager ([293e413](https://github.com/sirian/js/commit/293e4132c2c81153387aa54e8c6c99b09eb25d6e))
+
+
+
+
+
 ## [2.4.17](https://github.com/sirian/js/compare/@sirian/disposer@2.4.16...@sirian/disposer@2.4.17) (2021-03-13)
 
 **Note:** Version bump only for package @sirian/disposer

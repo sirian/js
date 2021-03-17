@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.12.0](https://github.com/sirian/js/compare/@sirian/xpromise@2.11.12...@sirian/xpromise@2.12.0) (2021-03-17)
+
+
+### Features
+
+* **xpromise:** isTimedOut() ([167ec7a](https://github.com/sirian/js/commit/167ec7adf9d3b5a6e2290e1b74a9c2b5d971a008))
+
+
+
+
+
 ## [2.11.12](https://github.com/sirian/js/compare/@sirian/xpromise@2.11.11...@sirian/xpromise@2.11.12) (2021-03-13)
 
 **Note:** Version bump only for package @sirian/xpromise
