@@ -1,11 +1,14 @@
-import {Disposer} from "../../src";
+import {DisposerManager} from "../../src";
 
 describe("", () => {
+    const dm = new DisposerManager();
+    // dm.on("error", console.error);
+
     const foo = {};
     const bar = {};
 
-    const dFoo = Disposer.for(foo);
-    const dBar = Disposer.for(bar);
+    const dFoo = dm.for(foo);
+    const dBar = dm.for(bar);
 
     dBar.addSource(foo);
 
@@ -24,7 +27,7 @@ describe("", () => {
     test("", () => {
 
         const zoo = {};
-        const dzoo = Disposer.for(zoo);
+        const dzoo = dm.for(zoo);
         expect(dzoo.isDisposed()).toBe(false);
         dzoo.addSource(foo);
         expect(dzoo.isDisposed()).toBe(true);
@@ -32,7 +35,7 @@ describe("", () => {
 
     test("", () => {
         const zoo = {};
-        const dzoo = Disposer.for(zoo);
+        const dzoo = dm.for(zoo);
         expect(dzoo.isDisposed()).toBe(false);
         dzoo.addSource(dFoo);
         expect(dzoo.isDisposed()).toBe(true);

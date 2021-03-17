@@ -1,21 +1,24 @@
-import {Disposer} from "../../src";
+import {DisposerManager} from "../../src";
 
 describe("Disposer.isDisposing", () => {
+    const dm = new DisposerManager();
+    // dm.on("error", console.error);
+
     test("Disposer.isDisposing", () => {
-        Disposer.events.on("dispose", (d) => {
+        dm.on("dispose", (t, d) => {
             expect(d.isDisposing()).toBe(true);
             expect(d.isDisposed()).toBe(true);
             expect(d.isDisposedFully()).toBe(false);
         });
 
-        Disposer.events.on("disposed", (d) => {
+        dm.on("disposed", (t, d) => {
             expect(d.isDisposing()).toBe(false);
             expect(d.isDisposed()).toBe(true);
             expect(d.isDisposedFully()).toBe(true);
         });
 
         const o = {};
-        const disposer = Disposer.for(o);
+        const disposer = dm.for(o);
 
         expect(disposer.isDisposing()).toBe(false);
         expect(disposer.isDisposed()).toBe(false);

@@ -1,9 +1,12 @@
-import {Disposer} from "../../src";
+import {DisposerManager} from "../../src";
 
 describe("callback", () => {
+    const dm = new DisposerManager();
+    // dm.on("error", console.error);
+
     test("", () => {
         const foo = {};
-        const d = Disposer.for(foo);
+        const d = dm.for(foo);
 
         const results: number[] = [];
         d.onDispose(() => results.push(1));
@@ -24,32 +27,34 @@ describe("callback", () => {
         const o = {};
         const actual: number[] = [];
 
-        Disposer.for(o).onDispose(() => {
+        dm.for(o).onDispose(() => {
             actual.push(1);
-            Disposer.for(o).onDispose(() => {
+            dm.for(o).onDispose(() => {
                 actual.push(2);
             });
             actual.push(3);
         });
 
-        Disposer.for(o).dispose();
+        dm.for(o).dispose();
 
         expect(actual).toStrictEqual([1, 2, 3]);
     });
 
     test("throws", async () => {
+        const dm2 = new DisposerManager();
+
         const foo = {};
 
         const results: any[] = [];
 
         const onError = jest.fn();
-        Disposer.events.once("error", onError);
+        dm2.on("error", onError);
 
         const err = new Error("foo");
 
         const errCallback = () => { throw err; };
 
-        const disposer = Disposer.for(foo)
+        const disposer = dm2.for(foo)
             .onDisposed(() => results.push(3))
             .onDispose(() => results.push(1))
             .onDispose(errCallback)
@@ -57,12 +62,12 @@ describe("callback", () => {
         ;
 
         expect(results).toStrictEqual([]);
-        expect(Disposer.isDisposed(foo)).toBe(false);
+        expect(dm2.isDisposed(foo)).toBe(false);
 
-        expect(() => Disposer.dispose(foo)).not.toThrow();
-        expect(Disposer.isDisposed(foo)).toBe(true);
+        expect(() => dm2.dispose(foo)).not.toThrow();
+        expect(dm2.isDisposed(foo)).toBe(true);
         expect(results).toStrictEqual([1, 2, 3]);
-        expect(onError).toHaveBeenCalledWith(err, disposer, errCallback);
+        expect(onError).toHaveBeenCalledWith(err, foo, disposer, errCallback);
     });
 
 });

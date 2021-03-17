@@ -1,9 +1,11 @@
-import {Disposer} from "../../src";
+import {DisposerManager} from "../../src";
 
 test("", () => {
+    const dm = new DisposerManager();
+    // dm.on("error", console.error);
     const foo = {};
-    const d = Disposer.for(foo);
-    expect(Disposer.for(foo)).toBe(d);
+    const d = dm.for(foo);
+    expect(dm.for(foo)).toBe(d);
     d.dispose();
-    expect(Disposer.for(foo)).toBe(d);
+    expect(dm.for(foo)).toBe(d);
 });

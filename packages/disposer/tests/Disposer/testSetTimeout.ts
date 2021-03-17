@@ -1,16 +1,18 @@
-import {Disposer} from "../../src";
+import {DisposerManager} from "../../src";
 
 test("Disposer.setTimeout", async () => {
+    const dm = new DisposerManager();
+    // dm.on("error", console.error);
     jest.useFakeTimers();
     const obj = {};
 
-    expect(Disposer.isDisposed(obj)).toBe(false);
+    expect(dm.isDisposed(obj)).toBe(false);
 
-    Disposer.setTimeout(obj, 2);
+    dm.setTimeout(obj, 2);
 
     jest.runTimersToTime(1);
-    expect(Disposer.isDisposed(obj)).toBe(false);
+    expect(dm.isDisposed(obj)).toBe(false);
 
     jest.runTimersToTime(2);
-    expect(Disposer.isDisposed(obj)).toBe(true);
+    expect(dm.isDisposed(obj)).toBe(true);
 });
