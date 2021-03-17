@@ -12,12 +12,6 @@
     },
     "references": [
         {
-            "path": "../common"
-        },
-        {
-            "path": "../event-dispatcher"
-        },
-        {
             "path": "../ts-extra-types"
         }
     ]

@@ -17,8 +17,6 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^7.0.8",
-        "@sirian/event-dispatcher": "^5.1.50",
         "@sirian/ts-extra-types": "^3.62.0"
     },
     "scripts": {},

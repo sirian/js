@@ -1,4 +1,3 @@
-import {tryCatch} from "@sirian/common";
 import {DisposeCallback, Disposer} from "./Disposer";
 
 export type DisposerEvents = {
@@ -79,7 +78,12 @@ export class DisposerManager {
     }
 
     public emit<T extends keyof DisposerEvents>(event: T, ...args: DisposerEvents[T]) {
-        this._listeners[event]?.forEach((cb) => tryCatch(() => cb(...args)));
+        for (const cb of this._listeners[event] ?? []) {
+            try {
+                cb(...args);
+            } catch (e) {
+            }
+        }
     }
 
     public offAll() {
