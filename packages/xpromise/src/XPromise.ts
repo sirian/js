@@ -44,10 +44,14 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
     constructor(executor?: PromiseExecutor<T>) {
         if (isFunction(executor)) {
-            executor(
-                (value) => this._doResolve(value),
-                (reason) => this.reject(reason),
-            );
+            try {
+                executor(
+                    (value) => this._doResolve(value),
+                    (reason) => this.reject(reason),
+                );
+            } catch (e) {
+                this.reject(e);
+            }
         }
     }
 
