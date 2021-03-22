@@ -145,26 +145,28 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public setTimeout(ms: number, fn?: Func1<any, this>): this {
-        if (this.isPending()) {
-            this.clearTimeout();
-            this._timedOut = false;
-
-            this._timeoutId = setTimeout(() => {
-                this.clearTimeout();
-                this._timedOut = true;
-                let error;
-
-                try {
-                    error = fn?.(this);
-                } catch (e) {
-                    error = e;
-                }
-
-                if (this._timedOut) {
-                    this.reject(error ?? new Error("XPromise timeout exceeded"));
-                }
-            }, ms);
+        if (!this.isPending()) {
+            return this;
         }
+
+        this._timedOut = false;
+        this.clearTimeout();
+
+        this._timeoutId = setTimeout(() => {
+            this.clearTimeout();
+            this._timedOut = true;
+            let error;
+
+            try {
+                error = fn?.(this);
+            } catch (e) {
+                error = e;
+            }
+
+            if (this._timedOut) {
+                this.reject(error ?? new Error("XPromise timeout exceeded"));
+            }
+        }, ms);
 
         return this;
     }
