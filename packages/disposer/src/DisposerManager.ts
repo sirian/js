@@ -9,51 +9,51 @@ export type DisposerEvents = {
 
 export type DisposerEventCallback<K extends keyof DisposerEvents> = (...args: DisposerEvents[K]) => void;
 
-export class DisposerManager {
+export class DisposerManager<D extends object = object> {
     private readonly _disposers = new WeakMap<object, Disposer<any>>();
     private _listeners: { [P in keyof DisposerEvents]?: Set<DisposerEventCallback<any>> } = {};
 
-    public onDispose<T extends object>(target: T, callback: DisposeCallback<T>) {
+    public onDispose<T extends D>(target: T, callback: DisposeCallback<T>) {
         return this.for(target).onDispose(callback);
     }
 
-    public onDisposed<T extends object>(target: T, callback: DisposeCallback<T>) {
+    public onDisposed<T extends D>(target: T, callback: DisposeCallback<T>) {
         return this.for(target).onDisposed(callback);
     }
 
-    public setTimeout<T extends object>(target: T, ms: number) {
+    public setTimeout<T extends D>(target: T, ms: number) {
         return this.for(target).setTimeout(ms);
     }
 
-    public addChild<T extends object>(target: T, ...children: object[]) {
+    public addChild<T extends D>(target: T, ...children: object[]) {
         return this.for(target).addChild(...children);
     }
 
-    public addSource<T extends object>(target: T, ...sources: object[]) {
+    public addSource<T extends D>(target: T, ...sources: object[]) {
         return this.for(target).addSource(...sources);
     }
 
-    public isDisposed(target: object) {
+    public isDisposed(target: D) {
         return this.has(target) && this.for(target).isDisposed();
     }
 
-    public isDisposedFully(target: object) {
+    public isDisposedFully(target: D) {
         return this.has(target) && this.for(target).isDisposedFully();
     }
 
-    public isDisposing(target: object) {
+    public isDisposing(target: D) {
         return this.has(target) && this.for(target).isDisposing();
     }
 
-    public dispose(...targets: object[]) {
+    public dispose(...targets: D[]) {
         targets.forEach((t) => this.for(t).dispose());
     }
 
-    public has(target: object) {
+    public has(target: D) {
         return this._disposers.has(target);
     }
 
-    public for<T extends object>(target: T) {
+    public for<T extends D>(target: T) {
         const disposers = this._disposers;
         if (!disposers.has(target)) {
             const disposer = new Disposer(this, target);
@@ -65,7 +65,7 @@ export class DisposerManager {
         return disposers.get(target) as Disposer<T>;
     }
 
-    public link(...targets: any[]) {
+    public link(...targets: D[]) {
         targets.forEach((t) => this.addChild(t, ...targets));
     }
 

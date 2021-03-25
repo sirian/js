@@ -56,7 +56,7 @@ export class Disposer<T extends object> {
     }
 
     public isDisposing() {
-        return this._state > DisposerState.INITIAL && !this.isDisposedFully();
+        return this._state > DisposerState.INITIAL && this._state < DisposerState.DISPOSED;
     }
 
     public isDisposedFully() {
