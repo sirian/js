@@ -12,3 +12,5 @@ export async function tryAsync(fn: Func0, onError?: any) {
         return applyIfFunction(onError, error);
     }
 }
+
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
