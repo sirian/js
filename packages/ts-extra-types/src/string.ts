@@ -12,3 +12,5 @@ export type StrJoin<T extends string[], S extends string = ""> =
     `${Head<T>}${S}${StrJoin<Tail<T>>}`;
 
 export type StrLength<T extends string> = Length<StrToArray<T>>;
+
+export type StrReverse<T extends string> = T extends `${infer A}${infer B}` ? `${StrReverse<B>}${A}` : T;
