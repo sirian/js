@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/sirian/js/compare/@sirian/common@7.0.8...@sirian/common@7.1.0) (2021-03-31)
+
+
+### Features
+
+* **common:** sleep ([14cffe4](https://github.com/sirian/js/commit/14cffe48e88ed44e5ff53093302df336e125b0d7))
+
+
+
+
+
 ## [7.0.8](https://github.com/sirian/js/compare/@sirian/common@7.0.7...@sirian/common@7.0.8) (2021-03-13)
 
 **Note:** Version bump only for package @sirian/common

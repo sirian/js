@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.63.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.62.0...@sirian/ts-extra-types@3.63.0) (2021-03-31)
+
+
+### Features
+
+* **ts-extra-types:** StrReverse ([4fcd28b](https://github.com/sirian/js/commit/4fcd28ba8e3d4559435e0658fb1f046efa527fa2))
+
+
+
+
+
 # [3.62.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.61.5...@sirian/ts-extra-types@3.62.0) (2021-03-13)
 
 

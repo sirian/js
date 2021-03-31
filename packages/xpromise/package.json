@@ -1,7 +1,7 @@
 {
     "name": "@sirian/xpromise",
     "description": "",
-    "version": "2.12.2",
+    "version": "2.12.3",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -26,6 +26,6 @@
         "@types/node": "^14.14.31"
     },
     "dependencies": {
-        "@sirian/ts-extra-types": "^3.62.0"
+        "@sirian/ts-extra-types": "^3.63.0"
     }
 }
