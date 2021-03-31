@@ -26,6 +26,7 @@
                 "packages/mixin/package.json",
                 "packages/parser/package.json",
                 "packages/property-access/package.json",
+                "packages/rate-limiter/package.json",
                 "packages/rpc/package.json",
                 "packages/ts-extra-types/package.json",
                 "packages/workflow/package.json",
