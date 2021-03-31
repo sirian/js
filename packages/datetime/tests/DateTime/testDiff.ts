@@ -1,7 +1,7 @@
-import {DateTime, DateTimeInterval, IDateInterval} from "../../src";
+import {DateTime, DateTimeInterval, IDateTimeInterval} from "../../src";
 
 describe("", () => {
-    const data: Array<[Partial<IDateInterval>, Partial<IDateInterval>?]> = [
+    const data: Array<[Partial<IDateTimeInterval>, Partial<IDateTimeInterval>?]> = [
         [{}],
         [{ms: 1}],
         [{seconds: 1}],
@@ -9,11 +9,10 @@ describe("", () => {
         [{minutes: 30}],
         [{months: 1}, {months: 1, days: 2}],
         [{months: 1, days: 2}, {months: 1, days: 4}],
-        [{days: 2, months: 1}],
         [{days: 2, seconds: 1, ms: 500}],
     ];
 
-    test.each(data)(`DateTime("2000-01-31T23:30:00Z").add(%p) === %p`, (i: Partial<IDateInterval>, expected = i) => {
+    test.each(data)(`DateTime("2000-01-31T23:30:00Z").add(%p) === %p`, (i: Partial<IDateTimeInterval>, expected = i) => {
         const d1 = new DateTime("2000-01-31T23:30:00Z");
         const d2 = DateTime.create(d1).add(i);
 

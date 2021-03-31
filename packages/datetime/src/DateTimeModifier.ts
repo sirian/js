@@ -1,5 +1,5 @@
 import {DateTime} from "./DateTime";
-import {IDateInterval} from "./DateTimeInterval";
+import {IDateTimeInterval} from "./DateTimeInterval";
 
 export class DateTimeModifier {
     public readonly pattern: string;
@@ -14,7 +14,7 @@ export class DateTimeModifier {
         end: (d) => d.endOfDay(),
     };
 
-    protected keys: Record<string, keyof IDateInterval> = {
+    protected keys: Record<string, keyof IDateTimeInterval> = {
         year: "years",
         month: "months",
         day: "days",

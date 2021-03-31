@@ -1,11 +1,11 @@
 import {isNumber} from "@sirian/common";
 import {DateTime} from "./DateTime";
-import {DateTimeInterval, IDateInterval} from "./DateTimeInterval";
+import {DateTimeInterval, IDateTimeInterval} from "./DateTimeInterval";
 
 export interface IDateRangeInit {
     start: DateTime;
     end?: DateTime;
-    interval: Partial<IDateInterval>;
+    interval: Partial<IDateTimeInterval>;
     limit?: number;
 }
 

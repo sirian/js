@@ -1,6 +1,4 @@
-import {entriesOf} from "@sirian/common";
-
-export interface IDateInterval {
+export interface IDateTimeInterval {
     years: number;
     months: number;
     days: number;
@@ -10,37 +8,23 @@ export interface IDateInterval {
     ms: number;
 }
 
-export class DateTimeInterval implements IDateInterval {
-    public years!: number;
-    public months!: number;
-    public days!: number;
-    public hours!: number;
-    public minutes!: number;
-    public seconds!: number;
-    public ms!: number;
+export class DateTimeInterval implements IDateTimeInterval {
+    public years: number = 0;
+    public months: number = 0;
+    public days: number = 0;
+    public hours: number = 0;
+    public minutes: number = 0;
+    public seconds: number = 0;
+    public ms: number = 0;
 
-    constructor(interval: Partial<IDateInterval> = {}, inverse: boolean = false) {
-        const keys = new Set<keyof IDateInterval>([
-            "years",
-            "months",
-            "days",
-            "hours",
-            "minutes",
-            "seconds",
-            "ms",
-        ]);
-
-        for (const [key, value] of entriesOf(interval)) {
-            if (!value || !keys.has(key)) {
-                continue;
-            }
-            if (keys.delete(key) && value) {
-                this[key] = +value * (inverse ? -1 : 1);
-            }
-        }
-
-        for (const key of keys) {
-            this[key] = 0;
-        }
+    constructor(interval: Partial<IDateTimeInterval> = {}, inverse: boolean = false) {
+        const sign = inverse ? -1 : 1;
+        this.years = sign * (interval.years ?? 0) || 0;
+        this.months = sign * (interval.months ?? 0) || 0;
+        this.days = sign * (interval.days ?? 0) || 0;
+        this.hours = sign * (interval.hours ?? 0) || 0;
+        this.minutes = sign * (interval.minutes ?? 0) || 0;
+        this.seconds = sign * (interval.seconds ?? 0) || 0;
+        this.ms = sign * (interval.ms ?? 0) || 0;
     }
 }

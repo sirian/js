@@ -1,6 +1,6 @@
 import {entriesOf, hasOwn} from "@sirian/common";
 import {DateTimeImmutable, IDateTime} from "./DateTimeImmutable";
-import {DateTimeInterval, IDateInterval} from "./DateTimeInterval";
+import {DateTimeInterval, IDateTimeInterval} from "./DateTimeInterval";
 import {DateTimeModifier} from "./DateTimeModifier";
 
 export class DateTime extends DateTimeImmutable {
@@ -118,10 +118,10 @@ export class DateTime extends DateTimeImmutable {
         return this;
     }
 
-    public add(interval: Partial<IDateInterval> = {}) {
+    public add(interval: Partial<IDateTimeInterval> = {}) {
         const it = new DateTimeInterval(interval);
 
-        const map: Record<keyof IDateInterval, keyof IDateTime> = {
+        const map: Record<keyof IDateTimeInterval, keyof IDateTime> = {
             years: "year",
             months: "month",
             days: "day",
@@ -142,7 +142,7 @@ export class DateTime extends DateTimeImmutable {
         return this;
     }
 
-    public sub(value: Partial<IDateInterval>) {
+    public sub(value: Partial<IDateTimeInterval>) {
         const interval = new DateTimeInterval(value, true);
 
         return this.add(interval);

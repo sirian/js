@@ -1,6 +1,6 @@
-import {DateTime, DateTimeInterval, DateTimePeriod, IDateInterval} from "../../src";
+import {DateTime, DateTimeInterval, DateTimePeriod, IDateTimeInterval} from "../../src";
 
-const data: Array<[Partial<IDateInterval>, number]> = [
+const data: Array<[Partial<IDateTimeInterval>, number]> = [
     [{days: 1}, 2],
     [{days: 1, minutes: 1}, 1],
     [{hours: 1}, 25],
