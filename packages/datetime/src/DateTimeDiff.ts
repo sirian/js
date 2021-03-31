@@ -1,17 +1,15 @@
 import {DateTime} from "./DateTime";
-import {DateArg} from "./DateTimeImmutable";
+import {DateTimeImmutable} from "./DateTimeImmutable";
 import {DateTimeInterval} from "./DateTimeInterval";
 
 export class DateTimeDiff {
-    public static diff(d1: DateArg, d2: DateArg): DateTimeInterval {
-        let m1 = new DateTime(d1);
-        let m2 = new DateTime(d2);
-
+    public static diff(m1: DateTimeImmutable, m2: DateTimeImmutable): DateTimeInterval {
         if (m1.isEqual(m2)) {
             return new DateTimeInterval();
         }
 
         const inverse = m1.isAfter(m2);
+
         if (inverse) {
             [m1, m2] = [m2, m1];
         }
@@ -38,13 +36,15 @@ export class DateTimeDiff {
             minutes += 60;
             hours--;
         }
+
         if (hours < 0) {
             hours += 24;
             days--;
         }
+
         if (days < 0) {
             const daysInLastFullMonth = DateTime
-                .create(`${m2.year}-${m2.month}`)
+                .create(m2.year + "-" + m2.month)
                 .sub({months: -1})
                 .daysInMonth();
 

@@ -1,11 +1,11 @@
+import {assert, stringifyVar} from "@sirian/common";
 import {DateTime} from "./DateTime";
 import {IDateTimeInterval} from "./DateTimeInterval";
 
 export class DateTimeModifier {
-    public readonly pattern: string;
-    protected queue: Array<(date: DateTime) => any> = [];
+    private _queue: Array<(date: DateTime) => any> = [];
 
-    protected modifiers: Record<string, (date: DateTime) => any> = {
+    private _modifiers: Record<string, (date: DateTime) => any> = {
         now: () => void 0,
         today: (d) => d.startOfDay(),
         yesterday: (d) => d.sub({days: 1}).startOfDay(),
@@ -14,28 +14,13 @@ export class DateTimeModifier {
         end: (d) => d.endOfDay(),
     };
 
-    protected keys: Record<string, keyof IDateTimeInterval> = {
-        year: "years",
-        month: "months",
-        day: "days",
-        hour: "hours",
-        min: "minutes",
-        minute: "minutes",
-        sec: "seconds",
-        second: "seconds",
-        ms: "ms",
-    };
-
     constructor(pattern: string) {
-        let index = 0;
-        pattern = pattern.trim();
-        this.pattern = pattern;
-        while (index < pattern.length) {
-            const match = this.parse(pattern.substr(index));
+        pattern = stringifyVar(pattern).trim();
 
-            if (!match) {
-                throw new Error(`Could not parse pattern "${pattern}" at index ${index}`);
-            }
+        for (let index = 0; index < pattern.length;) {
+            const match = this._parse(pattern.substr(index));
+
+            assert(match, "Could not parse pattern", {pattern, index});
 
             index += match[0].length;
         }
@@ -47,29 +32,41 @@ export class DateTimeModifier {
     }
 
     public modify(date: DateTime) {
-        for (const fn of this.queue) {
+        for (const fn of this._queue) {
             fn(date);
         }
         return date;
     }
 
-    protected parse(pattern: string) {
+    private _parse(pattern: string) {
         let match = pattern.match(/^\s*(now|today|yesterday|tomorrow|start|end)/i);
 
         if (match) {
-            this.queue.push(this.modifiers[match[1]]);
+            this._queue.push(this._modifiers[match[1]]);
             return match;
         }
 
         match = pattern.match(/^\s*([+-])\s*(\d+)\s*(year|month|day|hour|minute|min|seconds|sec|ms)s?/i);
 
+        const keys: Record<string, keyof IDateTimeInterval> = {
+            year: "years",
+            month: "months",
+            day: "days",
+            hour: "hours",
+            min: "minutes",
+            minute: "minutes",
+            sec: "seconds",
+            second: "seconds",
+            ms: "ms",
+        };
+
         if (match) {
             const [/*text*/, sign, val, type] = match;
             const mul = sign === "+" ? 1 : -1;
             const value = +val * mul;
-            const key = this.keys[type.toLowerCase()];
+            const key = keys[type.toLowerCase()];
             const interval = {[key]: value};
-            this.queue.push((d) => d.add(interval));
+            this._queue.push((d) => d.add(interval));
             return match;
         }
     }

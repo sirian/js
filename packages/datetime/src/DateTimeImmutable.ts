@@ -21,6 +21,8 @@ export type IDateTime = DateParts & TimeParts;
 
 export type DateArg = Date | DateTimeImmutable | string | number | undefined;
 
+export type DateTimePartsArray = [year: number, month: number, day: number, hour: number, minute: number, second: number, ms: number];
+
 export class DateTimeImmutable implements IDateTime {
     protected date: Date;
 
@@ -134,7 +136,7 @@ export class DateTimeImmutable implements IDateTime {
     }
 
     public diff(date: DateArg): DateTimeInterval {
-        return DateTimeDiff.diff(this, date);
+        return DateTimeDiff.diff(this, new DateTimeImmutable(date));
     }
 
     public isValid() {
@@ -181,7 +183,7 @@ export class DateTimeImmutable implements IDateTime {
         };
     }
 
-    public toArray(): [number, number, number, number, number, number, number] {
+    public toArray(): DateTimePartsArray {
         return [
             this.year,
             this.month,

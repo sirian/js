@@ -1,4 +1,4 @@
-import {DateTimeFormatter} from "../../src";
+import {formatNumber} from "../../src/DateUtil";
 
 const data: Array<[string, any, string]> = [
     ["", undefined, "00"],
@@ -31,5 +31,5 @@ const data: Array<[string, any, string]> = [
 ];
 
 test.each(data)("DateTimeFormatter.pad(%o, %o) === %o", (value, pad, expected) => {
-    expect(DateTimeFormatter.pad(value, pad)).toBe(expected);
+    expect(formatNumber(value, pad)).toBe(expected);
 });

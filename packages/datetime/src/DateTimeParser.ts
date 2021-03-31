@@ -1,4 +1,5 @@
-import {DateTimeFormatter} from "./DateTimeFormatter";
+import {stringifyVar} from "@sirian/common";
+import {formatNumber} from "./DateUtil";
 
 const opt = (value: string) => "(?:" + value + ")?";
 
@@ -23,39 +24,25 @@ export class DateTimeParser {
             return Date.now();
         }
 
-        const str = this.normalizeISO(text);
-
-        return Date.parse(str);
+        return Date.parse(this.normalizeISO(text));
     }
 
     public static normalizeISO(text: string) {
-        const match = String(text || "").toUpperCase().match(re);
+        const match = stringifyVar(text || "").toUpperCase().match(re);
 
         if (!match) {
             return text;
         }
 
-        const pad = DateTimeFormatter.pad;
-
         const [/*text*/, year, month, day, hour, min, sec, ms, /*tzStr*/, tzSign, tzHour, tzMin] = match;
 
-        // eval("console.log(text, {year, month, day, hour, min, sec, ms, tzStr, tzSign, tzHour, tzMin})");
+        const date = formatNumber(year, 4) + "-" + formatNumber(month ? +month : 1) + "-" + formatNumber(+(day || 1));
 
-        const date = [
-            pad(year, 4),
-            pad(month ? +month : 1),
-            pad(day ? +day : 1),
-        ].join("-");
+        const time = formatNumber(hour) + ":" + formatNumber(min) + ":" + formatNumber(sec);
 
-        const time = [
-            pad(hour),
-            pad(min),
-            pad(sec),
-        ].join(":");
+        const tz = tzHour ? tzSign + formatNumber(tzHour) + ":" + formatNumber(tzMin) : "Z";
 
-        const tz = tzHour ? tzSign + pad(tzHour) + ":" + pad(tzMin) : "Z";
-
-        const msTime = String(ms || 0).padEnd(3, "0").substr(0, 3);
+        const msTime = stringifyVar(ms || 0).padEnd(3, "0").substr(0, 3);
 
         return date + "T" + time + "." + msTime + tz;
     }

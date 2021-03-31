@@ -481,5 +481,4 @@ export class DateTimeZone {
         }));
         return (date.getTime() - tmp.getTime()) / 60 / 1000 - date.getTimezoneOffset();
     }
-
 }
