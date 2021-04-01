@@ -1,5 +1,5 @@
 import {stringifyVar} from "@sirian/common";
-import {formatNumber} from "./DateUtil";
+import {padN} from "./util";
 
 const opt = (value: string) => "(?:" + value + ")?";
 
@@ -36,11 +36,11 @@ export class DateTimeParser {
 
         const [/*text*/, year, month, day, hour, min, sec, ms, /*tzStr*/, tzSign, tzHour, tzMin] = match;
 
-        const date = formatNumber(year, 4) + "-" + formatNumber(month ? +month : 1) + "-" + formatNumber(+(day || 1));
+        const date = padN(year, 4) + "-" + padN(month ? +month : 1) + "-" + padN(+(day || 1));
 
-        const time = formatNumber(hour) + ":" + formatNumber(min) + ":" + formatNumber(sec);
+        const time = padN(hour) + ":" + padN(min) + ":" + padN(sec);
 
-        const tz = tzHour ? tzSign + formatNumber(tzHour) + ":" + formatNumber(tzMin) : "Z";
+        const tz = tzHour ? tzSign + padN(tzHour) + ":" + padN(tzMin) : "Z";
 
         const msTime = stringifyVar(ms || 0).padEnd(3, "0").substr(0, 3);
 

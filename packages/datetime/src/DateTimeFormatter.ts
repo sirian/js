@@ -1,10 +1,9 @@
-import DateTimeFormat = Intl.DateTimeFormat;
 import {fromEntries, keysOf, stringifyVar} from "@sirian/common";
 import {DateTimeImmutable} from "./DateTimeImmutable";
-import {formatNumber} from "./DateUtil";
+import {padN} from "./util";
 
 export class DateTimeFormatter {
-    public static formatToParts(dt: DateTimeImmutable, formatter: DateTimeFormat) {
+    public static formatToParts(dt: DateTimeImmutable, formatter: Intl.DateTimeFormat) {
         const parts = formatter.formatToParts(new Date(dt.timestampMs));
         return fromEntries(parts.map((part) => [part.type, part.value] as [Intl.DateTimeFormatPartTypes, string]));
     }
@@ -15,31 +14,31 @@ export class DateTimeFormatter {
         const short = this._getParts(dt, "short", locales);
 
         const tokens: Record<string, string | number> = {
-            YYYY: formatNumber(parts.year, 4),
-            YY: formatNumber(parts.year.substr(-2)),
+            YYYY: padN(parts.year, 4),
+            YY: padN(parts.year.substr(-2)),
             Y: parts.year,
 
             MMMM: long.month,
             MMM: short.month,
-            MM: formatNumber(parts.month),
+            MM: padN(parts.month),
             M: parts.month,
 
             DDDD: long.weekday,
             DDD: short.weekday,
-            DD: formatNumber(parts.day),
+            DD: padN(parts.day),
             D: parts.day,
 
-            HH: formatNumber(parts.hour),
+            HH: padN(parts.hour),
             H: parts.hour,
 
-            hh: formatNumber(parts.hour),
+            hh: padN(parts.hour),
             h: parts.hour,
 
-            mm: formatNumber(parts.minute),
+            mm: padN(parts.minute),
             m: parts.minute,
 
-            sss: formatNumber(dt.ms, 3),
-            ss: formatNumber(parts.second),
+            sss: padN(dt.ms, 3),
+            ss: padN(parts.second),
             s: parts.second,
         };
 

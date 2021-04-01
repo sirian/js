@@ -1,3 +1,6 @@
+import {entriesOf, keysOf} from "@sirian/common";
+import {IDateTime} from "./DateTimeImmutable";
+
 export interface IDateTimeInterval {
     years: number;
     months: number;
@@ -8,23 +11,41 @@ export interface IDateTimeInterval {
     ms: number;
 }
 
+const keyMap = {
+    years: "year",
+    months: "month",
+    days: "day",
+    hours: "hour",
+    minutes: "minute",
+    seconds: "second",
+    ms: "ms",
+} as const;
+
 export class DateTimeInterval implements IDateTimeInterval {
-    public years: number = 0;
-    public months: number = 0;
-    public days: number = 0;
-    public hours: number = 0;
-    public minutes: number = 0;
-    public seconds: number = 0;
-    public ms: number = 0;
+    public years!: number;
+    public months!: number;
+    public days!: number;
+    public hours!: number;
+    public minutes!: number;
+    public seconds!: number;
+    public ms!: number;
 
     constructor(interval: Partial<IDateTimeInterval> = {}, inverse: boolean = false) {
         const sign = inverse ? -1 : 1;
-        this.years = sign * (interval.years ?? 0) || 0;
-        this.months = sign * (interval.months ?? 0) || 0;
-        this.days = sign * (interval.days ?? 0) || 0;
-        this.hours = sign * (interval.hours ?? 0) || 0;
-        this.minutes = sign * (interval.minutes ?? 0) || 0;
-        this.seconds = sign * (interval.seconds ?? 0) || 0;
-        this.ms = sign * (interval.ms ?? 0) || 0;
+        for (const key of keysOf(keyMap)) {
+            this[key] = sign * (interval[key] ?? 0) || 0;
+        }
+    }
+
+    public static add<T extends IDateTime>(date: T, interval: Partial<IDateTimeInterval>) {
+        for (const [key, field] of entriesOf(keyMap)) {
+            date[field] += interval[key] ?? 0;
+        }
+
+        return date;
+    }
+
+    public static sub<T extends IDateTime>(date: T, interval: Partial<IDateTimeInterval>) {
+        return DateTimeInterval.add(date, new DateTimeInterval(interval, true));
     }
 }

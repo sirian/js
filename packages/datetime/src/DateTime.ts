@@ -1,5 +1,4 @@
-import {entriesOf, hasOwn} from "@sirian/common";
-import {DateTimeImmutable, IDateTime} from "./DateTimeImmutable";
+import {DateTimeImmutable} from "./DateTimeImmutable";
 import {DateTimeInterval, IDateTimeInterval} from "./DateTimeInterval";
 import {DateTimeModifier} from "./DateTimeModifier";
 
@@ -119,33 +118,13 @@ export class DateTime extends DateTimeImmutable {
     }
 
     public add(interval: Partial<IDateTimeInterval> = {}) {
-        const it = new DateTimeInterval(interval);
-
-        const map: Record<keyof IDateTimeInterval, keyof IDateTime> = {
-            years: "year",
-            months: "month",
-            days: "day",
-            hours: "hour",
-            minutes: "minute",
-            seconds: "second",
-            ms: "ms",
-        };
-
-        for (const [key, value] of entriesOf(it)) {
-            if (!value || !hasOwn(map, key)) {
-                continue;
-            }
-            const field = map[key];
-            this[field] = this[field] + value;
-        }
-
+        DateTimeInterval.add(this, interval);
         return this;
     }
 
-    public sub(value: Partial<IDateTimeInterval>) {
-        const interval = new DateTimeInterval(value, true);
-
-        return this.add(interval);
+    public sub(interval: Partial<IDateTimeInterval>) {
+        DateTimeInterval.sub(this, interval);
+        return this;
     }
 
     public clone(): DateTime {

@@ -35,6 +35,7 @@ export class DateTimeModifier {
         for (const fn of this._queue) {
             fn(date);
         }
+
         return date;
     }
 

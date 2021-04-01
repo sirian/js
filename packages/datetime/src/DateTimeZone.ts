@@ -468,10 +468,10 @@ export class DateTimeZone {
             return mul * offset;
         }
 
-        return DateTimeZone.getIntlTimeZoneOffset(tz);
+        return DateTimeZone._getIntlTimeZoneOffset(tz);
     }
 
-    protected static getIntlTimeZoneOffset(tz: string) {
+    private static _getIntlTimeZoneOffset(tz: string) {
         const date = new Date();
 
         date.setHours(0, 0, 0, 0);

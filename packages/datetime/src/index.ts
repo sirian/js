@@ -1,4 +1,3 @@
-export * from "./DateTimeDiff";
 export * from "./DateTimeInterval";
 export * from "./DateTimeModifier";
 export * from "./DateTimeParser";
