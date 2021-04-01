@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.3](https://github.com/sirian/js/compare/@sirian/rate-limiter@1.1.2...@sirian/rate-limiter@1.1.3) (2021-04-01)
+
+**Note:** Version bump only for package @sirian/rate-limiter
+
+
+
+
+
 ## [1.1.2](https://github.com/sirian/js/compare/@sirian/rate-limiter@1.1.1...@sirian/rate-limiter@1.1.2) (2021-04-01)
 
 **Note:** Version bump only for package @sirian/rate-limiter
