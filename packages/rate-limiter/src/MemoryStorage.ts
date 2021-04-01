@@ -5,26 +5,26 @@ import {IStorage} from "./IStorage";
 import {TimeUtil} from "./TimeUtil";
 
 export class MemoryStorage<T extends ILimiterState> implements IStorage<T> {
-    private buckets = new Map<string, [number | undefined, Return<T["serialize"]>]>();
+    private _buckets = new Map<string, [number | undefined, Return<T["serialize"]>]>();
 
     public save(limiterState: T): void {
-        const data = this.buckets.get(limiterState.id);
+        const data = this._buckets.get(limiterState.id);
 
         const expireMs = limiterState.getExpirationMs();
 
         const expireAt = isNumber(expireMs) ? TimeUtil.now() + expireMs : data?.[0];
 
-        this.buckets.set(limiterState.id, [expireAt, limiterState.serialize()]);
+        this._buckets.set(limiterState.id, [expireAt, limiterState.serialize()]);
     }
 
     public fetch(limiterStateId: string, unserialize: (data: Return<T["serialize"]>) => T): T | undefined {
-        const data = this.buckets.get(limiterStateId);
+        const data = this._buckets.get(limiterStateId);
         if (!data) {
             return;
         }
         const [expireAt, limiterState] = data;
         if (isNumber(expireAt) && expireAt <= TimeUtil.now()) {
-            this.buckets.delete(limiterStateId);
+            this._buckets.delete(limiterStateId);
             return;
         }
 
@@ -32,6 +32,6 @@ export class MemoryStorage<T extends ILimiterState> implements IStorage<T> {
     }
 
     public delete(limiterStateId: string): void {
-        this.buckets.delete(limiterStateId);
+        this._buckets.delete(limiterStateId);
     }
 }

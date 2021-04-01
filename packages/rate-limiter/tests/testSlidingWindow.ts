@@ -20,7 +20,7 @@ describe("SlidingWindow", () => {
         const cachedWindow = SlidingWindow.unserialize(data);
         expect(cachedWindow.getExpirationMs()).toBe(undefined);
 
-        const w2 = SlidingWindow.createFromPreviousWindow(cachedWindow, 15);
+        const w2 = SlidingWindow.from(cachedWindow, 15);
         expect(w2.getExpirationMs()).toBe(2 * 15);
     });
 
@@ -32,7 +32,7 @@ describe("SlidingWindow", () => {
         expect(window.getHitCount()).toBe(20);
 
         now += 60;
-        const w2 = SlidingWindow.createFromPreviousWindow(window, 60);
+        const w2 = SlidingWindow.from(window, 60);
         expect(w2.getHitCount()).toBe(20);
 
         now += 30;
@@ -49,7 +49,7 @@ describe("SlidingWindow", () => {
         const window = new SlidingWindow("foo", 60);
 
         now += 300;
-        const w2 = SlidingWindow.createFromPreviousWindow(window, 60);
+        const w2 = SlidingWindow.from(window, 60);
         expect(w2.isExpired()).toBe(true);
     });
 });

@@ -1,14 +1,13 @@
 import {assert, sleep} from "@sirian/common";
-import {DateTimeImmutable} from "@sirian/datetime";
 import {TimeUtil} from "./TimeUtil";
 
 export class RateLimit {
     public readonly availableTokens: number;
-    public readonly retryAfter: DateTimeImmutable;
+    public readonly retryAfter: number;
     public readonly accepted: boolean;
     public readonly limit: number;
 
-    constructor(availableTokens: number, retryAfter: DateTimeImmutable, accepted: boolean, limit: number) {
+    constructor(availableTokens: number, retryAfter: number, accepted: boolean, limit: number) {
         this.availableTokens = availableTokens;
         this.retryAfter = retryAfter;
         this.accepted = accepted;
@@ -22,6 +21,6 @@ export class RateLimit {
     }
 
     public wait() {
-        return sleep(Math.max(0, this.retryAfter.timestampMs - TimeUtil.now()));
+        return sleep(Math.max(0, this.retryAfter - TimeUtil.now()));
     }
 }
