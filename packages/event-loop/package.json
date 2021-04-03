@@ -19,5 +19,8 @@
     "scripts": {},
     "publishConfig": {
         "access": "public"
+    },
+    "dependencies": {
+        "@sirian/ts-extra-types": "^3.63.0"
     }
 }

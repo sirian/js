@@ -14,5 +14,9 @@
         "tsBuildInfoFile": "../../tmp/event-loop.tsbuildinfo",
         "declarationDir": "build/types"
     },
-    "references": []
+    "references": [
+        {
+            "path": "../ts-extra-types"
+        }
+    ]
 }

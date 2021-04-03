@@ -19,7 +19,11 @@ describe("Timeout.active", () => {
         }
 
         jest.advanceTimersByTime(1);
-        expect(fn).toHaveBeenCalled();
+        expect(fn).toHaveBeenCalledTimes(1);
+        expect(t.isScheduled()).toBe(false);
+
+        jest.advanceTimersByTime(100);
+        expect(fn).toHaveBeenCalledTimes(1);
         expect(t.isScheduled()).toBe(false);
     });
 });

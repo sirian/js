@@ -69,7 +69,7 @@ export abstract class AsyncTask {
         this._callback?.();
     }
 
-    protected abstract _start(callback: TaskCallback): any;
+    protected abstract _start(callback: TaskCallback): void;
 
-    protected abstract _clear(): any;
+    protected abstract _clear(): void;
 }
