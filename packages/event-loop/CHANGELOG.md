@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/sirian/js/compare/@sirian/event-loop@1.4.11...@sirian/event-loop@1.5.0) (2021-04-04)
+
+
+### Features
+
+* **event-loop:** setAlarm ([a834315](https://github.com/sirian/js/commit/a83431549e3ed6887bbaa803d027f316a64e43e4))
+
+
+
+
+
 ## [1.4.11](https://github.com/sirian/js/compare/@sirian/event-loop@1.4.10...@sirian/event-loop@1.4.11) (2021-03-08)
 
 **Note:** Version bump only for package @sirian/event-loop
