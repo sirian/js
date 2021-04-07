@@ -215,7 +215,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         if (this.isPending()) {
             this._reactions.push(reaction);
         } else {
-            this.react(reaction);
+            this._react(reaction);
         }
 
         return promise;
@@ -235,7 +235,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    protected react(reaction: PromiseReaction<T>) {
+    protected _react(reaction: PromiseReaction<T>) {
         const [promise, onFulfilled, onRejected] = reaction;
         const value = this._value;
 
@@ -313,6 +313,6 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
         this.clearTimeout();
 
-        this._reactions.splice(0).forEach((r) => this.react(r));
+        this._reactions.splice(0).forEach((r) => this._react(r));
     }
 }

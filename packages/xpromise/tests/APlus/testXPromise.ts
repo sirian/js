@@ -1,10 +1,17 @@
 import {XPromise} from "../../src";
 import {Adapter} from "./Adapter";
 
-class AsyncXPromise extends XPromise {
-    protected react(value: any) {
-        queueMicrotask(() => super.react(value));
-    }
-}
+// @ts-ignore
+const react = XPromise.prototype._react;
 
-Adapter.run(() => new AsyncXPromise());
+beforeAll(() => {
+    // @ts-ignore
+    XPromise.prototype._react = new Proxy(react, {
+        apply: (target, thisArg, args) => queueMicrotask(target.bind(thisArg, ...args)),
+    });
+});
+afterAll(() => {
+    // @ts-ignore
+    XPromise.prototype._react = react;
+});
+Adapter.run(() => new XPromise());
