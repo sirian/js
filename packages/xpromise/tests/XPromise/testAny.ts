@@ -2,8 +2,8 @@ import {XPromise} from "../../src";
 
 describe("XPromise.any", function() {
 
-    test("should handle []", async function() {
-        expect(await XPromise.any([])).toStrictEqual([]);
+    test("should handle []", function() {
+        expect(XPromise.any([])).rejects.toThrow(new AggregateError([], "All promises were rejected"));
     });
 
     test("should handle [success, failure]", async () => {

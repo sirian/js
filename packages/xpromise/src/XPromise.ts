@@ -1,4 +1,4 @@
-import {Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
+import {ArrayRO, Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
 
 export type OnFulfill<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
 export type OnReject<R> = undefined | null | ((reason: any) => R | PromiseLike<R>);
@@ -6,10 +6,8 @@ export type OnFinally = undefined | null | (() => any);
 export type Resolver<T> = (value?: T | PromiseLike<T>) => void;
 export type Rejector = (reason?: any) => void;
 export type PromiseExecutor<T> = (resolve: Resolver<T>, reject: Rejector) => void;
-export type AllSettled<T extends any[]> = {
-    [P in keyof T]:
-    { status: "fulfilled", value: Awaited<T[P]> } |
-    { status: "rejected", reason: any }
+export type AllSettled<T extends ArrayRO> = {
+    [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>
 };
 
 export interface IDeferred<T> {
@@ -60,13 +58,14 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
             const promises = [...it];
 
             const length = promises.length;
+            const errors: any[] = [];
+            const rejectAll = () => reject(new AggregateError(errors, "All promises were rejected"));
 
             if (!length) {
-                return resolve([] as any);
+                return rejectAll();
             }
 
             let rejectedCount = 0;
-            const errors: any[] = [];
 
             for (let i = 0; i < length; i++) {
                 const promise = promises[i];
@@ -74,7 +73,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
                 const onRejected = (error: any) => {
                     errors[i] = error;
                     if (++rejectedCount === length) {
-                        reject(new AggregateError(errors, "All promises were rejected"));
+                        rejectAll();
                     }
                 };
 
@@ -97,7 +96,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         return new XPromise((resolve, reject) => reject(reason));
     }
 
-    public static all<T extends any[]>(promises: T) {
+    public static all<T extends ArrayRO>(promises: T) {
         return new XPromise<AwaitedArray<T>>((resolve, reject) => {
             const length = promises.length;
 
@@ -107,15 +106,15 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
             let fulfilledCount = 0;
 
-            const results: any[] = [];
+            const results: any = [];
 
             for (let i = 0; i < length; i++) {
                 const promise = promises[i];
 
-                const onFulfilled = (val: Awaited<T[number]>) => {
+                const onFulfilled = (val: any) => {
                     results[i] = val;
                     if (++fulfilledCount === length) {
-                        resolve(results as AwaitedArray<T>);
+                        resolve(results);
                     }
                 };
 
@@ -124,20 +123,16 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         });
     }
 
-    public static allSettled<T extends any[]>(promises: T) {
-        return XPromise.wrap(() => promises
-            .map((v) => XPromise.resolve(v).then(
-                (value) => ({status: "fulfilled", value}),
-                (reason) => ({status: "rejected", reason}),
-            )))
-            .then(XPromise.all) as XPromise<AllSettled<T>>;
+    public static allSettled<T extends ArrayRO>(promises: T): XPromise<AllSettled<T>> {
+        return XPromise.all(promises.map((v) => XPromise.resolve(v).then(
+            (value) => ({status: "fulfilled", value}),
+            (reason) => ({status: "rejected", reason}),
+        ))) as any;
     }
 
-    public static race<T extends any[]>(promises: T) {
-        return new XPromise<Awaited<T[number]>>((resolve, reject) =>
-            promises.length
-            ? promises.map((p) => XPromise.resolve(p).then(resolve, reject))
-            : resolve([] as any));
+    public static race<T extends ArrayRO>(promises: T): XPromise<Awaited<T[number]>> {
+        return new XPromise<any>((resolve, reject) =>
+            [...promises].forEach((p) => XPromise.resolve(p).then(resolve, reject)));
     }
 
     public static wrap<R>(fn: () => R | PromiseLike<R>): XPromise<R> {
