@@ -1,3 +1,4 @@
+import {tryCatch} from "@sirian/common";
 import {DisposeCallback, Disposer} from "./Disposer";
 
 export type DisposerEvents = {
@@ -9,51 +10,47 @@ export type DisposerEvents = {
 
 export type DisposerEventCallback<K extends keyof DisposerEvents> = (...args: DisposerEvents[K]) => void;
 
-export class DisposerManager<D extends object = object> {
+export class DisposerManager<T extends object> {
     private readonly _disposers = new WeakMap<object, Disposer<any>>();
     private _listeners: { [P in keyof DisposerEvents]?: Set<DisposerEventCallback<any>> } = {};
 
-    public onDispose<T extends D>(target: T, callback: DisposeCallback<T>) {
+    public onDispose<U extends T>(target: T, callback: DisposeCallback<T>) {
         return this.for(target).onDispose(callback);
     }
 
-    public onDisposed<T extends D>(target: T, callback: DisposeCallback<T>) {
+    public onDisposed<U extends T>(target: U, callback: DisposeCallback<U>) {
         return this.for(target).onDisposed(callback);
     }
 
-    public setTimeout<T extends D>(target: T, ms: number) {
-        return this.for(target).setTimeout(ms);
-    }
-
-    public addChild<T extends D>(target: T, ...children: object[]) {
+    public addChild<U extends T>(target: U, ...children: object[]) {
         return this.for(target).addChild(...children);
     }
 
-    public addSource<T extends D>(target: T, ...sources: object[]) {
+    public addSource<U extends T>(target: U, ...sources: object[]) {
         return this.for(target).addSource(...sources);
     }
 
-    public isDisposed(target: D) {
+    public isDisposed(target: T) {
         return this.has(target) && this.for(target).isDisposed();
     }
 
-    public isDisposedFully(target: D) {
+    public isDisposedFully(target: T) {
         return this.has(target) && this.for(target).isDisposedFully();
     }
 
-    public isDisposing(target: D) {
+    public isDisposing(target: T) {
         return this.has(target) && this.for(target).isDisposing();
     }
 
-    public dispose(...targets: D[]) {
-        targets.forEach((t) => this.for(t).dispose());
+    public dispose(...targets: T[]) {
+        targets.forEach((t) => tryCatch(() => this.for(t).dispose()));
     }
 
-    public has(target: D) {
+    public has(target: T) {
         return this._disposers.has(target);
     }
 
-    public for<T extends D>(target: T) {
+    public for<U extends T>(target: U) {
         const disposers = this._disposers;
         if (!disposers.has(target)) {
             const disposer = new Disposer(this, target);
@@ -62,28 +59,23 @@ export class DisposerManager<D extends object = object> {
             this.emit("created", target, disposer);
         }
 
-        return disposers.get(target) as Disposer<T>;
+        return disposers.get(target) as Disposer<U>;
     }
 
-    public link(...targets: D[]) {
+    public link(...targets: T[]) {
         targets.forEach((t) => this.addChild(t, ...targets));
     }
 
-    public on<T extends keyof DisposerEvents>(event: T, callback: DisposerEventCallback<T>) {
-        (this._listeners[event] ??= new Set<DisposerEventCallback<T>>()).add(callback);
+    public on<U extends keyof DisposerEvents>(event: U, callback: DisposerEventCallback<U>) {
+        (this._listeners[event] ??= new Set<DisposerEventCallback<U>>()).add(callback);
     }
 
-    public off<T extends keyof DisposerEvents>(event: T, callback: DisposerEventCallback<T>) {
+    public off<U extends keyof DisposerEvents>(event: U, callback: DisposerEventCallback<U>) {
         this._listeners[event]?.delete(callback);
     }
 
-    public emit<T extends keyof DisposerEvents>(event: T, ...args: DisposerEvents[T]) {
-        for (const cb of this._listeners[event] ?? []) {
-            try {
-                cb(...args);
-            } catch (e) {
-            }
-        }
+    public emit<U extends keyof DisposerEvents>(event: U, ...args: DisposerEvents[U]) {
+        this._listeners[event]?.forEach((cb) => tryCatch(() => cb(...args)));
     }
 
     public offAll() {

@@ -1,3 +1,4 @@
+import {isObjectOrFunction} from "@sirian/common";
 import {Return} from "@sirian/ts-extra-types";
 import {DisposerManager} from "./DisposerManager";
 
@@ -25,9 +26,9 @@ export class Disposer<T extends object> {
     private readonly _sources: Set<Disposer<any>>;
     private _timeoutId?: Return<typeof setTimeout>;
     private _state: DisposerState = DisposerState.INITIAL;
-    private readonly _manager: DisposerManager;
+    private readonly _manager: DisposerManager<any>;
 
-    constructor(manager: DisposerManager, target: T) {
+    constructor(manager: DisposerManager<any>, target: T) {
         this.target = target;
         this._applied = new WeakSet();
         this._children = new Set();
@@ -49,6 +50,8 @@ export class Disposer<T extends object> {
 
     public clearTimeout() {
         clearTimeout(this._timeoutId);
+
+        return this;
     }
 
     public isDisposed() {
@@ -89,6 +92,7 @@ export class Disposer<T extends object> {
         }
 
         children
+            .filter(isObjectOrFunction)
             .map((c) => this._manager.for(c))
             .filter((d) => !d.isDisposed())
             .forEach((disposer) => {
