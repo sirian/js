@@ -1,9 +1,9 @@
-import {Nullish} from "@sirian/ts-extra-types";
+import {ArrayRO, Nullish} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
 import {assert} from "./Error";
 import {isFunction} from "./Is";
 import {entriesOf} from "./Obj";
-import {isPlainObject} from "./Var";
+import {compare, isPlainObject} from "./Var";
 import {XMap} from "./XMap";
 import {XWeakMap} from "./XWeakMap";
 
@@ -45,15 +45,20 @@ export const parseMapArgs = (args: any[]): [Array<[any, any]>, XMapInitializer |
     return [entries, initializer];
 };
 
-export const sortMap = <K, V>(map: Map<K, V>, compareFn: (a: [K, V], b: [K, V]) => number) => {
-    const entries = [...map.entries()].sort(compareFn);
-
+export const setMapEntries = <K, V>(map: Map<K, V>, entries: ArrayRO<readonly [K, V]>) => {
     map.clear();
-
-    entries.forEach(([key, value]) => map.set(key, value));
-
+    entries.forEach(([k, v]) => map.set(k, v));
     return map;
 };
+
+export const sortMap = <K, V>(map: Map<K, V>, compareFn: (a: [K, V], b: [K, V]) => number) =>
+    setMapEntries(map, [...map.entries()].sort(compareFn));
+
+export const sortMapBy = <K, V>(map: Map<K, V>, fn: (k: K, v: V) => any) =>
+    setMapEntries(map, [...map.entries()]
+        .map(([k, v]) => [fn(k, v), [k, v]] as const)
+        .sort((a, b) => compare(a[0], b[0]))
+        .map((a) => a[1]));
 
 export const pickMap: {
     <K, V>(map: IMapMini<K, V>, key: K, throws: true): V;

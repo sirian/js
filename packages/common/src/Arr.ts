@@ -94,9 +94,9 @@ export const arrChunk = (value: any[], size: number) => {
     return result;
 };
 
-export const sortBy = <T>(array: T[], fn: (v: T) => any) => {
+export const sortBy = <T>(array: T[], fn: (v: T, i: number) => any) => {
     [...array]
-        .map((v) => [fn(v), v])
+        .map((v, i) => [fn(v, i), v] as const)
         .sort((a, b) => compare(a[0], b[0]))
         .forEach((x, i) => array[i] = x[1]);
 

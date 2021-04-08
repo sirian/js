@@ -1,6 +1,6 @@
 import {fromEntries} from "./Obj";
 import {isEqual} from "./Var";
-import {ensureMap, parseMapArgs, pickMap, sortMap, XMapInitializer, XMapSource} from "./XUtils";
+import {ensureMap, parseMapArgs, pickMap, sortMap, sortMapBy, XMapInitializer, XMapSource} from "./XUtils";
 
 export class XMap<K = any, V = any> extends Map<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;
@@ -20,6 +20,11 @@ export class XMap<K = any, V = any> extends Map<K, V> {
 
     public sort(compareFn: (a: [K, V], b: [K, V]) => number) {
         sortMap(this, compareFn);
+        return this;
+    }
+
+    public sortBy(fn: (k: K, v: V) => any) {
+        sortMapBy(this, fn);
         return this;
     }
 
