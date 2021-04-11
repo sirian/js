@@ -3,7 +3,9 @@ import {Overwrite} from "./object";
 import {ArrayRO, LastElement, Length, TupleGet} from "./tuple";
 import {IsExact} from "./types";
 
+export type AbstractCtor<T = any, A extends ArrayRO = any[]> = abstract new (...args: A) => T;
 export type Ctor<T = any, A extends ArrayRO = any[]> = new(...args: A) => T;
+export type AnyCtor<T = any, A extends ArrayRO = any[]> = AbstractCtor<T, A> | Ctor<T, A>;
 export type Ctor0<T = any> = Ctor<T, []>;
 export type Ctor1<T = any, A = any> = Ctor<T, [A]>;
 export type Ctor2<T = any, A = any, B = any> = Ctor<T, [A, B]>;
@@ -11,7 +13,7 @@ export type Ctor2<T = any, A = any, B = any> = Ctor<T, [A, B]>;
 export type Newable<T = any> = Overwrite<NewableFunction, { prototype: T }>;
 
 export type Instance<T> =
-    T extends Ctor<infer R> ? R :
+    T extends AbstractCtor<infer R> | Ctor<infer R> ? R :
     T extends { prototype: infer P } ? P :
     never;
 
