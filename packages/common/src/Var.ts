@@ -1,4 +1,4 @@
-import {Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
+import {AnyCtor, Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
 import {getType, isArray, isFunction, isNumber, isObject, isString, isType} from "./Is";
 import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./Ref";
 
@@ -16,7 +16,7 @@ export const isConstructor = <T>(value: T): value is Extract<T, Newable> =>
 export const isNumeric = (value: any): value is string | number =>
     isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
 
-export const isInstanceOf = <C extends Array<Ctor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
+export const isInstanceOf = <C extends Array<AnyCtor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
     ctor.some((c) => isFunction(c) && (obj instanceof c));
 
 export const isEqualNaN = (value: any): value is number => value !== value;
@@ -56,7 +56,7 @@ export const isAsyncIterable = (value: any): value is AsyncIterable<any> =>
 export const isIterable = (value: any): value is Iterable<any> =>
     hasMethod(value, Symbol.iterator);
 
-export const instanceOfGuard = <C extends Array<Ctor | Newable>>(...ctor: C) =>
+export const instanceOfGuard = <C extends Array<AnyCtor | Newable>>(...ctor: C) =>
     (value: any): value is Instance<C[number]> => isInstanceOf(value, ...ctor);
 
 export const isRegExp = (value: any): value is RegExp => isInstanceOf(value, RegExp);

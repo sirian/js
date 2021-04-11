@@ -166,3 +166,5 @@ export const strWrap = (value: any, wrapChar: string, escapeChar: string = "\\")
 
     return wrapChar + escaped + wrapChar;
 };
+
+export const strGraphemes = (str: any) => stringifyVar(str).match(/(\P{M}\p{M}*)/gu) || [];
