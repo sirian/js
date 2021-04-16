@@ -1,2 +1,3 @@
-export * from "./StrFormat";
-export * from "./TagString";
+export * from "./dedent";
+export * from "./stringifyTagString";
+export * from "./tagString";

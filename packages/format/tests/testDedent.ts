@@ -1,6 +1,4 @@
-import {StrFormat} from "../../src";
-
-const dedent = StrFormat.dedent;
+import {dedent} from "../src";
 
 test("", () => {
     expect(dedent`foo`).toBe("foo");
@@ -42,6 +40,10 @@ test("", () => {
     expect(dedent` foo
     bar
         zoo`).toBe(" foo\nbar\n    zoo");
+
+    expect(dedent`foo\n\tbar`).toBe("foo\n\tbar");
+    expect(dedent("foo\n\tbar")).toBe("foo\nbar");
+    expect(dedent(" foo\n\tbar")).toBe("foo\nbar");
 
     expect(dedent`foo\n\tbar`).toBe("foo\n\tbar");
 
