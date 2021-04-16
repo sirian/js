@@ -14,3 +14,10 @@ export type StrJoin<T extends string[], S extends string = ""> =
 export type StrLength<T extends string> = Length<StrToArray<T>>;
 
 export type StrReverse<T extends string> = T extends `${infer A}${infer B}` ? `${StrReverse<B>}${A}` : T;
+
+export interface TemplateStringsLike {
+    readonly [n: number]: string;
+
+    readonly length: number;
+    raw?: readonly string[];
+}
