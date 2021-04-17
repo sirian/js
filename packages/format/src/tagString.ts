@@ -1,5 +1,6 @@
 import {isObject} from "@sirian/common";
 import {TemplateStringsLike} from "@sirian/ts-extra-types";
+import {stringifyTagString} from "./stringifyTagString";
 
 export interface TagString {
     strings: string[];
@@ -16,7 +17,7 @@ export const tagString = (input: TemplateStringsLike, ...values: any[]): TagStri
         raw: Array.from((input as any).raw ?? input),
         values,
         toString() {
-            return this.strings.reduce((res, str, i) => res + String(values[i - 1]) + str);
+            return stringifyTagString(this.strings, ...this.values);
         },
     })
     : tagString([input], ...values);
