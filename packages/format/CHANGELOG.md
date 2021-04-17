@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/sirian/js/compare/@sirian/format@1.0.64...@sirian/format@1.1.0) (2021-04-17)
+
+
+### Features
+
+* **format:** dedent, tagString, stringifyTagString ([598d026](https://github.com/sirian/js/commit/598d0268708a7194864ba6f51998ba31244ea43b))
+
+
+
+
+
 ## [1.0.64](https://github.com/sirian/js/compare/@sirian/format@1.0.63...@sirian/format@1.0.64) (2021-03-31)
 
 **Note:** Version bump only for package @sirian/format

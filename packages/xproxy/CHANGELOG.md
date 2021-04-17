@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.34](https://github.com/sirian/js/compare/@sirian/xproxy@1.5.33...@sirian/xproxy@1.5.34) (2021-04-17)
+
+**Note:** Version bump only for package @sirian/xproxy
+
+
+
+
+
 ## [1.5.33](https://github.com/sirian/js/compare/@sirian/xproxy@1.5.32...@sirian/xproxy@1.5.33) (2021-03-31)
 
 **Note:** Version bump only for package @sirian/xproxy

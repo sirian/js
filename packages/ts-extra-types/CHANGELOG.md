@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.64.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.63.0...@sirian/ts-extra-types@3.64.0) (2021-04-17)
+
+
+### Features
+
+* **ts-extra-types:** AbstractCtor ([deef85a](https://github.com/sirian/js/commit/deef85a16a73217a5911006515ad4b1cd84c4f9f))
+* **ts-extra-types:** TemplateStringsLike ([780c29f](https://github.com/sirian/js/commit/780c29f87230abdf181100d380146a58058a0f7a))
+
+
+
+
+
 # [3.63.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.62.0...@sirian/ts-extra-types@3.63.0) (2021-03-31)
 
 

@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0](https://github.com/sirian/js/compare/@sirian/common@7.1.0...@sirian/common@8.0.0) (2021-04-17)
+
+
+### patch
+
+* **common:** cleanup DescriptorType ([62190ad](https://github.com/sirian/js/commit/62190ad083b52dadf19f8e442ab3bf8c6801b52b))
+* **common:** Sprintf class to functions ([8181eef](https://github.com/sirian/js/commit/8181eef78d2d2ba9d05b93c18739763d70efc0e2))
+
+
+### BREAKING CHANGES
+
+* **common:** DescriptorType "enum" changed with "type"
+* **common:** Sprintf class deleted
+
+
+
+
+
 # [7.1.0](https://github.com/sirian/js/compare/@sirian/common@7.0.8...@sirian/common@7.1.0) (2021-03-31)
 
 
