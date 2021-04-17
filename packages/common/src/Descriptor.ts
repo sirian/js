@@ -2,40 +2,34 @@ import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get, Nullish} from "
 import {isBoolean, isFunction, isObject, isUndefined} from "./Is";
 import {defineProp, deleteProps, getDescriptor, hasAnyProp} from "./Ref";
 
-export enum DescriptorType {
-    NONE = "NONE",
-    DATA = "DATA",
-    ACCESSOR = "ACCESSOR",
-}
-
 export type DescriptorWrapper<T, V> = {
     get?(object: T, parent: () => V): V;
     set?(object: T, value: V, parent: (value: V) => void): void;
 };
 
-export const getDescriptorType = (d: any) => {
+export type DescriptorType = "accessor" | "data" | undefined;
+
+export const getDescriptorType = (d: any): DescriptorType => {
     const hasAccessor = hasAnyProp(d, ["get", "set"] as const);
-    const hasValueOrWritable = hasAnyProp(d, ["value", "writable"] as const);
+
     const bad = !isObject(d)
-        || hasAccessor && hasValueOrWritable
+        || hasAccessor && hasAnyProp(d, ["value", "writable"] as const)
         || hasAccessor && [d.get, d.set].some((v) => !isUndefined(v) && !isFunction(v))
         || [d.enumerable, d.configurable, d.writable].some((v) => !isUndefined(v) && !isBoolean(v));
 
-    if (bad) {
-        return DescriptorType.NONE;
+    if (!bad) {
+        return hasAccessor ? "accessor" : "data";
     }
-
-    return hasAccessor ? DescriptorType.ACCESSOR : DescriptorType.DATA;
 };
 
 export const isDescriptor = (d: any): d is AccessorPropertyDescriptor | DataPropertyDescriptor =>
-    DescriptorType.NONE !== getDescriptorType(d);
+    !!getDescriptorType(d);
 
 export const isAccessorDescriptor = (d: any): d is AccessorPropertyDescriptor =>
-    DescriptorType.ACCESSOR === getDescriptorType(d);
+    "accessor" === getDescriptorType(d);
 
 export const isDataDescriptor = (d: any): d is DataPropertyDescriptor =>
-    DescriptorType.DATA === getDescriptorType(d);
+    "data" === getDescriptorType(d);
 
 export const extendDescriptor: {
     <D extends TypedPropertyDescriptor<any>>(desc: PropertyDescriptor | Nullish, data: D): D;
@@ -73,18 +67,18 @@ export const wrapDescriptor: {
     <T extends object, V>(target: T, key: PropertyKey, wrapper: DescriptorWrapper<T, V>): TypedPropertyDescriptor<V>;
 } = <T extends object, K extends keyof any, V = Get<T, K>>(target: T, key: K, wrapper: DescriptorWrapper<T, V>) => {
     const desc = getDescriptor(target, key);
-    const get = wrapper.get;
-    const set = wrapper.set;
+    const getter = wrapper.get;
+    const setter = wrapper.set;
 
     const descriptor = extendDescriptor(desc, {
         get(this: T) {
             const parent = () => readDescriptor(desc, this);
-            return get ? get(this, parent) : parent();
+            return getter ? getter(this, parent) : parent();
         },
         set(this: T, value: V) {
             const parent = (v: V) => writeDescriptor(desc, this, key, v);
 
-            set ? set(this, value, parent) : parent(value);
+            setter ? setter(this, value, parent) : parent(value);
         },
     });
 
@@ -97,6 +91,7 @@ export const writeDescriptor: {
     <T, K extends keyof T>(desc: TypedPropertyDescriptor<T[K]>, object: T, key: K, value: T[K]): void;
     <T>(desc: TypedPropertyDescriptor<T>, object: any, key: PropertyKey, value: T): void;
     (desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any): void;
-} = (desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any) => {
-    desc?.set ? desc.set.call(object, value) : defineProp(object, key, extendDescriptor(desc, {value}));
-};
+} = (desc: PropertyDescriptor | undefined, object: any, key: PropertyKey, value: any) =>
+    desc?.set
+    ? desc.set.call(object, value)
+    : defineProp(object, key, extendDescriptor(desc, {value}));
