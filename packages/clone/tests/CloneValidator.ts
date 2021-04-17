@@ -1,4 +1,4 @@
-import {DescriptorType, getDescriptorType, isEqual, isPrimitive, keysOf, ownDescriptor} from "@sirian/common";
+import {getDescriptorType, isEqual, isPrimitive, keysOf, ownDescriptor} from "@sirian/common";
 import {CloneOptions, Cloner} from "../src";
 import {ValidateError} from "./ValidateError";
 
@@ -103,7 +103,7 @@ export class CloneValidator {
         return false;
     }
 
-    protected validateKey(src: object, clone: object | object, key: PropertyKey) {
+    protected validateKey(src: object, clone: object, key: PropertyKey) {
         const desc1 = ownDescriptor(src, key);
         const desc2 = ownDescriptor(clone, key);
 
@@ -111,11 +111,11 @@ export class CloneValidator {
         const type2 = getDescriptorType(desc2);
 
         if (type1 !== type2) {
-            throw new Error(`Decsriptor types mismatch. Expected ${type1}, given ${type2}`);
+            throw new Error(`Descriptor types mismatch. Expected ${type1}, given ${type2}`);
         }
 
         switch (type1) {
-            case DescriptorType.ACCESSOR:
+            case "accessor":
                 if (!isEqual(desc1!.get, desc2!.get)) {
                     throw new Error(`Descriptor "get" mismatch`);
                 }
@@ -123,7 +123,7 @@ export class CloneValidator {
                     throw new Error(`Descriptor "set" mismatch`);
                 }
                 break;
-            case DescriptorType.DATA:
+            case "data":
                 this.doValidate(desc1!.value, desc2!.value);
                 break;
             default:
