@@ -1,4 +1,4 @@
-import {entriesOf, isInstanceOf, isString, Sprintf} from "@sirian/common";
+import {entriesOf, isInstanceOf, isString, sprintf} from "@sirian/common";
 import {FormatContext} from "@sirian/logger";
 import {LogRecord} from "../LogRecord";
 import {PlaceholderToken, TagToken, TokenStream} from "../parser/token";
@@ -35,7 +35,7 @@ export abstract class LogFormatter implements ILogFormatter {
 
     public static sprintf(value: any, ph: Placeholder) {
         const format = "%" + ph.options + ph.type;
-        return new Placeholder(Sprintf.format(format, [value]), "s");
+        return new Placeholder(sprintf(format, value), "s");
     }
 
     public format(record: LogRecord): FormatContext {
