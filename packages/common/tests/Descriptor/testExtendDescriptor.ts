@@ -18,6 +18,10 @@ describe("extendDescriptor", () => {
         [{get: get1, set: set1}, {writable: false}, {...def, writable: false}],
         [{get: get1, set: set1}, {value: 2}, {...def, writable: true, value: 2}],
         [{value: null}, {}, {...defData, writable: true, value: null}],
+
+        [{...def, get: get1}, {}, {...def, get: get1}],
+        [{...def, value: 1}, {}, {...def, writable: true, value: 1}],
+        [{...def, writable: false}, {}, {...def, writable: false}],
     ];
 
     test.each(data)("Descriptor.extend(%p, %p) === %p", (desc, value, expected) => {

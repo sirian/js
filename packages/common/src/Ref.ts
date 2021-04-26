@@ -1,4 +1,4 @@
-import {AnyKey, ArrayRO, Ensure, Func, Func0, Func1, Get, Newable} from "@sirian/ts-extra-types";
+import {AnyKey, ArrayRO, Ensure, Func, Func0, Func1, Get, Newable, Nullish} from "@sirian/ts-extra-types";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
 import {stringifyObj} from "./Stringify";
 
@@ -119,12 +119,12 @@ export const setProp: {
     <V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
     (target: any, key: PropertyKey, value: any): boolean;
 } = (target: any, key: PropertyKey, value: any) =>
-    isObjectOrFunction(target) && Reflect.set(target, key, value);
+    isObjectOrFunction(target) && tryCatch(() => (target as any)[key] = value);
 
-export const deleteProp = <T>(target: T, key: (keyof T) | PropertyKey) =>
-    tryCatch(() => delete (target as any)[key], false);
+export const deleteProp = <T, K extends keyof T>(target: T, key: K | PropertyKey) =>
+    !isNullish(target) && tryCatch(() => delete (target as any)[key], false);
 
-export const deleteProps = <T, K extends keyof T>(target: T, keys: ArrayRO<K>) =>
+export const deleteProps = <T, K extends keyof T>(target: T | Nullish, ...keys: ArrayRO<K | PropertyKey>) =>
     keys.forEach((key) => deleteProp(target, key));
 
 export const isPropWritable = (target: any, property: PropertyKey) => {

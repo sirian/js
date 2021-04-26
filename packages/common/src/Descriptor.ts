@@ -33,27 +33,26 @@ export const isDataDescriptor = (d: any): d is DataPropertyDescriptor =>
 
 export const extendDescriptor: {
     <D extends TypedPropertyDescriptor<any>>(desc: PropertyDescriptor | Nullish, data: D): D;
-    (desc: PropertyDescriptor | Nullish, data: PropertyDescriptor): PropertyDescriptor;
-} = (desc: PropertyDescriptor | Nullish, newDesc: PropertyDescriptor = {}) => {
+    (desc: PropertyDescriptor | Nullish, data: PropertyDescriptor | Nullish): PropertyDescriptor;
+} = (desc: PropertyDescriptor | Nullish, newDesc: PropertyDescriptor | Nullish = {}) => {
     desc = {
         configurable: true,
         enumerable: false,
-        writable: true,
-        ...desc,
-    };
-
-    if (hasAnyProp(newDesc, ["get", "set"] as const)) {
-        deleteProps(desc, ["value", "writable"] as const);
-    }
-
-    if (hasAnyProp(newDesc, ["value", "writable"] as const)) {
-        deleteProps(desc, ["get", "set"] as const);
-    }
-
-    return {
         ...desc,
         ...newDesc,
     };
+
+    if (hasAnyProp(newDesc, ["get", "set"])) {
+        deleteProps(desc, "value", "writable");
+    }
+    if (hasAnyProp(newDesc, ["value", "writable"])) {
+        deleteProps(desc, "get", "set");
+    }
+    if (!hasAnyProp(desc, ["get", "set"])) {
+        desc.writable ??= true;
+    }
+
+    return desc;
 };
 
 export const readDescriptor: {

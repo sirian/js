@@ -11,9 +11,18 @@ import {
     ObjValueOf,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {uniq} from "./Arr";
 import {isArray} from "./Is";
-import {deleteProp, getObjectTag, getPrototypes, hasOwn, hasProp, ownDescriptor, ownKeys, ownNames} from "./Ref";
+import {
+    deleteProp,
+    deleteProps,
+    getObjectTag,
+    getPrototypes,
+    hasOwn,
+    hasProp,
+    ownDescriptor,
+    ownKeys,
+    ownNames,
+} from "./Ref";
 
 export interface SnapshotOptions {
     maxDepth?: number;
@@ -36,12 +45,18 @@ export const fromEntries = <E extends Iterable<Entry>>(entries: E) =>
 export const objMap = <T, E extends Entry>(obj: T, fn: <K extends keyof T>(k: K, v: T[K]) => E | false) =>
     fromEntries(entriesOf(obj).map(([k, v]: any) => fn(k, v)).filter(isArray) as E[]);
 
-export const pick = <T, K extends keyof T>(target: T, keys: Iterable<K>) => {
-    const entries = uniq(keys)
+export const pickEntries = <T, K extends keyof T>(target: T, keys: Iterable<K>) =>
+    [...keys]
         .filter((k) => hasProp(target, k))
         .map((k) => [k, target[k]] as [K, T[K]]);
 
-    return fromEntries(entries) as Pick<T, K>;
+export const pick = <T, K extends keyof T>(target: T, keys: Iterable<K>) =>
+    fromEntries(pickEntries(target, keys)) as Pick<T, K>;
+
+export const omit = <T, K extends keyof T>(target: T, keys: Iterable<K>) => {
+    target = {...target};
+    deleteProps(target, ...keys);
+    return target;
 };
 
 export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is ExtractByObjectTag<O, T> =>
