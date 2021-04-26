@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.25](https://github.com/sirian/js/compare/@sirian/lzf@1.3.24...@sirian/lzf@1.3.25) (2021-04-26)
+
+**Note:** Version bump only for package @sirian/lzf
+
+
+
+
+
 ## [1.3.24](https://github.com/sirian/js/compare/@sirian/lzf@1.3.23...@sirian/lzf@1.3.24) (2021-04-17)
 
 **Note:** Version bump only for package @sirian/lzf
