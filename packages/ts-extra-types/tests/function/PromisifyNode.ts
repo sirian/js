@@ -15,3 +15,5 @@ type Test = [
     AssertExact<(x: 1, y: 2) => Promise<2>,
         PromisifyNode<(x: 1, y: 2, c: Callback<2>) => void>>
 ];
+
+export default Test;

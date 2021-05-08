@@ -9,3 +9,5 @@ type Test = [
     AssertNotExtends<Func, NotFunc>,
     AssertNotExtends<FunctionConstructor, NotFunc>
 ];
+
+export default Test;

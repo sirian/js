@@ -38,3 +38,5 @@ type Test = [
 
     AssertExact<"y" | "z", TypedKeyOf<{ x: number; y: string; z: boolean | string }, boolean | string>>
 ];
+
+export default Test;

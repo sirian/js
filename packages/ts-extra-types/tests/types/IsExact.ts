@@ -72,3 +72,5 @@ type Test = [
     MustBeFalse<IsExact<{ x?: 1 | null }, { x: 1 | null | undefined }>>,
     AssertExact<[number] | [string, boolean] | [object?], [number] | [string, boolean] | [x?: (object | undefined)]>,
 ];
+
+export default Test;

@@ -9,3 +9,5 @@ type Test = [
     AssertNotExtends<(x: number, y: any) => boolean, Predicate<number>>,
     AssertNotExtends<(x: number) => boolean, Predicate<string>>
 ];
+
+export default Test;

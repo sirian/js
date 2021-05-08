@@ -19,3 +19,5 @@ type Test = [
     AssertExact<{ x: 1 }, Widen<{ x: 1 }>>,
     AssertExact<Number, Widen<Number>>
 ];
+
+export default Test;

@@ -11,3 +11,5 @@ type Test = [
     AssertExact<{ [id: number]: 2 }, ObjectZip<number[], 2[]>>,
     AssertExact<{ [id: number]: 2, x: 1 }, ObjectZip<["x", ...number[]], [1, ...2[]]>>,
 ];
+
+export default Test;

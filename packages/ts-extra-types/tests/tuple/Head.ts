@@ -18,3 +18,5 @@ type Test = [
 
     AssertExact<number, Head<[number, string, boolean]>>
 ];
+
+export default Test;

@@ -49,3 +49,5 @@ type Test = [
     AssertExact<0, Get<{ "0": 0 }, "0">>,
     AssertExact<never, Get<{ "0": 0 }, "1">>
 ];
+
+export default Test;

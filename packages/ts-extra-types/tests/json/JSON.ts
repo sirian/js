@@ -14,3 +14,5 @@ type Test = [
 
     AssertExact<3, Extract<({ foo: "bar" } | 3), JSONPrimitive>>,
 ];
+
+export default Test;

@@ -19,3 +19,5 @@ type Test = [
 
     AssertExact<never, TupleKeyOf<number[]>>
 ];
+
+export default Test;

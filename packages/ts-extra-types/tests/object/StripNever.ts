@@ -7,3 +7,5 @@ type Test = [
     AssertExact<{ y?: number }, OmitNever<{ x: never, y?: number | never }>>,
     AssertExact<{}, OmitNever<{ x: true & false }>>
 ];
+
+export default Test;

@@ -7,3 +7,5 @@ type Test = [
     AssertExact<Xor<false, true>, true>,
     AssertExact<Xor<false, true>, true>
 ];
+
+export default Test;

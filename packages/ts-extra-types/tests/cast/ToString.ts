@@ -15,3 +15,5 @@ type Test = [
     AssertExact<"9", KeyToString<"9">>,
     AssertExact<string, KeyToString<string>>,
 ];
+
+export default Test;

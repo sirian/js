@@ -36,3 +36,5 @@ type Test = [
     AssertExact<OverloadedInstance<Zoo, []>, Baz>,
     AssertExact<OverloadedInstance<Zoo, [3]>, Bar>,
 ];
+
+export default Test;

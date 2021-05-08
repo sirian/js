@@ -11,3 +11,5 @@ type Test = [
 
     AssertExact<{ a: 1, b: boolean }, FromEntry<["a", 1] | ["b", boolean]>>
 ];
+
+export default Test;

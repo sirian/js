@@ -11,3 +11,5 @@ type Test = [
     MustBeTrue<IsOptionalKey<Foo, "y">>,
     MustBeFalse<IsOptionalKey<Foo, "z">>
 ];
+
+export default Test;

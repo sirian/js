@@ -26,3 +26,5 @@ type Test = [
     AssertExact<never, ExtractByXTypeName<AnyType, never>>,
     AssertExact<never, ExtractByXTypeName<never, XTypeName>>
 ];
+
+export default Test;

@@ -15,3 +15,5 @@ type Test = [
     AssertExact<string, OptionalKeys<Partial<Record<string, any>>>>,
     AssertExact<"x" | "z", OptionalKeys<{ x?: string, y: number, z?: string }>>
 ];
+
+export default Test;

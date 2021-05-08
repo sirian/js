@@ -16,3 +16,5 @@ type Test = [
     AssertExact<never, MatchingKeys<{ x?: 1 }, { x: 1 | undefined }>>,
     AssertExact<"x", MatchingKeys<{ x?: 1 }, { x?: 1 | undefined }>>
 ];
+
+export default Test;

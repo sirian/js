@@ -12,3 +12,5 @@ type Test = [
     AssertExact<TypedPropertyDescriptor<boolean | undefined>, PickDescriptor<Foo, "z">>,
     AssertExact<PropertyDescriptor | undefined, PickDescriptor<Foo, "a">>
 ];
+
+export default Test;

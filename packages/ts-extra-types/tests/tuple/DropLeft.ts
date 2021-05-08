@@ -19,3 +19,5 @@ type Test = [
     AssertExact<[boolean], DropLeft<2, [number, string, boolean]>>,
     AssertExact<[boolean, ...string[]], DropLeft<2, [number, string, boolean, ...string[]]>>
 ];
+
+export default Test;

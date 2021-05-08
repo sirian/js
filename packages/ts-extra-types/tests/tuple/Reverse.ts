@@ -32,3 +32,5 @@ type Test = [
 
     AssertExact<[2 | 3, 1, 3, void], Reverse<[void, 3, 1, 2 | 3]>>
 ];
+
+export default Test;

@@ -23,3 +23,5 @@ type Test = [
     AssertExact<Negate<() => "">, () => true>,
     AssertExact<Negate<() => never>, () => never>,
 ];
+
+export default Test;

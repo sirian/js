@@ -11,3 +11,5 @@ type Test = [
     AssertExact<{ [x: number]: 1 }, ArrayToObject<1[]>>,
     AssertExact<{ "0": 1 }, ArrayToObject<[1 | 2] & { 0: 1 | 3 }>>
 ];
+
+export default Test;

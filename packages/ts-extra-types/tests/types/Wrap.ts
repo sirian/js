@@ -19,3 +19,5 @@ type Test = [
     AssertExact<Number, Wrap<Number>>,
     AssertExact<BigInt, Wrap<BigInt>>
 ];
+
+export default Test;

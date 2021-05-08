@@ -20,3 +20,5 @@ type Test = [
     AssertExact<[number?], Take<1, number[]>>,
     AssertExact<[number?, number?], Take<2, number[]>>
 ];
+
+export default Test;

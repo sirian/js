@@ -1,4 +1,4 @@
-import {Args, AssertExact, OverloadedArgs, Overloads} from "../../src";
+import {Args, AssertExact, OverloadedArgs} from "../../src";
 
 type F1 = () => number;
 
@@ -18,7 +18,7 @@ type F6 = {
     (x: "5"): 5;
     (x: "6"): 6;
 };
-type Z = Overloads<F3>;
+
 type Test = [
     AssertExact<Args<F1>, []>,
     AssertExact<OverloadedArgs<F1>, []>,
@@ -32,3 +32,5 @@ type Test = [
     AssertExact<Args<F6>, ["6"]>,
     AssertExact<OverloadedArgs<F6>, ["1"] | ["2"] | ["3"] | ["4"] | ["5"] | ["6"]>
 ];
+
+export default Test;

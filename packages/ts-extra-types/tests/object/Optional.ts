@@ -9,3 +9,5 @@ type Test = [
     AssertExact<{ x?: number, y?: string }, Partialize<{ x: number, y: string }>>,
     AssertExact<{ x: number, y: string }, Partialize<{ x: number, y: string }, never>>
 ];
+
+export default Test;

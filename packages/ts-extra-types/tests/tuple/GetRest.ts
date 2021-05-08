@@ -9,3 +9,5 @@ type Test = [
     AssertExact<2[], GetRest<[1, 2?, ...2[]]>>,
     AssertExact<3[], GetRest<[1?, 2?, ...3[]]>>,
 ];
+
+export default Test;

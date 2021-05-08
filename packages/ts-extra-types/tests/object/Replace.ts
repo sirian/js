@@ -8,3 +8,5 @@ type Test = [
     AssertExact<{ x: 1, y?: 2, z: 3 }, Replace<{ x: 1, y: 4, z: 3 }, { y?: 2 }>>,
     AssertExact<{ x: 1 }, Replace<{ x: 1 }, { y?: 2 }>>
 ];
+
+export default Test;

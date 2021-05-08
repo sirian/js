@@ -13,3 +13,5 @@ type Test = [
     AssertExact<[1], DeepRequire<[1?]>>,
     AssertExact<[1, 2, [3, 4], 5], DeepRequire<[1?, 2?, [3?, 4?]?, 5?]>>,
 ];
+
+export default Test;

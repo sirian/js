@@ -17,3 +17,5 @@ type Test = [
     AssertExact<boolean, Some<[false, ...boolean[]]>>,
     AssertExact<true, Some<[boolean, ...true[]]>>
 ];
+
+export default Test;

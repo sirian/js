@@ -15,3 +15,5 @@ type Test = [
     AssertExact<number, Add<number, 2>>,
     AssertExact<number, Add<number, number>>,
 ];
+
+export default Test;

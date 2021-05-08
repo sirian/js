@@ -12,3 +12,5 @@ type Test = [
     AssertExact<1 | undefined, GetDeep<{ x?: { y?: 1 } }, ["x", "y"]>>,
     AssertExact<1, GetDeep<{ x?: { y: 1 } }, ["x", "y"]>>,
 ];
+
+export default Test;

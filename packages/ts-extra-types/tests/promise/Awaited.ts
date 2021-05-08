@@ -8,3 +8,5 @@ type Test = [
     AssertExact<number, Awaited<number>>,
     AssertExact<undefined, Awaited<Promise<void>>>,
 ];
+
+export default Test;

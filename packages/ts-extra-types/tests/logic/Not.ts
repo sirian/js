@@ -5,3 +5,5 @@ type Test = [
     AssertExact<false, Not<true>>,
     AssertExact<boolean, Not<boolean>>,
 ];
+
+export default Test;

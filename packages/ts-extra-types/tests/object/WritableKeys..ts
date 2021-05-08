@@ -33,3 +33,5 @@ type Test = [
     AssertExact<WritableKeys<[number?]>, "0" | keyof []>,
     AssertExact<WritableKeys<[number, boolean]>, "0" | "1" | keyof []>
 ];
+
+export default Test;

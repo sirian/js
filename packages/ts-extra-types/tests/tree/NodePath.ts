@@ -20,3 +20,5 @@ type Test = [
     AssertExact<NodePath<C2>, [C2, C1, Root]>,
     AssertExact<NodePath<Foo>, Foo[]>,
 ];
+
+export default Test;

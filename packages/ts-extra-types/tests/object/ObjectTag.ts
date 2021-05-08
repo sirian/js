@@ -52,3 +52,5 @@ type Test = [
 
     AssertExact<never, ObjectTag<never>>
 ];
+
+export default Test;

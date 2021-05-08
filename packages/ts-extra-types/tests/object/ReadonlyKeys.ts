@@ -33,3 +33,5 @@ type Test = [
     AssertExact<ReadonlyKeys<[number?]>, never>,
     AssertExact<ReadonlyKeys<[number, boolean]>, never>
 ];
+
+export default Test;

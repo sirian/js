@@ -10,3 +10,5 @@ type Test = [
     MustBeFalse<IsOpenTuple<[true]>>,
     MustBeFalse<IsOpenTuple<[true?]>>
 ];
+
+export default Test;

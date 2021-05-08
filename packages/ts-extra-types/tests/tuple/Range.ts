@@ -6,3 +6,5 @@ type Test = [
     AssertExact<[0, 1, 2], Range<2>>,
     AssertExact<[0, 1, 2, 3, 4, 5], Range<5>>,
 ];
+
+export default Test;

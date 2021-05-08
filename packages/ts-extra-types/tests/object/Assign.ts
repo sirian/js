@@ -11,3 +11,5 @@ type Test = [
     AssertExact<{ x: 4, y: 2, z: 3 }, Assign<{ x: 1, z: 3 }, Array<{ x: 4, y: 2 }>>>,
     AssertExact<{ x: 1 } & object, Assign<{ x: 1 }, object[]>>,
 ];
+
+export default Test;

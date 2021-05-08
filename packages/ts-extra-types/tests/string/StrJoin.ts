@@ -13,3 +13,5 @@ type Test = [
     AssertExact<string, StrJoin<string[]>>,
     AssertExact<string, StrJoin<string[], ".">>,
 ];
+
+export default Test;

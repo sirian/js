@@ -1,4 +1,4 @@
-import {AnyType, AssertExact, ExtractByObjectTag, XTypeName} from "../../src";
+import {AssertExact, ExtractByObjectTag} from "../../src";
 
 type Fn = (() => void);
 type Class = PromiseConstructor;
@@ -21,3 +21,5 @@ type Test = [
     AssertExact<undefined | void, ExtractByObjectTag<Bar, "Undefined">>,
     AssertExact<2n, ExtractByObjectTag<Bar, "BigInt">>,
 ];
+
+export default Test;

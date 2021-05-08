@@ -7,3 +7,5 @@ type Test = [
     AssertExact<["f", "o", "o"], StrToArray<"foo">>,
     AssertExact<["п", "р", "и", "в", "е", "т"], StrToArray<"привет">>,
 ];
+
+export default Test;
