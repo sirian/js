@@ -19,5 +19,3 @@ type Test = [
     AssertExact<{ x: string, z: boolean } & { y: number },
         UnionToIntersection<{ x: string, z: boolean } | { y: number }>>
 ];
-
-export default Test;

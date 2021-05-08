@@ -27,5 +27,3 @@ type Test = [
     AssertExact<never, ExtractObject<CallableInstanceCtor>>,
     AssertExact<never, ExtractObject<Instance<CallableInstanceCtor>>>
 ];
-
-export default Test;

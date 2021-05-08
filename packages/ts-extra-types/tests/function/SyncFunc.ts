@@ -20,5 +20,3 @@ type Test = [
     AssertNotExtends<() => { then: AnyFunc }, SyncFunc>,
     AssertNotExtends<() => { then: number | (() => 1) }, SyncFunc>
 ];
-
-export default Test;

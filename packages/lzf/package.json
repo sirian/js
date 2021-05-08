@@ -10,6 +10,8 @@
     "homepage": "https://github.com/sirian/js/tree/master/packages/lzf",
     "license": "MIT",
     "files": [
+        "index.ts",
+        "src/",
         "build/"
     ],
     "main": "build/cjs/index.js",

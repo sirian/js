@@ -21,5 +21,3 @@ type Test = [
     AssertExact<{ 0: any }, MyOmit<Foo, "x" | "y" | "z">>,
     AssertExact<{}, MyOmit<Foo, keyof Foo>>
 ];
-
-export default Test;

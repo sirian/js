@@ -1,7 +1,7 @@
 import {ArgLast, AssertExact} from "../../src";
 
 type Test = [
-    AssertExact<undefined, ArgLast<() => boolean>>,
+    AssertExact<undefined, ArgLast<() => string>>,
 
     AssertExact<string, ArgLast<(x: string) => true>>,
 
@@ -15,5 +15,3 @@ type Test = [
 
     AssertExact<Date, ArgLast<(x: string, y: boolean, z: Date) => true>>
 ];
-
-export default Test;

@@ -16,5 +16,3 @@ type Test = [
     AssertExact<number, Inc<100>>,
     AssertExact<number, Inc<number>>
 ];
-
-export default Test;

@@ -29,5 +29,3 @@ type Test = [
     AssertExact<{ x: number | string, y: number }, MyPick<Foo, "y" | "x">>,
     AssertExact<{ z?: boolean | null }, MyPick<Foo, "z">>
 ];
-
-export default Test;

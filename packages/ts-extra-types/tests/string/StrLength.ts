@@ -7,5 +7,3 @@ type Test = [
     AssertExact<1 | 2, StrLength<"x" | "xx">>,
     AssertExact<number, StrLength<string>>,
 ];
-
-export default Test;

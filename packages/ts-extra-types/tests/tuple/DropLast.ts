@@ -13,5 +13,3 @@ type Test = [
     AssertExact<[1, 2, ...3[]], DropLast<[1, 2, ...3[]]>>,
     AssertExact<[2, ...1[]], DropLast<[2, ...1[]]>>,
 ];
-
-export default Test;

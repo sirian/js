@@ -68,20 +68,22 @@ for (let i = 0; i < dirs.length; i++) {
     const tsConfigFile = path.resolve(pkgDir, `tsconfig.json`);
     const tmpDir = path.relative(pkgDir, rootDir) + "/tmp";
 
-    const cfg = JSON.parse(fs.readFileSync(tsConfigFile, "utf-8"));
+    const tsConfig = fs.readFileSync(tsConfigFile, "utf-8");
+
+    const cfg = JSON.parse(tsConfig);
+    const compilerOptions = {
+        ...cfg.compilerOptions,
+        module: types[type],
+        outDir: `build/${type}`,
+        declarationDir: "build/types",
+        tsBuildInfoFile: `${tmpDir}/${pkgDirName}.tsbuildinfo`,
+    };
 
     const newCfg = {
         ...cfg,
         extends: "../../tsconfig.base.json",
         include: ["src"],
-        compilerOptions: {
-            ...cfg.compilerOptions,
-            module: types[type],
-            rootDir: "src",
-            outDir: `build/${type}`,
-            declarationDir: "build/types",
-            tsBuildInfoFile: `${tmpDir}/${pkgDirName}.tsbuildinfo`,
-        },
+        compilerOptions,
         references,
     };
 

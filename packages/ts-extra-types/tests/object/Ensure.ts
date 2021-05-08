@@ -34,5 +34,3 @@ type Test = [
     AssertExact<number | { toFixed?: (() => any), toPrecision: unknown },
         Ensure<null | number | { toFixed?: () => any }, "toPrecision">>
 ];
-
-export default Test;

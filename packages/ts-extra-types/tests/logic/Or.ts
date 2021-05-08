@@ -14,5 +14,3 @@ type Test = [
     AssertExact<boolean, Or<false, boolean>>,
     AssertExact<boolean, Or<boolean, boolean>>
 ];
-
-export default Test;

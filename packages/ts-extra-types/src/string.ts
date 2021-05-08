@@ -9,7 +9,7 @@ export type StrJoin<T extends string[], S extends string = ""> =
     T extends [] ? "" :
     T extends [infer H] ? H :
     IsOpenTuple<T> extends true ? string :
-    `${Head<T>}${S}${StrJoin<Tail<T>>}`;
+    `${Head<T>}${S}${StrJoin<Tail<T>, S>}`;
 
 export type StrLength<T extends string> = Length<StrToArray<T>>;
 

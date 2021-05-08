@@ -8,5 +8,3 @@ type Test = [
     AssertExact<number, ExpandKey<number>>,
     AssertExact<"0" | number, ExpandKey<"0" | number>>,
 ];
-
-export default Test;

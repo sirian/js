@@ -10,5 +10,3 @@ type Test = [
     AssertExact<false, IsWide<true>>,
     AssertExact<false, IsWide<false>>
 ];
-
-export default Test;

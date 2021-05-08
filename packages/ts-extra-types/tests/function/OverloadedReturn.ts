@@ -26,5 +26,3 @@ type Test = [
     AssertExact<never, OverloadedReturn<F3, [string]>>,
     AssertExact<object, OverloadedReturn<F3, [string, true]>>
 ];
-
-export default Test;

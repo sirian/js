@@ -20,5 +20,3 @@ type Test = [
     AssertExact<[6], Slice<[1, 2, 3, 4, 5, 6], 5, 2>>,
     AssertExact<[4, 5, 6], Slice<[1, 2, 3, 4, 5, 6], 3>>
 ];
-
-export default Test;

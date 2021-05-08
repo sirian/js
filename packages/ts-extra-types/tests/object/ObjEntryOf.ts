@@ -21,5 +21,3 @@ type Test = [
 
     AssertExact<ObjEntryOf<Record<string, boolean>>, [string, boolean]>
 ];
-
-export default Test;

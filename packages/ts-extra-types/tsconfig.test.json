@@ -1,0 +1,14 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "incremental": false,
+        "composite": false,
+        "rootDirs": [
+            "src",
+            "tests"
+        ],
+        "noUnusedLocals": false,
+        "noEmit": true
+    },
+    "include": ["src", "tests"]
+}

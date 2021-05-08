@@ -7,5 +7,3 @@ type Test = [
     AssertExact<1[], AwaitedArray<Array<Promise<1>>>>,
     AssertExact<[2, ...1[]], AwaitedArray<[2, ...Array<Promise<1>>]>>,
 ];
-
-export default Test;

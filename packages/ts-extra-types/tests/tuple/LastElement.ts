@@ -14,5 +14,3 @@ type Test = [
     AssertExact<1 | 2 | undefined, LastElement<[1?, ...2[]]>>,
     AssertExact<1 | 2, LastElement<[1, ...2[]]>>
 ];
-
-export default Test;

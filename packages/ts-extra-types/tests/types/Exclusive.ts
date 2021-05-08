@@ -7,5 +7,3 @@ type Test = [
     AssertExact<Exclusive<Foo, Bar>, Foo & { z?: never } | Bar & { x?: never, y: boolean }>,
     AssertExact<Exclusive<Foo, Bar>, Foo & { z?: never } | Bar & { x?: never, y: boolean }>
 ];
-
-export default Test;

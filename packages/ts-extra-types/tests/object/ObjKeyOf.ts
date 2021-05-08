@@ -8,5 +8,3 @@ type Test = [
     AssertExact<`${number}`, ObjKeyOf<1[]>>,
     AssertExact<"0" | "2" | "length", ObjKeyOf<{ 0: 1, "2": 2, length: 3 }>>
 ];
-
-export default Test;

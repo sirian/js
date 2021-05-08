@@ -15,5 +15,3 @@ type Test = [
     AssertExact<9, KeyToNumber<9>>,
     AssertExact<number, KeyToNumber<number>>
 ];
-
-export default Test;

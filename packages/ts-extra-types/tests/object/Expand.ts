@@ -14,5 +14,3 @@ type Test = [
     AssertExact<{ 0: 1 } & { "0": 1 } & { [x: number]: 1 | 2 }, Expand<ArrayToObject<[1, ...2[]]>>>,
     AssertExact<{ [id: number]: true } & { [id: number]: true }, Expand<ArrayToObject<true[]>>>
 ];
-
-export default Test;

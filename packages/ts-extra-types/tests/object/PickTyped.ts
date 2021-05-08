@@ -38,5 +38,3 @@ type Test = [
 
     AssertExact<{ x: true, y: string, z: boolean }, PickTyped<{ x: true; y: string; z: boolean }, boolean | string>>
 ];
-
-export default Test;

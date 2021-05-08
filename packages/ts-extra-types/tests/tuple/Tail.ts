@@ -30,5 +30,3 @@ type Test = [
     AssertExact<Tail<1[]>, 1[]>,
     AssertExact<Tail<readonly 1[]>, readonly 1[]>,
 ];
-
-export default Test;

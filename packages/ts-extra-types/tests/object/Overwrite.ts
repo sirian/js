@@ -9,5 +9,3 @@ type Test = [
     AssertExact<{ x: 2, y?: 3 }, Overwrite<{ x: 1 }, { x: 2, y?: 3 }>>,
     AssertExact<{ x: 2, y?: 3 }, Overwrite<{ x: 1 }, { x: 2, y?: 3 }>>
 ];
-
-export default Test;

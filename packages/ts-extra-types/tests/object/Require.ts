@@ -16,5 +16,3 @@ type Test = [
     AssertExact<{ name: "test", x: number, z: string },
         Require<{ name?: "test", x?: number, z: string }>>,
 ];
-
-export default Test;

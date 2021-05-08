@@ -32,5 +32,3 @@ type Test = [
     AssertExact<Args<F6>, ["6"]>,
     AssertExact<OverloadedArgs<F6>, ["1"] | ["2"] | ["3"] | ["4"] | ["5"] | ["6"]>
 ];
-
-export default Test;

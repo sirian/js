@@ -33,5 +33,3 @@ type Test = [
     AssertExact<OverloadedCtorArgs<typeof Baz>, [number] | [string, boolean] | [object?]>,
     AssertExact<OverloadedCtorArgs<Zoo>, [2] | [3] | [1]>,
 ];
-
-export default Test;

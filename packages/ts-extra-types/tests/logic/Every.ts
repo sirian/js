@@ -15,5 +15,3 @@ type Test = [
     AssertExact<boolean, Every<[boolean]>>,
     AssertExact<false, Every<[boolean, ...false[]]>>
 ];
-
-export default Test;

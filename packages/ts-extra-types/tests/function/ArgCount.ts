@@ -37,5 +37,3 @@ type Test = [
 
     AssertExact<number, ArgCount<(x: number, y?: string, ...args: any[]) => true>>
 ];
-
-export default Test;

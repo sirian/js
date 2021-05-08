@@ -16,5 +16,3 @@ type Test = [
     MustBeFalse<IsRepeatedTuple<[1?, ...1[]]>>,
     MustBeFalse<IsRepeatedTuple<[2?, ...1[]]>>
 ];
-
-export default Test;

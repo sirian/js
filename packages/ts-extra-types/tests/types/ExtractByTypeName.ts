@@ -28,5 +28,3 @@ type Test = [
     AssertExact<never, Ex<AnyType, never>>,
     AssertExact<never, Ex<never, TypeName>>
 ];
-
-export default Test;

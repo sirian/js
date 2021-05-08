@@ -26,5 +26,3 @@ type Test = [
 
     AssertExact<string | number, ToPrimitive<Date>>
 ];
-
-export default Test;

@@ -1,12 +1,10 @@
 {
     "extends": "../../tsconfig.base.json",
     "include": [
-        "src",
-        "tests"
+        "src"
     ],
     "compilerOptions": {
-        "noEmit": true,
-        "rootDirs": ["src", "tests"],
+        "rootDir": "src",
         "outDir": "build/cjs",
         "module": "commonjs",
         "tsBuildInfoFile": "../../tmp/ts-extra-types.tsbuildinfo",

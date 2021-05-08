@@ -11,7 +11,7 @@ import {
 } from "@sirian/ts-extra-types";
 
 export const isNull = (value: any): value is null => null === value;
-export const isUndefined = (value: any): value is undefined => undefined === value;
+export const isUndefined = (value: any): value is undefined|void => undefined === value;
 export const isNullish = (value: any): value is Nullish => null == value;
 export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => !isNullish(value);
 export const getType = <T>(value: T) => typeof value as TypeNameOf<T>;

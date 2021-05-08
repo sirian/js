@@ -41,5 +41,3 @@ type Test = [
     AssertNotExtends<[true, ...true[]], Two>,
     AssertNotExtends<[true, true, ...true[]], Two>
 ];
-
-export default Test;

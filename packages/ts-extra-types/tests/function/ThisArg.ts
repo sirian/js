@@ -12,5 +12,3 @@ type Test = [
     AssertExact<Date, ThisArg<(<T extends Date>(this: T) => any)>>,
     AssertExact<unknown, ThisArg<(this: unknown) => any>>
 ];
-
-export default Test;

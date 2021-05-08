@@ -11,5 +11,3 @@ type Test = [
     AssertExact<3, Length<{length: 3}>>,
     AssertExact<number, Length<number[]>>,
 ];
-
-export default Test;

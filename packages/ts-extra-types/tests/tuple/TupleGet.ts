@@ -20,5 +20,3 @@ type Test = [
     AssertExact<number | undefined, TupleGet<number[], 0>>,
     AssertExact<number | undefined, TupleGet<number[], 1>>,
 ];
-
-export default Test;

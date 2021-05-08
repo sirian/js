@@ -9,5 +9,3 @@ type Test = [
     MustBeFalse<IsFiniteTuple<[number?, ...number[]]>>,
     MustBeFalse<IsFiniteTuple<number[]>>
 ];
-
-export default Test;

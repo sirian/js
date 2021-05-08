@@ -9,5 +9,3 @@ type Test = [
     AssertExact<Record<number, 1>, GetIndexSignature<Record<number, 1>>>,
     AssertExact<Record<string, 2>, GetIndexSignature<Record<string, 2>>>
 ];
-
-export default Test;

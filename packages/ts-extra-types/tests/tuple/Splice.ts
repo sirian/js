@@ -16,5 +16,3 @@ type Test = [
     AssertExact<[2, ...3[]], Splice<[1, 2, ...3[]], 0, 1>>,
     AssertExact<3[], Splice<[1, 2, ...3[]], 0, 2>>
 ];
-
-export default Test;

@@ -13,5 +13,3 @@ type Test = [
     AssertExact<"foo" | "bar", RequiredKeys<Record<"foo" | "bar", any>>>,
     AssertExact<"y", RequiredKeys<{ x?: string, y: number, z?: string }>>
 ];
-
-export default Test;

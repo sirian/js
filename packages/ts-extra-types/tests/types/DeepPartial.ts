@@ -13,5 +13,3 @@ type Test = [
     AssertExact<[1?], DeepPartial<[1?]>>,
     AssertExact<[1?, 2?, [3?, 4?]?, 5?], DeepPartial<[1?, 2?, [3?, 4?]?, 5?]>>,
 ];
-
-export default Test;

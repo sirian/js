@@ -5,5 +5,3 @@ type Test = [
     AssertExact<Array<number | string>, IterableToArray<Iterable<number | string>>>,
     AssertExact<Array<readonly [AnyKey, number]>, IterableToArray<Iterable<readonly [AnyKey, number]>>>,
 ];
-
-export default Test;

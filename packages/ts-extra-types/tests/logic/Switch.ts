@@ -39,5 +39,3 @@ type Test = [
         FalseCase<5>
     ]>>
 ];
-
-export default Test;

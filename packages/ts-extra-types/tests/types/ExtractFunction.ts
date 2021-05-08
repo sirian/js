@@ -26,5 +26,3 @@ type Test = [
     AssertExact<CallableInstanceCtor, ExtractFunction<CallableInstanceCtor>>,
     AssertExact<CallableInstance, ExtractFunction<Instance<CallableInstanceCtor>>>
 ];
-
-export default Test;

@@ -17,5 +17,3 @@ type Test = [
 
     AssertExact<{ a: number | undefined }, FromEntries<Array<["a", number | undefined]>>>
 ];
-
-export default Test;

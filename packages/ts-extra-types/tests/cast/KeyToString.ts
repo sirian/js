@@ -17,5 +17,3 @@ type Test = [
     AssertExact<"100", KeyToString<"100">>,
     AssertExact<string, KeyToString<string>>,
 ];
-
-export default Test;

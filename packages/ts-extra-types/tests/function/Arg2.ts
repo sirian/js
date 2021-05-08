@@ -15,5 +15,3 @@ type Test = [
 
     AssertExact<boolean, Arg2<(x: string, y: boolean, z: Date) => true>>
 ];
-
-export default Test;

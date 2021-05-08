@@ -57,5 +57,3 @@ type Test = [
     AssertExact<Exclude<XTypeName, "function">, XTypeNameOf<NotFunc>>,
     AssertExact<never, XTypeNameOf<never>>
 ];
-
-export default Test;

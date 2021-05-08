@@ -20,5 +20,3 @@ type Test = [
     AssertExact<NodeDepth<C2>, 2>,
     AssertExact<NodeDepth<Foo>, number>,
 ];
-
-export default Test;

@@ -10,6 +10,8 @@
     "homepage": "https://github.com/sirian/js/tree/master/packages/iterator",
     "license": "MIT",
     "files": [
+        "index.ts",
+        "src/",
         "build/"
     ],
     "main": "build/cjs/index.js",

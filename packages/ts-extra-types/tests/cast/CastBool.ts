@@ -14,5 +14,3 @@ type Test = [
     AssertExact<false, CastBool<undefined>>,
     AssertExact<false, CastBool<void>>,
 ];
-
-export default Test;

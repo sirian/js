@@ -15,5 +15,3 @@ type Test = [
     AssertNotExtends<{}, AccessorPropertyDescriptor>,
     AssertNotExtends<{ value: undefined }, AccessorPropertyDescriptor>
 ];
-
-export default Test;
