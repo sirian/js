@@ -22,9 +22,6 @@
     "publishConfig": {
         "access": "public"
     },
-    "devDependencies": {
-        "@types/node": "^14.14.31"
-    },
     "dependencies": {
         "@sirian/ts-extra-types": "^3.64.0"
     }

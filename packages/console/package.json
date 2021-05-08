@@ -35,9 +35,6 @@
         "@sirian/xpromise": "^2.12.5",
         "error-stack-parser": "^2.0.4"
     },
-    "devDependencies": {
-        "@types/node": "^14.14.31"
-    },
     "scripts": {},
     "publishConfig": {
         "access": "public"
