@@ -1,27 +1,9 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build/cjs",
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/rate-limiter.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../datetime"
-        },
-        {
-            "path": "../ts-extra-types"
-        },
-        {
-            "path": "../xpromise"
-        }
-    ]
+        "rootDir": "src"
+    }
 }

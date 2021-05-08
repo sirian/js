@@ -1,28 +1,16 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build/cjs",
         "types": [
             "node"
         ],
         "lib": [
             "esnext",
             "dom"
-        ],
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/xproxy.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../ts-extra-types"
-        }
-    ]
+        ]
+    }
 }

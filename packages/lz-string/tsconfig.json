@@ -1,14 +1,9 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build/cjs",
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/lz-string.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": []
+        "rootDir": "src"
+    }
 }

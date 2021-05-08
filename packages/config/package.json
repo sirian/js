@@ -10,8 +10,6 @@
     "homepage": "https://github.com/sirian/js/tree/master/packages/config",
     "license": "MIT",
     "files": [
-        "index.ts",
-        "src/",
         "build/"
     ],
     "main": "build/cjs/index.js",

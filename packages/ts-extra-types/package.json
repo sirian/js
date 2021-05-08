@@ -10,10 +10,9 @@
     "homepage": "https://github.com/sirian/js/tree/master/packages/ts-extra-types",
     "license": "MIT",
     "files": [
-        "index.ts",
-        "src/"
+        "build"
     ],
-    "types": "src/index.ts",
+    "types": "build/types/index.d.ts",
     "sideEffects": false,
     "scripts": {
         "test": "tsc -p tsconfig.test.json",

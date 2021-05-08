@@ -1,10 +1,14 @@
 {
+    "ts-node": {
+        "compilerOptions": {
+            "types": ["node"],
+            "noEmit": true
+        },
+        "transpileOnly": true
+    },
     "compilerOptions": {
         "target": "ESNext",
-        "module": "ESNext",
-        "lib": [
-            "esnext",
-        ],
+        "lib": ["esnext"],
         "declaration": true,
         "composite": true,
         "incremental": true,
@@ -30,11 +34,12 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "newLine": "LF",
-        "resolveJsonModule": true,
-        "inlineSourceMap": true,
-        "inlineSources": false,
-        "experimentalDecorators": true
+        "resolveJsonModule": false,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "noEmit": true
+
     },
-    "include": ["packages"],
+    "include": [],
     "exclude": ["node_modules"]
 }

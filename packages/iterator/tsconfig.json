@@ -1,21 +1,9 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build/cjs",
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/iterator.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../ts-extra-types"
-        }
-    ]
+        "rootDir": "src"
+    }
 }

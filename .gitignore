@@ -7,3 +7,5 @@ coverage/
 yarn-*.log
 npm-*.log
 tsconfig.tsbuildinfo
+packages/*/tsconfig.cjs.json
+packages/*/tsconfig.esm.json

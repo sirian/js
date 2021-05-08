@@ -21,8 +21,6 @@
         "output"
     ],
     "files": [
-        "index.ts",
-        "src/",
         "build/"
     ],
     "main": "build/cjs/index.js",

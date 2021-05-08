@@ -1,24 +1,9 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build/cjs",
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/workflow.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../event-dispatcher"
-        },
-        {
-            "path": "../ts-extra-types"
-        }
-    ]
+        "rootDir": "src"
+    }
 }

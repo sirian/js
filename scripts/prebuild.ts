@@ -1,91 +1,105 @@
 import * as proc from "child_process";
 import * as fs from "fs";
-import * as path from "path";
+import {Dirent} from "fs";
 
-const types = {cjs: "commonjs", esm: "esnext"};
+const debug = console.debug;
+const VALIDATE = false;
 
-const type = process.argv[2];
-
-if (!types.hasOwnProperty(type)) {
-    throw new Error("Unknown type. Should be 'cjs' or 'esm'");
-}
-
-const rootDir = path.resolve(__dirname + "/..");
+const rootDir = __dirname + "/..";
 const packagesDir = rootDir + "/packages";
-const dirs = fs.readdirSync(packagesDir, {withFileTypes: true})
-    .sort()
-    .filter((dir) => dir.isDirectory());
 
-const greenkeeper = {
-    groups: {
-        default: {
-            packages: dirs.map((dir) => `packages/${dir.name}/package.json`),
+const writeGreenkeepConfig = (dirs: Dirent[]) => {
+    const greenkeeper = {
+        groups: {
+            default: {
+                packages: dirs.map((dir) => `packages/${dir.name}/package.json`),
+            },
         },
-    },
+    };
+    fs.writeFileSync(`${rootDir}/greenkeeper.json`, JSON.stringify(greenkeeper, null, 4));
 };
 
-function yarnInfo(pkg: string) {
+const yarnInfo = (pkg: string) => {
     const args = ["info", "--json", pkg];
     const data = proc.spawnSync("yarn", args, {cwd: process.cwd()});
     const output = data.output.join("");
     return JSON.parse(output).data;
-}
+};
 
-fs.writeFileSync(`${rootDir}/greenkeeper.json`, JSON.stringify(greenkeeper, null, 4));
+const validate = (pkgName: string, version: string) => {
+    if (!VALIDATE) {
+        return;
+    }
+    const info = yarnInfo(pkgName);
 
-for (let i = 0; i < dirs.length; i++) {
-    const dir = dirs[i];
-    const pkgDirName = dir.name;
-    console.log("[%d/%d] %s", i + 1, dirs.length, pkgDirName);
-    const pkgDir = path.resolve(packagesDir, pkgDirName);
-    const packageFile = path.resolve(pkgDir, "package.json");
+    if (version !== info.version) {
+        throw new Error(`Version ${pkgName} mismatch. Remote ${info.version}, local: ${version}`);
+    }
+};
 
-    const pkg = JSON.parse(fs.readFileSync(packageFile, "utf-8"));
-
-    // const pkgName = pkg.name;
-    // const info = yarnInfo(pkgName);
-    //
-    // if (pkg.version !== info.version) {
-    //     throw new Error(`Version ${pkgName} mismatch. Remote ${info.version}, local: ${pkg.version}`);
-    // }
-
-    const deps = Object.keys({...pkg.dependencies, ...pkg.devDependencies});
-    const references = [];
-    for (const dep of deps) {
-        const match = dep.match(/^@sirian\/([^\/]+)$/);
-        if (!match) {
-            continue;
-        }
-
-        const depName = match[1];
-        const depPath = path.resolve(packagesDir, depName);
-
-        if (fs.existsSync(depPath)) {
-            references.push({path: "../" + depName});
+const writeTsConfig = (path: string, cfg: object) => {
+    const data = JSON.stringify(cfg, null, 4) + "\n";
+    if (fs.existsSync(path)) {
+        const current = fs.readFileSync(path, "utf-8");
+        if (current === data) {
+            return;
         }
     }
+    debug("write %o", path);
+    fs.writeFileSync(path, data);
+};
 
-    const tsConfigFile = path.resolve(pkgDir, `tsconfig.json`);
-    const tmpDir = path.relative(pkgDir, rootDir) + "/tmp";
+const getReferences = (pkg: any) =>
+    Object.keys({...pkg.dependencies, ...pkg.devDependencies})
+        .map((dep) => dep.match(/^@sirian\/([^\/]+)$/)?.[1])
+        .filter(Boolean)
+        .map((depName) => "../" + depName);
 
-    const tsConfig = fs.readFileSync(tsConfigFile, "utf-8");
+const prebuild = () => {
+    const dirs = fs.readdirSync(packagesDir, {withFileTypes: true})
+        .sort()
+        .filter((dir) => dir.isDirectory())
+        .filter((dir) => fs.existsSync(packagesDir + "/" + dir.name + "/package.json"))
+    ;
 
-    const cfg = JSON.parse(tsConfig);
-    const compilerOptions = {
-        ...cfg.compilerOptions,
-        module: types[type],
-        outDir: `build/${type}`,
-        declarationDir: "build/types",
-        tsBuildInfoFile: `${tmpDir}/${pkgDirName}.tsbuildinfo`,
-    };
+    writeGreenkeepConfig(dirs);
 
-    const newCfg = {
-        ...cfg,
-        extends: "../../tsconfig.base.json",
+    for (let i = 0; i < dirs.length; i++) {
+        const dir = dirs[i];
+        const pkgDirName = dir.name;
+        debug("[%o/%o] %o", i + 1, dirs.length, pkgDirName);
+        const pkgDir = packagesDir + "/" + pkgDirName;
+        const packageFile = pkgDir + "/package.json";
+
+        const pkg = JSON.parse(fs.readFileSync(packageFile, "utf-8"));
+
+        validate(pkg.name, pkg.version);
+
+        prebuildType(pkg, pkgDirName, "cjs", "commonjs");
+        prebuildType(pkg, pkgDirName, "esm", "esnext");
+    }
+};
+
+const prebuildType = (pkg: any, pkgDirName: string, type: string, module: string) => {
+    const references = getReferences(pkg);
+    const tmpDir = rootDir + "/tmp";
+
+    const cfg = {
+        extends: "./tsconfig.json",
         include: ["src"],
-        compilerOptions,
-        references,
+        compilerOptions: {
+            noEmit: false,
+            module,
+            rootDir: "src",
+            outDir: `build/${type}`,
+            declarationDir: "build/types",
+            tsBuildInfoFile: `${tmpDir}/${pkgDirName}.${type}.tsbuildinfo`,
+        },
+        references: references.map((p) => ({path: `${p}/tsconfig.${type}.json`})),
     };
 
-    fs.writeFileSync(tsConfigFile, JSON.stringify(newCfg, null, 4));
-}
+    const pkgDir = packagesDir + "/" + pkgDirName;
+    writeTsConfig(`${pkgDir}/tsconfig.${type}.json`, cfg);
+};
+
+prebuild();

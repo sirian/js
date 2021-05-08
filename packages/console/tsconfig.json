@@ -1,33 +1,12 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
         "rootDir": "src",
-        "outDir": "build/cjs",
         "types": [
             "node"
-        ],
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/console.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": [
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../decorators"
-        },
-        {
-            "path": "../event-dispatcher"
-        },
-        {
-            "path": "../ts-extra-types"
-        },
-        {
-            "path": "../xpromise"
-        }
-    ]
+        ]
+    }
 }

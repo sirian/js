@@ -1,27 +1,9 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "../../tsconfig.json",
     "include": [
         "src"
     ],
     "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "build/cjs",
-        "module": "commonjs",
-        "tsBuildInfoFile": "../../tmp/dumper.tsbuildinfo",
-        "declarationDir": "build/types"
-    },
-    "references": [
-        {
-            "path": "../clone"
-        },
-        {
-            "path": "../common"
-        },
-        {
-            "path": "../decorators"
-        },
-        {
-            "path": "../ts-extra-types"
-        }
-    ]
+        "rootDir": "src"
+    }
 }
