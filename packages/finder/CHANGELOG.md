@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.58](https://github.com/sirian/js/compare/@sirian/finder@1.3.57...@sirian/finder@1.3.58) (2021-05-09)
+
+**Note:** Version bump only for package @sirian/finder
+
+
+
+
+
 ## [1.3.57](https://github.com/sirian/js/compare/@sirian/finder@1.3.56...@sirian/finder@1.3.57) (2021-04-26)
 
 **Note:** Version bump only for package @sirian/finder
