@@ -9,11 +9,15 @@ declare function encodeURIComponent(uriComponent: string | number | boolean): st
 
 declare function decodeURIComponent(encodedURIComponent: string): string;
 
-import {assert} from "@sirian/assert";
-import {entriesOf} from "@sirian/common";
 import {Base64} from "../src";
 
 const Buf = (globalThis as any).Buffer;
+const assert = (expected: any, actual: any) => {
+    if (expected !== actual) {
+        throw new Error(`String mismatch`);
+    }
+};
+
 delete (globalThis as any).Buffer;
 
 interface IBase64 {
@@ -59,9 +63,9 @@ interface IBase64 {
         const str64 = Buf.from(str).toString("base64");
 
         if (enc) {
-            assert(str64 === encode(str));
+            assert(str64, encode(str));
         } else {
-            assert(str === decode(str64));
+            assert(str, decode(str64));
         }
         const start = Date.now();
         for (let i = 0; i < N; i++) {
@@ -77,7 +81,7 @@ interface IBase64 {
             const times: Record<string, any> = {};
             console.group(`Test ${enc ? "encode" : "decode"} ${N}`);
 
-            for (const [name, engine] of entriesOf(engines)) {
+            for (const [name, engine] of Object.entries(engines)) {
                 try {
                     const time = testEngine(N, engine, enc);
                     maxTime = Math.max(time, maxTime);

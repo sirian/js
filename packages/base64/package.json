@@ -17,7 +17,7 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "scripts": {
-        "benchmark": "node --expose-gc -r ts-node/register benchmark/index.ts"
+        "benchmark": "ts-node benchmark/index.ts"
     },
     "publishConfig": {
         "access": "public"

@@ -32,14 +32,14 @@ export const base64Encode = (uint8: Uint8Array): string => {
     }
 
     // pad the end with zeros, but make sure to not forget the extra bytes
-    if (extraBytes === 1) {
+    if (1 === extraBytes) {
         const tmp = uint8[length - 1];
         result +=
             base64Chars[(tmp >> 2)] +
             base64Chars[mask & (tmp << 4)] +
             "==";
     }
-    if (extraBytes === 2) {
+    if (2 === extraBytes) {
         const tmp = (uint8[length - 2] << 8) + (uint8[length - 1]);
         result +=
             base64Chars[(tmp >> 10)] +
