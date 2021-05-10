@@ -24,7 +24,7 @@
         "ci:build": "yarn clean && yarn lint && yarn test && yarn build",
         "clean": "yarn build:clean && yarn test:clean",
         "prebuild": "ts-node scripts/prebuild.ts",
-        "build": "tsc -b packages/*/tsconfig.{cjs,esm}.json",
+        "build": "tsc -b packages/*/tsconfig.cjs.json packages/*/tsconfig.esm.json",
         "build:clean": "yarn build --clean && rimraf packages/*/build packages/*/tsconfig.{cjs,esm}.json",
         "build:watch": "yarn build --watch",
         "lint": "yarn tslint:lint",
