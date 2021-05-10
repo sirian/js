@@ -1,4 +1,5 @@
-import {AnyKey, ArrayRO, Ensure, Func, Func0, Func1, Get, Newable, Nullish} from "@sirian/ts-extra-types";
+import {AnyKey, ArrayRO, Ensure, Func0, Func1, Get, Newable, Nullish} from "@sirian/ts-extra-types";
+import {noop} from "./Const";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
 import {stringifyObj} from "./Stringify";
 
@@ -85,19 +86,23 @@ export const defineProp: {
 
 export const getConstructor = <T extends any>(target: T): Newable<T> | undefined => (target as any)?.constructor;
 
+const nativeCall = noop.call as any;
+const nativeApply = noop.apply as any;
+// const nativeBind = noop.bind as any;
+//
+// export const bind = nativeCall.bind(nativeBind);
+
 export const apply: {
     <R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
     <R>(target: () => R, thisArg?: any, args?: []): R
-} = ((target: Func, thisArg?: any, args: any[] = []) =>
-    target.apply(thisArg, args));
+} = nativeCall.bind(nativeApply);
 
 export const applyIfFunction: {
     <A extends any[], R>(fn: (...args: A) => R, ...args: A): R;
     <T>(value: T, ...args: any[]): T;
 } = (value: any, ...args: any[]) => isFunction(value) ? apply(value, null, args) : value;
 
-export const call = <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A): R =>
-    target.call(thisArg, ...args);
+export const call = nativeCall.bind(nativeCall) as <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A) => R;
 
 export const construct: {
     <T>(constructor: { new(): T }, args?: [], newTarget?: Function): T;

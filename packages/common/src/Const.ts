@@ -1,3 +1,4 @@
 import {Func} from "@sirian/ts-extra-types";
 
-export const noop = (() => {}) as Func;
+// tslint:disable-next-line:arrow-parens
+export const noop: Func = _ => _;

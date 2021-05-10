@@ -2,11 +2,10 @@ import {Return, TupleToObject} from "@sirian/ts-extra-types";
 import {isPrimitive} from "./Is";
 import {ensureMap} from "./XUtils";
 
-export const getCached = <T>(key: object, fn: () => T): T =>
-    ensureMap((getCached as any).cache ??= new WeakMap(), key, fn);
+export const getCached = ensureMap.bind(null, new WeakMap()) as (<T>(key: object, fn: () => T) => T);
 
 export const argsToken = <T extends any[]>(...tuple: T): TupleToObject<T> => {
-    const createMaps = () => [new WeakMap(), new Map()] as [WeakMap<any, any>, Map<any, any>];
+    const createMaps = () => [new WeakMap<any, any>(), new Map<any, any>()] as const;
     const getMap = (m: Return<typeof createMaps>, value: any) => m[isPrimitive(value) ? 1 : 0];
 
     const cache = getCached(argsToken, createMaps);

@@ -28,9 +28,15 @@ export type ByteArraySource = null | undefined | string | ArrayBuffer | ArrayBuf
 
 export type ByteInput = ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive;
 
+let textEncoder: TextEncoder;
+let textDecoder: TextDecoder;
+
+export const getTextEncoder = () => textEncoder ??= new TextEncoder();
+export const getTextDecoder = () => textDecoder ??= new TextDecoder();
+
 export const toBytes = (source?: ByteInput): Uint8Array => {
     if (isPrimitive(source)) {
-        return new TextEncoder().encode(stringifyVar(source));
+        return getTextEncoder().encode(stringifyVar(source));
     }
 
     if (isArrayBufferView(source)) {
@@ -50,7 +56,7 @@ export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer 
 };
 
 export const toUTF = (input?: ByteInput) =>
-    isPrimitive(input) ? stringifyVar(input) : new TextDecoder().decode(toBytes(input));
+    isPrimitive(input) ? stringifyVar(input) : getTextDecoder().decode(toBytes(input));
 
 export const isUTF8String = (source: string) =>
     tryCatch(() => source === decodeURIComponent(encodeURIComponent(source)), false);
