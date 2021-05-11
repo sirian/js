@@ -48,5 +48,5 @@ const data: Array<[string, string[]]> = [
 
 test.each(data)("StringInput.tokens('%s')", (str, expected) => {
     const input = new StringInput(str);
-    expect(input.tokens).toEqual(expected.concat());
+    expect(input.tokens).toStrictEqual(expected);
 });
