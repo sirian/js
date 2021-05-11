@@ -7,7 +7,7 @@ describe("", () => {
         },
     };
 
-    const data: Array<[PropertyDescriptor, any, any]> = [
+    const data = [
         [undefined, undefined, undefined],
         [undefined, null, undefined],
         [undefined, {}, undefined],
@@ -30,12 +30,14 @@ describe("", () => {
         [{set: noop}, null, undefined],
         [{set: noop}, undefined, undefined],
 
+        [{get: undefined}, {}, undefined],
+
         [desc, {}, undefined],
         [desc, {length: 1}, 1],
         [desc, [1, 2, 3], 3],
         [desc, "foo", 3],
         [desc, 1, undefined],
-    ];
+    ] as const;
 
     test.each(data)("readDescriptor(%o, %o) === %o", (descriptor, obj, expected) => {
         expect(readDescriptor(descriptor, obj)).toBe(expected);

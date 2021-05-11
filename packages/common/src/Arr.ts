@@ -48,9 +48,6 @@ export const last = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
 export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] =>
     isArray(value) ? value : Array.from(value ?? []);
 
-export const castArray = <T>(value: T): T extends ArrayRO ? T : [T] =>
-    [].concat(value as any) as any;
-
 export const uniq = <T>(input: Iterable<T>) => [...new Set(input)];
 
 export const makeArray = <N extends number, T = undefined>(length: N, fill: (index: number) => T) =>

@@ -114,7 +114,7 @@ export const construct: {
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
     isNotNullish(target) && (key in Object(target));
 
-export const hasAnyProp = <T, K extends PropertyKey>(target: T, keys: ArrayRO<K>): target is Ensure<T, K> =>
+export const hasAnyProp = <T, K extends PropertyKey>(target: T, keys: ArrayRO<K>): target is K extends any ? Ensure<T, K> : never =>
     keys.some((k) => hasProp(target, k));
 
 export const getProp = <T, K extends AnyKey>(target: T, key: K) => (target as any)?.[key] as Get<T, K>;

@@ -1,5 +1,6 @@
 import {
     AnyFunc,
+    ArrayRO,
     ExtractByTypeName,
     ExtractByXTypeName,
     Nullish,
@@ -11,7 +12,7 @@ import {
 } from "@sirian/ts-extra-types";
 
 export const isNull = (value: any): value is null => null === value;
-export const isUndefined = (value: any): value is undefined|void => undefined === value;
+export const isUndefined = (value: any): value is undefined | void => undefined === value;
 export const isNullish = (value: any): value is Nullish => null == value;
 export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => !isNullish(value);
 export const getType = <T>(value: T) => typeof value as TypeNameOf<T>;
@@ -25,10 +26,10 @@ export const getXType = <T>(value: T) =>
         : getType(value))) as XTypeNameOf<T>;
 
 export const isXType = <V, T extends XTypeName>(v: V, types: T | T[]): v is ExtractByXTypeName<V, T> =>
-    ([] as any[]).concat(types).includes(getXType(v));
+    castArray(types).includes(getXType(v) as any);
 
 export const isType = <V, T extends TypeName>(v: V, types: T | T[]): v is ExtractByTypeName<V, T> =>
-    ([] as any[]).concat(types).includes(getType(v));
+    castArray(types).includes(getType(v) as any);
 
 export const isNumber = (value: any): value is number => isType(value, "number");
 export const isBigInt = (value: any): value is bigint => isType(value, "bigint");
@@ -45,3 +46,5 @@ export const isTruthy = (a: any) => !!a;
 export const isFalsy = (a: any) => !a;
 
 export const isPromiseLike = (value: any): value is PromiseLike<any> => isFunction(value?.then);
+export const castArray = <T>(value: T | ArrayRO<T>) =>
+    [].concat(value as any) as T[];
