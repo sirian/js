@@ -30,7 +30,6 @@
             ]
         },
         "skipLibCheck": true,
-        "types": [],
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "newLine": "LF",
@@ -40,6 +39,5 @@
         "noEmit": true
 
     },
-    "include": [],
     "exclude": ["node_modules"]
 }

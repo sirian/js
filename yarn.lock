@@ -2001,9 +2001,9 @@ camelcase@^6.0.0:
   integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
 
 caniuse-lite@^1.0.30001219:
-  version "1.0.30001223"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001223.tgz#39b49ff0bfb3ee3587000d2f66c47addc6e14443"
-  integrity sha512-k/RYs6zc/fjbxTjaWZemeSmOjO0JJV+KguOBA3NwPup8uzxM1cMhR2BD9XmO86GuqaqTCO8CgkgH9Rz//vdDiA==
+  version "1.0.30001228"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001228.tgz#bfdc5942cd3326fa51ee0b42fbef4da9d492a7fa"
+  integrity sha512-QQmLOGJ3DEgokHbMSA8cj2a+geXqmnpyOFT0lhQV6P3/YOJvGDEwoedcwxEQ30gJIwIIunHIicunJ2rzK5gB2A==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3567,9 +3567,9 @@ is-ci@^2.0.0:
     ci-info "^2.0.0"
 
 is-core-module@^2.2.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.3.0.tgz#d341652e3408bca69c4671b79a0954a3d349f887"
-  integrity sha512-xSphU2KG9867tsYdLD4RWQ1VqdFl4HTO9Thf3I/3dLEfr0dbPTWKsuCKrgqMljg4nPE+Gq0VCnzT3gr0CyBmsw==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.4.0.tgz#8e9fc8e15027b011418026e98f0e6f4d86305cc1"
+  integrity sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==
   dependencies:
     has "^1.0.3"
 
@@ -6813,9 +6813,9 @@ typescript@^4.2.3:
   integrity sha512-V+evlYHZnQkaz8TRBuxTA92yZBPotr5H+WhQ7bD3hZUndx5tGOa1fuCgeSjxAzM1RiN5IzvadIXTVefuuwZCRg==
 
 uglify-js@^3.1.4:
-  version "3.13.5"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.13.5.tgz#5d71d6dbba64cf441f32929b1efce7365bb4f113"
-  integrity sha512-xtB8yEqIkn7zmOyS2zUNBsYCBRhDkvlNxMMY2smuJ/qA8NCHeQvKCF3i9Z4k8FJH4+PJvZRtMrPynfZ75+CSZw==
+  version "3.13.6"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.13.6.tgz#6815ac7fdd155d03c83e2362bb717e5b39b74013"
+  integrity sha512-rRprLwl8RVaS+Qvx3Wh5hPfPBn9++G6xkGlUupya0s5aDmNjI7z3lnRLB3u7sN4OmbB0pWgzhM9BEJyiWAwtAA==
 
 uid-number@0.0.6:
   version "0.0.6"
