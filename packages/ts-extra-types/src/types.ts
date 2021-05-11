@@ -33,15 +33,11 @@ export type AnyType = Primitive | AnyFunc | ObjectOnly;
 export type NotFunc = Primitive | ObjectOnly;
 export type ObjectOnly = any[] | object & { caller?: never };
 
-export type TypeName = "function" | "object" | "string" | "number" | "boolean" | "symbol" | "bigint" | "undefined";
-export type XTypeName = TypeName | "null" | "array";
+export type TypeName = TypeNameOf<any>;
+export type XTypeName = XTypeNameOf<any>;
 
 export type TypeNameOf<T> =
-    T extends null | any[] ? "object" : XTypeNameOf<T>;
-
-export type XTypeNameOf<T> =
-    T extends null ? "null" :
-    T extends ArrayRO ? "array" :
+    T extends null ? "object" :
     T extends AnyFunc ? "function" :
     T extends object ? "object" :
     T extends string ? "string" :
@@ -51,6 +47,11 @@ export type XTypeNameOf<T> =
     T extends symbol ? "symbol" :
     T extends boolean ? "boolean" :
     never;
+
+export type XTypeNameOf<T> =
+    T extends null ? "null" :
+    T extends ArrayRO ? "array" :
+    TypeNameOf<T>;
 
 export type ExtractByXTypeName<T, Type extends XTypeName> =
     T extends any

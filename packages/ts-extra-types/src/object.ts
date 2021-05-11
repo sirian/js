@@ -132,9 +132,7 @@ export type Require<T, K extends AnyKey = keyof T> = Overwrite<T, Required<MyPic
 
 export type Partialize<T, K extends AnyKey = keyof T> = Overwrite<T, Partial<MyPick<T, K>>>;
 
-export type Ensure<T, K extends AnyKey, U = unknown> =
-    { [P in K]: P extends keyof T ? T[P] : U }
-    & { [P in keyof T]: P extends K ? Extract<T[P], U> : T[P] };
+export type Ensure<T, K extends AnyKey, U = unknown> = T & {[P in K]: U};
 
 export type Entry<K extends AnyKey = any, V = any> = [K, V];
 
