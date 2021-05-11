@@ -29,7 +29,7 @@ export const clearAlarm = (id: any) => {
     }
 };
 
-const scheduleAlarm = (id: number, ms: number, fn: Func0) => {
+const scheduleAlarm = (id: any, ms: number, fn: Func0) => {
     const alarm = alarms.get(id);
     if (alarm) {
         alarm[2] ??= setTimeout(() => {
