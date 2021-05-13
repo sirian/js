@@ -1,26 +1,26 @@
-import {apply} from "../../src";
+import {call} from "@sirian/common";
 
-describe("apply", () => {
+describe("call", () => {
     function mock(this: any, ...args: any) {
         const fn = jest.fn();
-        apply(fn, this, [123, this, args]);
+        call(fn, this, 123, this, args);
         return fn;
     }
 
-    test("apply(mock)", () => {
-        const foo = apply(mock);
+    test("call(mock)", () => {
+        const foo = call(mock);
         expect(foo).toHaveBeenCalledWith(123, undefined, []);
     });
 
     for (const thisArg of [null, undefined, {x: 1}]) {
-        test(`apply(mock, ${thisArg})`, () => {
-            const foo = apply(mock, thisArg);
+        test(`call(mock, ${thisArg})`, () => {
+            const foo = call(mock, thisArg);
             expect(foo).toHaveBeenCalledWith(123, thisArg, []);
         });
 
         for (const args of [[], [undefined], [1, 2]]) {
-            test(`apply(mock, ${thisArg}, [${args}])`, () => {
-                const foo = apply(mock, thisArg, args);
+            test(`call(mock, ${thisArg}, [${args}])`, () => {
+                const foo = call(mock, thisArg, ...args);
                 expect(foo).toHaveBeenCalledWith(123, thisArg, args);
             });
         }

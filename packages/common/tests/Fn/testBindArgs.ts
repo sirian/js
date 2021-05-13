@@ -1,7 +1,7 @@
 import {bindArgs} from "../../src";
 
 describe("bindArgs", () => {
-    const foo = (x, y, z, ...rest) => [x, y, z, rest];
+    const foo = (x: any, y: any, z: any, ...rest: any[]) => [x, y, z, rest];
 
     const data: Array<[any, any[], any[]]> = [
         [{0: 1}, [2, 3, 4], [1, 2, 3, [4]]],
@@ -17,7 +17,7 @@ describe("bindArgs", () => {
     });
 
     test("bindArgs pass through this", () => {
-        function bar(x, y) {
+        function bar(this: any, x: any, y: any) {
             return [this, x, y];
         }
 

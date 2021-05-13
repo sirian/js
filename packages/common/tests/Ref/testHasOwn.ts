@@ -1,6 +1,6 @@
 import {hasOwn} from "../../src";
 
-describe("", () => {
+describe("hasOwn", () => {
     const data: Array<[any, any, boolean]> = [
         [{}, "x", false],
         [{x: 1}, "x", true],
@@ -16,7 +16,7 @@ describe("", () => {
         [null, "toString", false],
     ];
 
-    test.each(data)("Ref.hasOwn(%o, %o) === %o", (target, key, expected) => {
+    test.each(data)("hasOwn(%o, %o) === %o", (target, key, expected) => {
         expect(hasOwn(target, key)).toBe(expected);
     });
 });

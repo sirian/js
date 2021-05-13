@@ -1,6 +1,6 @@
 import {AnyKey, ArrayRO, Ensure, Func0, Func1, Get, Newable, Nullish} from "@sirian/ts-extra-types";
 import {noop} from "./Const";
-import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive, isString, isSymbol} from "./Is";
+import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive} from "./Is";
 import {stringifyObj} from "./Stringify";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -11,7 +11,22 @@ export interface ProtoChainOptions {
     stopAt?: object;
 }
 
-export const getPrototype = (target: any) => isNullish(target) ? undefined : Reflect.getPrototypeOf(Object(target));
+const nativeCall = noop.call as any;
+const nativeApply = noop.apply as any;
+const nativeBind = noop.bind as any;
+
+export const apply: {
+    <R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
+    <R>(target: () => R, thisArg?: any, args?: []): R
+} = nativeCall.bind(nativeApply);
+
+export const call = nativeCall.bind(nativeCall) as <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A) => R;
+
+export const bind: {
+    <R, A extends any[], B extends any[]>(f: (...args: [...A, ...B]) => R, thisArg: any, ...curry: A): (...args: B) => R;
+} = nativeCall.bind(nativeBind);
+
+export const getPrototype = (target: any) => isNullish(target) ? undefined : Object.getPrototypeOf(Object(target));
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {
     const result = new Set<any>();
@@ -36,22 +51,26 @@ export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Ar
     return [...result];
 };
 
-export const setPrototype = (target: object, proto: object | null | undefined) => Reflect.setPrototypeOf(target, proto ?? null);
+export const setPrototype = (target: object, proto: object | null | undefined) => Object.setPrototypeOf(target, proto ?? null);
+
+export const hasPrototype = (target: any) => isNotNullish(getPrototype(target));
 
 export const hasMethod = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K, Function> =>
     isFunction((target as any)?.[key]);
 
 export const hasOwn = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
-    isNotNullish(target) && Object.prototype.hasOwnProperty.call(target, key);
+    isNotNullish(target) && tryCatch(() => Object.prototype.hasOwnProperty.call(target, key), false);
+
+export const getOwn = <T, K extends PropertyKey>(target: T, key: K) => hasOwn(target, key) ? target[key] : undefined;
 
 export const ownKeys = <T>(target: T) =>
-    (isObjectOrFunction(target) ? Reflect.ownKeys(target) : []) as Array<keyof T>;
+    isNullish(target) ? [] : [...ownNames(target), ...ownSymbols(target)] as Array<keyof T>;
 
-export const ownSymbols = <S extends symbol>(target: { [P in S]: any }) =>
-    ownKeys(target).filter(isSymbol);
+export const ownSymbols = <S extends symbol>(target: any) =>
+    isNullish(target) ? [] : Object.getOwnPropertySymbols(target);
 
 export const ownNames = <T>(target: T) =>
-    ownKeys(target).filter(isString) as Array<Extract<keyof T, string>>;
+    isNullish(target) ? [] : Object.getOwnPropertyNames(target) as Array<Extract<keyof T, string>>;
 
 export const ownDescriptor: {
     <T, K extends keyof T>(target: T, key: K): TypedPropertyDescriptor<T[K]> | undefined;
@@ -70,11 +89,13 @@ export const getDescriptors = <T>(target: T) => {
     const result: Record<any, any> = {};
 
     for (const obj of getPrototypes(target)) {
+
         for (const key of ownKeys(obj)) {
             result[key] ||= ownDescriptor(obj, key);
         }
     }
     return result as TypedPropertyDescriptorMap<T>;
+
 };
 
 export const ownDescriptors = <T>(target: T) => Object.getOwnPropertyDescriptors(target);
@@ -82,27 +103,15 @@ export const ownDescriptors = <T>(target: T) => Object.getOwnPropertyDescriptors
 export const defineProp: {
     <T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
     (t: object, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): boolean;
-} = (t: object, k: PropertyKey, d: PropertyDescriptor) => Reflect.defineProperty(t, k, d);
+} = (t: object, k: PropertyKey, d: PropertyDescriptor) => Object.defineProperty(t, k, d);
 
-export const getConstructor = <T extends any>(target: T): Newable<T> | undefined => (target as any)?.constructor;
-
-const nativeCall = noop.call as any;
-const nativeApply = noop.apply as any;
-// const nativeBind = noop.bind as any;
-//
-// export const bind = nativeCall.bind(nativeBind);
-
-export const apply: {
-    <R, A extends any[]>(target: (...args: A) => R, thisArg: any, args: A): R;
-    <R>(target: () => R, thisArg?: any, args?: []): R
-} = nativeCall.bind(nativeApply);
+export const getConstructor = <T>(target: T) =>
+    tryCatch(() => (target as any)?.constructor as Get<T, "constructor">);
 
 export const applyIfFunction: {
     <A extends any[], R>(fn: (...args: A) => R, ...args: A): R;
     <T>(value: T, ...args: any[]): T;
 } = (value: any, ...args: any[]) => isFunction(value) ? apply(value, null, args) : value;
-
-export const call = nativeCall.bind(nativeCall) as <R, A extends any[]>(target: (...args: A) => R, thisArg?: any, ...args: A) => R;
 
 export const construct: {
     <T>(constructor: { new(): T }, args?: [], newTarget?: Function): T;
@@ -112,7 +121,7 @@ export const construct: {
     isNullish(newTarget) ? new target(...args) : Reflect.construct(target, args, newTarget);
 
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
-    isNotNullish(target) && (key in Object(target));
+    isNotNullish(target) && tryCatch(() => key in Object(target), false);
 
 export const hasAnyProp = <T, K extends PropertyKey>(target: T, keys: ArrayRO<K>): target is K extends any ? Ensure<T, K> : never =>
     keys.some((k) => hasProp(target, k));
@@ -129,8 +138,10 @@ export const setProp: {
 export const deleteProp = <T, K extends keyof T>(target: T, key: K | PropertyKey) =>
     !isNullish(target) && tryCatch(() => delete (target as any)[key], false);
 
-export const deleteProps = <T, K extends keyof T>(target: T | Nullish, ...keys: ArrayRO<K | PropertyKey>) =>
+export const deleteProps = <T, K extends keyof T>(target: T | Nullish, ...keys: ArrayRO<K | PropertyKey>) => {
     keys.forEach((key) => deleteProp(target, key));
+    return target as Omit<T, K>;
+};
 
 export const isPropWritable = (target: any, property: PropertyKey) => {
     if (isNullish(target)) {
@@ -156,4 +167,4 @@ export const tryCatch: {
     }
 };
 
-export const getObjectTag = (arg: any) => stringifyObj(arg).replace(/^\[object |]$/g, "");
+export const getObjectTag = (arg: any) => stringifyObj(arg).slice(8, -1);
