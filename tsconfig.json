@@ -34,7 +34,8 @@
         "forceConsistentCasingInFileNames": true,
         "newLine": "LF",
         "resolveJsonModule": false,
-        "sourceMap": true,
+        "inlineSources": true,
+        "inlineSourceMap": true,
         "experimentalDecorators": true,
         "noEmit": true
 
