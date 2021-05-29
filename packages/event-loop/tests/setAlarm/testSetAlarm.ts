@@ -11,8 +11,8 @@ const moveTime = (ms: number) => {
 };
 
 beforeEach(() => {
-    now = 0;
     jest.useFakeTimers();
+    jest.clearAllTimers();
     dateNowSpy = jest.spyOn(Date, "now").mockImplementation(() => now);
 });
 
