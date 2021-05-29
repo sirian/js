@@ -6,7 +6,7 @@
         "transpileOnly": true
     },
     "compilerOptions": {
-        "target": "ESNext",
+        "target": "ES2020",
         "lib": ["esnext"],
         "declaration": true,
         "composite": true,
