@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.8](https://github.com/sirian/js/compare/@sirian/event-loop@1.5.7...@sirian/event-loop@1.5.8) (2021-05-29)
+
+
+### Bug Fixes
+
+* **event-loop:** ES2020 ([85c28c6](https://github.com/sirian/js/commit/85c28c6df1126c471b802908125ed2303d8ef43a))
+
+
+
+
+
 ## [1.5.7](https://github.com/sirian/js/compare/@sirian/event-loop@1.5.6...@sirian/event-loop@1.5.7) (2021-05-29)
 
 **Note:** Version bump only for package @sirian/event-loop
