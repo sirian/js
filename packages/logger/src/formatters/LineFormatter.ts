@@ -1,6 +1,6 @@
 import {isNumber, isString, jsonStringify, stringifyVar} from "@sirian/common";
 import {DateTime} from "@sirian/datetime";
-import prettyFormat from "pretty-format";
+import {format as prettyFormat, OptionsReceived} from "pretty-format";
 import {LogRecord} from "../LogRecord";
 import {Parser, Token, TokenStream} from "../parser";
 import {FormatContext} from "./FormatContext";
@@ -40,7 +40,7 @@ export class LineFormatter extends LogFormatter {
         this.tokens = this.parser.parse(this.lineFormat);
     }
 
-    public static pretty(value: any, options?: prettyFormat.OptionsReceived): string {
+    public static pretty(value: any, options?: OptionsReceived): string {
         if (isString(value) || isNumber(value)) {
             return stringifyVar(value);
         }
