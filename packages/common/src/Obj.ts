@@ -11,7 +11,7 @@ import {
     ObjValueOf,
     Wrap,
 } from "@sirian/ts-extra-types";
-import {isArray} from "./Is";
+import {isArray, isPrimitive} from "./Is";
 import {
     deleteProp,
     deleteProps,
@@ -65,7 +65,11 @@ export const isObjectTag = <O, T extends string>(obj: O, tag: T): obj is Extract
 export const objZip = <K extends ArrayRO<AnyKey>, V extends ArrayRO>(keys: K, values: V) =>
     fromEntries(keys.map((k, i) => [k, values[i]])) as ObjectZip<K, V>;
 
-export const objSnapshot = <T extends object>(target: T, options: SnapshotOptions = {}) => {
+export const objSnapshot = <T>(target: T, options: SnapshotOptions = {}): T => {
+    if (isPrimitive(target)) {
+        return target;
+    }
+
     const protoKeys = getPrototypes(target, options)
         .map((x) => ownNames(x).filter((k) => "__proto__" !== k && ownDescriptor(x, k)?.get))
         .flat() as Array<keyof T>;

@@ -1,8 +1,10 @@
-import {isNumeric} from "../../src";
+import {isNumber, isNumeric, stringifyVar} from "../../src";
 
 describe("", () => {
-    const validData = ["-10",
+    const validData = [
+        "-10",
         "0",
+        "-0",
         "5",
         -16,
         0,
@@ -14,7 +16,7 @@ describe("", () => {
         3.1415,
         1.5999999999999999,
         8e5,
-        "123e-2",
+        ".123e-2",
         "040",
         "0xFF",
         "0Xba",
@@ -26,6 +28,9 @@ describe("", () => {
     ];
 
     const invalidData = [
+        0n,
+        1n,
+        -1n,
         Object("42"),
         "",
         "        ",
@@ -59,5 +64,8 @@ describe("", () => {
 
     test.each(data)("Var.isNumeric(%o) === %o", (value, expected) => {
         expect(isNumeric(value)).toBe(expected);
+        if (isNumber(value)) {
+            expect(isNumeric(stringifyVar(value))).toBe(expected);
+        }
     });
 });

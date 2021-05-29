@@ -1,3 +1,4 @@
+import {isNumber, isString} from "./Is";
 import {ifEqualNaN} from "./Var";
 
 export const SMALLEST_UNSAFE_INTEGER = 2 ** 53;
@@ -26,3 +27,6 @@ export const isInt = (x: any): x is number => isFinite(x) && !(x % 1);
 export const isFinite = (x: any): x is number => (+x === x) && (-1 / 0 !== x) && (1 / 0 !== x);
 
 export const isInt32 = (x: any): x is number => toInt32(x) === x;
+
+export const isNumeric = (value: any): value is string | number =>
+    isNumber(value) ? isFinite(value) : isString(value) && isFinite(+value - parseFloat(value));

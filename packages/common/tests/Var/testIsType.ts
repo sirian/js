@@ -3,17 +3,19 @@ import {isType} from "../../src";
 import {TestUtil} from "../TestUtil";
 
 describe("Var.isType", () => {
-    const trueData: Array<[any, TypeName | TypeName[]]> = [
+    const trueData: Array<[any, TypeName]> = [
         [3, "number"],
-        [3, ["number"]],
-        [3, ["string", "number"]],
+        [3n, "bigint"],
+        ["", "string"],
+        ["3", "string"],
         [null, "object"],
-        [null, ["object"]],
+        [undefined, "undefined"],
+        [{}, "object"],
+        [[], "object"],
+        [() => {}, "function"],
     ];
 
-    const falseData: Array<[any, TypeName | TypeName[]]> = [
-        [3, []],
-        [3, ["string"]],
+    const falseData: Array<[any, TypeName]> = [
         [3, "string"],
     ];
 

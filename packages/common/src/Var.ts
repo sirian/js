@@ -1,5 +1,5 @@
 import {AnyCtor, Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
-import {getType, isArray, isFunction, isNumber, isObject, isString, isType} from "./Is";
+import {getType, isArray, isFunction, isNumber, isObject, isString} from "./Is";
 import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./Ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
@@ -12,9 +12,6 @@ export const isConstructor = <T>(value: T): value is Extract<T, Newable> =>
     isFunction(value) && tryCatch(() => value === new (new Proxy(value, {
         construct: (target) => target,
     }) as any), false);
-
-export const isNumeric = (value: any): value is string | number =>
-    isType(value, ["number", "string"]) && !isEqualNaN(value - parseFloat(value));
 
 export const isInstanceOf = <C extends Array<AnyCtor | Newable>>(obj: any, ...ctor: C): obj is Instance<C[number]> =>
     ctor.some((c) => isFunction(c) && (obj instanceof c));

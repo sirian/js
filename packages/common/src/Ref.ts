@@ -101,8 +101,8 @@ export const getDescriptors = <T>(target: T) => {
 export const ownDescriptors = <T>(target: T) => Object.getOwnPropertyDescriptors(target);
 
 export const defineProp: {
-    <T, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): boolean;
-    (t: object, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): boolean;
+    <T extends object, K extends keyof T>(t: T, k: K, d: TypedPropertyDescriptor<T[K]>): T;
+    <T extends object>(t: T, k: PropertyKey, d: TypedPropertyDescriptor<any> | PropertyDescriptor): T;
 } = (t: object, k: PropertyKey, d: PropertyDescriptor) => Object.defineProperty(t, k, d);
 
 export const getConstructor = <T>(target: T) =>
@@ -133,7 +133,7 @@ export const setProp: {
     <V, K extends PropertyKey>(target: { [P in K]: V }, key: K, value: V): boolean;
     (target: any, key: PropertyKey, value: any): boolean;
 } = (target: any, key: PropertyKey, value: any) =>
-    isObjectOrFunction(target) && tryCatch(() => (target as any)[key] = value);
+    isObjectOrFunction(target) && tryCatch(() => (target as any)[key] = value, false);
 
 export const deleteProp = <T, K extends keyof T>(target: T, key: K | PropertyKey) =>
     !isNullish(target) && tryCatch(() => delete (target as any)[key], false);

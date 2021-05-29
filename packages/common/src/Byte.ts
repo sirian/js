@@ -1,9 +1,9 @@
 import {Instance, Primitive} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
-import {isPrimitive} from "./Is";
+import {isPrimitive, isSymbol} from "./Is";
 import {tryCatch} from "./Ref";
 import {stringifyVar} from "./Stringify";
-import {isArrayBufferLike, isArrayBufferView} from "./Var";
+import {isArrayBufferLike, isArrayBufferView, isInstanceOf} from "./Var";
 
 declare class TextEncoder {
     public encode(input?: string): Uint8Array;
@@ -31,12 +31,17 @@ export type ByteInput = ByteArraySource | ArrayLike<number> | Iterable<number> |
 let textEncoder: TextEncoder;
 let textDecoder: TextDecoder;
 
-export const getTextEncoder = () => textEncoder ??= new TextEncoder();
-export const getTextDecoder = () => textDecoder ??= new TextDecoder();
-
 export const toBytes = (source?: ByteInput): Uint8Array => {
+    if ("" === source || null == source) {
+        return new Uint8Array();
+    }
+
+    if (isInstanceOf(source, Uint8Array)) {
+        return source;
+    }
+
     if (isPrimitive(source)) {
-        return getTextEncoder().encode(stringifyVar(source));
+        return (textEncoder ??= new TextEncoder()).encode(stringifyVar(source));
     }
 
     if (isArrayBufferView(source)) {
@@ -56,7 +61,9 @@ export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer 
 };
 
 export const toUTF = (input?: ByteInput) =>
-    isPrimitive(input) ? stringifyVar(input) : getTextDecoder().decode(toBytes(input));
+    "" === input || null == input || isSymbol(input)
+    ? ""
+    : (isPrimitive(input) ? stringifyVar(input) : (textDecoder ??= new TextDecoder()).decode(toBytes(input)));
 
 export const isUTF8String = (source: string) =>
     tryCatch(() => source === decodeURIComponent(encodeURIComponent(source)), false);
