@@ -1,7 +1,7 @@
 {
     "name": "@sirian/xxtea",
     "description": "",
-    "version": "1.3.30",
+    "version": "1.3.31",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,9 +21,9 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^8.1.3"
+        "@sirian/common": "^8.1.4"
     },
     "devDependencies": {
-        "@sirian/base64": "^2.3.33"
+        "@sirian/base64": "^2.3.34"
     }
 }
