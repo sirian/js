@@ -17,13 +17,22 @@ test("@debounce timeout", () => {
 
     setInterval(() => ++now, 1);
     Foo.foo(3);
-    expect(setTimeout).toHaveBeenCalledTimes(1);
+    expect(calls).toStrictEqual([]);
     Foo.foo(5);
-    expect(setTimeout).toHaveBeenCalledTimes(1);
-    setTimeout(() => Foo.foo(3), 10);
+    setTimeout(() => Foo.foo(4), 10);
+    jest.advanceTimersByTime(2);
+    expect(calls).toStrictEqual([]);
+    jest.advanceTimersByTime(1);
+    expect(calls).toStrictEqual([[3, 5]]);
 
-    jest.runTimersToTime(1000);
-    expect(setTimeout).toHaveBeenCalledTimes(3);
+    jest.advanceTimersByTime(7);
+    expect(calls).toStrictEqual([[3, 5]]);
 
-    expect(calls).toStrictEqual([[3, 5], [13, 3]]);
+    jest.advanceTimersByTime(3);
+    expect(calls).toStrictEqual([[3, 5]]);
+    jest.advanceTimersByTime(1);
+    expect(calls).toStrictEqual([[3, 5], [14, 4]]);
+
+    jest.runOnlyPendingTimers();
+    expect(calls).toStrictEqual([[3, 5], [14, 4]]);
 });
