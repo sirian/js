@@ -2,7 +2,8 @@ import {entriesOf} from "@sirian/common";
 import {Func, Func0} from "@sirian/ts-extra-types";
 import {Adapter} from "./Adapter";
 
-type DoneAwareCallback = (cb: Func0) => any;
+export type DoneCallback = Func0;
+export type DoneAwareCallback = (done: DoneCallback) => any;
 
 export const testReasons = (callback: (value: any, name: string) => any) => {
     const reasons = {
@@ -30,49 +31,77 @@ export const testReasons = (callback: (value: any, name: string) => any) => {
 
 export const expectNotCalled = (fn: Func) => () => expect(fn).not.toHaveBeenCalled();
 
-export const specify = (name: string, fn: DoneAwareCallback, timeout = 10) => {
-    test(name, (done) => {
-        setTimeout(done, timeout);
+export const specify = (name: string, fn: DoneAwareCallback) => {
+    test(name, fn.length === 0 ? fn : (done) => {
         fn(() => done());
-        // Promise.resolve(result).then(() => done(), () => done());
-    }, timeout);
+        // setTimeout(done, timeout);
+    }, 10);
 };
 
-export const testFulfilled = (value, fn: (promise: PromiseLike<any>, done: Func0) => any) => {
-    specify("already-fulfilled", (done) => fn(Adapter.resolved(value), done));
+export const testFulfilled = (value: any, fn: (promise: PromiseLike<any>, done?: DoneCallback) => any) => {
+    specify("already-fulfilled", fn.bind(null, Adapter.resolved(value)));
 
-    specify("immediately-fulfilled", (done) => {
+    specify("immediately-fulfilled", 1 === fn.length ? () => {
+        const d = Adapter.deferred();
+        try {
+            return fn(d.promise);
+        } finally {
+            d.resolve(value);
+        }
+
+    } : (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
         d.resolve(value);
     });
 
-    specify("eventually-fulfilled", (done) => {
+    specify("eventually-fulfilled", 1 === fn.length ? () => {
+        const d = Adapter.deferred();
+        try {
+            return fn(d.promise);
+        } finally {
+            setTimeout(() => d.resolve(value), 1);
+        }
+    } : (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
-        setTimeout(() => d.resolve(value), 5);
+        setTimeout(() => d.resolve(value), 1);
     });
 };
 
 export const dummy = () => ({dummy: "dummy"});
 
-export const testRejected = (reason, fn) => {
-    specify("already-rejected", (done) => fn(Adapter.rejected(reason), done));
+export const testRejected = (reason: any, fn: (promise: PromiseLike<any>, done?: DoneCallback) => any) => {
+    test("already-rejected", fn.bind(null, Adapter.rejected(reason)));
 
-    specify("immediately-rejected", (done) => {
+    test("immediately-rejected", 1 === fn.length ? () => {
+        const d = Adapter.deferred();
+        try {
+            return fn(d.promise);
+        } finally {
+            d.reject(reason);
+        }
+    } : (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
         d.reject(reason);
     });
 
-    specify("eventually-rejected", (done) => {
+    test("eventually-rejected", 1 === fn.length ? () => {
+        const d = Adapter.deferred();
+        try {
+            return fn(d.promise);
+        } finally {
+            setTimeout(() => d.reject(reason), 1);
+        }
+    } : (done) => {
         const d = Adapter.deferred();
         fn(d.promise, done);
-        setTimeout(() => d.reject(reason), 5);
+        setTimeout(() => d.reject(reason), 1);
     });
 };
 
-export const thenables = {
+export const thenables: Record<string, Record<string, (value: any) => { then: (onFulfilled: any, onRejected: any) => any }>> = {
     fulfilled: {
         "a synchronously-fulfilled custom thenable": (value) => ({
             then(onFulfilled) {
@@ -93,7 +122,7 @@ export const thenables = {
                     get() {
                         if (numberOfTimesThenRetrieved === 0) {
                             ++numberOfTimesThenRetrieved;
-                            return (onFulfilled) => onFulfilled(value);
+                            return (onFulfilled: any) => onFulfilled(value);
                         }
                         return null;
                     },
@@ -119,7 +148,7 @@ export const thenables = {
 
         "an eventually-fulfilled promise": (value) => {
             const d = Adapter.deferred();
-            setTimeout(() => d.resolve(value), 5);
+            setTimeout(() => d.resolve(value), 1);
             return d.promise;
         },
     },
@@ -144,7 +173,7 @@ export const thenables = {
                     get() {
                         if (numberOfTimesThenRetrieved === 0) {
                             ++numberOfTimesThenRetrieved;
-                            return (onFulfilled, onRejected) => onRejected(reason);
+                            return (onFulfilled: any, onRejected: any) => onRejected(reason);
                         }
                         return null;
                     },
@@ -171,7 +200,7 @@ export const thenables = {
 
         "an eventually-rejected promise"(reason) {
             const d = Adapter.deferred();
-            setTimeout(() => d.reject(reason), 5);
+            setTimeout(() => d.reject(reason), 1);
 
             return d.promise;
         },

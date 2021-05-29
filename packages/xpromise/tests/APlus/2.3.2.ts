@@ -1,17 +1,15 @@
-import {Func0} from "@sirian/ts-extra-types";
-import {TestUtil} from "../../../common/tests/TestUtil";
+import {sleep} from "@sirian/common";
 import {Adapter} from "./Adapter";
-import {specify} from "./helper";
 
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
 
 function testPromiseResolution(xFactory: () => PromiseLike<unknown>, fn: (promise: PromiseLike<any>) => void) {
-    specify("via return from a fulfilled promise", () => {
+    test("via return from a fulfilled promise", () => {
         return fn(Adapter.resolved(dummy).then(xFactory));
     });
 
-    specify("via return from a rejected promise", () => {
+    test("via return from a rejected promise", () => {
         return fn(Adapter.rejected(dummy).then(null, xFactory));
     });
 }
@@ -25,7 +23,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
 
                 promise.then(wasFulfilled, wasRejected);
 
-                await TestUtil.delay(100);
+                await sleep(1);
                 expect(wasFulfilled).not.toHaveBeenCalled();
                 expect(wasRejected).not.toHaveBeenCalled();
             });
@@ -42,7 +40,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
         describe("`x` is eventually-fulfilled", () => {
             testPromiseResolution(() => {
                     const d = Adapter.deferred();
-                    setTimeout(() => d.resolve(sentinel), 5);
+                    setTimeout(() => d.resolve(sentinel), 1);
                     return d.promise;
                 },
                 (promise) => promise.then((value) => expect(value).toBe(sentinel)));
@@ -59,7 +57,7 @@ describe("2.3.2: If `x` is a promise, adopt its state", () => {
         describe("`x` is eventually-rejected", () => {
             testPromiseResolution(() => {
                     const d = Adapter.deferred();
-                    setTimeout(() => d.reject(sentinel), 5);
+                    setTimeout(() => d.reject(sentinel), 1);
                     return d.promise;
                 },
                 (promise) => promise.then(null, (reason) => expect(reason).toBe(sentinel)));

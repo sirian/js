@@ -1,10 +1,9 @@
 import {Adapter} from "./Adapter";
-import {specify, testFulfilled, testRejected} from "./helper";
+import {testFulfilled, testRejected} from "./helper";
 
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 
-describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the execution context stack contains only " +
-    "platform code.", () => {
+describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the execution context stack contains only platform code.", () => {
     describe("`then` returns before the promise becomes fulfilled or rejected", () => {
         testFulfilled(dummy, (promise, done) => {
             let thenHasReturned = false;
@@ -29,35 +28,33 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
     });
 
     describe("Clean-stack execution ordering tests (fulfillment case)", () => {
-        specify("when `onFulfilled` is added immediately before the promise is fulfilled",
-            () => {
-                const d = Adapter.deferred();
-                let onFulfilledCalled = false;
+        test("when `onFulfilled` is added immediately before the promise is fulfilled", () => {
+            const d = Adapter.deferred();
+            let onFulfilledCalled = false;
 
-                d.promise.then(() => {
-                    onFulfilledCalled = true;
-                });
-
-                d.resolve(dummy);
-
-                expect(onFulfilledCalled).toBe(false);
+            d.promise.then(() => {
+                onFulfilledCalled = true;
             });
 
-        specify("when `onFulfilled` is added immediately after the promise is fulfilled",
-            () => {
-                const d = Adapter.deferred();
-                let onFulfilledCalled = false;
+            d.resolve(dummy);
 
-                d.resolve(dummy);
+            expect(onFulfilledCalled).toBe(false);
+        });
 
-                d.promise.then(() => {
-                    onFulfilledCalled = true;
-                });
+        test("when `onFulfilled` is added immediately after the promise is fulfilled", () => {
+            const d = Adapter.deferred();
+            let onFulfilledCalled = false;
 
-                expect(onFulfilledCalled).toBe(false);
+            d.resolve(dummy);
+
+            d.promise.then(() => {
+                onFulfilledCalled = true;
             });
 
-        specify("when one `onFulfilled` is added inside another `onFulfilled`", (done) => {
+            expect(onFulfilledCalled).toBe(false);
+        });
+
+        test("when one `onFulfilled` is added inside another `onFulfilled`", (done) => {
             const promise = Adapter.resolved();
             let firstOnFulfilledFinished = false;
 
@@ -70,7 +67,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when `onFulfilled` is added inside an `onRejected`", (done) => {
+        test("when `onFulfilled` is added inside an `onRejected`", (done) => {
             const promise = Adapter.rejected();
             const promise2 = Adapter.resolved();
             let firstOnRejectedFinished = false;
@@ -84,7 +81,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when the promise is fulfilled asynchronously", (done) => {
+        test("when the promise is fulfilled asynchronously", (done) => {
             const d = Adapter.deferred();
             let firstStackFinished = false;
 
@@ -101,35 +98,33 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
     });
 
     describe("Clean-stack execution ordering tests (rejection case)", () => {
-        specify("when `onRejected` is added immediately before the promise is rejected",
-            () => {
-                const d = Adapter.deferred();
-                let onRejectedCalled = false;
+        test("when `onRejected` is added immediately before the promise is rejected", () => {
+            const d = Adapter.deferred();
+            let onRejectedCalled = false;
 
-                d.promise.then(null, () => {
-                    onRejectedCalled = true;
-                });
-
-                d.reject(dummy);
-
-                expect(onRejectedCalled).toBe(false);
+            d.promise.then(null, () => {
+                onRejectedCalled = true;
             });
 
-        specify("when `onRejected` is added immediately after the promise is rejected",
-            () => {
-                const d = Adapter.deferred();
-                let onRejectedCalled = false;
+            d.reject(dummy);
 
-                d.reject(dummy);
+            expect(onRejectedCalled).toBe(false);
+        });
 
-                d.promise.then(null, () => {
-                    onRejectedCalled = true;
-                });
+        test("when `onRejected` is added immediately after the promise is rejected", () => {
+            const d = Adapter.deferred();
+            let onRejectedCalled = false;
 
-                expect(onRejectedCalled).toBe(false);
+            d.reject(dummy);
+
+            d.promise.then(null, () => {
+                onRejectedCalled = true;
             });
 
-        specify("when `onRejected` is added inside an `onFulfilled`", (done) => {
+            expect(onRejectedCalled).toBe(false);
+        });
+
+        test("when `onRejected` is added inside an `onFulfilled`", (done) => {
             const promise = Adapter.resolved();
             const promise2 = Adapter.rejected();
             let firstOnFulfilledFinished = false;
@@ -143,7 +138,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when one `onRejected` is added inside another `onRejected`", (done) => {
+        test("when one `onRejected` is added inside another `onRejected`", (done) => {
             const promise = Adapter.rejected();
             let firstOnRejectedFinished = false;
 
@@ -156,7 +151,7 @@ describe("2.2.4: `onFulfilled` or `onRejected` must not be called until the exec
             });
         });
 
-        specify("when the promise is rejected asynchronously", (done) => {
+        test("when the promise is rejected asynchronously", (done) => {
             const d = Adapter.deferred();
             let firstStackFinished = false;
 

@@ -1,6 +1,5 @@
-import {specify, testRejected} from "./helper";
-
 import {Adapter} from "./Adapter";
+import {specify, testRejected} from "./helper";
 
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
 const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test for with strict equality
@@ -29,8 +28,8 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             setTimeout(() => {
                 d.reject(dummy);
                 isRejected = true;
-            }, 5);
-        });
+            }, 1);
+        }, 2);
 
         specify("never rejected", (done) => {
             const d = Adapter.deferred();
@@ -44,8 +43,8 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             setTimeout(() => {
                 expect(onRejectedCalled).toBe(false);
                 done();
-            }, 5);
-        });
+            }, 1);
+        }, 2);
     });
 
     describe("2.2.3.3: it must not be called more than once.", () => {
@@ -56,7 +55,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
                 expect(++timesCalled).toBe(1);
                 done();
             });
-        });
+        }, 1);
 
         specify("trying to reject a pending promise more than once, immediately", (done) => {
             const d = Adapter.deferred();
@@ -83,8 +82,8 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             setTimeout(() => {
                 d.reject(dummy);
                 d.reject(dummy);
-            }, 5);
-        });
+            }, 1);
+        }, 2);
 
         specify("trying to reject a pending promise more than once, immediately then delayed", (done) => {
             const d = Adapter.deferred();
@@ -98,8 +97,8 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             d.reject(dummy);
             setTimeout(() => {
                 d.reject(dummy);
-            }, 5);
-        });
+            }, 1);
+        }, 2);
 
         specify("when multiple `then` calls are made, spaced apart in time", (done) => {
             const d = Adapter.deferred();
@@ -125,7 +124,7 @@ describe("2.2.3: If `onRejected` is a function,", () => {
             setTimeout(() => {
                 d.reject(dummy);
             }, 3);
-        });
+        }, 4);
 
         specify("when `then` is interleaved with rejection", (done) => {
             const d = Adapter.deferred();

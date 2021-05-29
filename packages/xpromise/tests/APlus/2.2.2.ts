@@ -28,8 +28,8 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             setTimeout(() => {
                 d.resolve(dummy);
                 isFulfilled = true;
-            }, 5);
-        });
+            }, 1);
+        }, 2);
 
         specify("never fulfilled", (done) => {
             const d = Adapter.deferred();
@@ -43,8 +43,8 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             setTimeout(() => {
                 expect(onFulfilledCalled).toBe(false);
                 done();
-            }, 5);
-        });
+            }, 1);
+        }, 2);
     });
 
     describe("2.2.2.3: it must not be called more than once.", () => {
@@ -55,7 +55,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
                 expect(++timesCalled).toBe(1);
                 done();
             });
-        });
+        }, 1);
 
         specify("trying to fulfill a pending promise more than once, immediately", (done) => {
             const d = Adapter.deferred();
@@ -82,8 +82,8 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             setTimeout(() => {
                 d.resolve(dummy);
                 d.resolve(dummy);
-            }, 5);
-        });
+            }, 1);
+        }, 2);
 
         specify("trying to fulfill a pending promise more than once, immediately then delayed", (done) => {
             const d = Adapter.deferred();
@@ -97,8 +97,8 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             d.resolve(dummy);
             setTimeout(() => {
                 d.resolve(dummy);
-            }, 5);
-        });
+            }, 1);
+        }, 2);
 
         specify("when multiple `then` calls are made, spaced apart in time", (done) => {
             const d = Adapter.deferred();
@@ -124,7 +124,7 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
             setTimeout(() => {
                 d.resolve(dummy);
             }, 6);
-        });
+        }, 8);
 
         specify("when `then` is interleaved with fulfillment", (done) => {
             const d = Adapter.deferred();
@@ -140,6 +140,6 @@ describe("2.2.2: If `onFulfilled` is a function,", () => {
                 expect(++timesCalled[1]).toBe(1);
                 done();
             });
-        });
+        }, 1);
     });
 });

@@ -132,7 +132,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
                         setTimeout(() => {
                             expect(calls).toStrictEqual([handler1, handler2, handler3]);
                             done();
-                        }, 5);
+                        }, 1);
                     });
                 });
             });
@@ -258,7 +258,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
                         setTimeout(() => {
                             expect(calls).toStrictEqual([handler1, handler2, handler3]);
                             done();
-                        }, 5);
+                        }, 1);
                     });
                 });
             });

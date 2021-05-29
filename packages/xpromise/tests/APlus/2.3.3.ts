@@ -354,7 +354,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     "`rejectPromise`, both synchronously", () => {
                     function xFactory() {
                         const d = Adapter.deferred();
-                        setTimeout(() => d.resolve(sentinel), 5);
+                        setTimeout(() => d.resolve(sentinel), 1);
 
                         return {
                             then: (resolvePromise, rejectPromise) => {
@@ -375,7 +375,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     "`rejectPromise`, both synchronously", () => {
                     function xFactory() {
                         const d = Adapter.deferred();
-                        setTimeout(() => d.reject(sentinel), 5);
+                        setTimeout(() => d.reject(sentinel), 1);
 
                         return {
                             then: (resolvePromise, rejectPromise) => {
@@ -502,7 +502,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     "times synchronously", () => {
                     function xFactory() {
                         const d = Adapter.deferred();
-                        setTimeout(() => d.resolve(sentinel), 5);
+                        setTimeout(() => d.resolve(sentinel), 1);
 
                         return {
                             then: (resolvePromise) => {
@@ -523,7 +523,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                     "times synchronously", () => {
                     function xFactory() {
                         const d = Adapter.deferred();
-                        setTimeout(() => d.reject(sentinel), 5);
+                        setTimeout(() => d.reject(sentinel), 1);
 
                         return {
                             then: (resolvePromise) => {
@@ -665,7 +665,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("`resolvePromise` was called with an asynchronously-fulfilled promise", () => {
                     function xFactory() {
                         const d = Adapter.deferred();
-                        setTimeout(() => d.resolve(sentinel), 5);
+                        setTimeout(() => d.resolve(sentinel), 1);
 
                         return {
                             then: (resolvePromise) => {
@@ -685,7 +685,7 @@ describe("2.3.3: Otherwise, if `x` is an object or function,", () => {
                 describe("`resolvePromise` was called with an asynchronously-rejected promise", () => {
                     function xFactory() {
                         const d = Adapter.deferred();
-                        setTimeout(() => d.reject(sentinel), 5);
+                        setTimeout(() => d.reject(sentinel), 1);
 
                         return {
                             then: (resolvePromise) => {

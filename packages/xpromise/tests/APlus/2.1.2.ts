@@ -13,6 +13,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
             expect(onFulfilledCalled).toBe(false);
             done();
         });
+        setTimeout(done, 1);
     });
 
     specify("trying to fulfill then immediately reject", (done) => {
@@ -29,6 +30,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
         d.resolve(dummy);
         d.reject(dummy);
 
+        setTimeout(done, 2);
     });
 
     specify("trying to fulfill then reject, delayed", (done) => {
@@ -45,8 +47,8 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
         setTimeout(() => {
             d.resolve(dummy);
             d.reject(dummy);
-        }, 5);
-
+        }, 1);
+        setTimeout(done, 2);
     });
 
     specify("trying to fulfill immediately then reject delayed", (done) => {
@@ -61,7 +63,7 @@ describe("2.1.2.1: When fulfilled, a promise: must not transition to any other s
         });
 
         d.resolve(dummy);
-        setTimeout(() => d.reject(dummy), 5);
-
+        setTimeout(() => d.reject(dummy), 1);
+        setTimeout(done, 2);
     });
 });
