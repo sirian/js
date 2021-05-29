@@ -1,14 +1,12 @@
-import {TestUtil} from "../../../common/tests/TestUtil";
-import {Base64} from "../../src";
+import {makeArray, randomInt, randomUint8} from "@sirian/common";
+import {Base64, base64Encode} from "../../src";
 
 describe("Random strings", () => {
-    const data = TestUtil.randStrings(20, 0, 50);
+    const data = makeArray(100, () => new Uint8Array(makeArray(randomInt(0, 1000), randomUint8)));
 
-    test.each(data)("encode/decode %p", (str) => {
-        const expected = Buffer.from(str).toString("base64");
-        const encoded = Base64.encode(str, true);
-        const decoded = Base64.decode(encoded, true);
-        expect(encoded).toBe(expected);
-        expect(decoded).toBe(str);
+    test.each(data)("encode/decode %o", (uint8) => {
+        const b64 = Buffer.from(uint8).toString("base64");
+        expect(base64Encode(uint8)).toBe(b64);
+        expect(Base64.decode(b64)).toStrictEqual(uint8);
     });
 });

@@ -1,100 +1,69 @@
-// tslint:disable:no-console max-line-length
-declare function gc(): void;
+// tslint:disable:no-console
 
-declare function require(x: string): any;
+import {toUTF} from "@sirian/common";
+import {base64Decode, base64Encode} from "../src";
+import {BufferBase64, IBase64} from "./BufferBase64";
 
-declare const console: any;
+const Buf = global.Buffer;
+Reflect.deleteProperty(global, "Buffer");
 
-declare function encodeURIComponent(uriComponent: string | number | boolean): string;
-
-declare function decodeURIComponent(encodedURIComponent: string): string;
-
-import {Base64} from "../src";
-
-const Buf = (globalThis as any).Buffer;
-const assert = (expected: any, actual: any) => {
-    if (expected !== actual) {
-        throw new Error(`String mismatch`);
-    }
+const engines: Record<string, IBase64> = {
+    "Buffer": BufferBase64,
+    // "polyfill1": Polyfill1,
+    // "polyfill2": Polyfill2,
+    "@sirian/base64": {
+        encode: base64Encode,
+        decode: (x) => toUTF(base64Decode(x)),
+    },
+    "js-base64": require("js-base64").Base64,
+    "base-64": require("base-64"),
 };
 
-delete (globalThis as any).Buffer;
+global.Buffer = Buf;
 
-interface IBase64 {
-    encode: (value: string) => string;
-    decode: (value: string) => string;
+function testEngine(N: number, engine: IBase64, method: "encode" | "decode", value: string, expected: string) {
+    const fn = engine[method].bind(engine, value);
+    const start = Date.now();
+    for (let i = 0; i < N; i++) {
+        const result = fn();
+        if (expected !== result) {
+            throw new Error("String mismatch at sample " + i);
+        }
+    }
+    return Date.now() - start;
 }
 
-(() => {
-    const engines: Record<string, IBase64> = {
-        "Buffer": {
-            encode: (x) => Buf.from(x).toString("base64"),
-            decode: (x) => Buf.from(x, "base64").toString(),
-        },
-        // "polyfill_1": {
-        //     encode: (x) =>
-        //         btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
-        //     decode: (x) =>
-        //         decodeURIComponent([].map.call(atob(x), (c: string) =>
-        //             "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
-        // },
-        // "polyfill_2": {
-        //     encode: (s) => btoa(unescape(encodeURIComponent(s))),
-        //     decode: (s) => decodeURIComponent(escape(atob(s))),
-        // },
-        "js-base64": require("js-base64").Base64,
-        "base-64": require("base-64"),
-        "@sirian/base64": {
-            encode: (x) => Base64.encode(x, true),
-            decode: (x) => Base64.decode(x, true),
-        },
-    };
+const strings = [
+    "",
+    "foo bar",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
+    "Z͑ͫ̓ͪ̂ͫ̽͏̴̙̤̞͉͚̯̞̠͍A̴̵̜̰͔ͫ͗͢L̠ͨͧͩ͘G̴̻͈͍͔̹̑͗̎̅͛́Ǫ̵̹̻̝̳͂̌̌͘!͖̬̰̙̗̿̋ͥͥ̂ͣ̐́́͜͞😹🐶😹🐶💩𝌆",
+];
 
-    function testEngine(N: number, {encode, decode}: IBase64, enc: boolean) {
-        if ("function" === typeof gc) {
-            gc();
-        }
+for (const str of strings) {
+    for (const method of ["encode", "decode"] as const) {
+        const str64 = BufferBase64.encode(str);
+        const [value, expected] = "encode" === method ? [str, str64] : [str64, str];
 
-        const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, "
-            + "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-            + "Современные технологии достигли такого уровня, что синтетическое тестирование "
-            + "обеспечивает широкому кругу (специалистов) участие в формировании форм воздействия.";
+        console.log("%s(%o)", method, value);
 
-        const str64 = Buf.from(str).toString("base64");
-
-        if (enc) {
-            assert(str64, encode(str));
-        } else {
-            assert(str, decode(str64));
-        }
-        const start = Date.now();
-        for (let i = 0; i < N; i++) {
-            enc ? encode(str) : decode(str64);
-        }
-        return Date.now() - start;
-    }
-
-    for (const enc of [true, false]) {
         const data: Record<number, Record<string, number>> = {};
         let maxTime = 0;
-        for (let N = 500; maxTime < 500; N *= 2) {
+        for (let N = 2000; maxTime < 1000; N *= 2) {
             const times: Record<string, any> = {};
-            console.group(`Test ${enc ? "encode" : "decode"} ${N}`);
-
             for (const [name, engine] of Object.entries(engines)) {
                 try {
-                    const time = testEngine(N, engine, enc);
+                    const time = testEngine(N, engine, method, value, expected);
                     maxTime = Math.max(time, maxTime);
                     times[name] = time;
                 } catch (e) {
                     times[name] = e.message;
                 }
             }
-            console.groupEnd();
 
             data[N] = times;
         }
 
         console.table(data);
     }
-})();
+}

@@ -1,52 +1,30 @@
+import {ByteInput, toBytes} from "@sirian/common";
 import {base64Chars} from "./const";
 
-export const base64Encode = (uint8: Uint8Array): string => {
-    const length = uint8.length;
-    const extraBytes = length % 3; // if we have 1 byte left, pad 2 bytes
-    let result = "";
-    const maxChunkLength = 16383; // must be multiple of 3
-    const length3 = length - extraBytes;
-
-    // go through the array every three bytes, we'll deal with trailing stuff later
-    const mask = 0x3F;
-    for (let start = 0; start < length3; start += maxChunkLength) {
-        const chunkEnd = start + maxChunkLength;
-
-        const end = chunkEnd > length3 ? length3 : chunkEnd;
-
-        let chunk = "";
-        for (let i = start; i < end; i += 3) {
-            const tmp =
-                (uint8[i] << 16)
-                + (uint8[i + 1] << 8)
-                + (uint8[i + 2]);
-
-            chunk +=
-                base64Chars[mask & (tmp >> 18)] +
-                base64Chars[mask & (tmp >> 12)] +
-                base64Chars[mask & (tmp >> 6)] +
-                base64Chars[mask & (tmp)];
-
-        }
-        result += chunk;
+export const base64Encode = (input: ByteInput): string => {
+    if (null == input || "" === input) {
+        return "";
     }
 
-    // pad the end with zeros, but make sure to not forget the extra bytes
-    if (1 === extraBytes) {
-        const tmp = uint8[length - 1];
+    const uint8 = toBytes(input);
+
+    const len = uint8.length;
+    const rest = len % 3;
+
+    let result: string = "";
+
+    for (let i = 0; i < len; i) {
+        const a = uint8[i++];
+        const b = i < len ? uint8[i++] : 0;
+        const c = i < len ? uint8[i++] : 0;
+
+        const bitmap = (a << 16) | (b << 8) | c;
         result +=
-            base64Chars[(tmp >> 2)] +
-            base64Chars[mask & (tmp << 4)] +
-            "==";
-    }
-    if (2 === extraBytes) {
-        const tmp = (uint8[length - 2] << 8) + (uint8[length - 1]);
-        result +=
-            base64Chars[(tmp >> 10)] +
-            base64Chars[mask & (tmp >> 4)] +
-            base64Chars[mask & (tmp << 2)] +
-            "=";
+            base64Chars[bitmap >> 18 & 63]
+            + base64Chars[bitmap >> 12 & 63]
+            + base64Chars[bitmap >> 6 & 63]
+            + base64Chars[bitmap & 63];
     }
 
-    return result;
+    return rest ? result.slice(0, rest - 3) + (1 === rest ? "==" : "=") : result;
 };

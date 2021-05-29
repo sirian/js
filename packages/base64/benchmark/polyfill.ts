@@ -1,3 +1,5 @@
+import {IBase64} from "./BufferBase64";
+
 const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 const b64re = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
 
@@ -60,4 +62,15 @@ export const atob = (x: string) => {
                   fromCharCode(bitmap >> 16 & 255, bitmap >> 8 & 255, bitmap & 255);
     }
     return result;
+};
+
+export const Polyfill1: IBase64 = {
+    encode: (x) =>
+        btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
+    decode: (x) =>
+        decodeURIComponent([].map.call(atob(x), (c: string) => "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
+};
+export const Polyfill2: IBase64 = {
+    encode: (s) => btoa(unescape(encodeURIComponent(s))),
+    decode: (s) => decodeURIComponent(escape(atob(s))),
 };
