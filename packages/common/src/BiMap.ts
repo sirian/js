@@ -2,12 +2,7 @@ import {XMap} from "./XMap";
 import {XSet} from "./XSet";
 
 export class BiMap<K = any, V = any> extends XMap<K, V> {
-    protected reverse: XMap<V, XSet<K>>;
-
-    constructor() {
-        super();
-        this.reverse = new XMap(() => new XSet());
-    }
+    protected reverse: XMap<V, XSet<K>> = new XMap(() => new XSet());
 
     public clear() {
         this.reverse.clear();

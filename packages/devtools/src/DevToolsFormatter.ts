@@ -11,11 +11,7 @@ export interface IDevToolsFormatter<T = any, C = any> {
 }
 
 export abstract class DevToolsFormatter<T = any, C = any> implements IDevToolsFormatter {
-    protected readonly wrapper: DevToolsWrapper<T, C>;
-
-    constructor() {
-        this.wrapper = new DevToolsWrapper(this);
-    }
+    protected readonly wrapper: DevToolsWrapper<T, C> = new DevToolsWrapper(this);
 
     public static enable<F extends DevToolsFormatter, A extends any[]>(this: Ctor<F, A>, ...args: A) {
         return new this(...args);

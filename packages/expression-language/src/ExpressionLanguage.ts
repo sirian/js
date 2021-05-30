@@ -12,21 +12,17 @@ export interface ExpressionLanguageInit {
 }
 
 export class ExpressionLanguage {
-    protected functions: Record<string, IExpressionFunction>;
+    protected functions: Record<string, IExpressionFunction> = {};
     protected compiler: Compiler;
-    protected tokenizer: Tokenizer;
-    protected parser: Parser;
+    protected tokenizer = new Tokenizer();
+    protected parser = new Parser();
 
     constructor(init: Partial<ExpressionLanguageInit> = {}) {
-        this.functions = {};
-
         for (const [name, fn] of entriesOf(init.functions || {})) {
             this.functions[name] = isFunction(fn) ? new SimpleExpressionFunction(fn) : fn;
         }
 
         this.compiler = new Compiler(this.functions);
-        this.tokenizer = new Tokenizer();
-        this.parser = new Parser();
     }
 
     public getFunctionNames() {

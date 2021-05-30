@@ -19,22 +19,17 @@ const enum DisposerState {
 export class Disposer<T extends object> {
     public readonly target: T;
 
-    private readonly _before: Set<DisposeCallback<T>>;
-    private readonly _after: Set<DisposeCallback<T>>;
-    private readonly _applied: WeakSet<DisposeCallback<T>>;
-    private readonly _children: Set<Disposer<any>>;
-    private readonly _sources: Set<Disposer<any>>;
+    private readonly _before = new Set<DisposeCallback<T>>();
+    private readonly _after = new Set<DisposeCallback<T>>();
+    private readonly _applied = new WeakSet<DisposeCallback<T>>();
+    private readonly _children = new Set<Disposer<any>>();
+    private readonly _sources = new Set<Disposer<any>>();
     private _timeoutId?: Return<typeof setTimeout>;
     private _state: DisposerState = DisposerState.INITIAL;
     private readonly _manager: DisposerManager<any>;
 
     constructor(manager: DisposerManager<any>, target: T) {
         this.target = target;
-        this._applied = new WeakSet();
-        this._children = new Set();
-        this._sources = new Set();
-        this._before = new Set();
-        this._after = new Set();
         this._manager = manager;
     }
 
@@ -109,43 +104,46 @@ export class Disposer<T extends object> {
     }
 
     public dispose() {
-        if (DisposerState.INITIAL !== this._state) {
+        const self = this;
+
+        if (DisposerState.INITIAL !== self._state) {
             return;
         }
 
-        this._state = DisposerState.BEFORE_CHILDREN;
+        self._state = DisposerState.BEFORE_CHILDREN;
 
-        this.clearTimeout();
+        self.clearTimeout();
 
-        const target = this.target;
-        this._manager.emit("dispose", target, this);
+        const target = self.target;
+        self._manager.emit("dispose", target, self);
 
-        this._before.forEach((fn) => this._handle(fn));
-        this._before.clear();
+        self._before.forEach((fn) => self._handle(fn));
+        self._before.clear();
 
-        this._state = DisposerState.CHILDREN;
+        self._state = DisposerState.CHILDREN;
 
-        this._sources.forEach((source) => source._children.delete(this));
-        this._sources.clear();
+        self._sources.forEach((source) => source._children.delete(self));
+        self._sources.clear();
 
-        this._manager.dispose(...this._children);
+        self._manager.dispose(...self._children);
 
-        this._state = DisposerState.AFTER_CHILDREN;
-        this._after.forEach((fn) => this._handle(fn));
-        this._after.clear();
+        self._state = DisposerState.AFTER_CHILDREN;
+        self._after.forEach((fn) => self._handle(fn));
+        self._after.clear();
 
-        this._state = DisposerState.DISPOSED;
-        this._manager.emit("disposed", target, this);
+        self._state = DisposerState.DISPOSED;
+        self._manager.emit("disposed", target, self);
     }
 
     private _handle(callback: DisposeCallback<T>) {
+        const self = this;
         try {
-            if (!this._applied.has(callback)) {
-                this._applied.add(callback);
-                callback(this.target, this);
+            if (!self._applied.has(callback)) {
+                self._applied.add(callback);
+                callback(self.target, self);
             }
         } catch (e) {
-            this._manager.emit("error", e, this.target, this, callback);
+            self._manager.emit("error", e, self.target, self, callback);
         }
     }
 }

@@ -6,19 +6,15 @@ import {XWeakMap} from "./XWeakMap";
 
 export class HybridMap<K, V> implements IMapMini<K, V> {
     private readonly _initializer?: XMapInitializer;
-    private readonly _strongMap: XMap<K & Primitive, V>;
-    private _weakMap: XWeakMap<K & object, V>;
+    private readonly _strongMap: XMap<K & Primitive, V> = new XMap();
+    private _weakMap: XWeakMap<K & object, V> = new XWeakMap();
 
     constructor(initializer?: XMapInitializer<K, V>);
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
 
     constructor(...args: any[]) {
         const [src, initializer] = parseMapArgs(args);
-
-        this._weakMap = new XWeakMap();
-        this._strongMap = new XMap();
         this._initializer = initializer;
-
         src.forEach(([key, value]) => this.set(key, value));
     }
 

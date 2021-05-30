@@ -3,9 +3,9 @@ import {IDeferred, OnFinally, OnFulfill, OnReject, Rejector, Resolver} from "./X
 export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
     public readonly promise: PromiseLike<T>;
 
+    private readonly _factory: PromiseConstructorLike;
     private _resolver!: Resolver<T>;
     private _rejector!: Rejector;
-    private readonly _factory: PromiseConstructorLike;
 
     constructor(factory: PromiseConstructorLike = Promise) {
         this._factory = factory;
@@ -29,7 +29,7 @@ export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
     }
 
     public finally(f?: OnFinally) {
-        if (typeof f !== "function") {
+        if ("function" !== typeof f) {
             return this.then(f, f);
         }
 

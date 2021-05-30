@@ -1,17 +1,16 @@
 import {TaskCallback} from "./TaskQueue";
 
 export abstract class AsyncTask {
-    public static readonly tasks = new Map<number, AsyncTask>();
+    private static readonly _tasks = new Map<number, AsyncTask>();
 
     private static _lastId = 0;
 
     private _callback?: TaskCallback;
     private _id?: number;
-    private _destroyed: boolean;
+    private _destroyed: boolean = false;
 
     constructor(callback?: TaskCallback) {
         this._callback = callback;
-        this._destroyed = false;
     }
 
     public static create<T extends AsyncTask, A extends any[]>(this: new(...args: A) => T, ...args: A) {
@@ -26,7 +25,7 @@ export abstract class AsyncTask {
         if (!this._destroyed && !this.isScheduled()) {
             const id = ++AsyncTask._lastId;
             this._id = id;
-            AsyncTask.tasks.set(id, this);
+            AsyncTask._tasks.set(id, this);
             this._start(() => !this._destroyed && id === this._id && this._handle());
         }
         return this;
@@ -34,7 +33,7 @@ export abstract class AsyncTask {
 
     public clear() {
         if (this._id) {
-            AsyncTask.tasks.delete(this._id);
+            AsyncTask._tasks.delete(this._id);
             delete this._id;
         }
         this._clear();

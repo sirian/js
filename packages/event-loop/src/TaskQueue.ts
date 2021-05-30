@@ -6,11 +6,10 @@ export class TaskQueue {
     private static _lastId: number = 0;
 
     private _tasks: Record<string, Task> = {};
-    private _scheduled: boolean;
+    private _scheduled = false;
     private readonly _scheduler: (callback: () => void) => void;
 
     constructor(scheduler: (callback: () => void) => void) {
-        this._scheduled = false;
         this._scheduler = scheduler;
     }
 

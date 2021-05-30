@@ -12,11 +12,9 @@ export interface ICloneHandler<T> {
 export class Cloner implements ICloner<any> {
     public static readonly symbol: typeof cloneSymbol = cloneSymbol;
 
-    protected handlers: Map<object, ICloneHandler<any>>;
+    protected handlers: Map<object, ICloneHandler<any>> = new Map();
 
     public constructor() {
-        this.handlers = new Map();
-
         this.addHandler(Array, {
             create: (src) => new Array(src.length),
             init: (stub, src, ctx) => src.forEach((value, index) => ctx.cloneProperty(stub, src, index)),

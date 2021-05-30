@@ -5,10 +5,6 @@ import {MultiDispatcher} from "./MultiDispatcher";
 export type EventsDispatcherEventMap = Record<string, BaseEvent>;
 
 export class EventsDispatcher<T extends EventsDispatcherEventMap> extends MultiDispatcher<{ [P in keyof T]: [T[P]] }> {
-    constructor() {
-        super();
-    }
-
     public emit<K extends keyof T>(eventName: K, event: T[K]) {
         super.emit(eventName, event);
         return event;

@@ -6,11 +6,7 @@ const openBrackets = "([{";
 const closeBrackets = ")]}";
 
 export class BracketLexer implements ILexer<TokenTypes> {
-    protected brackets: WeakMap<Reader, Array<[string, number]>>;
-
-    constructor() {
-        this.brackets = new WeakMap();
-    }
+    protected brackets: WeakMap<Reader, Array<[string, number]>> = new WeakMap();
 
     public handle(reader: Reader, stream: TokenStream) {
         return this.openBracket(reader, stream) || this.closeBracket(reader, stream);

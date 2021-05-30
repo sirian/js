@@ -12,15 +12,13 @@ export interface MultiDispatcherOptions<T extends MultiDispatcherEventMap> {
 
 export class MultiDispatcher<T extends MultiDispatcherEventMap = any> {
     protected readonly options: MultiDispatcherOptions<T>;
-    private readonly _map: XMap<keyof T, Dispatcher>;
+    private readonly _map: XMap<keyof T, Dispatcher> = new XMap();
 
     constructor(options: Partial<MultiDispatcherOptions<T>> = {}) {
         this.options = {
             onError: (e) => throwError(e),
             ...options,
         };
-
-        this._map = new XMap();
     }
 
     public on<K extends keyof T>(event: K, listener: MultiDispatcherCallback<T, K>, opts?: ListenerOptions) {

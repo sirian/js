@@ -16,10 +16,6 @@ import {StrictObject} from "./StrictObject";
 export class ResolvableParameterBag<T extends Record<string | number, any>> extends ParameterBag<T> {
     protected resolved?: T;
 
-    constructor(params?: T) {
-        super(params);
-    }
-
     public escape<V>(value: V): V;
     public escape(value: any): any {
         if (isString(value)) {

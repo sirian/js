@@ -12,12 +12,10 @@ import {TokenType, TokenTypes} from "./Token";
 import {TokenStream} from "./TokenStream";
 
 export class Tokenizer extends LexerTokenizer<TokenTypes> {
-    protected bracketLexer: BracketLexer;
+    protected bracketLexer: BracketLexer = new BracketLexer();
 
     constructor() {
         super();
-
-        this.bracketLexer = new BracketLexer();
 
         this.setHandlers([
             new WhitespaceLexer(),

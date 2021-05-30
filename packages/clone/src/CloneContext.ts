@@ -16,8 +16,8 @@ import {Cloner, ICloneHandler} from "./Cloner";
 import {CloneOptions} from "./ICloner";
 
 export class CloneContext {
-    private readonly stack: object[];
-    private readonly map: Map<any, any>;
+    private readonly stack: object[] = [];
+    private readonly map = new Map<any, any>();
     private readonly cloner: Cloner;
     private readonly maxDepth: number;
     private readonly bypass: (object: object, ctx: CloneContext) => boolean;
@@ -26,8 +26,6 @@ export class CloneContext {
         this.maxDepth = options.maxDepth ?? 0;
         this.bypass = options.bypass ?? (() => false);
         this.cloner = cloner;
-        this.map = new Map();
-        this.stack = [];
     }
 
     public get depth() {

@@ -6,11 +6,10 @@ export class CloneValidator {
     protected stack!: Array<[object, PropertyKey]>;
     protected cloner: Cloner;
     protected options!: Partial<CloneOptions>;
-    protected map: Map<object, [object, number]>;
+    protected map: Map<object, [object, number]> = new Map();
 
     public constructor(cloner: Cloner) {
         this.cloner = cloner;
-        this.map = new Map();
     }
 
     protected get maxDepth() {

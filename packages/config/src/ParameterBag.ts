@@ -2,10 +2,9 @@ import {assign, deleteProp, entriesOf, hasOwn, isPropertyKey, keysOf, valuesOf} 
 import {ParameterNotFoundError} from "./Error";
 
 export class ParameterBag<T extends Record<string | number, any>> {
-    protected params: Partial<T>;
+    protected params: Partial<T> = {};
 
     constructor(params: Partial<T> = {}) {
-        this.params = {};
         this.set(params);
     }
 
