@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.64.4...@sirian/ts-extra-types@4.0.0) (2021-05-30)
+
+
+### Features
+
+* build target = ESNext ([8d4529a](https://github.com/sirian/js/commit/8d4529a4e1628ad769c0bb84a5cd353520dc0d76))
+
+
+
+
+
 ## [3.64.4](https://github.com/sirian/js/compare/@sirian/ts-extra-types@3.64.3...@sirian/ts-extra-types@3.64.4) (2021-05-19)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

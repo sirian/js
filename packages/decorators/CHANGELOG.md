@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/sirian/js/compare/@sirian/decorators@1.6.22...@sirian/decorators@2.0.0) (2021-05-30)
+
+**Note:** Version bump only for package @sirian/decorators
+
+
+
+
+
 ## [1.6.22](https://github.com/sirian/js/compare/@sirian/decorators@1.6.21...@sirian/decorators@1.6.22) (2021-05-29)
 
 **Note:** Version bump only for package @sirian/decorators
