@@ -1,4 +1,4 @@
-import {AssertExact, NodePath} from "../../src";
+import {AssertExact, NodeParents} from "../../src";
 
 interface Root {}
 
@@ -7,7 +7,11 @@ interface C1 {
 }
 
 interface C2 {
-    parent: C1;
+    parent: C1 | null;
+}
+
+interface C3 {
+    parent: C2 | C1;
 }
 
 interface Foo {
@@ -15,8 +19,9 @@ interface Foo {
 }
 
 type Test = [
-    AssertExact<NodePath<Root>, [Root]>,
-    AssertExact<NodePath<C1>, [C1, Root]>,
-    AssertExact<NodePath<C2>, [C2, C1, Root]>,
-    AssertExact<NodePath<Foo>, Foo[]>,
+    AssertExact<NodeParents<Root, "parent">, [Root]>,
+    AssertExact<NodeParents<C1, "parent">, [C1, Root]>,
+    AssertExact<NodeParents<C2, "parent">, [C2] | [C2, C1, Root]>,
+    AssertExact<NodeParents<C3, "parent">, [C3, C2] | [C3, C2, C1, Root] | [C3, C1, Root]>,
+    AssertExact<NodeParents<Foo, "parent">, Foo[]>,
 ];
