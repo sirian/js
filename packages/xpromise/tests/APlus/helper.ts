@@ -35,7 +35,7 @@ export const specify = (name: string, fn: DoneAwareCallback) => {
     test(name, fn.length === 0 ? fn : (done) => {
         fn(() => done());
         // setTimeout(done, timeout);
-    }, 10);
+    }, 20);
 };
 
 export const testFulfilled = (value: any, fn: (promise: PromiseLike<any>, done?: DoneCallback) => any) => {
