@@ -20,6 +20,7 @@ export * from "./Rgx";
 export * from "./Sprintf";
 export * from "./Str";
 export * from "./Stringify";
+export * from "./Tree";
 export * from "./Var";
 export * from "./XMap";
 export * from "./XUtils";

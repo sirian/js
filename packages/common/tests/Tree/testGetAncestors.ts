@@ -1,5 +1,4 @@
-import {makeArray} from "@sirian/common";
-import {getParents} from "../../src/Tree";
+import {getParents, makeArray} from "../../src";
 
 describe("getParents", () => {
     const nodes = makeArray(5, (i) => ({name: i, parent: null as any}));
