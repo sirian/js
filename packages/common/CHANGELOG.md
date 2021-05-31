@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.1.0](https://github.com/sirian/js/compare/@sirian/common@9.0.1...@sirian/common@9.1.0) (2021-05-31)
+
+
+### Features
+
+* **common:** getAncestors, getParents ([e8ec02b](https://github.com/sirian/js/commit/e8ec02b0f6bc8ecc61e6e67406a91f643db3d4a6))
+
+
+
+
+
 ## [9.0.1](https://github.com/sirian/js/compare/@sirian/common@9.0.0...@sirian/common@9.0.1) (2021-05-30)
 
 **Note:** Version bump only for package @sirian/common

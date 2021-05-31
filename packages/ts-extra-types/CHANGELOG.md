@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.0.1...@sirian/ts-extra-types@4.1.0) (2021-05-31)
+
+
+### Features
+
+* **ts-extra-types:** NodeAncestors ([5cd3b26](https://github.com/sirian/js/commit/5cd3b268eb79042549aa99af486d7e6d6215a8c2))
+
+
+
+
+
 ## [4.0.1](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.0.0...@sirian/ts-extra-types@4.0.1) (2021-05-30)
 
 **Note:** Version bump only for package @sirian/ts-extra-types
