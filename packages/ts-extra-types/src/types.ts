@@ -117,3 +117,7 @@ export type DeepPartial<T> = {
 export type DeepRequire<T> = {
     [P in keyof T]-?: DeepRequire<T[P]>;
 };
+
+export type Writable<T> = {
+    -readonly [P in keyof T]: T[P];
+};

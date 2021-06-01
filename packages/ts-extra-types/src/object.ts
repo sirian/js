@@ -2,7 +2,7 @@ import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBe, MustBeString} from "./mustbe";
 import {ArrayRO, GetRest, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
-import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide, UnionToIntersection} from "./types";
+import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide, UnionToIntersection, Writable} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
 
@@ -118,10 +118,6 @@ export type IsRequiredKey<T, K extends keyof T> = IsRequired<MyPick<T, K>>;
 
 export type IsRequired<T> = IsExtends<T, Required<T>>;
 export type IsPartial<T> = IsExtends<Partial<T>, T>;
-
-export type Writable<T> = {
-    -readonly [P in keyof T]: T[P];
-};
 
 export type ReadonlyKeys<T> = Exclude<KeyOf<T>, WritableKeys<T>>;
 export type WritableKeys<T> = {
