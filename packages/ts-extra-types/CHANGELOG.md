@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.1.0...@sirian/ts-extra-types@4.2.0) (2021-06-01)
+
+
+### Features
+
+* **ts-extra-types:** readonly updates for tuples ([7ad2ffe](https://github.com/sirian/js/commit/7ad2ffe11883a584bad80840caf0e51b8ebee673))
+
+
+
+
+
 # [4.1.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.0.1...@sirian/ts-extra-types@4.1.0) (2021-05-31)
 
 
