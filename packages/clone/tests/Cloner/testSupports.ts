@@ -1,4 +1,3 @@
-import {TestUtil} from "../../../common/tests/TestUtil";
 import {cloner, cloneSymbol} from "../../src";
 
 class Foo {
@@ -34,16 +33,15 @@ const trueData = [
     new DataView(new ArrayBuffer(42)),
     new Bar(),
     new Baz(),
-] as const;
+].map((v) => [v, true]);
 
 const falseData = [
     new WeakMap(),
     new WeakSet(),
     new class {}(),
     new Foo(),
-] as const;
+].map((v) => [v, false]);
 
-const data = TestUtil.mergeData(trueData, falseData);
-test.each(data)("Cloner.supports(%O) === %p", (obj, expected) => {
+test.each([...trueData, ...falseData])("Cloner.supports(%O) === %p", (obj, expected) => {
     expect(cloner.supports(obj)).toBe(expected);
 });

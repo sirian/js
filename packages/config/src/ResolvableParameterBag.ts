@@ -48,7 +48,7 @@ export class ResolvableParameterBag<T extends Record<string | number, any>> exte
     public resolve() {
         if (!this.resolved) {
             const resolved: any = {};
-            for (const [key, value] of entriesOf(this.params)) {
+            for (const [key, value] of entriesOf(this.params as Record<string | number, any>)) {
                 resolved[key] = this.resolveValue(value);
             }
             this.params = this.unescape(resolved as T);

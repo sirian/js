@@ -84,7 +84,7 @@ export class Compiler {
             this.raw("{");
             let first = false;
 
-            for (const [k, v] of entriesOf(value)) {
+            for (const [k, v] of entriesOf(value as Record<any, any>)) {
                 if (first) {
                     this.raw(",");
                 }
