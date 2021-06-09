@@ -1,6 +1,7 @@
 import {clearAlarm, setAlarm} from "../../src/setAlarm";
+import SpyInstance = jest.SpyInstance;
 
-let dateNowSpy;
+let dateNowSpy: SpyInstance;
 let now = 0;
 
 const sleep = (ms: number) => now += ms;

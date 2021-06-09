@@ -35,8 +35,8 @@ export abstract class AsyncTask {
         if (this._id) {
             AsyncTask._tasks.delete(this._id);
             delete this._id;
+            this._clear();
         }
-        this._clear();
         return this;
     }
 

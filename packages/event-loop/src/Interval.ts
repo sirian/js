@@ -17,7 +17,10 @@ export class Interval extends AsyncTask {
     }
 
     protected _clear() {
-        clearInterval(this._intervalId);
+        if (this._intervalId) {
+            clearInterval(this._intervalId);
+            delete this._intervalId;
+        }
     }
 
     protected _start(callback: TaskCallback) {

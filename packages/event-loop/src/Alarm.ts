@@ -17,7 +17,10 @@ export class Alarm extends AsyncTask {
     }
 
     protected _clear() {
-        clearAlarm(this._alarmId);
+        if (this._alarmId) {
+            clearAlarm(this._alarmId);
+            delete this._alarmId;
+        }
     }
 
     protected _start(callback: TaskCallback) {

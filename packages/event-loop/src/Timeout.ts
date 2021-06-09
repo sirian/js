@@ -16,7 +16,10 @@ export class Timeout extends AsyncTask {
     }
 
     protected _clear() {
-        clearTimeout(this._timeoutId);
+        if (this._timeoutId) {
+            clearTimeout(this._timeoutId);
+            delete this._timeoutId;
+        }
     }
 
     protected _start(callback: TaskCallback) {
