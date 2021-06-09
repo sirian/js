@@ -41,11 +41,11 @@ describe("XPromise.race", function() {
     });
 
     function delayResolve<T>(ms: number, value?: T) {
-        return new Promise<T>((resolve) => setTimeout(() => resolve(value), ms));
+        return new Promise<T>((resolve) => setTimeout(() => resolve(value as any), ms));
     }
 
     function delayReject<T>(ms: number, value?: T) {
-        return new Promise<T>((resolve, reject) => setTimeout(() => reject(new Error(value)), ms));
+        return new Promise<T>((resolve, reject) => setTimeout(() => reject(new Error(value as any)), ms));
     }
 
     test("The first resolving Promise should be acted upon.", async () => {

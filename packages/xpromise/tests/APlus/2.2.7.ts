@@ -23,7 +23,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
 
     describe("2.2.7.2: If either `onFulfilled` or `onRejected` throws an exception `e`, `promise2` must be rejected " +
         "with `e` as the reason.", () => {
-        function testReason(expectedReason, stringRepresentation) {
+        function testReason(expectedReason: any, stringRepresentation: string) {
             describe("The reason is " + stringRepresentation, () => {
                 testFulfilled(dummy, (promise1, done) => {
                     const promise2 = promise1.then(() => {
@@ -54,7 +54,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
     describe("2.2.7.3: If `onFulfilled` is not a function and `promise1` is fulfilled, `promise2` must be fulfilled " +
         "with the same value.", () => {
 
-        function testNonFunction(nonFunction, stringRepresentation) {
+        function testNonFunction(nonFunction: any, stringRepresentation: string) {
             describe("`onFulfilled` is " + stringRepresentation, () => {
                 testFulfilled(sentinel, (promise1, done) => {
                     const promise2 = promise1.then(nonFunction);
@@ -78,7 +78,7 @@ describe("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfi
     describe("2.2.7.4: If `onRejected` is not a function and `promise1` is rejected, `promise2` must be rejected " +
         "with the same reason.", () => {
 
-        function testNonFunction(nonFunction, stringRepresentation) {
+        function testNonFunction(nonFunction: any, stringRepresentation: string) {
             describe("`onRejected` is " + stringRepresentation, () => {
                 testRejected(sentinel, (promise1, done) => {
                     const promise2 = promise1.then(null, nonFunction);

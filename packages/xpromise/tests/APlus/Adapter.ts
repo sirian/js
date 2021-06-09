@@ -3,7 +3,7 @@ import {IDeferred} from "../../src";
 export class Adapter {
     protected static factory: <T>() => IDeferred<T>;
 
-    public static resolved<T>(value?) {
+    public static resolved<T>(value?: T) {
         const d = this.deferred<T>();
         d.resolve(value);
         return d.promise;

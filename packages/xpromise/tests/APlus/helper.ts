@@ -1,4 +1,3 @@
-import {entriesOf} from "@sirian/common";
 import {Func, Func0} from "@sirian/ts-extra-types";
 import {Adapter} from "./Adapter";
 
@@ -24,21 +23,24 @@ export const testReasons = (callback: (value: any, name: string) => any) => {
         "a rejected promise": () => Adapter.rejected({dummy: "rejected"}),
     };
 
-    for (const [name, fn] of entriesOf(reasons)) {
+    for (const [name, fn] of Object.entries(reasons)) {
         callback(fn(), name);
     }
 };
 
 export const expectNotCalled = (fn: Func) => () => expect(fn).not.toHaveBeenCalled();
 
-export const specify = (name: string, fn: DoneAwareCallback) => {
+export const specify = (name: string, fn: DoneAwareCallback, timeout: number = 20) => {
     test(name, fn.length === 0 ? fn : (done) => {
         fn(() => done());
         // setTimeout(done, timeout);
     }, 20);
 };
 
-export const testFulfilled = (value: any, fn: (promise: PromiseLike<any>, done?: DoneCallback) => any) => {
+export const testFulfilled: {
+    <T>(value: T | PromiseLike<T>, fn: (value: PromiseLike<T>, done: DoneCallback) => void): void;
+    <T>(value: T | PromiseLike<T>, fn: (value: PromiseLike<T>) => any): void
+} = (value: any, fn: Function) => {
     specify("already-fulfilled", fn.bind(null, Adapter.resolved(value)));
 
     specify("immediately-fulfilled", 1 === fn.length ? () => {
@@ -71,7 +73,10 @@ export const testFulfilled = (value: any, fn: (promise: PromiseLike<any>, done?:
 
 export const dummy = () => ({dummy: "dummy"});
 
-export const testRejected = (reason: any, fn: (promise: PromiseLike<any>, done?: DoneCallback) => any) => {
+export const testRejected: {
+    (reason: any, fn: (value: PromiseLike<any>, done: DoneCallback) => void): void;
+    (reason: any, fn: (value: PromiseLike<any>) => any): void
+} = (reason: any, fn: Function) => {
     test("already-rejected", fn.bind(null, Adapter.rejected(reason)));
 
     test("immediately-rejected", 1 === fn.length ? () => {

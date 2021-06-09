@@ -6,7 +6,7 @@ const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't 
 describe("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e. with no `this` value).", function() {
     describe("strict mode", function() {
         specify("fulfilled", function(done) {
-            Adapter.resolved(dummy).then(function onFulfilled() {
+            Adapter.resolved(dummy).then(function onFulfilled(this: any) {
                 "use strict";
 
                 expect(this).toBe(undefined);
@@ -15,7 +15,7 @@ describe("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e.
         });
 
         specify("rejected", function(done) {
-            Adapter.rejected(dummy).then(null, function onRejected() {
+            Adapter.rejected(dummy).then(null, function onRejected(this: any) {
                 "use strict";
 
                 expect(this).toBe(undefined);
@@ -26,14 +26,14 @@ describe("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e.
 
     describe.skip("sloppy mode", function() {
         specify("fulfilled", function(done) {
-            Adapter.resolved(dummy).then(function onFulfilled() {
+            Adapter.resolved(dummy).then(function onFulfilled(this: any) {
                 expect(this).toBe(global);
                 done();
             });
         });
 
         specify("rejected", function(done) {
-            Adapter.rejected(dummy).then(null, function onRejected() {
+            Adapter.rejected(dummy).then(null, function onRejected(this: any) {
                 expect(this).toBe(global);
                 done();
             });

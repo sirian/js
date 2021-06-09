@@ -1,3 +1,4 @@
+import {Func0} from "@sirian/ts-extra-types";
 import {testFulfilled, testRejected} from "./helper";
 
 const dummy = {dummy: "dummy"}; // we fulfill or reject with this when we don't intend to test against it
@@ -6,7 +7,7 @@ const sentinel = {sentinel: "sentinel"}; // a sentinel fulfillment value to test
 const sentinel2 = {sentinel2: "sentinel2"};
 const sentinel3 = {sentinel3: "sentinel3"};
 
-function callbackAggregator(times, ultimateCallback) {
+function callbackAggregator(times: number, ultimateCallback: Func0) {
     let soFar = 0;
     return () => {
         if (++soFar === times) {
@@ -88,7 +89,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
 
         describe("`onFulfilled` handlers are called in the original order", () => {
             testFulfilled(dummy, (promise) => {
-                const calls = [];
+                const calls: any[] = [];
                 const handler1 = jest.fn(() => {
                     calls.push(handler1);
                 });
@@ -110,7 +111,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
 
             describe("even when one handler is added inside another handler", () => {
                 testFulfilled(dummy, (promise, done) => {
-                    const calls = [];
+                    const calls: any[] = [];
                     const handler1 = jest.fn(() => {
                         calls.push(handler1);
                     });
@@ -213,7 +214,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
 
         describe("`onRejected` handlers are called in the original order", () => {
             testRejected(dummy, (promise, done) => {
-                const calls = [];
+                const calls: any[] = [];
                 const handler1 = jest.fn(() => {
                     calls.push(handler1);
                 });
@@ -236,7 +237,7 @@ describe("2.2.6: `then` may be called multiple times on the same promise.", () =
 
             describe("even when one handler is added inside another handler", () => {
                 testRejected(dummy, (promise, done) => {
-                    const calls = [];
+                    const calls: any[] = [];
                     const handler1 = jest.fn(() => {
                         calls.push(handler1);
                     });

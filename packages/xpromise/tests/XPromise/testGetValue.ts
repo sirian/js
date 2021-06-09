@@ -3,7 +3,7 @@ import {XPromise} from "../../src";
 describe("XPromise.getValue", () => {
     const pendingError = new Error("Could not get value of pending promise");
 
-    const expectError = (p: XPromise, error) => {
+    const expectError = (p: XPromise, error: any) => {
         expect(() => p.getValue()).toThrow(error);
     };
 

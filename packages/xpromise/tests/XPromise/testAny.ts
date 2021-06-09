@@ -48,7 +48,7 @@ describe("XPromise.any", function() {
     });
 
     function delayResolve<T>(ms: number, value?: T) {
-        return new Promise<T>((resolve) => setTimeout(() => resolve(value), ms));
+        return new Promise<T>((resolve) => setTimeout(() => resolve(value as any), ms));
     }
 
     function delayReject<T>(ms: number, value?: T) {
