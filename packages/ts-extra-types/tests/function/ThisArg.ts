@@ -1,6 +1,6 @@
 import {AssertExact, ThisArg} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<unknown, ThisArg<() => any>>,
     AssertExact<unknown, ThisArg<DateConstructor>>,
     AssertExact<unknown, ThisArg<(this: unknown) => any>>,

@@ -1,6 +1,6 @@
 import {ArgLast, AssertExact} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<undefined, ArgLast<() => string>>,
 
     AssertExact<string, ArgLast<(x: string) => true>>,

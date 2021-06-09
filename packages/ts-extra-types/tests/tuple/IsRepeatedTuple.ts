@@ -1,6 +1,6 @@
 import {IsRepeatedTuple, MustBeFalse, MustBeTrue} from "../../src";
 
-type Test = [
+declare type Test = [
     MustBeTrue<IsRepeatedTuple<1[]>>,
     MustBeTrue<IsRepeatedTuple<readonly 1[]>>,
 

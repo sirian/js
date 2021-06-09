@@ -1,6 +1,6 @@
 import {AssertExact, Flatten} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<[1, 2, 3, 4], Flatten<[1, 2, 3, 4]>>,
     AssertExact<readonly [1, 2, 3, 4], Flatten<readonly [1, 2, 3, 4]>>,
 

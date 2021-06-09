@@ -1,6 +1,6 @@
 import {IsOpenTuple, MustBeFalse, MustBeTrue} from "../../src";
 
-type Test = [
+declare type Test = [
     MustBeTrue<IsOpenTuple<[true, ...boolean[]]>>,
     MustBeTrue<IsOpenTuple<readonly [true, ...boolean[]]>>,
 

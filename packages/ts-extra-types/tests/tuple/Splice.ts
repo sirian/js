@@ -1,6 +1,6 @@
 import {AssertExact, Splice} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<[], Splice<[], 0>>,
     AssertExact<readonly [], Splice<readonly [], 0>>,
 

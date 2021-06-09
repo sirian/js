@@ -15,7 +15,7 @@ interface Foo {
     l: (...args: any[]) => void;
 }
 
-type Test = [
+declare type Test = [
     AssertExact<Pick<Foo, "c" | "d" | "e">, PickTyped<Foo, boolean>>,
 
     AssertExact<Pick<Foo, "c">, PickTyped<Foo, true>>,

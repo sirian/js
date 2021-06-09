@@ -1,6 +1,6 @@
 import {AssertExtends, AssertNotExtends, Predicate, TypeGuard} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExtends<() => true, Predicate<number>>,
     AssertExtends<TypeGuard<number>, Predicate<number>>,
     AssertExtends<(x: number) => boolean, Predicate<number>>,

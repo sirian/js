@@ -1,6 +1,6 @@
 import {AnyType, AssertExact, Ctor, Func, NotFunc, TypeName, TypeNameOf} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<"boolean", TypeNameOf<true>>,
     AssertExact<"boolean", TypeNameOf<boolean>>,
 

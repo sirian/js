@@ -1,6 +1,6 @@
 import {AssertExact, Every, MustBeFalse, MustBeTrue} from "../../src";
 
-type Test = [
+declare type Test = [
     MustBeTrue<Every<[]>>,
     MustBeFalse<Every<[false]>>,
     MustBeFalse<Every<[false, true]>>,

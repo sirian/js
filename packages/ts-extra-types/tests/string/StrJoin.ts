@@ -1,6 +1,6 @@
 import {AssertExact, StrJoin} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<"", StrJoin<[]>>,
     AssertExact<"", StrJoin<[], ".">>,
     AssertExact<"x", StrJoin<["x"]>>,

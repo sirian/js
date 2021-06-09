@@ -1,6 +1,6 @@
 import {AssertExact, AssertExtends, AssertNotExtends, Func, JSONPrimitive, JSONValue} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExtends<1, JSONPrimitive>,
     AssertExtends<{ x: boolean }, JSONValue>,
     AssertExtends<{ x: boolean, 10: number }, JSONValue>,

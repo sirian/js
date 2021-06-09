@@ -1,6 +1,6 @@
 import {IsEmptyTuple, MustBeFalse, MustBeTrue} from "../../src";
 
-type Test = [
+declare type Test = [
     MustBeTrue<IsEmptyTuple<[]>>,
     MustBeTrue<IsEmptyTuple<readonly []>>,
 

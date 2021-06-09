@@ -1,6 +1,6 @@
 import {AssertExact, Length} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<0, Length<[]>>,
     AssertExact<0, Length<readonly []>>,
 

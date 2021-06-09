@@ -1,6 +1,6 @@
 import {Arg3, AssertExact} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<undefined, Arg3<() => boolean>>,
 
     AssertExact<undefined, Arg3<(x: string) => true>>,

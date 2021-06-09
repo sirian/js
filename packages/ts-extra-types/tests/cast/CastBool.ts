@@ -1,6 +1,6 @@
 import {AssertExact, CastBool} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<true, CastBool<true>>,
     AssertExact<true, CastBool<1>>,
     AssertExact<true, CastBool<object>>,

@@ -1,6 +1,6 @@
 import {AssertExact, ToPrimitive} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<number, ToPrimitive<number>>,
     AssertExact<string, ToPrimitive<string>>,
     AssertExact<undefined, ToPrimitive<undefined>>,

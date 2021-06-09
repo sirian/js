@@ -2,7 +2,7 @@ import {AssertExact, PromisifyNode} from "../../src";
 
 type Callback<R> = (err: any, value: R) => any;
 
-type Test = [
+declare type Test = [
     AssertExact<never,
         PromisifyNode<() => void>>,
 

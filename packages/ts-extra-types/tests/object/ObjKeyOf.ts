@@ -1,6 +1,6 @@
 import {AssertExact, ObjKeyOf} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<"1", ObjKeyOf<{ 1: 1 }>>,
     AssertExact<"1", ObjKeyOf<{ "1": 1 }>>,
     AssertExact<"0", ObjKeyOf<[1]>>,

@@ -5,7 +5,7 @@ type Class = PromiseConstructor;
 type Foo = 3 | boolean | Fn | Class | { x: 1 } | number[] | null | void;
 type Bar = undefined | null | void | 2n;
 
-type Test = [
+declare type Test = [
     AssertExact<never, ExtractByXTypeName<Foo, "string">>,
     AssertExact<{ x: 1 }, ExtractByXTypeName<Foo, "object">>,
     AssertExact<Fn | Class, ExtractByXTypeName<Foo, "function">>,

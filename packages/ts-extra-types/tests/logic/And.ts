@@ -1,6 +1,6 @@
 import {And, AssertExact, AssertFalse, AssertTrue} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertTrue<And<true, true>>,
     AssertFalse<And<true, false>>,
 

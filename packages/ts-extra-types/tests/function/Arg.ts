@@ -1,6 +1,6 @@
 import {Arg, AssertExact} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<never, Arg<number, () => boolean>>,
     AssertExact<undefined, Arg<0, () => boolean>>,
 

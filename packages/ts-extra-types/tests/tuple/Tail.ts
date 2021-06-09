@@ -1,6 +1,6 @@
 import {AssertExact, Tail} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<Tail<[]>, []>,
     AssertExact<Tail<readonly []>, readonly []>,
 

@@ -1,6 +1,6 @@
 import {AssertExact, UnionToTuple} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<UnionToTuple<1>, [1]>,
     AssertExact<UnionToTuple<1 | 2>, [1, 2] | [2, 1]>,
     AssertExact<UnionToTuple<1 | 3 | 2>,

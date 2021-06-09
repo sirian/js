@@ -15,7 +15,7 @@ interface Foo {
     l: (...args: any[]) => void;
 }
 
-type Test = [
+declare type Test = [
     AssertExact<"c" | "d" | "e", TypedKeyOf<Foo, boolean>>,
 
     AssertExact<"c", TypedKeyOf<Foo, true>>,

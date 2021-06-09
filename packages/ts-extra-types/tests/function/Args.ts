@@ -1,6 +1,6 @@
 import {Args, AssertExact} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<[], Args<() => boolean>>,
 
     AssertExact<[string], Args<(x: string) => true>>,

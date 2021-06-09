@@ -1,6 +1,6 @@
 import {AccessorPropertyDescriptor, AssertExtends, AssertNotExtends, DataPropertyDescriptor} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExtends<{}, DataPropertyDescriptor>,
     AssertExtends<{ value: unknown }, DataPropertyDescriptor>,
     AssertExtends<{ value: any, writable: true }, DataPropertyDescriptor>,

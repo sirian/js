@@ -19,7 +19,7 @@ type F6 = {
     (x: "6"): 6;
 };
 
-type Test = [
+declare type Test = [
     AssertExact<Overloads<(...args: any[]) => any>, [any[], any]>,
     AssertExact<Overloads<(...args: unknown[]) => any>, [unknown[], any]>,
     AssertExact<Overloads<(...args: never[]) => never>, [never[], never]>,

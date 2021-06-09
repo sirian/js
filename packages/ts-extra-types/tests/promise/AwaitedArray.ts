@@ -1,6 +1,6 @@
 import {AssertExact, AwaitedArray} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<[], AwaitedArray<[]>>,
     AssertExact<[1, 2, 3], AwaitedArray<[Promise<1>, 2, PromiseLike<Promise<3>>]>>,
     AssertExact<[1, 2 | null], AwaitedArray<[Promise<1>, 2 | null]>>,

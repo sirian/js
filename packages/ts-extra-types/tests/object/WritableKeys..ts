@@ -5,7 +5,7 @@ type Foo = {
     y: number;
 };
 
-type Test = [
+declare type Test = [
     AssertExact<WritableKeys<{}>, never>,
     AssertExact<WritableKeys<{ x: number }>, "x">,
     AssertExact<WritableKeys<{ readonly x: number }>, never>,

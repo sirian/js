@@ -1,6 +1,6 @@
 import {AssertExact, Widen} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<number, Widen<3>>,
     AssertExact<number, Widen<number>>,
     AssertExact<bigint, Widen<3n>>,

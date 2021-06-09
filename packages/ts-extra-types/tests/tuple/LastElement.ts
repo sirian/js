@@ -1,6 +1,6 @@
 import {AssertExact, LastElement} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<undefined, LastElement<[]>>,
     AssertExact<undefined, LastElement<readonly []>>,
 

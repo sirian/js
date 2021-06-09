@@ -1,6 +1,6 @@
 import {AssertExact, TupleKeyOf} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<never, TupleKeyOf<[]>>,
     AssertExact<never, TupleKeyOf<readonly []>>,
 

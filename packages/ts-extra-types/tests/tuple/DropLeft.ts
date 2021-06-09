@@ -1,6 +1,6 @@
 import {AssertExact, DropLeft} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<[], DropLeft<0, []>>,
     AssertExact<readonly [], DropLeft<0, readonly []>>,
 

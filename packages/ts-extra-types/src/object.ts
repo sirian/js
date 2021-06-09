@@ -1,7 +1,7 @@
 import {KeyToNumber, KeyToString} from "./cast";
 import {If} from "./logic";
 import {MustBe, MustBeString} from "./mustbe";
-import {ArrayRO, GetRest, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
+import {ArrayRO, ArrayToObject, IsOpenTuple, Length, Tail, TupleKeyOf} from "./tuple";
 import {AnyFunc, IfExact, IfNever, IsExact, IsExtends, IsWide, UnionToIntersection, Writable} from "./types";
 
 export type KeyOf<T, Filter = keyof T> = Extract<keyof T, Filter>;
@@ -56,8 +56,7 @@ export type ObjValueOf<T> =
 
 export type ObjEntryOf<T> =
     T extends ArrayRO
-    ? { [P in TupleKeyOf<T>]: Entry<P, T[P]> }[TupleKeyOf<T>]
-        | (IsOpenTuple<T> extends true ? Entry<`${number}`, GetRest<T>[number]> : never)
+    ? ObjEntryOf<ArrayToObject<T>>
     : { [P in KeyOf<T>]: Entry<KeyToString<P>, T[P]> }[KeyOf<T>];
 
 export type Get<T, K extends AnyKey, TDefault = never> =
@@ -128,9 +127,9 @@ export type Require<T, K extends AnyKey = keyof T> = Overwrite<T, Required<MyPic
 
 export type Partialize<T, K extends AnyKey = keyof T> = Overwrite<T, Partial<MyPick<T, K>>>;
 
-export type Ensure<T, K extends AnyKey, U = unknown> = T & {[P in K]: U};
+export type Ensure<T, K extends AnyKey, U = unknown> = T & { [P in K]: U };
 
-export type Entry<K extends AnyKey = any, V = any> = [K, V];
+export type Entry<K extends AnyKey = any, V = any> = readonly [K, V];
 
 export type FromEntry<E extends Entry> =
     UnionToIntersection<E extends Entry ? Record<E[0], E[1]> : never>;

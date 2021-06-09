@@ -1,6 +1,6 @@
 import {AssertExact, KeyToString} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<"0", KeyToString<0>>,
     AssertExact<"1", KeyToString<1>>,
     AssertExact<"2", KeyToString<2>>,

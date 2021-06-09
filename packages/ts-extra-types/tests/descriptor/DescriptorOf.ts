@@ -6,7 +6,7 @@ type Foo = {
     z: boolean | undefined;
 };
 
-type Test = [
+declare type Test = [
     AssertExact<TypedPropertyDescriptor<number>, DescriptorOf<Foo, "x">>,
     AssertExact<TypedPropertyDescriptor<string | undefined>, DescriptorOf<Foo, "y">>,
     AssertExact<TypedPropertyDescriptor<boolean | undefined>, DescriptorOf<Foo, "z">>,

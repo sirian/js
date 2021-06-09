@@ -1,6 +1,6 @@
 import {AssertExact, ExpandKey} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<0 | "0", ExpandKey<0>>,
     AssertExact<0 | "0", ExpandKey<"0">>,
     AssertExact<string, ExpandKey<string>>,

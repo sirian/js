@@ -1,6 +1,6 @@
 import {AssertExact, IsWide} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<true, IsWide<boolean>>,
     AssertExact<true, IsWide<string>>,
     AssertExact<true, IsWide<number>>,

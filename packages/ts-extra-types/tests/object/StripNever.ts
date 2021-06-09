@@ -1,6 +1,6 @@
 import {AssertExact, OmitNever} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, OmitNever<{}>>,
     AssertExact<{}, OmitNever<{ x: never }>>,
     AssertExact<{ y: number }, OmitNever<{ x: never, y: number }>>,

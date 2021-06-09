@@ -7,7 +7,7 @@ type Bar = undefined | null | void | 2n;
 
 type Ex<V, T extends TypeName> = ExtractByTypeName<V, T>;
 
-type Test = [
+declare type Test = [
     AssertExact<never, Ex<Foo, "string">>,
     AssertExact<{ x: 1 } | null | number[], Ex<Foo, "object">>,
     AssertExact<Fn | Class, Ex<Foo, "function">>,

@@ -1,6 +1,6 @@
 import {AssertExact, ObjectZip} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, ObjectZip<[], []>>,
     AssertExact<{}, ObjectZip<[], ["x"]>>,
     AssertExact<{ x: undefined }, ObjectZip<["x"], []>>,

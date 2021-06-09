@@ -4,7 +4,7 @@ declare class SubFunction extends Function {
     constructor(x?: number);
 }
 
-type Test = [
+declare type Test = [
     AssertExact<number, ArgCount<Func>>,
 
     AssertExact<never, ArgCount<{}>>,

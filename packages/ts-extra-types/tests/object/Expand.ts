@@ -1,6 +1,6 @@
 import {ArrayToObject, AssertExact, Expand} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, Expand<{}>>,
     AssertExact<0 | "0", keyof Expand<{ 0: 1 }>>,
     AssertExact<{ "0": 1 } & { 0: 1 }, Expand<{ 0: 1 }>>,

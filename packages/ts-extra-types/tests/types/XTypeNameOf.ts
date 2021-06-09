@@ -11,7 +11,7 @@ import {
     XTypeNameOf,
 } from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<"boolean", XTypeNameOf<true>>,
     AssertExact<"boolean", XTypeNameOf<boolean>>,
 

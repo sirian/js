@@ -1,6 +1,6 @@
 import {AssertExact, StrReverse} from "@sirian/ts-extra-types";
 
-type Test = [
+declare type Test = [
     AssertExact<string, StrReverse<string>>,
     AssertExact<"", StrReverse<"">>,
     AssertExact<"a", StrReverse<"a">>,

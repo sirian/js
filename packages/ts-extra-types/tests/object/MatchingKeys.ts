@@ -1,6 +1,6 @@
 import {AssertExact, MatchingKeys} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<never, MatchingKeys<{ x: 1 }, {}>>,
     AssertExact<never, MatchingKeys<{ x: 1 }, { readonly x: 1 }>>,
     AssertExact<never, MatchingKeys<{ readonly x: 1 }, { x: 1 }>>,

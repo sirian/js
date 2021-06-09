@@ -19,7 +19,7 @@ type F3 = {
 //     (x: "6"): 6;
 // };
 
-type Test = [
+declare type Test = [
     AssertExact<number, OverloadedReturn<F3, [number]>>,
     AssertExact<string, OverloadedReturn<F3, [{}]>>,
     AssertExact<string, OverloadedReturn<F3, []>>,

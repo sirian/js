@@ -1,6 +1,6 @@
 import {AssertExact, StrToArray} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<[], StrToArray<"">>,
     AssertExact<string[], StrToArray<string>>,
     AssertExact<["f"], StrToArray<"f">>,

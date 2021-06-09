@@ -19,7 +19,7 @@ type F6 = {
     (x: "6"): 6;
 };
 
-type Test = [
+declare type Test = [
     AssertExact<Args<F1>, []>,
     AssertExact<OverloadedArgs<F1>, []>,
 

@@ -27,7 +27,7 @@ type Zoo = {
     new(x: 3): Bar;
 };
 
-type Test = [
+declare type Test = [
     AssertExact<OverloadedInstance<typeof Foo, [number]>, Foo>,
     AssertExact<OverloadedInstance<typeof Bar, []>, Bar>,
     AssertExact<OverloadedInstance<typeof Baz, [string, boolean]>, Baz>,

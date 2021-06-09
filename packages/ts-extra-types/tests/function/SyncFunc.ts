@@ -1,6 +1,6 @@
 import {AnyFunc, AssertExtends, AssertNotExtends, Ctor, Func, Primitive, SyncFunc} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExtends<() => { then: number[] }, SyncFunc>,
     AssertExtends<() => { then: number }, SyncFunc>,
     AssertExtends<() => { then: { x: 1 } }, SyncFunc>,

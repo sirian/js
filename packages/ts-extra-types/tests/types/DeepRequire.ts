@@ -1,6 +1,6 @@
 import {AssertExact, DeepRequire} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, DeepRequire<{}>>,
     AssertExact<{ x: number }, DeepRequire<{ x?: number }>>,
     AssertExact<{ x: number }, DeepRequire<{ x: number }>>,

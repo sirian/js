@@ -6,7 +6,7 @@ type Zero = TupleOf<true, 0>;
 type One = TupleOf<true, 1>;
 type Two = TupleOf<true, 2>;
 
-type Test = [
+declare type Test = [
     AssertExact<[string, string, string], TupleOf<string, 3>>,
     AssertExact<[] | [number, number] | [number, number, number, number], TupleOf<number, 0 | 2 | 4>>,
     AssertExact<number[], TupleOf<number, number>>,

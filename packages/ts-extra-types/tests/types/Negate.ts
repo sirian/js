@@ -2,7 +2,7 @@ import {AssertExact, Negate, TypeGuard} from "../../src";
 
 type X = number | "foo" | "bar";
 
-type Test = [
+declare type Test = [
     AssertExact<Negate<TypeGuard<"foo", X>>, (value: number | "foo" | "bar") => value is "bar" | number>,
     AssertExact<Negate<TypeGuard<number, X>>, (value: number | "foo" | "bar") => value is "foo" | "bar">,
     AssertExact<Negate<TypeGuard<X, X>>, (value: number | "foo" | "bar") => value is never>,

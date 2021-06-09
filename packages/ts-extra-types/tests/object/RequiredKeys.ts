@@ -1,6 +1,6 @@
 import {AssertExact, Func, RequiredKeys} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<never, RequiredKeys<null>>,
     AssertExact<never, RequiredKeys<undefined>>,
     AssertExact<never, RequiredKeys<{}>>,

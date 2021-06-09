@@ -2,7 +2,7 @@ import {AssertExact, TupleGet} from "../../src";
 
 type Foo = [0, 1, 2?, 3?, ...4[]];
 
-type Test = [
+declare type Test = [
     AssertExact<undefined, TupleGet<[], 0>>,
     AssertExact<1, TupleGet<[1], 0>>,
     AssertExact<undefined, TupleGet<[1], 1>>,

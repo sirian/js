@@ -2,7 +2,7 @@ import {AssertExact, Reverse} from "../../src";
 
 type U = undefined;
 
-type Test = [
+declare type Test = [
     AssertExact<[], Reverse<[]>>,
     AssertExact<readonly [], Reverse<readonly []>>,
 

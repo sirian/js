@@ -7,7 +7,7 @@ interface Foo {
     z?: boolean | null;
 }
 
-type Test = [
+declare type Test = [
     AssertExact<Foo, MyOmit<Foo, never>>,
     AssertExact<Foo, MyOmit<Foo, 1>>,
     AssertExact<Foo, MyOmit<Foo, "1">>,

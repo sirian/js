@@ -1,6 +1,6 @@
 import {AssertExact, Require} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{ x: number },
         Require<{ x: number }, "x">>,
 

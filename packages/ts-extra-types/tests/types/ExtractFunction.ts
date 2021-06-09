@@ -7,7 +7,7 @@ type CallableInstanceCtor = new (bar: any) => CallableInstance;
 
 declare class Baz {}
 
-type Test = [
+declare type Test = [
     AssertExact<(() => 1), ExtractFunction<Foo>>,
     AssertExact<typeof Baz, ExtractFunction<typeof Baz>>,
     AssertExact<never, ExtractFunction<Baz>>,

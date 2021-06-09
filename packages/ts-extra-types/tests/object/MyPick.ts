@@ -8,7 +8,7 @@ interface Foo {
     z?: boolean | null;
 }
 
-type Test = [
+declare type Test = [
     AssertExact<{}, MyPick<Foo, never>>,
     AssertExact<{ 0: 1 }, MyPick<{ 0: 1, 1: 2 }, 0>>,
     AssertExact<{ 0: 1 }, MyPick<{ 0: 1, 1: 2 }, "0">>,

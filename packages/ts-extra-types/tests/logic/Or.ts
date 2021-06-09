@@ -1,6 +1,6 @@
 import {AssertExact, MustBeFalse, MustBeTrue, Or} from "../../src";
 
-type Test = [
+declare type Test = [
     MustBeTrue<Or<true, true>>,
     MustBeTrue<Or<true, false>>,
 

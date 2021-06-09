@@ -1,6 +1,6 @@
 import {AssertExact, Ensure} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{x: number}, Ensure<{}, "x", number>>,
     AssertExact<{x: number}, Ensure<{x: string | number}, "x", number>>,
     AssertExact<{x: never}, Ensure<{x: string}, "x", number>>,

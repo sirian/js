@@ -1,6 +1,6 @@
 import {AssertExact, Ctor, Func, ObjectTag} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<"Boolean", ObjectTag<true>>,
     AssertExact<"Boolean", ObjectTag<boolean>>,
 

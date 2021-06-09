@@ -1,6 +1,6 @@
 import {AssertExact, Head} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<undefined, Head<[]>>,
     AssertExact<undefined, Head<readonly []>>,
 

@@ -1,6 +1,6 @@
 import {AssertExact, GetIndexSignature} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, GetIndexSignature<{}>>,
     AssertExact<{}, GetIndexSignature<{ "foo": 1; 0: 1 }>>,
     AssertExact<{ [id: number]: 1 }, GetIndexSignature<{ [id: number]: 1; "foo": number; "0": 1 }>>,

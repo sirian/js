@@ -3,7 +3,7 @@ import {AssertExact, Case, Switch} from "../../src";
 type FalseCase<T> = Case<false, T>;
 type TrueCase<T> = Case<true, T>;
 
-type Test = [
+declare type Test = [
     AssertExact<never, Switch<[]>>,
 
     AssertExact<never, Switch<[

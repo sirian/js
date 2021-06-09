@@ -1,6 +1,6 @@
 import {AssertExact, Partialize} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, Partialize<{}>>,
     AssertExact<{ x?: number }, Partialize<{ x: number }, "x">>,
     AssertExact<{ x: number }, Partialize<{ x: number }, never>>,

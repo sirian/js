@@ -1,6 +1,6 @@
 import {AssertExact, DeepPartial} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, DeepPartial<{}>>,
     AssertExact<{ x?: number }, DeepPartial<{ x?: number }>>,
     AssertExact<{ x?: number }, DeepPartial<{ x: number }>>,

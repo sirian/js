@@ -1,6 +1,6 @@
 import {AssertExact, Overwrite} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{ x: 2 }, Overwrite<{ x: 1 }, { x: 2 }>>,
     AssertExact<{ x: 2 }, Overwrite<{ x?: 1 }, { x: 2 }>>,
     AssertExact<{ x?: 2 }, Overwrite<{ x?: 1 }, { x?: 2 }>>,

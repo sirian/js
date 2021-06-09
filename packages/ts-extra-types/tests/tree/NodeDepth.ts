@@ -18,7 +18,7 @@ interface Foo {
     parent: Foo;
 }
 
-type Test = [
+declare type Test = [
     AssertExact<NodeDepth<Root, "parent">, 0>,
     AssertExact<NodeDepth<C1, "parent">, 1>,
     AssertExact<NodeDepth<C2, "parent">, 0 | 2>,

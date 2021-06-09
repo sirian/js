@@ -6,7 +6,7 @@ type Foo = {
     z: number | undefined;
 };
 
-type Test = [
+declare type Test = [
     MustBeTrue<IsOptionalKey<Foo, "x">>,
     MustBeTrue<IsOptionalKey<Foo, "y">>,
     MustBeFalse<IsOptionalKey<Foo, "z">>

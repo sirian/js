@@ -1,6 +1,6 @@
 import {IsFiniteTuple, MustBeFalse, MustBeTrue} from "../../src";
 
-type Test = [
+declare type Test = [
     MustBeTrue<IsFiniteTuple<[]>>,
     MustBeTrue<IsFiniteTuple<readonly []>>,
 

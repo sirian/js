@@ -27,7 +27,7 @@ type Zoo = {
     new(x: 3): Bar;
 };
 
-type Test = [
+declare type Test = [
     AssertExact<CtorOverloads<typeof Foo>, [[number], Foo]>,
     AssertExact<CtorOverloads<typeof Bar>, [[], Bar] | [[string, boolean], Bar]>,
     AssertExact<CtorOverloads<typeof Baz>, [[number], Baz] | [[string, boolean], Baz] | [[object?], Baz]>,

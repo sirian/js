@@ -1,6 +1,6 @@
 import {AssertExact, FromEntry} from "../../src";
 
-type Test = [
+declare type Test = [
     AssertExact<{}, FromEntry<[never, 1]>>,
     AssertExact<{ foo: 1 }, FromEntry<["foo", 1]>>,
     AssertExact<{ 0: 1 }, FromEntry<[0, 1]>>,
