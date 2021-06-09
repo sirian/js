@@ -4,7 +4,7 @@ describe("weightedShuffle([2, 3, 5])", () => {
     test("", () => {
         const input = [2, 3, 5];
 
-        const tmp = {};
+        const tmp: Record<number, number> = {};
         const N = 1000;
 
         for (let i = 0; i < N; i++) {
@@ -22,7 +22,7 @@ describe("weightedShuffle([2, 3, 5])", () => {
     });
 
     test("weightedShuffle([])", () => {
-        const a = [];
+        const a: [] = [];
         const b = weightedShuffle(a, () => 1);
         expect(b).toBe(a);
         expect(a).toStrictEqual([]);

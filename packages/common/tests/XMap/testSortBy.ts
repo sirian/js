@@ -1,4 +1,4 @@
-import {compare, sortMap, XMap} from "../../src";
+import {XMap} from "../../src";
 
 describe("XMap.sort", () => {
     test("XMap.sort by value", () => {

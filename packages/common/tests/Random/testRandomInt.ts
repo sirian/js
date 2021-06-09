@@ -33,7 +33,7 @@ describe("randomInt", () => {
     });
 
     test("randomInt(3, 7, true)", () => {
-        const randoms = {};
+        const randoms: Record<number, number> = {};
         const total = 1000;
         const min = 3;
         const max = 7;
@@ -50,7 +50,7 @@ describe("randomInt", () => {
     });
 
     test("randomInt(3, 7, false)", () => {
-        const randoms = {};
+        const randoms: Record<number, number> = {};
         const total = 1000;
         const min = 3;
         const max = 7;

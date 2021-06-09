@@ -1,3 +1,4 @@
+import {URL} from "url";
 import {objReplace} from "../../src";
 
 const data: Array<[object, object[], object]> = [

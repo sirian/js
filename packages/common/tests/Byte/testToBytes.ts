@@ -1,4 +1,4 @@
-import {toBytes, toUTF} from "../../src";
+import {toBytes} from "../../src";
 
 describe("toBytes", () => {
     const data: Array<[any, number[]]> = [

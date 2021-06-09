@@ -1,28 +1,24 @@
-import {XTypeName} from "@sirian/ts-extra-types";
 import {isXType} from "../../src";
-import {TestUtil} from "../TestUtil";
 
 describe("Var.isXType", () => {
-    const trueData: Array<[any, XTypeName]> = [
-        [3, "number"],
-        [3n, "bigint"],
-        ["", "string"],
-        ["3", "string"],
-        [null, "null"],
-        [undefined, "undefined"],
-        [{}, "object"],
-        [[], "array"],
-        [() => {}, "function"],
-    ];
+    const trueData = [
+        [3, "number", true],
+        [3n, "bigint", true],
+        ["", "string", true],
+        ["3", "string", true],
+        [null, "null", true],
+        [undefined, "undefined", true],
+        [{}, "object", true],
+        [[], "array", true],
+        [() => {}, "function", true],
+    ] as const;
 
-    const falseData: Array<[any, XTypeName]> = [
-        [3, "string"],
-        [null, "object"],
-    ];
+    const falseData = [
+        [3, "string", false],
+        [null, "object", false],
+    ] as const;
 
-    const data = TestUtil.mergeData(trueData, falseData);
-
-    test.each(data)("Var.isType(%O, %O) === %O", (value, types, expected) => {
+    test.each([...trueData, ...falseData])("Var.isType(%O, %O) === %O", (value, types, expected) => {
         expect(isXType(value, types)).toBe(expected);
     });
 });

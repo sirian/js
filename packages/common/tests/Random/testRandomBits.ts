@@ -1,4 +1,4 @@
-import {randomBits, randomUint8, range, toInt} from "../../src";
+import {randomBits, range, toInt} from "../../src";
 
 describe("randomUint8", () => {
     const data = range(1, 8);

@@ -13,7 +13,7 @@ describe("construct", () => {
 
     test("construct with args", () => {
         class Foo {
-            constructor(public x, public y = 3) {}
+            constructor(public x: any, public y = 3) {}
         }
 
         class Zoo {

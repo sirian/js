@@ -4,7 +4,7 @@ describe("shuffle", () => {
     test("shuffle", () => {
         const input = [1, 5, 3, 2];
 
-        const tmp = input.map(() => ({}));
+        const tmp: Array<Record<number, number>> = input.map(() => ({}));
         const N = 1000;
 
         for (let i = 0; i < N; i++) {
