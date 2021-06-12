@@ -85,18 +85,10 @@ export const getDescriptor: {
     ? void 0
     : ownDescriptor(target, key) ?? getDescriptor(getPrototype(target), key);
 
-export const getDescriptors = <T>(target: T) => {
-    const result: Record<any, any> = {};
-
-    for (const obj of getPrototypes(target)) {
-
-        for (const key of ownKeys(obj)) {
-            result[key] ||= ownDescriptor(obj, key);
-        }
-    }
-    return result as TypedPropertyDescriptorMap<T>;
-
-};
+export const getDescriptors = <T>(target: T) => modify({}, (result: Record<any, any>) =>
+    getPrototypes(target).forEach((obj) =>
+        ownKeys(obj).forEach((key) =>
+            result[key] ??= ownDescriptor(obj, key)))) as TypedPropertyDescriptorMap<T>;
 
 export const ownDescriptors = <T>(target: T) => Object.getOwnPropertyDescriptors(target);
 
@@ -138,10 +130,8 @@ export const setProp: {
 export const deleteProp = <T, K extends keyof T>(target: T, key: K | PropertyKey) =>
     !isNullish(target) && tryCatch(() => delete (target as any)[key], false);
 
-export const deleteProps = <T, K extends keyof T>(target: T | Nullish, ...keys: ArrayRO<K | PropertyKey>) => {
-    keys.forEach((key) => deleteProp(target, key));
-    return target as Omit<T, K>;
-};
+export const deleteProps = <T, K extends keyof T>(target: T | Nullish, ...keys: ArrayRO<K | PropertyKey>) =>
+    modify(target, () => keys.forEach((key) => deleteProp(target, key))) as Omit<T, K>;
 
 export const isPropWritable = (target: any, property: PropertyKey) => {
     if (isNullish(target)) {
@@ -159,7 +149,7 @@ export const isPropWritable = (target: any, property: PropertyKey) => {
 export const tryCatch: {
     <T>(fn: () => T): T | undefined;
     <T, R>(fn: () => T, onError: R | Func1<R>): T | R;
-} = (fn: Func0, onError?: Func1) => {
+} = <T, R>(fn: Func0, onError?: R | Func1<R>) => {
     try {
         return fn();
     } catch (error) {
@@ -167,4 +157,25 @@ export const tryCatch: {
     }
 };
 
+export const tryFinally = <T>(tryFn: () => T, finallyFn: () => void) => {
+    try {
+        return tryFn();
+    } finally {
+        finallyFn();
+    }
+};
+
+export const tryCatchFinally = <T>(tryFn: () => T, catchFn: Func1, finallyFn: () => void) => {
+    try {
+        return tryFn();
+    } catch (e) {
+        return applyIfFunction(catchFn);
+    } finally {
+        finallyFn();
+    }
+};
+
 export const getObjectTag = (arg: any) => stringifyObj(arg).slice(8, -1);
+
+// noinspection CommaExpressionJS
+export const modify = <T>(value: T, cb: (v: T) => any) => (cb(value), value);

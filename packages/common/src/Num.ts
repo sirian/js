@@ -9,10 +9,13 @@ export const INT32_SIZE = 2 ** 31;
 export const INT32_MAX = 2 ** 31 - 1;
 export const UINT21_SIZE = 2 ** 21;
 export const UINT21_MAX = 2 ** 21 - 1;
+export const BIG_UINT64_MAX = 2n ** 64n - 1n;
 
 export const toInt = (x: number) => Math.trunc(x);
 export const toInt32 = (x: number) => x | 0;
 export const toUint32 = (v: number) => v >>> 0;
+export const toBigInt = (x: number | bigint) => BigInt(x);
+export const toBigUint64 = (x: number | bigint) => toBigInt(x) & BIG_UINT64_MAX;
 
 export const parseNumber = (x?: boolean | string | number | null, defaultValue: number = NaN): number =>
     ifEqualNaN(+(x ?? 0), defaultValue);

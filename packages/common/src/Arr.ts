@@ -27,6 +27,19 @@ export const first = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
     return (value as any)[0] as First<T>;
 };
 
+export const firstN = <T>(value: IterableIterator<T>, limit: number): T[] => {
+    const result = [];
+
+    for (const x of value) {
+        if (result.length >= limit) {
+            break;
+        }
+        result.push(x);
+    }
+
+    return result;
+};
+
 type Last<T> =
     T extends ArrayRO ? LastElement<T> :
     T extends Iterable<infer V> | ArrayLike<infer V> ? V | undefined :

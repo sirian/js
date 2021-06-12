@@ -12,6 +12,8 @@ export * from "./Fn";
 export * from "./HybridMap";
 export * from "./Is";
 export * from "./Json";
+export * from "./LRU";
+export * from "./Math";
 export * from "./Num";
 export * from "./Obj";
 export * from "./Random";

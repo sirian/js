@@ -1,5 +1,5 @@
 import {AnyCtor, Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
-import {getType, isArray, isFunction, isNumber, isObject, isString} from "./Is";
+import {getType, isArray, isFunction, isNumber, isObject, isPrimitive, isString, isSymbol} from "./Is";
 import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./Ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
@@ -89,3 +89,37 @@ export const compare = (x: any, y: any): -1 | 0 | 1 =>
     isEqual(x, y) ? 0 : (isEqual(x, [x, y].sort()[0]) ? -1 : 1);
 
 export const isError = (value: any): value is Error => isInstanceOf(value, Error);
+
+export const toPrimitive = (input: any, hint: "string" | "number" | "default" = "default") => {
+    if (isPrimitive(input)) {
+        return input;
+    }
+
+    const exoticToPrim = input[Symbol.toPrimitive];
+
+    if (isFunction(exoticToPrim)) {
+        const result = exoticToPrim.call(input, hint);
+        if (isPrimitive(result)) {
+            return result;
+        }
+
+        throw new TypeError("Unable to convert exotic object to primitive");
+    }
+
+    if (hint === "default" && (isInstanceOf(input, Date) || isSymbol(input))) {
+        hint = "string";
+    }
+
+    const methodNames = hint === "string" ? ["toString", "valueOf"] : ["valueOf", "toString"];
+
+    for (const method of methodNames) {
+        if (hasMethod(input, method)) {
+            const result = input[method]();
+            if (isPrimitive(result)) {
+                return result;
+            }
+        }
+    }
+
+    throw new TypeError("No default value");
+};

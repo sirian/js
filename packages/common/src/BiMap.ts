@@ -11,8 +11,7 @@ export class BiMap<K = any, V = any> extends XMap<K, V> {
 
     public delete(key: K) {
         if (this.has(key)) {
-            const value = this.get(key)!;
-            this._unregister(key, value);
+            this._unregister(key, this.get(key)!);
         }
         return super.delete(key);
     }
@@ -34,11 +33,9 @@ export class BiMap<K = any, V = any> extends XMap<K, V> {
 
     private _unregister(key: K, value: V) {
         const keys = this.reverse.get(value);
-        if (keys) {
-            keys.delete(key);
-            if (!keys.size) {
-                this.reverse.delete(value);
-            }
+        keys?.delete(key);
+        if (!keys?.size) {
+            this.reverse.delete(value);
         }
     }
 }
