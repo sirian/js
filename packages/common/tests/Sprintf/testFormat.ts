@@ -1,4 +1,4 @@
-import {sprintf, vsprintf} from "../../src";
+import {sprintf} from "../../src";
 
 type TestTuple = [expected: string, format: string, ...args: any[]];
 
@@ -9,7 +9,6 @@ describe("sprintf", () => {
         describe(description, () => {
             test.each(tests)("%p === vsprintf(%p, %p)", (expected, format, ...args) => {
                 expect(sprintf(format, ...args)).toBe(expected);
-                expect(vsprintf(format, args)).toBe(expected);
             });
         });
     };

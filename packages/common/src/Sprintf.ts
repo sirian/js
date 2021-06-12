@@ -1,91 +1,185 @@
-import {assert, ensureNotNull} from "./Error";
-import {isString} from "./Is";
-import {jsonStringify} from "./Json";
+import {assert} from "./Error";
+import {isFunction, isString} from "./Is";
+import {jsonStringify, quoteSingle} from "./Json";
+import {max} from "./Math";
+import {NullMap} from "./NullMap";
 import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Ref";
 import {stringifyVar} from "./Stringify";
-import {toPrimitive} from "./Var";
+import {isBetween, toPrimitive} from "./Var";
+import {ensureMap, IMapMini} from "./XUtils";
 
-const enum PL {
-    PLACEHOLDER = 0,
-    PARAM_NUM,
-    KEYS,
-    SIGN,
-    PAD_CHAR,
-    ALIGN,
-    WIDTH,
-    PRECISION,
-    TYPE,
-}
-
-type Placeholder = [
-    placeholder: string,
-    paramNum: number,
-    keys: undefined | string[],
+export type Placeholder = Readonly<{
+    text: string,
+    argNum: number,
+    keys: undefined | readonly string[],
     sign: boolean,
     padChar: string,
     align: boolean,
     width: number,
     precision: number | undefined,
     type: string,
-];
+}>;
 
-type ParsedFormat = Array<Placeholder | string>;
+export type PlaceholderFormatter = (arg: any, ph: Placeholder) => string | number;
+export type Placeholders = Record<string, PlaceholderFormatter>;
+export type SprintfPart = string | Placeholder;
+export type SprintfParsed = SprintfPart[];
 
-const placeholders: Record<string, (arg: any, ph: Placeholder) => string | number> = {
-    b: (v) => toInt(v).toString(2),
-    c: (v) => String.fromCharCode(toInt(v)),
-    i: (v) => toInt(v),
-    d: (v) => toInt(v),
-    j: (v, ph) => jsonStringify(v, null, ph[PL.WIDTH]),
-    e: (v, ph) => parseNumber(v).toExponential(ph[PL.PRECISION]),
-    f: (v, ph) => null == ph[PL.PRECISION] ? parseNumber(v) : parseNumber(v).toFixed(ph[PL.PRECISION]),
-    g: (v, ph) => ph[PL.PRECISION] ? +v.toPrecision(ph[PL.PRECISION]) : parseNumber(v),
-    o: (v) => toUint32(v).toString(8),
-    s: (v, ph) => substr(v, ph),
-    t: (v, ph) => substr(!!v, ph),
-    T: (v, ph) => substr(getObjectTag(v).toLowerCase(), ph),
-    u: (v) => toUint32(v),
-    v: (v, ph) => substr(toPrimitive(v), ph),
-    x: (v) => toUint32(v).toString(16),
-    X: (v) => toUint32(v).toString(16).toUpperCase(),
-};
+export const sprintf = (pattern: string, ...args: any[]) => Sprintf.instance.format(pattern, args);
 
-const substr = (arg: any, ph: Placeholder) => stringifyVar(arg).substr(0, ph[PL.PRECISION] || 1 / 0);
+export class Sprintf {
+    private static _instance?: Sprintf;
+    protected readonly _placeholders: Placeholders;
+    private _cache: IMapMini<string, SprintfParsed> = new NullMap();
 
-export const sprintf = (format: string, ...args: any[]) => vsprintf(format, args);
+    public constructor(placeholders?: Placeholders) {
+        const substr = (arg: any, ph: Placeholder) => stringifyVar(arg).substr(0, ph.precision || 1 / 0);
 
-export const vsprintf = (pattern: string, args: any[]) => {
-    const output: string[] = [];
+        this._placeholders = {
+            b: (v) => toInt(v).toString(2),
+            c: (v) => String.fromCharCode(v),
+            i: (v) => toInt(v),
+            d: (v) => toInt(v),
+            j: (v, ph) => substr(jsonStringify(v, null, ph.width), ph),
+            e: (v, ph) => parseNumber(v).toExponential(ph.precision),
+            f: (v, ph) => null == ph.precision ? parseNumber(v) : parseNumber(v).toFixed(ph.precision),
+            g: (v, ph) => ph.precision ? +v.toPrecision(ph.precision) : parseNumber(v),
+            o: (v) => toUint32(v).toString(8),
+            s: (v, ph) => substr(v, ph),
+            t: (v, ph) => substr(!!v, ph),
+            T: (v, ph) => substr(getObjectTag(v).toLowerCase(), ph),
+            u: (v) => toUint32(v),
+            v: (v, ph) => substr(toPrimitive(v), ph),
+            x: (v) => toUint32(v).toString(16),
+            X: (v) => toUint32(v).toString(16).toUpperCase(),
+            ...placeholders,
+        };
+    }
 
-    const parsed = parse(pattern);
+    public setCache(cache: IMapMini<string, SprintfParsed>) {
+        this._cache = cache;
+    }
 
-    let argCursor = 0;
+    public static get instance() {
+        return this._instance ??= new this();
+    }
 
-    for (const ph of parsed) {
-        if (isString(ph)) {
-            output.push(ph);
-            continue;
+    public compile(pattern: string) {
+        const parsed = this.parse(pattern);
+        return (...args: any[]) => this._format(parsed, args).join("");
+    }
+
+    public format(pattern: string, args: any[]) {
+        return this.compile(pattern)(...args);
+    }
+
+    public parse(pattern: string): SprintfParsed {
+        const rgx = /[^%]+|%%|(?:%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d*))?([a-zA-Z]))|(.)/g;
+
+        return ensureMap(this._cache, pattern, () => [...pattern.matchAll(rgx)].map((match) => {
+            const index = match.index;
+            const [text, argNum, keys, sign, padChar = " ", align, width, precision = "", type, unexpected] = match;
+
+            assert(!unexpected, () => new SyntaxError("Unexpected token at index " + quoteSingle(index) + " in: " + quoteSingle(pattern)));
+
+            if ("%" !== text[0]) {
+                return text;
+            }
+
+            if ("%%" === text) {
+                return "%";
+            }
+
+            return ensureMap(this._cache, text, (): [Placeholder] => [Object.freeze({
+                text,
+                argNum: parseInt(argNum, 0),
+                keys: this._parseKeys(pattern, keys),
+                sign: !!sign,
+                padChar: padChar.slice(-1),
+                align: !!align,
+                width: parseInt(width, 0),
+                precision: "" === precision ? void 0 : parseInt(precision, 0),
+                type,
+            })])[0];
+        }));
+    }
+
+    protected _parseKeys(pattern: string, field: string) {
+        if (!field) {
+            return;
         }
 
-        const [placeholder, paramNum, keys, sign, padChar, align, width, /*precision*/, type] = ph;
+        const rgxKey = /^([_a-z]\w*)/i;
+        const rgxKeyAccess = /^\.([_a-z]\w*)/i;
+        const rgxIndexAccess = /^\[(\d+)]/;
 
-        const arg = keys
-                    ? keys.reduce((obj, key) => obj?.[key], args[argCursor]) // keyword argument
-                    : (paramNum
-                       ? args[paramNum - 1] // positional argument (explicit)
-                       : args[argCursor++]); // positional argument (implicit)
+        const keys: string[] = [];
 
-        const callback = ensureNotNull(
-            placeholders[type],
-            "[sprintf] Unknown format specifier \"" + type + "\" at \"" + placeholder + "\"");
+        let match = rgxKey.exec(field);
+
+        while (true) {
+            assert(
+                match,
+                () => new SyntaxError("Failed to parse named argument key " + quoteSingle(field) + " in: " + quoteSingle(pattern)),
+                {pattern, field},
+            );
+
+            keys.push(match[1]);
+
+            field = field.substring(match[0].length);
+
+            if ("" === field) {
+                break;
+            }
+
+            match = rgxKeyAccess.exec(field) || rgxIndexAccess.exec(field);
+        }
+        Object.freeze(keys);
+
+        return keys;
+    }
+
+    protected _format(parsed: SprintfParsed, args: any[]) {
+        let argCursor = 0;
+
+        return parsed.map((ph) => {
+            if (isString(ph)) {
+                return ph;
+            }
+
+            const {text, argNum, keys, type} = ph;
+
+            const callback = this._placeholders[type];
+
+            assert(
+                isFunction(callback),
+                () => new TypeError("Unknown format specifier " + quoteSingle(type) + " in: " + quoteSingle(text)),
+            );
+
+            let arg;
+
+            if (keys) {
+                arg = keys.reduce((obj, key) => obj?.[key], args[argCursor]);
+            } else {
+                const argIndex = argNum ? argNum - 1 : argCursor++;
+
+                assert(
+                    isBetween(argIndex, 0, args.length - 1),
+                    () => new RangeError("Argument " + quoteSingle(argIndex) + " not provided"),
+                );
+
+                arg = args[argIndex];
+            }
+
+            return this._formatPlaceholder(callback, ph, arg);
+        });
+    }
+
+    protected _formatPlaceholder(callback: PlaceholderFormatter, ph: Placeholder, arg: any) {
+        const {sign, padChar, align, width, type} = ph;
 
         let argText = stringifyVar(callback(arg, ph));
-
-        if ("j" === type) {
-            output.push(argText);
-            continue;
-        }
 
         let signText = "";
 
@@ -94,93 +188,16 @@ export const vsprintf = (pattern: string, args: any[]) => {
 
             if (sign || isNegativeArg) {
                 signText = isNegativeArg ? "-" : "+";
-                if (argText.length && ("+" === argText[0] || "-" === argText[0])) {
-                    argText = argText.substr(1);
-                }
+                argText = argText.replace(/^[+-]/, "");
             }
         }
 
         const padLength = width - signText.length - argText.length;
 
-        const pad = padChar.repeat(Math.max(0, width && padLength));
+        const pad = padChar.repeat(max(0, width && padLength));
 
-        const part = align
-                     ? signText + argText + pad
-                     : ("0" === padChar
-                        ? signText + pad + argText
-                        : pad + signText + argText);
-
-        output.push(part);
+        return align
+               ? signText + argText + pad
+               : ("0" === padChar ? signText + pad : pad + signText) + argText;
     }
-
-    return output.join("");
-};
-
-const parseKeys = (pattern: string, field: string) => {
-    if (!field) {
-        return;
-    }
-
-    const rgxKey = /^([a-z_][a-z_\d]*)/i;
-    const rgxKeyAccess = /^\.([a-z_][a-z_\d]*)/i;
-    const rgxIndexAccess = /^\[(\d+)]/;
-
-    const keys: string[] = [];
-
-    let match = rgxKey.exec(field);
-
-    while (true) {
-        assert(match, "[sprintf] Failed to parse named argument key", {pattern, field});
-
-        keys.push(match[1]);
-
-        field = field.substring(match[0].length);
-
-        if ("" === field) {
-            break;
-        }
-
-        match = rgxKeyAccess.exec(field) || rgxIndexAccess.exec(field);
-    }
-
-    return keys;
-};
-
-function parse(pattern: string) {
-    const result: ParsedFormat = [];
-
-    const rgx = /[^%]+|%%|(?:%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d*))?([a-zA-Z]))|(.)/g;
-
-    for (const match of pattern.matchAll(rgx)) {
-        const index = match.index;
-        const [text, paramNum, keys, sign, padChar = " ", align, width, precision = "", type, unexpected] = match;
-
-        assert(!unexpected, "[sprintf] Unexpected token", {pattern, index});
-
-        if ("%" !== text[0]) {
-            result.push(text);
-            continue;
-        }
-
-        if ("%%" === text) {
-            result.push("%");
-            continue;
-        }
-
-        const ph: Placeholder = [
-            text,
-            parseInt(paramNum, 0),
-            parseKeys(pattern, keys),
-            !!sign,
-            padChar.slice(-1),
-            !!align,
-            parseInt(width, 0),
-            "" === precision ? void 0 : parseInt(precision, 0),
-            type,
-        ];
-
-        result.push(ph);
-    }
-
-    return result;
 }

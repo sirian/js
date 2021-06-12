@@ -1,4 +1,4 @@
-import {stringifyVar} from "./Stringify";
+import {stringifyStr, stringifyVar} from "./Stringify";
 
 export const jsonStringify = (value: any, ...args: any[]) => JSON.stringify(value ?? null, ...args);
 
@@ -69,3 +69,17 @@ export const jsonStripComments = (value: string) => {
 
     return result.join("");
 };
+
+export const quoteSingle = (str: any) => wrapQuotes(str, "'");
+
+export const quoteBacktick = (str: any) => wrapQuotes(str, "`");
+
+export const quoteDouble = (str: any) => wrapQuotes(str, "\"");
+
+export const wrapQuotes = (str: any, quote: "'" | "\"" | "`") =>
+    quote
+    + jsonStringify(stringifyStr(str))
+        .slice(1, -1)
+        .replace(/\\"/g, "\"")
+        .replaceAll(quote, "\\" + quote)
+    + quote;

@@ -1,17 +1,30 @@
-import {sprintf, vsprintf} from "../../src";
+import {sprintf} from "../../src";
 
-function throws(format: string, args: any, err?: any) {
-    expect(() => vsprintf(format, args)).toThrow(err);
-    expect(() => sprintf(format, ...args)).toThrow(err);
+function throws(format: string, args: any, err: any) {
+    test(format, () => {
+        expect(() => sprintf(format, ...args)).toThrow(err);
+    });
 }
 
 function notThrow(format: string, args: any, err?: any) {
-    expect(() => vsprintf(format, args)).not.toThrow(err);
-    expect(() => sprintf(format, ...args)).not.toThrow(err);
+    test(format, () => {
+        expect(() => sprintf(format, ...args)).not.toThrow(err);
+    });
 }
 
+const UNKNOWN_PLACEHOLDER = "Unknown format specifier";
+const UNEXPECTED_TOKEN = "Unexpected token";
+const NOT_ENOUGH_ARGS = "Argument '1' not provided";
+const FAILED_TO_PARSE_KEY = "Failed to parse named argument key";
+
 describe("sprintf", () => {
-    test("should not throw Error (cache consistency)", () => {
+    describe("should throw when not enough args", () => {
+        notThrow("%s %d", [1, 2, 3]);
+        notThrow("%s %d", [1, 2]);
+        throws("%s %d", [1], NOT_ENOUGH_ARGS);
+    });
+
+    describe("should not throw Error (cache consistency)", () => {
         // redefine object properties to ensure that is not affect to the cache
         sprintf("hasOwnProperty");
         sprintf("constructor");
@@ -19,22 +32,23 @@ describe("sprintf", () => {
         notThrow("%s", ["crash?"]);
     });
 
-    test("should throw SyntaxError for placeholders", () => {
-        throws("%", [], Error);
-        throws("%A", [], Error);
-        throws("%s%", [], Error);
-        throws("%(s", [], Error);
-        throws("%)s", [], Error);
-        throws("%$s", [], Error);
-        throws("%()s", [], Error);
-        throws("%(12)s", [], Error);
+    describe("should throw SyntaxError for placeholders", () => {
+        throws("%", [], UNEXPECTED_TOKEN);
+        throws("%s%", [], UNEXPECTED_TOKEN);
+        throws("%(s", [], UNEXPECTED_TOKEN);
+        throws("%)s", [], UNEXPECTED_TOKEN);
+        throws("%$s", [], UNEXPECTED_TOKEN);
+        throws("%()s", [], UNEXPECTED_TOKEN);
+        throws("%(12)s", [], FAILED_TO_PARSE_KEY);
+        throws("%A", [], UNKNOWN_PLACEHOLDER);
+        throws("%Z", [], UNKNOWN_PLACEHOLDER);
     });
 
     const numeric = "bcdiefguxX".split("");
     for (const specifier of numeric) {
         const fmt = sprintf("%%%s", specifier);
 
-        test(fmt + " should not throw TypeError for something implicitly castable to number", () => {
+        describe(fmt + " should not throw TypeError for something implicitly castable to number", () => {
             notThrow(fmt, [1 / 0]);
             notThrow(fmt, [true]);
             notThrow(fmt, [[1]]);
@@ -43,11 +57,11 @@ describe("sprintf", () => {
         });
     }
 
-    test("should not throw Error for expression which evaluates to undefined", () => {
+    describe("should not throw Error for expression which evaluates to undefined", () => {
         notThrow("%(x.y)s", [{x: {}}]);
     });
 
-    test("should not throw when accessing properties on the prototype", () => {
+    describe("should not throw when accessing properties on the prototype", () => {
         class C {
             get x() { return 2; }
 

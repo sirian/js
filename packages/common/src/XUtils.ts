@@ -71,12 +71,14 @@ export const pickMap: {
 };
 
 export const ensureMap = <K, V>(map: IMapMini<K, V>, key: K, initializer?: XMapInitializer<K, V>): V => {
-    if (!map.has(key)) {
-        assert(isFunction(initializer), "[ensureMap] Initializer is not a function", {key});
-        map.set(key, initializer(key));
+    if (map.has(key)) {
+        return map.get(key) as V;
     }
 
-    return map.get(key) as V;
+    assert(isFunction(initializer), "[ensureMap] Initializer is not a function", {key});
+    const value = initializer(key);
+    map.set(key, value);
+    return value;
 };
 
 export const insertSet = <T>(set: ISetMini<T>, value: T) => {
