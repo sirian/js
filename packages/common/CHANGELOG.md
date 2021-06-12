@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.3.0](https://github.com/sirian/js/compare/@sirian/common@9.2.0...@sirian/common@9.3.0) (2021-06-12)
+
+
+### Features
+
+* **common:** Sprintf cache ([fd93eeb](https://github.com/sirian/js/commit/fd93eeb39330129511a3d542af6d48cc1b5011d4))
+
+
+
+
+
 # [9.2.0](https://github.com/sirian/js/compare/@sirian/common@9.1.3...@sirian/common@9.2.0) (2021-06-12)
 
 
