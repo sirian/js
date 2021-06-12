@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.2.0](https://github.com/sirian/js/compare/@sirian/common@9.1.3...@sirian/common@9.2.0) (2021-06-12)
+
+
+### Features
+
+* **common:** LRU, toPrimitive, min, max, abs ([14d8eb8](https://github.com/sirian/js/commit/14d8eb8e2f8ae9fc0b9fdc12f6d48f8c398d4d79))
+
+
+
+
+
 ## [9.1.3](https://github.com/sirian/js/compare/@sirian/common@9.1.2...@sirian/common@9.1.3) (2021-06-09)
 
 **Note:** Version bump only for package @sirian/common
