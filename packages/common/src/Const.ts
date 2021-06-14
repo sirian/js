@@ -1,4 +1,4 @@
 import {Func} from "@sirian/ts-extra-types";
 
-// tslint:disable-next-line:arrow-parens
-export const noop: Func = _ => _;
+export const noop: Func<void> = () => {};
+export const asIs = <T>(v: T) => v;
