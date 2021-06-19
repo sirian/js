@@ -1,22 +1,14 @@
+import {base64Normalize} from "./base64Normalize";
 import {base64Chars} from "./const";
 
-const revLookup = (b64: string, index: number) => {
-    const char = b64[index];
-    if ("-" === char) {
-        return 62;
-    }
-    if ("_" === char) {
-        return 63;
-    }
-
-    return base64Chars.indexOf(char);
-};
+const revLookup = (b64: string, index: number) => base64Chars.indexOf(b64[index]);
 
 export const base64Decode = (b64: string): Uint8Array => {
     const rawLength = b64.length;
     if (!rawLength) {
         return new Uint8Array();
     }
+    b64 = base64Normalize(b64);
 
     const extra = rawLength & 3;
 

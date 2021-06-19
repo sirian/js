@@ -1,22 +1,20 @@
 import {ByteInput, toBytes} from "@sirian/common";
-import {base64Chars} from "./const";
+import {base64Chars, base64MakeURISafe} from "./const";
 
-export const base64Encode = (input: ByteInput): string => {
+export const base64Encode = (input: ByteInput, uriSafe: boolean = false): string => {
     if (null == input || "" === input) {
         return "";
     }
 
     const uint8 = toBytes(input);
-
     const len = uint8.length;
-    const rest = len % 3;
 
     let result: string = "";
 
-    for (let i = 0; i < len; i) {
+    for (let i = 0; i < len;) {
         const a = uint8[i++];
-        const b = i < len ? uint8[i++] : 0;
-        const c = i < len ? uint8[i++] : 0;
+        const b = uint8[i++] ?? 0;
+        const c = uint8[i++] ?? 0;
 
         const bitmap = (a << 16) | (b << 8) | c;
         result +=
@@ -26,5 +24,9 @@ export const base64Encode = (input: ByteInput): string => {
             + base64Chars[bitmap & 63];
     }
 
-    return rest ? result.slice(0, rest - 3) + (1 === rest ? "==" : "=") : result;
+    const rest = len % 3;
+    if (rest) {
+        result = result.slice(0, rest - 3) + (1 === rest ? "==" : "=");
+    }
+    return uriSafe ? base64MakeURISafe(result) : result;
 };

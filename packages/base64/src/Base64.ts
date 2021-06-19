@@ -17,11 +17,13 @@ interface IBase64 {
 
 export const Base64 = {
     encode(value: ByteInput, asString = false) {
-        const b64 = "" === value || null == value ? "" : base64Encode(toBytes(value));
+        value ??= "";
+        const b64 = "" === value ? "" : base64Encode(toBytes(value));
         return asString ? b64 : toBytes(b64);
     },
     decode(value: ByteInput, asString = false) {
-        if ("" === value || null == value) {
+        value ??= "";
+        if ("" === value) {
             return asString ? "" : new Uint8Array();
         }
         const uint8 = base64Decode(toUTF(value));
