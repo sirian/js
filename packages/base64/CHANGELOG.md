@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/sirian/js/compare/@sirian/base64@3.0.8...@sirian/base64@3.1.0) (2021-06-19)
+
+
+### Features
+
+* **base64:** uri safe support ([909166c](https://github.com/sirian/js/commit/909166c7aba98850106c220b50e1a8d0d63163d9))
+
+
+
+
+
 ## [3.0.8](https://github.com/sirian/js/compare/@sirian/base64@3.0.7...@sirian/base64@3.0.8) (2021-06-14)
 
 **Note:** Version bump only for package @sirian/base64
