@@ -1,20 +1,19 @@
 import {ByteInput, toBytes} from "@sirian/common";
-import {DELTA, mx, parseKey, toInt32, toUint32Array} from "./helper";
+import {DELTA, mx, parseKey, toUint32Array} from "./helper";
 
 export const xxteaDecrypt = (data: ByteInput, key: ByteInput) => {
     const uint32 = toUint32Array(data);
     const k = parseKey(key);
-
-    const {length, buffer} = uint32;
+    const length = uint32.length;
 
     let y = uint32[0];
     const q = (6 + 52 / length) | 0;
     const lastIndex = length - 1;
-    for (let sum = toInt32(q * DELTA); sum !== 0; sum = toInt32(sum - DELTA)) {
+    for (let sum = (q * DELTA) | 0; sum !== 0; sum = (sum - DELTA) | 0) {
         const e = sum >>> 2 & 3;
         for (let p = lastIndex; p >= 0; --p) {
             const z = uint32[p > 0 ? p - 1 : lastIndex];
-            y = uint32[p] = toInt32(uint32[p] - mx(k, sum, y, z, p, e));
+            y = uint32[p] = (uint32[p] - mx(k, sum, y, z, p, e)) | 0;
         }
     }
 
@@ -28,5 +27,5 @@ export const xxteaDecrypt = (data: ByteInput, key: ByteInput) => {
         n = m;
     }
 
-    return toBytes(buffer.slice(0, n));
+    return toBytes(uint32.buffer.slice(0, n));
 };
