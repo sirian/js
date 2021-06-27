@@ -40,7 +40,7 @@ export const parseMapArgs = (args: any[]): [Array<[any, any]>, XMapInitializer |
         return [[], src];
     }
 
-    const entries = (isPlainObject(src) ? entriesOf(src) : toArray(src));
+    const entries = (isPlainObject(src) ? entriesOf(src) : toArray(src)) as [any, any];
 
     return [entries, initializer];
 };
