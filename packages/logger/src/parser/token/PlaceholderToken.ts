@@ -5,7 +5,7 @@ export class PlaceholderToken extends BaseToken {
     public readonly type?: string;
     public readonly options: string;
 
-    constructor(path?: string | number, type?: string, options: string = "", text: string = "") {
+    constructor(path?: string | number, type?: string, options = "", text = "") {
         super(text);
         this.path = path;
         this.type = type;

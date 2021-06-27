@@ -44,7 +44,7 @@ export class Reader {
     }
 
     public match(pattern: RegExp) {
-        return this.rest().match(pattern);
+        return pattern.exec(this.rest());
     }
 
     public rest(length?: number) {

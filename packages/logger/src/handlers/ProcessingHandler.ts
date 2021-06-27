@@ -39,7 +39,7 @@ export class ProcessingHandler extends AbstractHandler {
         if (!this.formatter) {
             this.formatter = this.getDefaultFormatter();
         }
-        return this.formatter!;
+        return this.formatter;
     }
 
     protected processRecord(record: LogRecord) {

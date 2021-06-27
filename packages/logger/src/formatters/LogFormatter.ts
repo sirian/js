@@ -11,9 +11,7 @@ export interface LogFormatterInit {
     placeholders: Record<string, PlaceholderFormatCallback>;
 }
 
-export interface ILogFormatter extends IFormatter<LogRecord, FormatContext> {
-
-}
+export type ILogFormatter = IFormatter<LogRecord, FormatContext>;
 
 export abstract class LogFormatter implements ILogFormatter {
     protected placeholders: Record<string, PlaceholderFormatCallback> = {};
