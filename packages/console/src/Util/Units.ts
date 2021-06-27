@@ -43,7 +43,7 @@ export class Units {
         return this.from(value, k, units).format(template);
     }
 
-    public format(template: string = "%.2f  %s") {
+    public format(template = "%.2f  %s") {
         return sprintf(template, this.value, this.unit);
     }
 }

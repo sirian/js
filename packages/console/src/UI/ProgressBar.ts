@@ -74,25 +74,25 @@ export class ProgressBar {
         },
     };
 
-    protected barWidth: number = 28;
+    protected barWidth = 28;
     protected barChar?: string;
-    protected emptyBarChar: string = "-";
-    protected progressChar: string = ">";
+    protected emptyBarChar = "-";
+    protected progressChar = ">";
     protected format?: string;
     protected internalFormat?: string;
-    protected redrawFreq: number = 1;
+    protected redrawFreq = 1;
     protected output: Output;
-    protected step: number = 0;
-    protected max: number = 0;
+    protected step = 0;
+    protected max = 0;
     protected startTime: number;
     protected stepWidth!: number;
-    protected percent: number = 0.0;
-    protected formatLineCount: number = 0;
+    protected percent = 0.0;
+    protected formatLineCount = 0;
     protected messages: Map<string, string> = new Map();
     protected overwrite = true;
-    protected firstRun: boolean = false;
+    protected firstRun = false;
 
-    public constructor(output: Output, max: number = 0) {
+    public constructor(output: Output, max = 0) {
         this.output = output;
         this.setMaxSteps(max);
 
@@ -153,7 +153,7 @@ export class ProgressBar {
         this.messages.set(name, message);
     }
 
-    public getMessage(name: string = "message") {
+    public getMessage(name = "message") {
         return this.messages.get(name);
     }
 
@@ -226,7 +226,7 @@ export class ProgressBar {
         this.display();
     }
 
-    public advance(step: number = 1) {
+    public advance(step = 1) {
         this.setProgress(this.step + step);
         return this;
     }

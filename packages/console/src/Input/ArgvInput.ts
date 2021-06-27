@@ -90,7 +90,7 @@ export class ArgvInput extends Input {
 
     public toString() {
         const tokens = this.tokens.map((token) => {
-            const match = token.match(/^(-[^=]+=)(.+)/);
+            const match = /^(-[^=]+=)(.+)/.exec(token);
             if (match) {
                 return match[1] + this.escapeToken(match[2]);
             }

@@ -24,7 +24,7 @@ export abstract class Descriptor {
 
     public abstract describeApplication(description: ApplicationDescription): void;
 
-    protected write(content: string, decorated: boolean = false) {
+    protected write(content: string, decorated = false) {
         this.output.write(content, {
             type: decorated ? OutputType.NORMAL : OutputType.RAW,
         });

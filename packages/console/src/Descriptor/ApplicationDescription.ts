@@ -19,7 +19,7 @@ export class ApplicationDescription {
     protected readonly aliases: Map<string, CommandDefinition>;
     protected inspected: boolean;
 
-    constructor(application: Application, namespace: string = "") {
+    constructor(application: Application, namespace = "") {
         this.application = application;
         this.namespace = namespace;
         this.namespaces = new Map();
@@ -28,7 +28,7 @@ export class ApplicationDescription {
         this.inspected = false;
     }
 
-    public static async inspectApplication(app: Application, namespace: string = "") {
+    public static async inspectApplication(app: Application, namespace = "") {
         const desc = new ApplicationDescription(app, namespace);
         await desc.inspectApplication();
         return desc;

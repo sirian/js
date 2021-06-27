@@ -313,7 +313,7 @@ export class Application {
         return this.getCommand(exact ? name : found[0]);
     }
 
-    public getNames(ns: string = "") {
+    public getNames(ns = "") {
         const commands = new XSet<string>();
 
         const names = [...this.commands.keys()];

@@ -202,7 +202,7 @@ export class InputDefinition {
         return values;
     }
 
-    public getSynopsis(short: boolean = false) {
+    public getSynopsis(short = false) {
         const elements: string[] = [];
 
         const opts = this.options;

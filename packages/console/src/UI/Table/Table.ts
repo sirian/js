@@ -22,7 +22,7 @@ export class Table {
     protected headers: TableRow[] = [];
     protected rows: TableRow[] = [];
     protected effectiveColumnWidths: number[] = [];
-    protected columnsCount: number = 0;
+    protected columnsCount = 0;
     protected output: Output;
     protected style!: TableStyle;
     protected columnStyles: TableStyle[] = [];

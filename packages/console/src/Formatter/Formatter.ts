@@ -71,7 +71,7 @@ export class Formatter {
         return `<${style}>${value}</>`;
     }
 
-    public static escape(text: string = ""): string {
+    public static escape(text = ""): string {
         text = stringifyVar(text).replace(/([^\\]?)</gi, (tmp, match) => {
             return match + "\\<";
         });
@@ -160,10 +160,10 @@ export class Formatter {
 
     public decorate(message: string): string {
         message = stringifyVar(message);
-        let offset: number = 0;
+        let offset = 0;
         const output: string[] = [];
-        const tagRegex: string = "[a-z][a-z0-9_=,;-]*";
-        const r: RegExp = new RegExp("<((" + tagRegex + ")|/(" + tagRegex + ")?)>", "ig");
+        const tagRegex = "[a-z][a-z0-9_=,;-]*";
+        const r = new RegExp("<((" + tagRegex + ")|/(" + tagRegex + ")?)>", "ig");
 
         while (true) {
             const match = r.exec(message);

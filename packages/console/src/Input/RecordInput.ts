@@ -22,7 +22,7 @@ export class RecordInput extends Input {
         }
     }
 
-    public hasParameterOption(values: string | string[], onlyParams: boolean = false): boolean {
+    public hasParameterOption(values: string | string[], onlyParams = false): boolean {
         values = castArray(values);
 
         for (let [k, v] of this.parameters) {
@@ -42,7 +42,7 @@ export class RecordInput extends Input {
         return false;
     }
 
-    public getParameterOption(values: string | string[], defaultValue = false, onlyParams: boolean = false) {
+    public getParameterOption(values: string | string[], defaultValue = false, onlyParams = false) {
         values = castArray(values);
 
         for (const [k, v] of this.parameters) {
