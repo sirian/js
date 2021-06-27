@@ -10,7 +10,7 @@ export const bind = () =>
             get: (object, previous) => {
                 const objMap = ensureMap(map, object, () => new WeakMap());
 
-                const fn = previous() as F;
+                const fn = previous() ;
 
                 return ensureMap(objMap, fn, () => fn.bind(object));
             },
