@@ -55,7 +55,7 @@ export class Mixin {
     }
 
     protected static cache(mixin: MixinFn) {
-        return Mixin.wrap(mixin, (superclass) => Mixin.caches.ensure(superclass).ensure(mixin) as any);
+        return Mixin.wrap(mixin, (superclass) => Mixin.caches.ensure(superclass).ensure(mixin) );
     }
 
     protected static deduplicate(mixin: MixinFn) {
