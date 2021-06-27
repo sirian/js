@@ -27,7 +27,7 @@ export class Reader {
         return this.pos >= this.length;
     }
 
-    public moveForward(length: number = 1) {
+    public moveForward(length = 1) {
         const pos = this.pos + length;
         this.pos = Math.min(pos, this.length);
     }
@@ -47,7 +47,7 @@ export class Reader {
     }
 
     public match(pattern: RegExp) {
-        return this.getRemaining().match(pattern);
+        return pattern.exec(this.getRemaining());
     }
 
     public getSubstring(length?: number) {

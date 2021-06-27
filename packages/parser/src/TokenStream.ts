@@ -4,9 +4,9 @@ import {Token, TokenTypes} from "./Token";
 export class TokenStream<T extends TokenTypes = TokenTypes> {
     public readonly source: string;
     protected tokens: Array<Token<T>> = [];
-    protected pos: number = 0;
+    protected pos = 0;
 
-    constructor(tokens: Array<Token<T>> = [], source: string = "") {
+    constructor(tokens: Array<Token<T>> = [], source = "") {
         this.source = source;
         this.push(...tokens);
     }
