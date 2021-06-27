@@ -3,7 +3,7 @@ export type TaskCallback = () => any;
 type Task = [fn: TaskCallback, canceled: boolean];
 
 export class TaskQueue {
-    private static _lastId: number = 0;
+    private static _lastId = 0;
 
     private _tasks: Record<string, Task> = {};
     private _scheduled = false;

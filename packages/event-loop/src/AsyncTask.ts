@@ -7,7 +7,7 @@ export abstract class AsyncTask {
 
     private _callback?: TaskCallback;
     private _id?: number;
-    private _destroyed: boolean = false;
+    private _destroyed = false;
 
     constructor(callback?: TaskCallback) {
         this._callback = callback;
