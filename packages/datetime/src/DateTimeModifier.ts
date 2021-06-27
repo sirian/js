@@ -40,14 +40,14 @@ export class DateTimeModifier {
     }
 
     private _parse(pattern: string) {
-        let match = pattern.match(/^\s*(now|today|yesterday|tomorrow|start|end)/i);
+        let match = /^\s*(now|today|yesterday|tomorrow|start|end)/i.exec(pattern);
 
         if (match) {
             this._queue.push(this._modifiers[match[1]]);
             return match;
         }
 
-        match = pattern.match(/^\s*([+-])\s*(\d+)\s*(year|month|day|hour|minute|min|seconds|sec|ms)s?/i);
+        match = /^\s*([+-])\s*(\d+)\s*(year|month|day|hour|minute|min|seconds|sec|ms)s?/i.exec(pattern);
 
         const keys: Record<string, keyof IDateTimeInterval> = {
             year: "years",

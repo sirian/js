@@ -30,7 +30,7 @@ export class DateTimeInterval implements IDateTimeInterval {
     public seconds!: number;
     public ms!: number;
 
-    constructor(interval: Partial<IDateTimeInterval> = {}, inverse: boolean = false) {
+    constructor(interval: Partial<IDateTimeInterval> = {}, inverse = false) {
         const sign = inverse ? -1 : 1;
         for (const key of keysOf(keyMap)) {
             this[key] = sign * (interval[key] ?? 0) || 0;

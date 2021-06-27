@@ -64,7 +64,7 @@ export class DateTime extends DateTimeImmutable {
         return this;
     }
 
-    public setTime(h: number, m: number = 0, s: number = 0, ms: number = 0) {
+    public setTime(h: number, m = 0, s = 0, ms = 0) {
         this.hour = h;
         this.minute = m;
         this.second = s;

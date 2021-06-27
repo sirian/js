@@ -61,7 +61,7 @@ export class DateTimeImmutable implements IDateTime {
         return Date.now();
     }
 
-    public static getTimestampSec(truncate: boolean = true) {
+    public static getTimestampSec(truncate = true) {
         const sec = this.getTimestampMs() / 1000;
 
         return truncate ? toInt(sec) : sec;

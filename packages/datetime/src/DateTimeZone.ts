@@ -459,7 +459,7 @@ export class DateTimeZone {
 
         const re = /^(?:GMT)?([+-])?(2[0-4]|[01]?[0-9]):?([0-5]?[0-9])?$/;
 
-        const match = tz.match(re);
+        const match = re.exec(tz);
 
         if (match) {
             const [/*text*/, sign, hour, min] = match;

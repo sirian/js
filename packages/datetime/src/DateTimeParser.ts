@@ -28,7 +28,7 @@ export class DateTimeParser {
     }
 
     public static normalizeISO(text: string) {
-        const match = stringifyVar(text || "").toUpperCase().match(re);
+        const match = re.exec(stringifyVar(text || "").toUpperCase());
 
         if (!match) {
             return text;
