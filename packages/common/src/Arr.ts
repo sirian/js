@@ -2,7 +2,7 @@ import {ArrayRO, LastElement, TupleOf} from "@sirian/ts-extra-types";
 import {isArray} from "./Is";
 import {compare, isArrayLike, isEqual, isIterable} from "./Var";
 
-export const range = (from: number, to: number, step: number = 1) => {
+export const range = (from: number, to: number, step = 1) => {
     const result = [];
     const sign = step > 0 ? 1 : -1;
     while (sign * (to - from) >= 0) {

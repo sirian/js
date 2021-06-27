@@ -9,7 +9,7 @@ export const randomUint8 = () => randomBits(8);
 export const randomUint16 = () => randomBits(16);
 export const randomUint32 = () => randomBits(32);
 
-export const randomInt = (min: number = 0, max: number = 2 ** 32 - 1, inclusive: boolean = true) => {
+export const randomInt = (min = 0, max: number = 2 ** 32 - 1, inclusive = true) => {
     const imin = Math.ceil(min);
     const imax = Math.floor(max);
 

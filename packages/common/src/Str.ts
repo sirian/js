@@ -38,23 +38,24 @@ export const pad = (value: unknown, maxLength: number, chars = " ", side: StrSid
 export const trim = (value: unknown, mask = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) => {
     const str = stringifyVar(value);
 
-    const maskPattern = [...mask].map(rgxEscape).join("|");
-
-    const parts = [];
+    const strArray = [...str];
+    const length = strArray.length;
+    let start = 0;
+    let end = length;
 
     if (StrSide.BOTH === type || StrSide.LEFT === type) {
-        parts.push("^(?:" + maskPattern + ")+");
+        while (start < end && -1 !== mask.indexOf(strArray[start])) {
+            ++start;
+        }
     }
 
     if (StrSide.BOTH === type || StrSide.RIGHT === type) {
-        parts.push("(?:" + maskPattern + ")+$");
+        while (start < end && -1 !== mask.indexOf(strArray[end - 1])) {
+            --end;
+        }
     }
 
-    if (!parts.length) {
-        return str;
-    }
-
-    return str.replace(new RegExp(parts.join("|"), "gu"), "");
+    return start > 0 || end < length ? strArray.slice(start, end).join("") : str;
 };
 
 export const strRepeat = (chars: string, maxLength: number) => {

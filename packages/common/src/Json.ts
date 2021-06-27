@@ -46,7 +46,7 @@ export const jsonStripComments = (value: string) => {
         pos = tokenizer.lastIndex;
 
         if (text === "\"" && !lineComment && !multiComment) {
-            const tmp = left.match(/(\\)*$/);
+            const tmp = /(\\)*$/.exec(left);
             // start of string with ", or unescaped " character found to end string
             if (!inString || !tmp || (tmp[0].length % 2) === 0) {
                 inString = !inString;

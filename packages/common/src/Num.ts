@@ -20,7 +20,7 @@ export const toBigInt = (x: number | bigint) => BigInt(x);
 export const toBigUint64 = (x: number | bigint) => toBigInt(x) & BIG_UINT64_MAX;
 export const toBigUint32 = (x: number | bigint) => toBigInt(x) & BIG_UINT32_MAX;
 
-export const parseNumber = (x?: boolean | string | number | null, defaultValue: number = NaN): number =>
+export const parseNumber = (x?: boolean | string | number | null, defaultValue = NaN): number =>
     ifEqualNaN(+(x ?? 0), defaultValue);
 
 export const parseInt = (x?: boolean | string | number | null, defaultValue?: number) =>

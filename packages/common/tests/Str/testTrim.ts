@@ -4,7 +4,19 @@ type TrimFn = typeof trim | typeof trimLeft | typeof trimRight;
 
 describe("", () => {
     const data: Array<[TrimFn, [any, ...any[]], string]> = [
+        [trim, [""], ""],
+        [trim, [" "], ""],
+        [trim, ["  "], ""],
+        [trim, [" foo"], "foo"],
+        [trim, ["  foo"], "foo"],
+        [trim, ["foo "], "foo"],
+        [trim, ["foo  "], "foo"],
+        [trim, [" foo "], "foo"],
+        [trim, ["  foo "], "foo"],
+        [trim, [" foo  "], "foo"],
+        [trim, ["  foo  "], "foo"],
         [trim, ["  \tfoo \n "], "foo"],
+        [trim, ["  \n "], ""],
         [trim, ["  \tfoo \n ", []], "  \tfoo \n "],
         [trim, [" undefined", undefined], "undefined"],
         [trim, [" undefined"], "undefined"],
