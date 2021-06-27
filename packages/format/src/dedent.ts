@@ -8,10 +8,10 @@ export const dedent = (str: TemplateStringsLike, ...values: any[]) => {
     const strings = t.strings;
 
     // count leading whitespaces in raw source
-    const skipLeft = raw.match(/^[ \t]*\r?\n/);
+    const skipLeft = /^[ \t]*\r?\n/.exec(raw);
 
     // count trailing whitespaces in raw source
-    const skipRight = raw.match(/\r?\n[ \t]*$/);
+    const skipRight = /\r?\n[ \t]*$/.exec(raw);
 
     if (skipLeft) {
         strings[0] = strings[0].substr(skipLeft[0].length);
