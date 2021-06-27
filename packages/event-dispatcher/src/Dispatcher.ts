@@ -14,7 +14,7 @@ export interface ListenerOptions {
 
 export class Dispatcher<A extends any[] = any> {
     private readonly _map = new Map<ListenerCallback<A>, Required<ListenerOptions>>();
-    private _dirty: boolean = false;
+    private _dirty = false;
     private readonly _options: ListenerSetOptions<A>;
 
     constructor(options: Partial<ListenerSetOptions<A>> = {}) {
