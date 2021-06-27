@@ -5,7 +5,7 @@ import {Node} from "./Node";
 export class ConstantNode extends Node<{}, { value: any }> {
     protected isIdentifier: boolean;
 
-    public constructor(value: any, isIdentifier: boolean = false) {
+    public constructor(value: any, isIdentifier = false) {
         super({}, {value});
         this.isIdentifier = isIdentifier;
     }

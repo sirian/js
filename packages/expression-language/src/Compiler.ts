@@ -3,7 +3,7 @@ import {IExpressionFunction} from "./IExpressionFunction";
 import {Node} from "./nodes";
 
 export class Compiler {
-    protected source: string = "";
+    protected source = "";
     protected functions: Record<string, IExpressionFunction>;
 
     public constructor(functions: Record<string, IExpressionFunction>) {

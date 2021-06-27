@@ -3,7 +3,7 @@ import {TokenType, TokenTypes} from "../Token";
 import {TokenStream} from "../TokenStream";
 
 export class StringLexer extends AbstractRegExpLexer<TokenTypes> {
-    protected regexp: RegExp = /^(?:"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*))'/s;
+    protected regexp = /^(?:"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*))'/s;
 
     protected handleMatch(match: RegExpMatchArray, reader: Reader, stream: TokenStream) {
         const text = match[0];
