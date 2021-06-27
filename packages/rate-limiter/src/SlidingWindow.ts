@@ -70,7 +70,7 @@ export class SlidingWindow implements ILimiterState {
         return TimeUtil.now() > this._windowEndAtMs;
     }
 
-    public add(hits: number = 1) {
+    public add(hits = 1) {
         this._hitCount += hits;
     }
 

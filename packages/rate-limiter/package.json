@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@sirian/rate-limiter",
     "description": "",
     "version": "2.0.8",

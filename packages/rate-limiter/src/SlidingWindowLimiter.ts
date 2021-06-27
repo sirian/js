@@ -18,7 +18,7 @@ export class SlidingWindowLimiter implements ILimiter {
         this.interval = dateIntervalToMs(interval);
     }
 
-    public consume(tokens: number = 1): RateLimit {
+    public consume(tokens = 1): RateLimit {
         const item = this.storage.fetch(this.id, (d) => SlidingWindow.unserialize(d)) ?? new SlidingWindow(this.id, this.interval);
 
         const win = item.isExpired() ? SlidingWindow.from(item, this.interval) : item;
