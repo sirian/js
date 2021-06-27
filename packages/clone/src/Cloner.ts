@@ -91,7 +91,7 @@ export class Cloner implements ICloner<any> {
 
     public getHandler<T extends object>(src: T): ICloneHandler<T> | undefined {
         const proto = getPrototype(src);
-        return this.handlers.get(proto as any);
+        return this.handlers.get(proto );
     }
 
     public cloneDeep<T>(src: T, options: Partial<CloneOptions> = {}) {
