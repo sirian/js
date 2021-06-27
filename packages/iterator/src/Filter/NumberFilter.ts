@@ -6,7 +6,7 @@ export class NumberFilter extends CompareFilter {
         super();
 
         const re = /^\s*(==|!=|[<>]=?)?\s*([0-9.]+)\s*(?:([kmg])(i?))?\s*$/;
-        const match = stringifyVar(test).match(re);
+        const match = re.exec(stringifyVar(test));
 
         if (!match) {
             throw new Error(`Don't understand "${test}" as a number test.`);
