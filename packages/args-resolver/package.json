@@ -1,13 +1,14 @@
 {
-    "name": "@sirian/lzf",
+    "private": true,
+    "name": "@sirian/args-resolver",
     "description": "",
-    "version": "2.0.9",
+    "version": "2.2.1",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
     },
     "repository": "https://github.com/sirian/js",
-    "homepage": "https://github.com/sirian/js/tree/master/packages/lzf",
+    "homepage": "https://github.com/sirian/js/tree/master/packages/args-resolver",
     "license": "MIT",
     "files": [
         "build/"
@@ -21,6 +22,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^9.3.2"
+        "@sirian/common": "^9.3.2",
+        "@sirian/ts-extra-types": "^4.2.2"
     }
 }

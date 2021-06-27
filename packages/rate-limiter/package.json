@@ -2,7 +2,7 @@
     "private": true,
     "name": "@sirian/rate-limiter",
     "description": "",
-    "version": "2.0.8",
+    "version": "2.0.9",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -18,10 +18,10 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/common": "^9.3.1",
-        "@sirian/datetime": "^4.0.8",
-        "@sirian/ts-extra-types": "^4.2.1",
-        "@sirian/xpromise": "^3.0.4"
+        "@sirian/common": "^9.3.2",
+        "@sirian/datetime": "^4.0.9",
+        "@sirian/ts-extra-types": "^4.2.2",
+        "@sirian/xpromise": "^3.0.5"
     },
     "scripts": {},
     "publishConfig": {

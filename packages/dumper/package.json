@@ -1,7 +1,7 @@
 {
     "name": "@sirian/dumper",
     "description": "",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -17,10 +17,10 @@
     "types": "build/types/index.d.ts",
     "sideEffects": false,
     "dependencies": {
-        "@sirian/clone": "^3.0.8",
-        "@sirian/common": "^9.3.1",
-        "@sirian/decorators": "^2.0.8",
-        "@sirian/ts-extra-types": "^4.2.1"
+        "@sirian/clone": "^3.0.9",
+        "@sirian/common": "^9.3.2",
+        "@sirian/decorators": "^2.0.9",
+        "@sirian/ts-extra-types": "^4.2.2"
     },
     "scripts": {},
     "publishConfig": {
