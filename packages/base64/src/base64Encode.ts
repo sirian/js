@@ -1,7 +1,7 @@
 import {ByteInput, toBytes} from "@sirian/common";
 import {base64Chars, base64MakeURISafe} from "./const";
 
-export const base64Encode = (input: ByteInput, uriSafe: boolean = false): string => {
+export const base64Encode = (input: ByteInput, uriSafe = false): string => {
     if (null == input || "" === input) {
         return "";
     }
@@ -9,7 +9,7 @@ export const base64Encode = (input: ByteInput, uriSafe: boolean = false): string
     const uint8 = toBytes(input);
     const len = uint8.length;
 
-    let result: string = "";
+    let result = "";
 
     for (let i = 0; i < len;) {
         const a = uint8[i++];
