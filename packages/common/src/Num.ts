@@ -1,21 +1,24 @@
 import {isNumber, isString} from "./Is";
 import {ifEqualNaN} from "./Var";
 
-export const SMALLEST_UNSAFE_INTEGER = 2 ** 53;
-export const LARGEST_SAFE_INTEGER = 2 ** 53 - 1;
-export const UINT32_SIZE = 2 ** 32;
-export const UINT32_MAX = 2 ** 32 - 1;
 export const INT32_SIZE = 2 ** 31;
-export const INT32_MAX = 2 ** 31 - 1;
+export const INT32_MAX = INT32_SIZE - 1;
+export const UINT32_SIZE = INT32_SIZE * 2;
+export const UINT32_MAX = UINT32_SIZE - 1;
 export const UINT21_SIZE = 2 ** 21;
-export const UINT21_MAX = 2 ** 21 - 1;
-export const BIG_UINT64_MAX = 2n ** 64n - 1n;
+export const UINT21_MAX = UINT21_SIZE - 1;
+export const BIG_UINT64_SIZE = 2n ** 64n;
+export const BIG_UINT64_MAX = BIG_UINT64_SIZE - 1n;
+export const BIG_UINT32_SIZE = 2n ** 32n;
+export const BIG_UINT32_MAX = BIG_UINT32_SIZE - 1n;
 
+export const toNumber = (x: number | bigint) => Number(x);
 export const toInt = (x: number) => Math.trunc(x);
 export const toInt32 = (x: number) => x | 0;
 export const toUint32 = (v: number) => v >>> 0;
 export const toBigInt = (x: number | bigint) => BigInt(x);
 export const toBigUint64 = (x: number | bigint) => toBigInt(x) & BIG_UINT64_MAX;
+export const toBigUint32 = (x: number | bigint) => toBigInt(x) & BIG_UINT32_MAX;
 
 export const parseNumber = (x?: boolean | string | number | null, defaultValue: number = NaN): number =>
     ifEqualNaN(+(x ?? 0), defaultValue);

@@ -10,14 +10,14 @@ export const enum StrSide {
     BOTH = "both",
 }
 
-export type ReplaceCallback = (substring: string, ...args: any[]) => string;
+export type ReplaceCallback = (substring: string, ...args: unknown[]) => string;
 
-export const padRight = (str: any, maxLength: number, chars: string = " ") => pad(str, maxLength, chars, StrSide.RIGHT);
+export const padRight = (str: unknown, maxLength: number, chars = " ") => pad(str, maxLength, chars, StrSide.RIGHT);
 
-export const padLeft = (str: any, maxLength: number, chars: string = " ") => pad(str, maxLength, chars, StrSide.LEFT);
+export const padLeft = (str: unknown, maxLength: number, chars = " ") => pad(str, maxLength, chars, StrSide.LEFT);
 
-export const pad = (str: any, maxLength: number, chars: string = " ", side: StrSide = StrSide.LEFT) => {
-    str = stringifyVar(str);
+export const pad = (value: unknown, maxLength: number, chars = " ", side: StrSide = StrSide.LEFT) => {
+    const str = stringifyVar(value);
     const length = str.length;
     const padLength = maxLength - length;
 
@@ -35,7 +35,7 @@ export const pad = (str: any, maxLength: number, chars: string = " ", side: StrS
     return left + str + right;
 };
 
-export const trim = (value: any, mask: string = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) => {
+export const trim = (value: unknown, mask = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) => {
     const str = stringifyVar(value);
 
     const maskPattern = [...mask].map(rgxEscape).join("|");
@@ -69,9 +69,9 @@ export const strRepeat = (chars: string, maxLength: number) => {
         .substr(0, maxLength);
 };
 
-export const trimLeft = (value: any, mask?: string) => trim(value, mask, StrSide.LEFT);
+export const trimLeft = (value: unknown, mask?: string) => trim(value, mask, StrSide.LEFT);
 
-export const trimRight = (value: any, mask?: string) => trim(value, mask, StrSide.RIGHT);
+export const trimRight = (value: unknown, mask?: string) => trim(value, mask, StrSide.RIGHT);
 
 export const lowerFirst = <T extends string>(value: T) =>
     (stringifyVar(value).charAt(0).toLowerCase() + stringifyVar(value).slice(1)) as `${Uncapitalize<ToString<T>>}`;
@@ -79,7 +79,7 @@ export const lowerFirst = <T extends string>(value: T) =>
 export const upperFirst = <T extends string>(value: T) =>
     (stringifyVar(value).charAt(0).toUpperCase() + stringifyVar(value).slice(1)) as `${Capitalize<T>}`;
 
-export const strReplace = (value: any, pairs: Record<string, string | ReplaceCallback>) => {
+export const strReplace = (value: unknown, pairs: Record<string, string | ReplaceCallback>) => {
     const str = stringifyVar(value);
 
     if (!str) {
@@ -98,9 +98,9 @@ export const strReplace = (value: any, pairs: Record<string, string | ReplaceCal
     });
 };
 
-export const camelCase = (value: any) => trim(value).replace(/[-_\s]+(.)?/g, (s, c) => c ? c.toUpperCase() : "");
+export const camelCase = (value: unknown) => trim(value).replace(/[-_\s]+(.)?/g, (s, c: string | null) => c?.toUpperCase() ?? "");
 
-export const dashCase = (value: any) => trim(value)
+export const dashCase = (value: unknown) => trim(value)
     .replace(/([A-Z])/g, "-$1")
     .replace(/[-_\s]+/g, "-")
     .toLowerCase();
@@ -156,7 +156,7 @@ export const strSplit = (value: string, re: string | RegExp, limit: number = Num
     return res;
 };
 
-export const strWrap = (value: any, wrapChar: string, escapeChar: string = "\\") => {
+export const strWrap = (value: unknown, wrapChar: string, escapeChar = "\\") => {
     const escapeCharRgx = new RegExp(rgxEscape(escapeChar), "g");
     const wrapCharRgx = new RegExp(rgxEscape(wrapChar), "g");
 
@@ -167,4 +167,4 @@ export const strWrap = (value: any, wrapChar: string, escapeChar: string = "\\")
     return wrapChar + escaped + wrapChar;
 };
 
-export const strGraphemes = (str: any) => stringifyVar(str).match(/(\P{M}\p{M}*)/gu) || [];
+export const strGraphemes = (str: unknown) => stringifyVar(str).match(/(\P{M}\p{M}*)/gu) || [];

@@ -1,16 +1,23 @@
-import {abs, isInt, toBigInt} from "@sirian/common";
+import {abs} from "@sirian/common";
 
 describe("abs", () => {
-    const data: Array<[number, number]> = [
-        -1.5, -1, -0, 0, 1, 1.5, NaN, 1 / 0, -1 / 0,
-    ].map((v) => [v, Math.abs(v)]);
+    const data = [
+        [-1.5, 1.5],
+        [-1, 1],
+        [-0, 0],
+        [0, 0],
+        [1, 1],
+        [1.5, 1.5],
+        [NaN, NaN],
+        [1 / 0, 1 / 0],
+        [-1 / 0, 1 / 0],
+        [-10n, 10n],
+        [-0n, 0n],
+        [0n, 0n],
+        [10n, 10n],
+    ] as const;
 
     test.each(data)("abs(%p) === %p", (value, expected) => {
-        expect(abs(value)).toBe(expected);
-
-        if (isInt(value)) {
-            const big = toBigInt(value);
-            expect(abs(big)).toBe(toBigInt(expected));
-        }
+        expect(Object.is(abs(value), expected)).toBe(true);
     });
 });

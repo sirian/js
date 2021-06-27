@@ -1,7 +1,6 @@
 import {assert} from "./Error";
 import {isFunction, isString} from "./Is";
 import {jsonStringify, quoteSingle} from "./Json";
-import {max} from "./Math";
 import {NullMap} from "./NullMap";
 import {parseNumber, toInt, toUint32} from "./Num";
 import {getObjectTag} from "./Ref";
@@ -135,7 +134,6 @@ export class Sprintf {
 
             match = rgxKeyAccess.exec(field) || rgxIndexAccess.exec(field);
         }
-        Object.freeze(keys);
 
         return keys;
     }
@@ -192,9 +190,7 @@ export class Sprintf {
             }
         }
 
-        const padLength = width - signText.length - argText.length;
-
-        const pad = padChar.repeat(max(0, width && padLength));
+        const pad = "".padStart(width - signText.length - argText.length, padChar);
 
         return align
                ? signText + argText + pad
