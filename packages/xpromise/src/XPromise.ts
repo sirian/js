@@ -24,9 +24,9 @@ export type PromiseReaction<T, R1 = any, R2 = any> = [
 
 export type PromiseStatus = "pending" | "fulfilled" | "rejected";
 
-declare function setTimeout(callback: (...args: any[]) => void, ms: number): any;
+declare function setTimeout(callback: (...args: any[]) => void, ms: number): unknown;
 
-declare function clearTimeout(timeoutId: any): any;
+declare function clearTimeout(timeoutId: unknown): void;
 
 const isFunction = (x: any): x is Func => "function" === typeof x;
 
@@ -36,7 +36,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     private _status: PromiseStatus = "pending";
     private _reactions: Array<PromiseReaction<any>> = [];
     private _resolved = false;
-    private _timeoutId?: any;
+    private _timeoutId?: unknown;
     private _value?: any;
     private _timedOut = false;
 
@@ -106,19 +106,17 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
             let fulfilledCount = 0;
 
-            const results: any = [];
+            const results: unknown[] = [];
 
             for (let i = 0; i < length; i++) {
-                const promise = promises[i];
-
-                const onFulfilled = (val: any) => {
-                    results[i] = val;
-                    if (++fulfilledCount === length) {
-                        resolve(results);
-                    }
-                };
-
-                XPromise.resolve(promise).then(onFulfilled, reject);
+                XPromise
+                    .resolve(promises[i])
+                    .then((val) => {
+                        results[i] = val;
+                        if (++fulfilledCount === length) {
+                            resolve(results as any);
+                        }
+                    }, reject);
             }
         });
     }
@@ -132,7 +130,9 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
 
     public static race<T extends ArrayRO>(promises: T): XPromise<Awaited<T[number]>> {
         return new XPromise<any>((resolve, reject) =>
-            [...promises].forEach((p) => XPromise.resolve(p).then(resolve, reject)));
+            [...promises].forEach((p) => {
+                XPromise.resolve(p).then(resolve, reject);
+            }));
     }
 
     public static wrap<R>(fn: () => R | PromiseLike<R>): XPromise<R> {
@@ -145,10 +145,10 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
 
         this._timedOut = false;
-        this.clearTimeout();
+        void this.clearTimeout();
 
         this._timeoutId = setTimeout(() => {
-            this.clearTimeout();
+            void this.clearTimeout();
             this._timedOut = true;
             let error;
 
@@ -302,7 +302,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    private _settle(status: "fulfilled" | "rejected", value: any) {
+    private _settle(status: "fulfilled" | "rejected", value: unknown) {
         if (!this.isPending()) {
             return;
         }
@@ -311,7 +311,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         this._status = status;
         this._value = value;
 
-        this.clearTimeout();
+        void this.clearTimeout();
 
         this._reactions.splice(0).forEach((r) => this._react(r));
     }
