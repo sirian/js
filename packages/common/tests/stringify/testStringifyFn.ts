@@ -6,13 +6,13 @@ describe("stringifyFn", () => {
             return "foo";
         },
         async function() {
-            return "foo";
+            return Promise.resolve("foo");
         },
         function foo() {
             return "foo";
         },
         async function foo() {
-            return "foo";
+            return Promise.resolve("foo");
         },
         function* foo() {
             yield "foo";
@@ -25,6 +25,6 @@ describe("stringifyFn", () => {
     test.each(data)("stringifyFn(%O)", (fn) => {
         const result = stringifyFn(fn);
         expect(result).toEqual(Function.prototype.toString.call(fn));
-        expect(result).toEqual("" + fn);
+        expect(result).toEqual(String(fn));
     });
 });

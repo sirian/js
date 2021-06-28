@@ -11,7 +11,9 @@ describe("Entries.from", () => {
         [[1, 2], [[0, 1], [1, 2]]],
         [{x: 1}, [["x", 1]]],
         [{x: undefined}, [["x", undefined]]],
-        [[1, , 3], [[0, 1], [1, undefined], [2, 3]]], // tslint:disable-line:no-sparse-arrays
+
+        // eslint-disable-next-line no-sparse-arrays
+        [[1, /*hole*/, 3], [[0, 1], [1, undefined], [2, 3]]], // tslint:disable-line:no-sparse-arrays
     ];
 
     test.each(data)("Entries.from(%O) === %O", (value, expected) => {

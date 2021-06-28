@@ -6,6 +6,7 @@ describe("getOwn", () => {
         [{x: 1}, "x", 1],
         [Object.create({x: 1}), "x", undefined],
         [{}, "hasOwnProperty", undefined],
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         [Object.prototype, "hasOwnProperty", Object.prototype.hasOwnProperty],
         [new Array(2), 1, undefined],
         [[1, 2, 3], 1, 2],

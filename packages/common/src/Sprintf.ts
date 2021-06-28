@@ -104,35 +104,29 @@ export class Sprintf {
         }));
     }
 
-    protected _parseKeys(pattern: string, field: string) {
-        if (!field) {
+    protected _parseKeys(pattern: string, fieldExpr: string) {
+        if (!fieldExpr) {
             return;
         }
+        let field = "." + fieldExpr;
 
-        const rgxKey = /^([_a-z]\w*)/i;
         const rgxKeyAccess = /^\.([_a-z]\w*)/i;
         const rgxIndexAccess = /^\[(\d+)]/;
 
         const keys: string[] = [];
 
-        let match = rgxKey.exec(field);
+        while ("" !== field) {
+            const match = rgxKeyAccess.exec(field) || rgxIndexAccess.exec(field);
 
-        while (true) {
             assert(
                 match,
-                () => new SyntaxError("Failed to parse named argument key " + quoteSingle(field) + " in: " + quoteSingle(pattern)),
+                () => new SyntaxError("Failed to parse named argument key " + quoteSingle(fieldExpr) + " in: " + quoteSingle(pattern)),
                 {pattern, field},
             );
 
             keys.push(match[1]);
 
             field = field.substring(match[0].length);
-
-            if ("" === field) {
-                break;
-            }
-
-            match = rgxKeyAccess.exec(field) || rgxIndexAccess.exec(field);
         }
 
         return keys;

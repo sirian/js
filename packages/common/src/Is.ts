@@ -34,8 +34,8 @@ export const isBigInt = (value: unknown): value is bigint => isType(value, "bigi
 export const isBoolean = (value: unknown): value is boolean => isType(value, "boolean");
 export const isString = (value: unknown): value is string => isType(value, "string");
 export const isSymbol = (value: unknown): value is symbol => isType(value, "symbol");
-export const isObject = <T>(value: T): value is Exclude<Extract<T, object>, AnyFunc> => null !== value && isType(value, "object");
-export const isFunction = <T>(value: T): value is Function & Extract<T, AnyFunc> => isType(value, "function");
+export const isObject = <T>(value: T): value is Exclude<Extract<T & object, object>, AnyFunc> => null !== value && isType(value, "object");
+export const isFunction = (value: unknown): value is Function => isType(value, "function");
 
 export const isObjectOrFunction = (value: unknown): value is object => null !== value && (isObject(value) || isFunction(value));
 export const isPrimitive = (value: unknown): value is Primitive => null == value || !isObjectOrFunction(value);

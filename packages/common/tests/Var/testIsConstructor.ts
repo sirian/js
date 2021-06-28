@@ -13,8 +13,7 @@ describe("Fn", () => {
         [async function asyncFn() {}, false],
         [async function* asyncGen(): any {}, false],
         [() => void 0, false],
-        [async () => void 0, false],
-
+        [async () => void 0, false], // eslint-disable-line @typescript-eslint/require-await
         [function() {}, true],
         [function fn() {}, true],
         [Object, true],

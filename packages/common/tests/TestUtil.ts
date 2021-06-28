@@ -62,7 +62,7 @@ export class TestUtil {
     }
 
     public static randString(min: number, max = min) {
-        return makeArray(randomInt(min, max, true), TestUtil.randChar).join("");
+        return makeArray(randomInt(min, max, true), () => TestUtil.randChar()).join("");
     }
 
     public static randStrings(count: number, minLength = 0, maxLength = 30) {

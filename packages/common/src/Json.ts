@@ -27,6 +27,7 @@ export const jsonStripComments = (value: string) => {
 
     const result = [];
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         const match = tokenizer.exec(value);
         if (!match) {

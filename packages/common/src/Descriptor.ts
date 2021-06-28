@@ -3,8 +3,8 @@ import {isBoolean, isFunction, isObject, isUndefined} from "./Is";
 import {defineProp, deleteProps, getDescriptor, hasAnyProp} from "./Ref";
 
 export type DescriptorWrapper<T, V> = {
-    get?(object: T, parent: () => V): V;
-    set?(object: T, value: V, parent: (value: V) => void): void;
+    get?(this: void, object: T, parent: () => V): V;
+    set?(this: void, object: T, value: V, parent: (value: V) => void): void;
 };
 
 export type DescriptorType = "accessor" | "data" | undefined;

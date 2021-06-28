@@ -14,7 +14,6 @@ describe("stringifyVar", () => {
     ];
 
     test.each(data)("stringifyVar(%s) === %o", (code, expected) => {
-        const value = TestUtil.eval(code);
-        expect(stringifyVar(value)).toBe(expected);
+        expect(stringifyVar(TestUtil.eval(code))).toBe(expected);
     });
 });

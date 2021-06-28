@@ -24,6 +24,15 @@ module.exports = {
     ],
     rules: {
         "@typescript-eslint/explicit-module-boundary-types": 0,
+        "@typescript-eslint/no-empty-interface": 1,
+        "@typescript-eslint/no-unsafe-member-access": 1,
+        "@typescript-eslint/no-unsafe-assignment": 1,
+        "@typescript-eslint/no-unsafe-call": 1,
+        "@typescript-eslint/no-unsafe-return": 1,
+        "@typescript-eslint/no-empty-function": 1,
+        "@typescript-eslint/restrict-template-expressions": [1, {}],
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/no-implied-eval": 0,
         "@typescript-eslint/ban-types": [1, {
             types: {
                 object: false,

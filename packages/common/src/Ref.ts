@@ -11,8 +11,11 @@ export interface ProtoChainOptions {
     stopAt?: object;
 }
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeCall = noop.call as any;
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeApply = noop.apply as any;
+// eslint-disable-next-line @typescript-eslint/unbound-method
 const nativeBind = noop.bind as any;
 
 export const apply: {
@@ -26,7 +29,7 @@ export const bind: {
     <R, A extends any[], B extends any[]>(f: (...args: [...A, ...B]) => R, thisArg: any, ...curry: A): (...args: B) => R;
 } = nativeCall.bind(nativeBind);
 
-export const getPrototype = (target: any) => isNullish(target) ? undefined : Object.getPrototypeOf(Object(target));
+export const getPrototype = (target: unknown) => isNullish(target) ? undefined : Object.getPrototypeOf(Object(target));
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {
     const result = new Set<any>();

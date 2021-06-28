@@ -1,16 +1,17 @@
 import {assert} from "../../src";
 
 describe("error() throws", () => {
-    const falsy = [-0, 0, 0.0, 0n, "", NaN, false, null, undefined];
+    const falsy = [-0, 0, 0.0, 0n, "", NaN, false, null, undefined] as const;
+
     const truthy = [
         1, -1, -Infinity, Infinity,
         [], [0], [""], [[]],
         {},
         ...falsy.map(Object),
-    ];
+    ] as const;
 
     test.each(falsy)("error(%o) throws", (value) => {
-        const msg = `Assert failed. Value "${value}" is falsy`;
+        const msg = `Assert failed. Value is falsy`;
         expect(() => assert(value, msg)).toThrow(msg);
     });
 
