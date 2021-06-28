@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@sirian/rpc",
     "description": "",
     "version": "2.0.9",

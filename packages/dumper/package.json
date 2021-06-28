@@ -1,4 +1,5 @@
 {
+    "private": true,
     "name": "@sirian/dumper",
     "description": "",
     "version": "1.0.9",
