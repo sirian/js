@@ -70,7 +70,7 @@ export class Dispatcher<A extends any[] = any> {
     }
 
     public emit(...args: A): void {
-        this.all().forEach((l) => this.apply(l, args));
+        this.all().forEach((l) => void this.apply(l, args));
     }
 
     public dispatch(...args: A) {

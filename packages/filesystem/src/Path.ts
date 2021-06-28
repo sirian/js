@@ -9,7 +9,7 @@ export class Path {
     protected static decoder = new util.TextDecoder();
 
     public static join(...parts: PathPart[]) {
-        const paths = parts.map(Path.stringify);
+        const paths = parts.map((p) => Path.stringify(p));
         return pathUtil.join(...paths);
     }
 

@@ -30,7 +30,7 @@ export class Client<T extends RPCProtocol> {
         xPromise.finally(() => this.requests.delete(id));
 
         if (init.timeoutMS) {
-            xPromise.setTimeout(init.timeoutMS);
+            void xPromise.setTimeout(init.timeoutMS);
         }
 
         const payload: RequestPayload<T, K> = [
@@ -54,7 +54,7 @@ export class Client<T extends RPCProtocol> {
 
         const [_, id, ok, result] = payload;
 
-        const r = this.requests.pick(id) as XPromise<RPCResult<T, K>>;
+        const r = this.requests.pick(id) as XPromise<RPCResult<T, K>> | undefined;
 
         if (!r) {
             return;

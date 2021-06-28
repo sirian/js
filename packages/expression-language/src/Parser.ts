@@ -94,7 +94,7 @@ export class Parser {
     }
 
     protected parsePrimaryExpression() {
-        const stream = this.stream;
+        const {stream, options} = this;
         const token = stream.current;
 
         let node;
@@ -117,7 +117,6 @@ export class Parser {
                         return new ConstantNode(null);
 
                     default:
-                        const options = this.options;
                         if ("(" === stream.current.value) {
                             const functions = options.functions;
                             if (-1 === functions.indexOf(value)) {
@@ -187,6 +186,7 @@ export class Parser {
         const node = new HashNode();
         let first = true;
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             if (stream.current.test(TokenType.PUNCTUATION, "}")) {
                 break;
@@ -239,6 +239,7 @@ export class Parser {
     protected parsePostfixExpression(node: Node) {
         const stream = this.stream;
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             const token = stream.current;
 

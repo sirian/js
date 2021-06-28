@@ -103,7 +103,7 @@ export class Glob {
 
                     if (isGlobstar) {
                         // it's a globstar, so match zero or more path segments
-                        reStr += "((?:[^/]*(?:\/|$))*)";
+                        reStr += "((?:[^/]*(?:/|$))*)";
                         i++; // move over the "/"
                     } else {
                         // it's not a globstar, so only match one path segment

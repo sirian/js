@@ -290,7 +290,7 @@ export class ProgressBar {
     }
 
     protected buildLine() {
-        return this.format!.replace(/%([a-z\-_]+)(?:\:([^%]+))?%/gi, (...matches: string[]) => {
+        return this.format!.replace(/%([a-z\-_]+)(?::([^%]+))?%/gi, (...matches: string[]) => {
             const formatter = ProgressBar.placeholderFormatters[matches[1]];
             let text;
 

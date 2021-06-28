@@ -18,10 +18,10 @@ export abstract class LogFormatter implements ILogFormatter {
 
     constructor(init: Partial<LogFormatterInit> = {}) {
         this.setPlaceholders({
-            d: LogFormatter.sprintf,
-            i: LogFormatter.sprintf,
-            f: LogFormatter.sprintf,
-            s: LogFormatter.sprintf,
+            d: (v, ph) => LogFormatter.sprintf(v, ph),
+            i: (v, ph) => LogFormatter.sprintf(v, ph),
+            f: (v, ph) => LogFormatter.sprintf(v, ph),
+            s: (v, ph) => LogFormatter.sprintf(v, ph),
             t: (value) => new Placeholder(typeof value, "s"),
             o: (value, ph) => ph,
             O: (value, ph) => ph,

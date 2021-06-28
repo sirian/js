@@ -28,6 +28,7 @@ module.exports = {
         "@typescript-eslint/no-unsafe-member-access": 1,
         "@typescript-eslint/no-unsafe-assignment": 1,
         "@typescript-eslint/no-unsafe-call": 1,
+        "@typescript-eslint/no-this-alias": 0,
         "@typescript-eslint/no-unsafe-return": 1,
         "@typescript-eslint/no-empty-function": 1,
         "@typescript-eslint/restrict-template-expressions": [1, {}],

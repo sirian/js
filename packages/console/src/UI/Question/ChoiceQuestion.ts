@@ -38,7 +38,7 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
         const choices = this.getChoices();
 
         const keys = keysOf(choices);
-        const widths = keys.map(StrUtil.width);
+        const widths = keys.map((k) => StrUtil.width(k));
 
         const width = Math.max(...widths);
 

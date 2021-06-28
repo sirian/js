@@ -67,7 +67,7 @@ export class Command<A extends Application = Application> {
         ]);
     }
 
-    public async run() {
+    public run() {
         const input = this.input;
 
         // The command name argument is often omitted when a command is executed directly with its run() method.

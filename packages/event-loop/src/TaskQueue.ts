@@ -40,7 +40,7 @@ export class TaskQueue {
         entries.forEach(([id, [fn, canceled]]) => {
             delete this._tasks[id];
             if (!canceled) {
-                (async () => fn())();
+                void (async () => await fn())();
             }
         });
     }

@@ -48,6 +48,6 @@ export class ListCommand extends Command {
         const ns = input.getArgument("namespace");
         const description = await ApplicationDescription.inspectApplication(this.application, ns);
 
-        await descriptor.describeApplication(description);
+        descriptor.describeApplication(description);
     }
 }

@@ -65,6 +65,7 @@ export class Finder extends BaseIterator<File> {
         return this;
     }
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     public async* [Symbol.asyncIterator]() {
         const {maxDepth, dirs, fs} = this.options;
         const it = new AppendIterator<File>();

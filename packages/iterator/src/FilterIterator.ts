@@ -23,7 +23,7 @@ export class FilterIterator<V> extends BaseIterator<V> {
 
     public async* [Symbol.asyncIterator]() {
         for await (const x of this.target) {
-            if (await this.callback(x)) {
+            if (this.callback(x)) {
                 yield x;
             }
         }

@@ -25,10 +25,8 @@ export class RecordInput extends Input {
     public hasParameterOption(values: string | string[], onlyParams = false): boolean {
         values = castArray(values);
 
-        for (let [k, v] of this.parameters) {
-            if (!isNumber(k)) {
-                v = k;
-            }
+        for (const [k, val] of this.parameters) {
+            const v = isNumber(k) ? val : k;
 
             if (onlyParams && "--" === v) {
                 return false;

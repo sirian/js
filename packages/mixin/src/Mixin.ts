@@ -20,11 +20,7 @@ export class Mixin {
     protected static readonly caches = new XWeakMap((superclass) => new XMap((mixin) => mixin(superclass)));
 
     public static create<M extends MixinFn>(mixin: M) {
-        const bare = Mixin.createBareMixin(mixin);
-
-        const {cache, deduplicate, hasInstanceWrapper} = Mixin;
-
-        return hasInstanceWrapper(deduplicate(cache(bare)));
+        return Mixin.hasInstanceWrapper(Mixin.deduplicate(Mixin.cache(Mixin.createBareMixin(mixin))));
     }
 
     public static createConstructable<M extends MixinFn>(mixin: M) {

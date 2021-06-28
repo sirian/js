@@ -165,6 +165,7 @@ export class Formatter {
         const tagRegex = "[a-z][a-z0-9_=,;-]*";
         const r = new RegExp("<((" + tagRegex + ")|/(" + tagRegex + ")?)>", "ig");
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             const match = r.exec(message);
 

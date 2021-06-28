@@ -19,6 +19,7 @@ export class AppendIterator<V> extends BaseIterator<V> {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     public async* [Symbol.asyncIterator]() {
         for (const source of this.sources) {
             yield* source;

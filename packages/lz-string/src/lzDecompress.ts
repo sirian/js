@@ -57,6 +57,7 @@ export const lzDecompress = (bytes?: Uint8Array | null) => {
     dictionary.push(w);
     result.push(w);
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
         if (index > bytes.length) {
             return "";

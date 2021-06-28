@@ -86,6 +86,7 @@ export class StringInput extends ArgvInput {
         this.pos = 0;
 
         const tokens = [];
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             const token = this.nextToken();
 

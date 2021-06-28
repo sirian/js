@@ -8,7 +8,7 @@ const d12 = "([0-9]{1,2})";
 const reDate = "([0-9]{1,4})" + opt("-" + d12) + opt("-" + d12);
 const msPattern = "\\.([0-9]+)";
 const reTime = d12 + ":" + d12 + opt(":" + d12 + opt(msPattern));
-const reTimezone = "(?:Z|(?:GMT)?\s*([+-])?" + d12 + opt(":?" + d12) + ")";
+const reTimezone = "(?:Z|(?:GMT)?\\s*([+-])?" + d12 + opt(":?" + d12) + ")";
 
 const re = new RegExp([
     "^",

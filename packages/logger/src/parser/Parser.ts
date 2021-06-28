@@ -17,6 +17,7 @@ export class Parser {
     public parse(line: string): Token[] {
         const reader = new Reader(line);
 
+        // eslint-disable-next-line no-constant-condition
         while (true) {
             const position = reader.index;
 

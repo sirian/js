@@ -42,6 +42,7 @@ export class HelpCommand extends Command {
         try {
             super.bindInput();
         } catch (e) {
+            // ignored
         }
     }
 
@@ -56,6 +57,6 @@ export class HelpCommand extends Command {
 
         const descriptor = DescriptorManager.getInstance().createDescriptor(format, output);
 
-        await descriptor.describeCommand(command.getDefinition());
+        descriptor.describeCommand(command.getDefinition());
     }
 }
