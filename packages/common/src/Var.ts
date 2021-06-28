@@ -1,5 +1,15 @@
 import {AnyCtor, Ctor, Instance, Newable, Predicate, TypeGuard} from "@sirian/ts-extra-types";
-import {getType, isArray, isFunction, isNumber, isObject, isPrimitive, isString, isSymbol} from "./Is";
+import {
+    getType,
+    isArray,
+    isFunction,
+    isNumber,
+    isNumberOrBigInt,
+    isObject,
+    isPrimitive,
+    isString,
+    isSymbol,
+} from "./Is";
 import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./Ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
@@ -85,8 +95,30 @@ export const isPlainObject = (x: any) => {
     return !isFunction(ctor) || ctor.prototype !== x;
 };
 
-export const compare = (x: any, y: any): -1 | 0 | 1 =>
-    isEqual(x, y) ? 0 : (isEqual(x, [x, y].sort()[0]) ? -1 : 1);
+export const compare = (x: any, y: any) => {
+    const xNaN = x !== x;
+    const yNaN = y !== y;
+
+    if (x === y || xNaN && yNaN) {
+        return 0;
+    }
+
+    // tslint:disable-next-line:triple-equals
+    if (!xNaN && !yNaN && isNumberOrBigInt(x) && isNumberOrBigInt(y) && x != y) { // use != to compare number/bigint
+        return x < y ? -1 : 1;
+    }
+
+    const tx = typeof x;
+    const ty = typeof y;
+
+    if (tx !== ty) {
+        return tx < ty ? -1 : 1;
+    }
+
+    return xNaN ? 1 :
+           yNaN ? -1 :
+           x < y ? -1 : 1;
+};
 
 export const isError = (value: any): value is Error => isInstanceOf(value, Error);
 

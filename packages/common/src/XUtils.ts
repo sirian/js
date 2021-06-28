@@ -1,9 +1,9 @@
 import {ArrayRO, Nullish} from "@sirian/ts-extra-types";
-import {toArray} from "./Arr";
+import {sort, sortBy, toArray} from "./Arr";
 import {assert} from "./Error";
 import {isFunction} from "./Is";
 import {entriesOf} from "./Obj";
-import {compare, isPlainObject} from "./Var";
+import {isPlainObject} from "./Var";
 import {XMap} from "./XMap";
 import {XWeakMap} from "./XWeakMap";
 
@@ -52,13 +52,10 @@ export const setMapEntries = <K, V>(map: Map<K, V>, entries: ArrayRO<readonly [K
 };
 
 export const sortMap = <K, V>(map: Map<K, V>, compareFn: (a: [K, V], b: [K, V]) => number) =>
-    setMapEntries(map, [...map.entries()].sort(compareFn));
+    setMapEntries(map, sort([...map.entries()], compareFn));
 
-export const sortMapBy = <K, V>(map: Map<K, V>, fn: (k: K, v: V) => any) =>
-    setMapEntries(map, [...map.entries()]
-        .map(([k, v]) => [fn(k, v), [k, v]] as const)
-        .sort((a, b) => compare(a[0], b[0]))
-        .map((a) => a[1]));
+export const sortMapBy = <K, V>(map: Map<K, V>, fn: (k: K, v: V) => unknown) =>
+    setMapEntries(map, sortBy([...map.entries()], ([k, v]) => fn(k, v)));
 
 export const pickMap: {
     <K, V>(map: IMapMini<K, V>, key: K, throws: true): V;

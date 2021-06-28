@@ -23,7 +23,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
         return this;
     }
 
-    public sortBy(fn: (k: K, v: V) => any) {
+    public sortBy(fn: (k: K, v: V) => unknown) {
         sortMapBy(this, fn);
         return this;
     }
