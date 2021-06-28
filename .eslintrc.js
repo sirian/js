@@ -31,6 +31,9 @@ module.exports = {
         "@typescript-eslint/no-unsafe-return": 1,
         "@typescript-eslint/no-empty-function": 1,
         "@typescript-eslint/restrict-template-expressions": [1, {}],
+        "@typescript-eslint/restrict-plus-operands": [1, {
+            checkCompoundAssignments: true
+        }],
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-implied-eval": 0,
         "@typescript-eslint/ban-types": [1, {

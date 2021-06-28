@@ -1,13 +1,13 @@
 import {IBase64} from "./BufferBase64";
 
 const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-const b64re = /^(?:[A-Za-z\d+\/]{4})*?(?:[A-Za-z\d+\/]{2}(?:==)?|[A-Za-z\d+\/]{3}=?)?$/;
+const b64re = /^(?:[A-Za-z\d+/]{4})*?(?:[A-Za-z\d+/]{2}(?:==)?|[A-Za-z\d+/]{3}=?)?$/;
 
 export const btoa = (x: string) => {
     x = String(x);
     const len = x.length;
 
-    let result: string = "";
+    let result = "";
 
     for (let i = 0; i < len;) {
         const a = x.charCodeAt(i++);

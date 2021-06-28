@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // tslint:disable:no-console
 
 import {toUTF} from "@sirian/common";
@@ -15,6 +16,7 @@ const engines: Record<string, IBase64> = {
         encode: base64Encode,
         decode: (x) => toUTF(base64Decode(x)),
     },
+
     "js-base64": require("js-base64").Base64,
     "base-64": require("base-64"),
 };

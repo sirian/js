@@ -2,6 +2,7 @@ import {Base64} from "../../src";
 import {data} from "./data";
 
 const rev = [];
+// eslint-disable-next-line prefer-const
 for (let [str, b64] of data) {
     rev.push([b64, str]);
     while (b64.endsWith("=")) {
