@@ -11,9 +11,14 @@ test(".resolve(Promise.resolve(1)) resolves to 1", async () => {
 });
 
 test(".resolve(Promise.resolve(1)).then(x); x should be 1", async () => {
-    XPromise
+    const p = XPromise
         .resolve(Promise.resolve(1))
-        .then((x) => expect(x).toBe(1));
+        .then((x) => {
+            expect(x).toBe(1);
+            return 2;
+        });
+
+    await expect(p).resolves.toBe(2);
 });
 
 test(".resolve() twice", async () => {
@@ -32,14 +37,14 @@ test(".reject() twice", async () => {
     await expect(p.catch(() => 3)).resolves.toBe(3);
 });
 
-test("resolve with rejected XPromise", async () => {
+test("resolve with rejected XPromise", () => {
     const rej = XPromise.reject();
     const p = XPromise.resolve(rej);
 
     expect(p.isRejected()).toBe(true);
 });
 
-test("resolve with inherited class", async () => {
+test("resolve with inherited class", () => {
     class FooPromise extends XPromise {}
 
     const foo = new FooPromise();

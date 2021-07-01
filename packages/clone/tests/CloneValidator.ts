@@ -1,4 +1,5 @@
-import {getDescriptorType, isEqual, isPrimitive, keysOf, ownDescriptor} from "@sirian/common";
+/* eslint-disable @typescript-eslint/unbound-method */
+import {assert, getDescriptorType, isEqual, isPrimitive, keysOf, ownDescriptor} from "@sirian/common";
 import {CloneOptions, Cloner} from "../src";
 import {ValidateError} from "./ValidateError";
 
@@ -113,25 +114,28 @@ export class CloneValidator {
             throw new Error(`Descriptor types mismatch. Expected ${type1}, given ${type2}`);
         }
 
+        assert(desc1);
+        assert(desc2);
+
         switch (type1) {
             case "accessor":
-                if (!isEqual(desc1!.get, desc2!.get)) {
+                if (!isEqual(desc1.get, desc2.get)) {
                     throw new Error(`Descriptor "get" mismatch`);
                 }
-                if (!isEqual(desc1!.set, desc2!.set)) {
+                if (!isEqual(desc1.set, desc2.set)) {
                     throw new Error(`Descriptor "set" mismatch`);
                 }
                 break;
             case "data":
-                this.doValidate(desc1!.value, desc2!.value);
+                this.doValidate(desc1.value, desc2.value);
                 break;
             default:
                 throw new Error(`Unexpected descriptor type ${type1}`);
         }
 
         for (const k of ["writable", "configurable", "enumerable"] as const) {
-            const v1 = desc1![k];
-            const v2 = desc2![k];
+            const v1 = desc1[k];
+            const v2 = desc2[k];
             if (!isEqual(v1, v2)) {
                 throw new Error(`Descriptor "${k}" mismatch. Expected ${v1}, given ${v2}`);
             }

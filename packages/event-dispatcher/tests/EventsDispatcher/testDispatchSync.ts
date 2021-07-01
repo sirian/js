@@ -8,7 +8,7 @@ test("testInitialState", () => {
     expect(dispatcher.hasListeners("post.foo")).toBe(false);
 });
 
-test("testDispatch", async () => {
+test("testDispatch", () => {
     const dispatcher = new EventsDispatcher();
     const testListener = new TestEventListener();
     dispatcher.addListener("pre.foo", (e) => testListener.preFoo(e));
@@ -19,7 +19,7 @@ test("testDispatch", async () => {
     expect(testListener.postFooInvoked).toBe(false);
 });
 
-test("testDispatch", async () => {
+test("testDispatch", () => {
     const dispatcher = new EventsDispatcher();
     const testListener = new TestEventListener();
     dispatcher.addListener("pre.foo", (e) => testListener.preFoo(e));

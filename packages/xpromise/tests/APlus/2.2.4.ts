@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import {Adapter} from "./Adapter";
 import {testFulfilled, testRejected} from "./helper";
 

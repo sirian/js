@@ -7,11 +7,11 @@ test("Test async dispatch", async () => {
     const data: any[] = [];
 
     dispatcher.addListener(() => data.push(1));
-    dispatcher.addListener(() => XPromise.resolve().then(() => data.push(2)), {
-        passive: true,
-    });
+    dispatcher.addListener(() => XPromise.resolve().then(() => data.push(2)));
     dispatcher.addListener(() => data.push(3));
+    // eslint-disable-next-line @typescript-eslint/require-await
     dispatcher.addListener(async () => data.push(4));
+    // eslint-disable-next-line @typescript-eslint/require-await
     dispatcher.addListener(async () => data.push(5));
     dispatcher.addListener(() => Promise.resolve().then(() => data.push(6)));
     dispatcher.addListener(() => Promise.resolve().then(() => data.push(7)));

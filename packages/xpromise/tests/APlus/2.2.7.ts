@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import {isObjectOrFunction} from "@sirian/common";
 import {Adapter} from "./Adapter";
 import {specify, testFulfilled, testReasons, testRejected} from "./helper";

@@ -40,7 +40,7 @@ describe("callback", () => {
         expect(actual).toStrictEqual([1, 2, 3]);
     });
 
-    test("throws", async () => {
+    test("throws", () => {
         const dm2 = new DisposerManager();
 
         const foo = {};

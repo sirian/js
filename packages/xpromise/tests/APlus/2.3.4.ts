@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import {isFunction} from "@sirian/common";
 import {Func0} from "@sirian/ts-extra-types";
 import {testFulfilled, testRejected} from "./helper";

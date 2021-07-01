@@ -1,6 +1,6 @@
 import {XPromise} from "../../src";
 
-test("Test status", async () => {
+test("Test status", () => {
     const p = XPromise.create();
     expect(p.isPending()).toBe(true);
     expect(p.isFulfilled()).toBe(false);
@@ -12,14 +12,14 @@ test("Test status", async () => {
     expect(p.isRejected()).toBe(false);
 });
 
-test("Test status XPromise.resolve()", async () => {
+test("Test status XPromise.resolve()", () => {
     const p = XPromise.resolve(1);
     expect(p.isPending()).toBe(false);
     expect(p.isFulfilled()).toBe(true);
     expect(p.isRejected()).toBe(false);
 });
 
-test("Test status XPromise.reject()", async () => {
+test("Test status XPromise.reject()", () => {
     const p = XPromise.reject(1);
     expect(p.isPending()).toBe(false);
     expect(p.isFulfilled()).toBe(false);

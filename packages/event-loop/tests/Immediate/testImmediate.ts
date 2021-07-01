@@ -1,7 +1,8 @@
-import {Immediate, setImmediate, sleep, startImmediate} from "../../src";
+import {MessageChannel} from "worker_threads";
+import {setImmediate, sleep, startImmediate} from "../../src";
 
 beforeAll(() => {
-    globalThis.MessageChannel = require("worker_threads").MessageChannel;
+    globalThis.MessageChannel = MessageChannel;
 });
 
 describe("Immediate", () => {

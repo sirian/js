@@ -12,6 +12,7 @@ test("", () => {
 
     expect(c1.foo()).toBe(c1);
 
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const p = c1.foo;
     expect(p()).toBe(c1);
 

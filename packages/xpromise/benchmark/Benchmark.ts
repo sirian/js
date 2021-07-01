@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 import {XPromise} from "../src";
 
-declare const console: any;
 declare const gc: any;
 declare const process: any;
 
 // tslint:disable:no-console
 export class Benchmark {
     protected count: number;
+
+    protected results: Record<string, number> = {};
 
     constructor(count: number) {
         this.count = count;
@@ -15,16 +17,15 @@ export class Benchmark {
     public async run() {
         console.log("Count: %d", this.count);
 
-        const cb = (value: number) => value + 1;
+        const cb = (value: number) => (value + 1) % 256;
         const cba = async (value: number) => {
-            await null;
-            return value + 1;
+            return await (value + 1) % 256;
         };
 
-        await this.test("SyncLoop", async () => {
+        await this.test("SyncLoop", () => {
             let result = 0;
             for (let i = 0; i < this.count; i++) {
-                result = result + 1;
+                result = (result + 1) % 256;
             }
             return result;
         });
@@ -50,7 +51,7 @@ export class Benchmark {
             for (let i = 0; i < this.count; i++) {
                 result = cb(result);
 
-                if (result && "function" === typeof result.then) {
+                if ("function" === typeof result?.then) {
                     result = await result;
                 }
             }
@@ -62,7 +63,7 @@ export class Benchmark {
             for (let i = 0; i < this.count; i++) {
                 result = cba(result);
 
-                if (result && "function" === typeof result.then) {
+                if ("function" === typeof result?.then) {
                     result = await result;
                 }
             }
@@ -109,7 +110,7 @@ export class Benchmark {
             return promise;
         });
 
-        console.log();
+        return this.results;
     }
 
     protected async test(name: string, fn: () => any) {
@@ -118,7 +119,12 @@ export class Benchmark {
         }
         const before = process.memoryUsage().heapUsed / 1024 / 1024;
         const start = Date.now();
-        const result = await fn();
+
+        const promise = fn();
+        const middle = process.memoryUsage().heapUsed / 1024 / 1024;
+
+        const result = await promise;
+
         const time = Date.now() - start;
 
         if ("undefined" !== typeof gc) {
@@ -126,8 +132,10 @@ export class Benchmark {
         }
         const after = process.memoryUsage().heapUsed / 1024 / 1024;
 
-        console.assert(result === this.count, name);
+        console.assert(result === this.count % 256, name);
 
-        console.log("%s\t%s ms. Memory: %s => %s", name.padEnd(20), time.toString().padStart(5), before.toFixed(2), after.toFixed(2));
+        this.results[name] = time;
+        console.log("%s\t%s ms. Memory: %s => %s => %s",
+            name.padEnd(20), time.toString().padStart(5), before.toFixed(2), middle.toFixed(2), after.toFixed(2));
     }
 }

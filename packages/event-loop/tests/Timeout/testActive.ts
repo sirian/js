@@ -1,7 +1,7 @@
 import {Timeout} from "../../src";
 
 describe("Timeout.active", () => {
-    test("", async () => {
+    test("", () => {
         jest.useFakeTimers();
 
         const fn = jest.fn();

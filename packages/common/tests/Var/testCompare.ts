@@ -1,27 +1,39 @@
 import {compare} from "../../src";
 
 describe("compare", () => {
-    const array = [
-        -Infinity, -1n, -1, 0n, 0, 1n, 1, +Infinity, NaN, null, "-10", "bar", "foo", "zoo", undefined,
+    const data: Array<[any, any, -1 | 0 | 1]> = [
+        [0, 0, 0],
+        [1, 1, 0],
+        [-1, -1, 0],
+        [1, 2, -1],
+        [2, 10, -1],
+        [-1, -2, 1],
+        [0, "0", -1],
+        [-1, "-2", -1],
+        [-2, "-1", -1],
+        ["1", "10", -1],
+        ["2", "10", 1],
+        [NaN, NaN, 0],
+        [null, null, 0],
+        [undefined, undefined, 0],
+        [null, undefined, -1],
     ];
 
-    const tmp = [];
+    const array = [
+        -Infinity, -2n, -2, -1n, -1, 0n, 0, 1n, 1, 2n, +Infinity, NaN, null, "-10", "1", "10", "2", "bar", "foo", "zoo", undefined,
+    ];
 
     for (let i = 0; i < array.length; i++) {
         for (let j = i; j < array.length; j++) {
-            tmp.push([array[i], array[j]]);
+            const y = array[j];
+            const x = array[i];
+
+            data.push([x, y, Object.is(x, y) ? 0 : -1]);
+            data.push([y, x, Object.is(x, y) ? 0 : 1]);
         }
     }
 
-    test.each(tmp)("compare(%o, %o)", (x, y) => {
-        expect(compare(x, y)).toBeLessThanOrEqual(0);
-    });
-
-    test("compare(-1, -2)", () => {
-        expect(compare(-1, -2)).toBe(1);
-    });
-
-    test("compare(-2, -1)", () => {
-        expect(compare(-2, -1)).toBe(-1);
+    test.each(data)("compare(%o, %o) === %o", (x, y, expected) => {
+        expect(compare(x, y)).toBe(expected);
     });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {PropertyAccessor, UnexpectedTypeError} from "../../src";
 
 const empty = Object.create(null);

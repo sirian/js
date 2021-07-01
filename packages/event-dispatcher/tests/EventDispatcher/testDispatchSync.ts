@@ -1,6 +1,6 @@
 import {BaseEvent, EventDispatcher} from "../../src";
 
-test("testEmit", async () => {
+test("testEmit", () => {
     const fn1 = jest.fn();
     const fn2 = jest.fn();
     const dispatcher = new EventDispatcher<BaseEvent>();

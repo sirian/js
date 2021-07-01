@@ -14,7 +14,7 @@ export class HelloCommand extends Command {
 
     }
 
-    public async execute() {
+    public execute() {
         const io = this.io;
 
         const name = io.input.getArgument("name");

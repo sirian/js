@@ -1,6 +1,6 @@
 import {DisposerManager} from "../../src";
 
-test("Disposer.setTimeout", async () => {
+test("Disposer.setTimeout", () => {
     const dm = new DisposerManager();
     // dm.on("error", console.error);
     jest.useFakeTimers();

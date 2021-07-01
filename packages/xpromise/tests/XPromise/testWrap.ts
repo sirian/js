@@ -1,9 +1,9 @@
 import {XPromise} from "../../src";
 
-test("XPromise.wrap", () => {
+test("XPromise.wrap", async () => {
     const value = {};
     const err = {};
 
-    expect(XPromise.wrap(() => value)).resolves.toBe(value);
-    expect(XPromise.wrap(() => { throw err; })).rejects.toBe(err);
+    await expect(XPromise.wrap(() => value)).resolves.toBe(value);
+    await expect(XPromise.wrap(() => { throw err; })).rejects.toBe(err);
 });

@@ -12,4 +12,4 @@ const app = new Application({
     ],
 });
 
-app.run();
+void app.run();

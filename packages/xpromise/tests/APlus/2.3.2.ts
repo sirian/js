@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import {sleep} from "@sirian/common";
 import {Adapter} from "./Adapter";
 

@@ -18,6 +18,7 @@ test.each(data)("[...new RecursiveIterator(%j, %j)] === %j", (value, options, ex
 });
 
 test.each(data)("", async (value: any[], options, expected) => {
+    // eslint-disable-next-line @typescript-eslint/require-await
     const gen = (async function*() {
         yield* value.map((val) => Promise.resolve(val));
     })();

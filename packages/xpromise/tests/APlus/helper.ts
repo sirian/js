@@ -30,7 +30,7 @@ export const testReasons = (callback: (value: any, name: string) => any) => {
 
 export const expectNotCalled = (fn: Func) => () => expect(fn).not.toHaveBeenCalled();
 
-export const specify = (name: string, fn: DoneAwareCallback, timeout: number = 20) => {
+export const specify = (name: string, fn: DoneAwareCallback, timeout = 0) => {
     test(name, fn.length === 0 ? fn : (done) => {
         fn(() => done());
         // setTimeout(done, timeout);

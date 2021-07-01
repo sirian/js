@@ -37,7 +37,7 @@ export class TableCommand extends Command {
         return Object.keys(this.styles);
     }
 
-    public async execute() {
+    public execute() {
         const io = this.io;
         const styleName = io.input.getOption("style");
 

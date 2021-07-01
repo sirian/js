@@ -1,7 +1,7 @@
 import {Interval} from "../../src";
 
 describe("Interval.active", () => {
-    test("", async () => {
+    test("", () => {
         jest.useFakeTimers();
         const fn = jest.fn();
 

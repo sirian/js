@@ -12,7 +12,7 @@ describe("EventsDispatcher.once", () => {
         dispatcher.once("foo", foo2);
         dispatcher.once("bar", bar);
 
-        dispatcher.dispatch("foo", new BaseEvent());
+        void dispatcher.dispatch("foo", new BaseEvent());
 
         expect(foo1).toHaveBeenCalledTimes(1);
         expect(foo2).toHaveBeenCalledTimes(1);

@@ -1,6 +1,6 @@
 import {Parser, PlaceholderToken} from "../../src";
 
-const p = (type: string, opts: string = "") => new PlaceholderToken(void 0, type, opts, "%" + opts + type);
+const p = (type: string, opts = "") => new PlaceholderToken(void 0, type, opts, "%" + opts + type);
 const t = (...args: any[]) => Reflect.construct(PlaceholderToken, args);
 
 const data: Array<[string, string[]]> = [

@@ -1,6 +1,6 @@
 import {Alarm} from "../../src";
 
-let dateNowSpy;
+let dateNowSpy: any;
 let now = 0;
 
 const sleep = (ms: number) => now += ms;
@@ -21,7 +21,7 @@ afterEach(() => {
 });
 
 describe("Alarm.active", () => {
-    test("", async () => {
+    test("", () => {
         const fn = jest.fn();
         const t = Alarm.create(11, fn);
 

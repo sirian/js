@@ -15,10 +15,10 @@ test("XPromise.reject(2)", async () => {
     await expect(then1).rejects.toBe(2);
 });
 
-test("XPromise.resolve(XPromise.create())", async () => {
+test("XPromise.resolve(XPromise.create())", () => {
     const p2 = XPromise.create();
     const p = XPromise.resolve(p2);
-    await expect(p).toBe(p2);
+    expect(p).toBe(p2);
 });
 
 test(".then(any, throwsFn)", async () => {
