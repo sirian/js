@@ -1,0 +1,5 @@
+packages/*/build
+packages/xpromise/tests/APlus
+node_modules
+tmp
+todo

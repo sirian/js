@@ -11,21 +11,25 @@
     ],
     "devDependencies": {
         "@types/jest": "^26.0.23",
-        "@types/node": "^15.12.5",
+        "@types/node": "^16.0.0",
         "@typescript-eslint/eslint-plugin": "^4.28.0",
-        "@typescript-eslint/eslint-plugin-tslint": "^4.28.0",
         "@typescript-eslint/parser": "^4.28.0",
-        "eslint": "^7.29.0",
+        "eslint": "^7.30.0",
+        "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-jest": "^24.3.6",
         "eslint-plugin-jsdoc": "^35.4.0",
         "eslint-plugin-prefer-arrow": "^1.2.3",
-        "eslint-plugin-unicorn": "^33.0.1",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-unicorn": "^34.0.1",
         "jest": "^27.0.5",
         "lerna": "^4.0.0",
+        "lint-staged": "^11.0.0",
+        "package-json": "^7.0.0",
+        "prettier": "^2.3.2",
         "rimraf": "^3.0.2",
         "ts-jest": "^27.0.3",
         "ts-node": "^10.0.0",
-        "tslint": "^5.0",
         "typescript": "^4.3.4"
     },
     "scripts": {
@@ -35,18 +39,23 @@
         "build": "tsc -b packages/*/tsconfig.cjs.json packages/*/tsconfig.esm.json",
         "build:clean": "yarn build --clean && rimraf packages/*/build packages/*/tsconfig.cjs.json packages/*/tsconfig.esm.json",
         "build:watch": "yarn build --watch",
-        "lint": "yarn tslint:lint && yarn eslint:lint:errors",
-        "lint:fix": "yarn tslint:fix && yarn eslint:fix",
-        "tslint:lint": "tslint 'packages/*/{src,tests,example,benchmark}/**/*'",
-        "tslint:fix": "yarn tslint:lint --fix",
-        "eslint:lint": "eslint --cache --cache-location=tmp/ --ext .ts packages/",
-        "eslint:fix": "yarn eslint:lint --fix",
-        "eslint:lint:errors": "yarn eslint:lint --quiet",
+        "lint": "yarn eslint:errors packages",
+        "eslint": "eslint --cache --cache-location=tmp/ --ext=ts,js",
+        "eslint:errors": "yarn eslint --quiet",
+        "prettier": "prettier",
         "test": "yarn test:jest && lerna run test --parallel",
         "test:clean": "yarn test:jest --clearCache",
         "test:jest": "jest",
         "test:watch": "jest --watch",
         "lerna:publish": "yarn lerna publish --conventional-commits --yes",
         "prepare": "git config core.hooksPath hooks"
+    },
+    "resolutions": {
+        "trim-newlines": ">=3.0.1 <4.0.0 || >=4.0.1"
+    },
+    "lint-staged": {
+        "*.{ts}": [
+            "eslint --quiet"
+        ]
     }
 }

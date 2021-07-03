@@ -1,14 +1,16 @@
+const ERROR = "error";
+const OFF = "off";
+const WARN = "warn";
+
+const singleRule = process.argv.some((a) => a.startsWith('--rule='))
+
 module.exports = {
     "env": {
         "es6": true,
-        node: true,
-        browser: true
+        "node": true,
+        "browser": true,
+        "jest/globals": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "tsconfig.json",
@@ -16,28 +18,46 @@ module.exports = {
         "ecmaVersion": 2021
     },
     "plugins": [
-        "eslint-plugin-unicorn",
-        "eslint-plugin-prefer-arrow",
-        "eslint-plugin-import",
         "@typescript-eslint",
-        "@typescript-eslint/tslint"
+        "prettier",
+        "unicorn",
+        "prefer-arrow",
+        "import",
+        "jest"
     ],
-    rules: {
-        "@typescript-eslint/explicit-module-boundary-types": 0,
-        "@typescript-eslint/no-empty-interface": 1,
-        "@typescript-eslint/no-unsafe-member-access": 1,
-        "@typescript-eslint/no-unsafe-assignment": 1,
-        "@typescript-eslint/no-unsafe-call": 1,
-        "@typescript-eslint/no-this-alias": 0,
-        "@typescript-eslint/no-unsafe-return": 1,
-        "@typescript-eslint/no-empty-function": 1,
-        "@typescript-eslint/restrict-template-expressions": [1, {}],
-        "@typescript-eslint/restrict-plus-operands": [1, {
-            checkCompoundAssignments: true
+    extends: singleRule ? [] : [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:unicorn/recommended",
+        "prettier"
+    ],
+    rules: singleRule ? {} : {
+        "unicorn/prevent-abbreviations": OFF,
+        "unicorn/filename-case": [WARN, {
+            "cases": {
+                "camelCase": true,
+                "pascalCase": true
+            }
         }],
-        "@typescript-eslint/no-explicit-any": 0,
-        "@typescript-eslint/no-implied-eval": 0,
-        "@typescript-eslint/ban-types": [1, {
+        "unicorn/no-array-for-each": OFF,
+        "unicorn/explicit-length-check": OFF,
+        "unicorn/no-this-assignment": OFF,
+        "unicorn/prefer-number-properties": OFF,
+        "unicorn/catch-error-name": OFF,
+        "@typescript-eslint/explicit-module-boundary-types": OFF,
+        "@typescript-eslint/no-empty-interface": WARN,
+        "@typescript-eslint/no-unsafe-member-access": WARN,
+        "@typescript-eslint/no-unsafe-assignment": WARN,
+        "@typescript-eslint/no-unsafe-call": WARN,
+        "@typescript-eslint/no-this-alias": OFF,
+        "@typescript-eslint/no-unsafe-return": WARN,
+        "@typescript-eslint/no-empty-function": WARN,
+        "@typescript-eslint/restrict-template-expressions": WARN,
+        "@typescript-eslint/restrict-plus-operands": OFF,
+        "@typescript-eslint/no-explicit-any": OFF,
+        "@typescript-eslint/no-implied-eval": OFF,
+        "@typescript-eslint/ban-types": [WARN, {
             types: {
                 object: false,
                 Function: false
