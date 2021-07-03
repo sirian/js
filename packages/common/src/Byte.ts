@@ -24,6 +24,17 @@ export type TypedArrayConstructor =
     | Float32ArrayConstructor
     | Float64ArrayConstructor;
 
+export type TypedArray =
+    | Int8Array
+    | Int16Array
+    | Int32Array
+    | Uint8Array
+    | Uint8ClampedArray
+    | Uint16Array
+    | Uint32Array
+    | Float32Array
+    | Float64Array;
+
 export type ByteArraySource = null | undefined | string | ArrayBuffer | ArrayBufferView;
 
 export type ByteInput = ByteArraySource | ArrayLike<number> | Iterable<number> | Primitive;
@@ -58,6 +69,13 @@ export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer 
     const tmp = new Uint8Array(bytesPerElement * Math.ceil(length / bytesPerElement));
     tmp.set(bytes);
     return new to(tmp.buffer) as Instance<T>;
+};
+
+export const concatBytes = <T extends TypedArrayConstructor>(ctor: T, ...sources: Array<Instance<T>>) => {
+    let length = sources.reduce((len, source) => len + source.length, 0);
+    const result = new ctor(length);
+    sources.reduceRight<any>((tmp, s) => result.set(s, length -= s.length), null);
+    return result;
 };
 
 export const toUTF = (input?: ByteInput) =>
