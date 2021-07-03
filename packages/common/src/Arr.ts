@@ -59,7 +59,7 @@ export const last = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
 };
 
 export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] =>
-    isArray(value) ? value : Array.from(value ?? []);
+    isArray(value) ? value : Array.from(value ?? []); // eslint-disable-line unicorn/prefer-spread
 
 export const uniq = <T>(input: Iterable<T>) => [...new Set(input)];
 
@@ -72,7 +72,11 @@ export const intersect = <T>(array: Iterable<T>, ...arrays: Array<Iterable<T>>):
     return toArray(array).filter((value) => sets.every((set) => set.has(value)));
 };
 
-export const swap = (arr: any[], i: number, j: number) => [arr[i], arr[j]] = [arr[j], arr[i]];
+export const swap = (arr: unknown[], i: number, j: number) => {
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+};
 
 export const arrRemoveItem = <T>(array: T[], value: T, limit?: number) =>
     arrRemove(array, (item) => isEqual(item, value), limit);
@@ -115,11 +119,11 @@ export const sortBy = <T>(array: T[], fn: (v: T, i: number) => unknown) => {
     return array;
 };
 
-export const each = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].forEach(fn);
+export const each = <T>(value: Iterable<T>, fn: (v: T, i: number) => unknown) => [...value].forEach((v, i) => fn(v, i));
 
-export const every = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].every(fn);
+export const every = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].every((v, i) => fn(v, i));
 
-export const some = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].some(fn);
+export const some = <T>(value: Iterable<T>, fn: (v: T, i: number) => any) => [...value].some((v, i) => fn(v, i));
 
 export const isEqualTuple = <T extends any[]>(x: T, y: any[]): y is T =>
     isArray(x)

@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 import {Filesystem} from "../../src";
 import {TestUtil} from "../TestUtil";
 

@@ -1,3 +1,4 @@
+import {tryCatch} from "@sirian/common";
 import {DescriptorManager} from "../Descriptor";
 import {Argument, BoolOption, Option} from "../Input";
 import {Command} from "./Command";
@@ -39,11 +40,7 @@ export class HelpCommand extends Command {
     }
 
     protected bindInput() {
-        try {
-            super.bindInput();
-        } catch (e) {
-            // ignored
-        }
+        tryCatch(() => super.bindInput());
     }
 
     protected async execute() {

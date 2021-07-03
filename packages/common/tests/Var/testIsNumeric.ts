@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/new-for-builtins,unicorn/no-null */
 import {isNumber, isNumeric, stringifyVar} from "../../src";
 
 describe("", () => {
@@ -14,13 +15,13 @@ describe("", () => {
         "4.536",
         -2.6,
         3.1415,
-        1.5999999999999999,
+        1.599_999_999_999_999_9,
         8e5,
         ".123e-2",
         "040",
         "0xFF",
         "0Xba",
-        0xFFF,
+        0xF_FF,
         "0b111110",
         "0B111110",
         "0o76",

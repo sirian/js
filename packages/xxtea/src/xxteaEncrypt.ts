@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-math-trunc */
 import {ByteInput, toBytes} from "@sirian/common";
 import {DELTA, mx, parseKey, toUint32Array} from "./helper";
 

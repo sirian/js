@@ -1,4 +1,5 @@
-import {URL} from "url";
+/* eslint-disable unicorn/no-null */
+import {URL} from "node:url";
 import {objReplace} from "../../src";
 
 const data: Array<[object, object[], object]> = [

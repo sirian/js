@@ -1,6 +1,6 @@
 import {keysOf} from "@sirian/common";
 import {Marking} from "../Marking";
-import {MarkingStoreInterface} from "../workflow-types";
+import {MarkingStoreInterface} from "../MarkingStoreInterface";
 
 export class SingleStateMarkingStore<K extends string> implements MarkingStoreInterface<any> {
     public readonly property: K;

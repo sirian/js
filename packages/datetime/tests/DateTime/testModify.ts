@@ -8,9 +8,9 @@ describe("", () => {
         ["+75sec", 75],
         ["+1minute", 60],
         ["+1hour", 3600],
-        ["+1day", 86400],
-        ["+1day +1hour", 86400 + 3600],
-        ["+1day +2hour +3min +4sec", 86400 + 2 * 3600 + 3 * 60 + 4],
+        ["+1day", 86_400],
+        ["+1day +1hour", 86_400 + 3600],
+        ["+1day +2hour +3min +4sec", 86_400 + 2 * 3600 + 3 * 60 + 4],
     ];
 
     test.each(data)("date.modify(%o)", (value, expected) => {

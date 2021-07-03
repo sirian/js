@@ -8,13 +8,13 @@ export const dedent = (str: TemplateStringsLike, ...values: any[]) => {
     const strings = t.strings;
 
     // count leading whitespaces in raw source
-    const skipLeft = /^[ \t]*\r?\n/.exec(raw);
+    const skipLeft = /^[\t ]*\r?\n/.exec(raw);
 
     // count trailing whitespaces in raw source
-    const skipRight = /\r?\n[ \t]*$/.exec(raw);
+    const skipRight = /\r?\n[\t ]*$/.exec(raw);
 
     if (skipLeft) {
-        strings[0] = strings[0].substr(skipLeft[0].length);
+        strings[0] = strings[0].slice(skipLeft[0].length);
     }
 
     if (skipRight) {
@@ -23,8 +23,8 @@ export const dedent = (str: TemplateStringsLike, ...values: any[]) => {
     }
 
     const indent = raw
-        .replace(/^[^\n]*[\n\S]/, "") // ignore first line
-        .match(/^[ \t]*(?=\S)/gm)
+        .replace(/^[^\n]*[\S\n]/, "") // ignore first line
+        .match(/^[\t ]*(?=\S)/gm)
         ?.map((s) => s.length)
         ?.reduce((a, b) => a < b ? a : b)
     ;

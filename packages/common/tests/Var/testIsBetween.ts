@@ -2,6 +2,7 @@ import {isBetween} from "../../src";
 
 describe("isBetween", () => {
     const e = 1e-10;
+    const inf = 1 / 0;
     const data: Array<[any, any, any, boolean]> = [
         [0, 0, 0, true],
         [0, -1, 1, true],
@@ -11,12 +12,12 @@ describe("isBetween", () => {
         [1 + e, -1, 1, false],
         [-1 - e, -1, 1, false],
 
-        [0, -Infinity, 1, true],
-        [0, -1, Infinity, true],
-        [0, -Infinity, Infinity, true],
-        [-Infinity, -Infinity, Infinity, true],
-        [+Infinity, -Infinity, Infinity, true],
-        [NaN, -Infinity, +Infinity, false],
+        [0, -inf, 1, true],
+        [0, -1, inf, true],
+        [0, -inf, inf, true],
+        [-inf, -inf, inf, true],
+        [+inf, -inf, inf, true],
+        [NaN, -inf, +inf, false],
         [NaN, -1, 1, false],
 
         [false, 0, 1, false],

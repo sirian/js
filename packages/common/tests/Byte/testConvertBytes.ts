@@ -15,7 +15,7 @@ describe("convertBytes", () => {
     ;
 
     test.each(data)("to %O", (constructor: TypedArrayConstructor) => {
-        const source = new Int16Array([0, -1, 1, -129, -128, 127, 128, -32768, 32767, 65535, 65536]);
+        const source = new Int16Array([0, -1, 1, -129, -128, 127, 128, -32_768, 32_767, 65_535, 65_536]);
         const sourceBuffer = source.buffer;
         const sourceView = new DataView(sourceBuffer);
 

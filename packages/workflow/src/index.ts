@@ -9,4 +9,4 @@ export * from "./Transition";
 export * from "./TransitionBlocker";
 export * from "./TransitionBlockerList";
 export * from "./Workflow";
-export * from "./workflow-types";
+export * from "./MarkingStoreInterface";

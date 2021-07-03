@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-null */
+import {makeArray, randomUint32} from "@sirian/common";
 import {LZString} from "../../src";
 
 describe("LZString", () => {
@@ -18,10 +20,10 @@ describe("LZString", () => {
         for (i = 32; i < 127; ++i) {
             testString += String.fromCharCode(i);
         }
-        for (i = 128 + 32; i < 55296; ++i) {
+        for (i = 128 + 32; i < 55_296; ++i) {
             testString += String.fromCharCode(i);
         }
-        for (i = 63744; i < 65536; ++i) {
+        for (i = 63_744; i < 65_536; ++i) {
             testString += String.fromCharCode(i);
         }
         const compressed = LZString.compress(testString);
@@ -40,7 +42,7 @@ describe("LZString", () => {
     });
 
     test("compresses and decompresses a long string", () => {
-        const testString = [...Array(1000)].map(() => Math.random()).join("");
+        const testString = makeArray(1000, () => randomUint32().toString(36)).join("");
 
         const compressed = LZString.compress(testString);
         expect(compressed).not.toBe(testString);

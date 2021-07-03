@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import * as util from "util";
+import * as fs from "node:fs";
+import * as util from "node:util";
 
 import {File, FileType} from "./File";
 import {Path} from "./Path";
@@ -44,7 +44,7 @@ export class Filesystem {
         try {
             await util.promisify(fs.access)(path, fs.constants.R_OK);
             return true;
-        } catch (e) {
+        } catch {
             return false;
         }
     }
@@ -53,7 +53,7 @@ export class Filesystem {
         try {
             await util.promisify(fs.access)(path, fs.constants.W_OK);
             return true;
-        } catch (e) {
+        } catch {
             return false;
         }
     }
@@ -62,7 +62,7 @@ export class Filesystem {
         try {
             await util.promisify(fs.access)(path, fs.constants.F_OK);
             return true;
-        } catch (e) {
+        } catch {
             return false;
         }
     }

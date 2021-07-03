@@ -1,4 +1,4 @@
-import {Stream} from "stream";
+import {Stream} from "node:stream";
 import {IOutputOptions, Output} from "./Output";
 
 export class BufferedOutput extends Output {

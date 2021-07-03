@@ -14,7 +14,7 @@ export class Transition<S extends string = any> {
     }
 
     public static validateName(name: string) {
-        if (!/^[-_\w]+$/.test(name)) {
+        if (!/^[\w-]+$/.test(name)) {
             throw new Error(`The transition "${name}" contains invalid characters.`);
         }
     }

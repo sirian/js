@@ -1,7 +1,7 @@
 import {CommandDefinition} from "../Command";
 import {Argument, InputDefinition, Option} from "../Input";
 import {ApplicationDescription} from "./ApplicationDescription";
-import {Descriptor, IDescribeOptions} from "./Descriptor";
+import {Descriptor} from "./Descriptor";
 
 export interface ICommandData {
     name: string;
@@ -36,15 +36,15 @@ export interface IOptionData {
 }
 
 export class JsonDescriptor extends Descriptor {
-    public describeArgument(argument: Argument, options: IDescribeOptions = {}) {
+    public describeArgument(argument: Argument) {
         this.writeData(this.getArgumentData(argument));
     }
 
-    public describeOption(option: Option, options: IDescribeOptions = {}) {
+    public describeOption(option: Option) {
         this.writeData(this.getOptionData(option));
     }
 
-    public describeInputDefinition(definition: InputDefinition, options: IDescribeOptions = {}) {
+    public describeInputDefinition(definition: InputDefinition) {
         this.writeData(this.getInputDefinitionData(definition));
     }
 
@@ -84,7 +84,7 @@ export class JsonDescriptor extends Descriptor {
             name: argument.getName(),
             is_required: argument.isRequired(),
             is_array: argument.isMultiple(),
-            description: argument.getDescription().replace(/\s*[\r\n]\s*/g, " "),
+            description: argument.getDescription().replace(/\s*[\n\r]\s*/g, " "),
             defaultValue: argument.getDefaultValue(),
         };
     }
@@ -96,7 +96,7 @@ export class JsonDescriptor extends Descriptor {
             accept_value: option.acceptValue(),
             is_value_required: option.isValueRequired(),
             is_multiple: option.isMultiple(),
-            description: option.getDescription().replace(/\s*[\r\n]\s*/g, " "),
+            description: option.getDescription().replace(/\s*[\n\r]\s*/g, " "),
             default: option.getDefault(),
             defaultValue: option.getDefaultValue(),
         };

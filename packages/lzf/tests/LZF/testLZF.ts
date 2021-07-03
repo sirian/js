@@ -1,6 +1,16 @@
 import {base64Decode} from "@sirian/base64";
-import {ByteInput, toBytes, toUTF} from "@sirian/common";
+import {ByteInput, makeArray, randomUint16, randomUint32, randomUint8, toBytes, toUTF} from "@sirian/common";
 import {lzfCompress, lzfDecompress} from "../../src";
+
+const check = (str: ByteInput, compressed?: ByteInput) => {
+    if (compressed) {
+        expect(lzfCompress(str)).toStrictEqual(toBytes(compressed));
+    }
+
+    const decompressed = lzfDecompress(lzfCompress(str));
+
+    expect(toUTF(decompressed)).toStrictEqual(str);
+};
 
 describe("LZF", () => {
     const data: Array<[string, number[]]> = [
@@ -10,16 +20,6 @@ describe("LZF", () => {
         ["111111111111", [1, 49, 49, 192, 0, 1, 49, 49]],
     ];
 
-    const check = (str: string, compressed?: ByteInput) => {
-        if (compressed) {
-            expect(lzfCompress(str)).toStrictEqual(toBytes(compressed));
-        }
-
-        const decompressed = lzfDecompress(lzfCompress(str));
-
-        expect(toUTF(decompressed)).toStrictEqual(str);
-    };
-
     test.each(data)("LZF.compress %o", check);
 
     test("compresses and decompresses all printable UTF-16 characters", () => {
@@ -28,10 +28,10 @@ describe("LZF", () => {
         for (let i = 32; i < 127; ++i) {
             str += String.fromCharCode(i);
         }
-        for (let i = 128 + 32; i < 55296; ++i) {
+        for (let i = 128 + 32; i < 55_296; ++i) {
             str += String.fromCharCode(i);
         }
-        for (let i = 63744; i < 65536; ++i) {
+        for (let i = 63_744; i < 65_536; ++i) {
             str += String.fromCharCode(i);
         }
         check(str);
@@ -43,9 +43,12 @@ describe("LZF", () => {
         }
     });
 
-    test("compresses and decompresses a long string", () => {
-        const str = [...Array(1000)].map(Math.random).join("");
-        check(str);
+    test("compresses and decompresses random bytes", () => {
+        for (let i = 0; i < 20; i++) {
+            check(new Uint32Array(makeArray(1000, randomUint32)));
+            check(new Uint16Array(makeArray(1000, randomUint16)));
+            check(new Uint8Array(makeArray(1000, randomUint8)));
+        }
     });
 
     test("Check predefined long string", () => {

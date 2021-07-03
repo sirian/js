@@ -10,8 +10,8 @@ const data: Array<[any[], string]> = [
     [["", 1, [3, 4], {}], ` 1 [3, 4] {}`],
     [["%o %s %s", 1, [3, 4], {}], "1 3,4 [object Object]"],
     [["Hello %02d %.2f", 1.8, Math.PI], "Hello 01 3.14"],
-    [["Hello %02d", "0xFF", 17.00001], "Hello 255 17.00001"],
-    [["Hello <info>%02d</info>", "0xFF", 17.00001], "Hello 255 17.00001"],
+    [["Hello %02d", "0xFF", 17.000_01], "Hello 255 17.00001"],
+    [["Hello <info>%02d</info>", "0xFF", 17.000_01], "Hello 255 17.00001"],
     [["Hello {x|d} {y|f:.2}", {x: 1.7, y: 1 / 3}], "Hello 1 0.33"],
 ];
 

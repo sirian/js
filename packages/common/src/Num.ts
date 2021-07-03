@@ -14,7 +14,7 @@ export const BIG_UINT32_MAX = BIG_UINT32_SIZE - 1n;
 
 export const toNumber = (x: number | bigint) => Number(x);
 export const toInt = (x: number) => Math.trunc(x);
-export const toInt32 = (x: number) => x | 0;
+export const toInt32 = (x: number) => x | 0; // eslint-disable-line unicorn/prefer-math-trunc
 export const toUint32 = (v: number) => v >>> 0;
 export const toBigInt = (x: number | bigint) => BigInt(x);
 export const toBigUint64 = (x: number | bigint) => toBigInt(x) & BIG_UINT64_MAX;

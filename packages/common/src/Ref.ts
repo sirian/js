@@ -29,6 +29,7 @@ export const bind: {
     <R, A extends any[], B extends any[]>(f: (...args: [...A, ...B]) => R, thisArg: any, ...curry: A): (...args: B) => R;
 } = nativeCall.bind(nativeBind);
 
+// eslint-disable-next-line unicorn/new-for-builtins
 export const getPrototype = (target: unknown) => isNullish(target) ? undefined : Object.getPrototypeOf(Object(target));
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {
@@ -54,6 +55,7 @@ export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Ar
     return [...result];
 };
 
+// eslint-disable-next-line unicorn/no-null
 export const setPrototype = (target: object, proto: object | null | undefined) => Object.setPrototypeOf(target, proto ?? null);
 
 export const hasPrototype = (target: any) => isNotNullish(getPrototype(target));
@@ -106,7 +108,7 @@ export const getConstructor = <T>(target: T) =>
 export const applyIfFunction: {
     <A extends any[], R>(fn: (...args: A) => R, ...args: A): R;
     <T>(value: T, ...args: any[]): T;
-} = (value: any, ...args: any[]) => isFunction(value) ? apply(value, null, args) : value;
+} = (value: any, ...args: any[]) => isFunction(value) ? apply(value, void 0, args) : value;
 
 export const construct: {
     <T>(constructor: { new(): T }, args?: [], newTarget?: Function): T;
@@ -116,6 +118,7 @@ export const construct: {
     isNullish(newTarget) ? new target(...args) : Reflect.construct(target, args, newTarget);
 
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
+    // eslint-disable-next-line unicorn/new-for-builtins
     isNotNullish(target) && tryCatch(() => key in Object(target), false);
 
 export const hasAnyProp = <T, K extends PropertyKey>(target: T, keys: ArrayRO<K>): target is K extends any ? Ensure<T, K> : never =>
@@ -171,7 +174,7 @@ export const tryFinally = <T>(tryFn: () => T, finallyFn: () => void) => {
 export const tryCatchFinally = <T>(tryFn: () => T, catchFn: Func1, finallyFn: () => void) => {
     try {
         return tryFn();
-    } catch (e) {
+    } catch {
         return applyIfFunction(catchFn);
     } finally {
         finallyFn();

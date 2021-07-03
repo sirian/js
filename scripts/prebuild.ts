@@ -1,42 +1,50 @@
-import * as fs from "fs";
-import {getPackageDir, packagesDir, readPackageJSON, rootDir, validate, writeJSON} from "./util";
+import * as fs from "node:fs";
+import {PackageJson} from "type-fest";
+import {debug, getPackageDir, packagesDir, readPackageJSON, rootDir, validate, writeJSON} from "./util";
 
-const debug = console.debug;
-const VALIDATE = false;
+const VALIDATE = process.argv.includes("--validate");
 
-const getReferences = (pkg: any) =>
+const getReferences = (pkg: PackageJson) =>
     Object.keys({...pkg.dependencies, ...pkg.devDependencies})
-        .map((dep) => dep.match(/^@sirian\/([^\/]+)$/)?.[1])
+        .map((dep) => /^@sirian\/([^/]+)$/.exec(dep)?.[1])
         .filter(Boolean)
         .map((depName) => "../" + depName);
 
-const prebuild = () => {
-    const packages = fs.readdirSync(packagesDir, {withFileTypes: true})
+const prebuild = async () => {
+    const packages = fs
+        .readdirSync(packagesDir, {withFileTypes: true})
         .sort()
         .filter((dir) => dir.isDirectory())
-        .map((dir) => dir.name)
-        .filter((name) => fs.existsSync(getPackageDir(name) + "/package.json"))
+        .map((dir) => ({
+            name: dir.name,
+            pkg: readPackageJSON(dir.name),
+        }))
     ;
+//        .filter((name) => fs.existsSync(getPackageDir(name) + "/package.json"));
+
+    if (VALIDATE) {
+        await validate(packages.map(({pkg}) => pkg));
+    }
 
     const publicAccess = [];
 
-    for (const [i, name] of packages.entries()) {
-        debug("[%o/%o] %o", i + 1, packages.length, name);
+    debug("Prebuild");
+    for (const [i, {name, pkg}] of packages.entries()) {
+        debug("[%o/%o] %o ", i + 1, packages.length, name);
 
-        const pkg = readPackageJSON(name);
+        if (!pkg.name || !pkg.version) {
+            continue;
+        }
 
         if (!pkg.private) {
             publicAccess.push(name);
         }
 
-        if (VALIDATE) {
-            validate(pkg.name, pkg.version);
-        }
-
-        prebuildType(pkg, name, "cjs", "commonjs");
-        prebuildType(pkg, name, "esm", "esnext");
+        prebuildType(pkg, name, "cjs", "CommonJS");
+        prebuildType(pkg, name, "esm", "ESNext");
     }
 
+    debug("greenkeeper.json");
     writeJSON(rootDir + `/greenkeeper.json`, {
         groups: {
             default: {
@@ -46,7 +54,7 @@ const prebuild = () => {
     });
 };
 
-const prebuildType = (pkg: any, pkgName: string, type: string, module: string) => {
+const prebuildType = (pkg: any, pkgName: string, type: string, tsModule: "ESNext" | "CommonJS") => {
     const references = getReferences(pkg);
     const tmpDir = rootDir + "/tmp";
 
@@ -55,7 +63,7 @@ const prebuildType = (pkg: any, pkgName: string, type: string, module: string) =
         include: ["src"],
         compilerOptions: {
             noEmit: false,
-            module,
+            module: tsModule,
             rootDir: "src",
             outDir: `build/${type}`,
             declarationDir: "build/types",
@@ -67,4 +75,4 @@ const prebuildType = (pkg: any, pkgName: string, type: string, module: string) =
     writeJSON(getPackageDir(pkgName) + `/tsconfig.${type}.json`, cfg);
 };
 
-prebuild();
+prebuild().catch(console.error);

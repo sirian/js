@@ -114,6 +114,7 @@ export class Parser {
 
                     case "null":
                     case "NULL":
+                        // eslint-disable-next-line unicorn/no-null
                         return new ConstantNode(null);
 
                     default:
@@ -309,11 +310,8 @@ export class Parser {
         // As a result, if token is NOT an operator OR token.value is NOT a valid property or method name,
         // an exception shall be thrown.
 
-        if (!token.is(TokenType.NAME)) {
-            if ((!token.is(TokenType.OPERATOR)
-                || !/^(?:[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/.test(token.value))) {
-                throw new SyntaxError("Expected name", token.position, stream.source);
-            }
+        if (!token.is(TokenType.NAME) && (!token.is(TokenType.OPERATOR) || !/^[A-Z_a-z\u007F-\u00FF][\w\u007F-\u00FF]*/.test(token.value))) {
+            throw new SyntaxError("Expected name", token.position, stream.source);
         }
 
         const key = new ConstantNode(token.value, true);
@@ -379,6 +377,7 @@ export class Parser {
                     stream.next();
                     expr3 = this.parseExpression();
                 } else {
+                    // eslint-disable-next-line unicorn/no-null
                     expr3 = new ConstantNode(null);
                 }
             }

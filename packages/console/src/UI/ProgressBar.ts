@@ -1,7 +1,7 @@
 import {padLeft, sprintf, stringifyVar, substrCount} from "@sirian/common";
 import {LogicError} from "../Error";
 import {Output, OutputVerbosity} from "../Output";
-import {ESC} from "../TTY";
+import {Cursor} from "../TTY";
 import {Perf, StrUtil, Units} from "../Util";
 
 export type ProgressBarPlaceholderFormatter = (bar: ProgressBar) => string | number;
@@ -86,7 +86,7 @@ export class ProgressBar {
     protected max = 0;
     protected startTime: number;
     protected stepWidth!: number;
-    protected percent = 0.0;
+    protected percent = 0;
     protected formatLineCount = 0;
     protected messages: Map<string, string> = new Map();
     protected overwrite = true;
@@ -116,21 +116,20 @@ export class ProgressBar {
             [120, "mins", 60],
             [3600, "1 hr"],
             [7200, "hrs", 3600],
-            [86400, "1 day"],
-            [172800, "days", 86400],
+            [86_400, "1 day"],
+            [172_800, "days", 86_400],
         ];
 
         for (let index = 0; index < formats.length; index++) {
             const [breakpoint, text, divider] = formats[index] as [number, string, number | undefined];
 
-            if (secs >= breakpoint) {
-                if ((index + 1 < formats.length && secs < formats[index + 1][0]) || index === formats.length - 1) {
-                    if (!divider) {
-                        return text;
-                    }
+            if (secs < breakpoint) {
+                continue;
+            }
 
-                    return sprintf("%d %s", Math.trunc(secs / divider), text);
-                }
+            if ((index + 1 < formats.length && secs < formats[index + 1][0]) || index === formats.length - 1) {
+                return !divider ? text : sprintf("%d %s", Math.trunc(secs / divider), text);
+
             }
         }
 
@@ -217,7 +216,7 @@ export class ProgressBar {
     public start(max?: number) {
         this.startTime = Perf.now();
         this.step = 0;
-        this.percent = 0.0;
+        this.percent = 0;
 
         if (max) {
             this.setMaxSteps(max);
@@ -290,7 +289,7 @@ export class ProgressBar {
     }
 
     protected buildLine() {
-        return this.format!.replace(/%([a-z\-_]+)(?::([^%]+))?%/gi, (...matches: string[]) => {
+        return this.format!.replace(/%([_a-z\-]+)(?::([^%]+))?%/gi, (...matches: string[]) => {
             const formatter = ProgressBar.placeholderFormatters[matches[1]];
             let text;
 
@@ -329,10 +328,10 @@ export class ProgressBar {
     protected doOverwrite(message: string) {
         if (this.overwrite) {
             if (!this.firstRun) {
-                const messages = [ESC.cr(), ESC.eraseLine()];
+                const messages = [Cursor.cr(), Cursor.eraseLine()];
 
                 for (let i = 0; i < this.formatLineCount; i++) {
-                    messages.push(ESC.up(), ESC.eraseLine());
+                    messages.push(Cursor.up(), Cursor.eraseLine());
                 }
 
                 this.output.write(messages);

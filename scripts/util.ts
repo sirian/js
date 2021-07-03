@@ -1,27 +1,38 @@
-import proc from "child_process";
-import * as fs from "fs";
-import * as path from "path";
+/* eslint-disable unicorn/prefer-module */
+import * as fs from "node:fs";
+import * as path from "node:path";
+import packageJson from "package-json";
+import {PackageJson} from "type-fest";
 
 export const rootDir = path.dirname(__dirname);
 export const packagesDir = path.join(rootDir, "packages");
+export const debug = console.debug;
+export const error = console.error;
 
 export const getPackageDirName = (packageNameOrPath: string) => path.basename(packageNameOrPath);
 export const getPackageDir = (packageNameOrPath: string) => path.join(packagesDir, path.basename(packageNameOrPath));
-export const readJSON = (file: string) => JSON.parse(fs.readFileSync(file, "utf-8"));
-export const readPackageJSON = (packageName: string) => readJSON(getPackageDir(packageName) + "/package.json");
-export const writeJSON = (file: string, data: unknown) => fs.writeFileSync(file, JSON.stringify(data, null, 4) + "\n");
+export const readJSON = <T>(file: string) => JSON.parse(fs.readFileSync(file, "utf-8")) as T;
+export const readPackageJSON = (packageName: string) => readJSON<PackageJson>(getPackageDir(packageName) + "/package.json");
+export const writeJSON = (file: string, data: unknown) => fs.writeFileSync(file, JSON.stringify(data, void 0, 4) + "\n");
 
-export const yarnInfo = (pkg: string) => {
-    const args = ["info", "--json", pkg];
-    const data = proc.spawnSync("yarn", args, {cwd: process.cwd()});
-    const output = data.output.join("");
-    return JSON.parse(output).data;
-};
+export const validate = async (pkgs: PackageJson[]) => {
+    debug("Validate package versions");
 
-export const validate = (pkgName: string, version: string) => {
-    const info = yarnInfo(pkgName);
+    const promises = pkgs.map(async (pkg) => {
+        const info = await packageJson(pkg.name!);
 
-    if (version !== info.version) {
-        throw new Error(`Version ${pkgName} mismatch. Remote ${info.version}, local: ${version}`);
-    }
+        return {
+            name: pkg.name,
+            private: pkg.private,
+            local: pkg.version,
+            remote: info.version,
+        };
+    });
+
+    const results = await Promise.all(promises);
+
+    const table = results
+        .filter(({local, remote}) => local !== remote)
+
+    console.table(table);
 };

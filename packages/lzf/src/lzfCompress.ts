@@ -11,7 +11,7 @@ export const lzfCompress = (input: ByteInput) => {
 
     const FRST = (d: Uint8Array, p: number) => (((d[p]) << 8) | d[p + 1]);
     const NEXT = (v: number, d: Uint8Array, p: number) => (((v) << 8) | d[p + 2]);
-    const IDX = (h: number) => (((h * 0x1e35a7bd) >> (32 - HLOG - 8)) & (HSIZE - 1));
+    const IDX = (h: number) => (((h * 0x1e_35_a7_bd) >> (32 - HLOG - 8)) & (HSIZE - 1));
 
     const output = [];
     const htab = new Uint32Array(HSIZE);

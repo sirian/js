@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 import {IDeferred} from "../../src";
 
 export class Adapter {
@@ -11,7 +12,7 @@ export class Adapter {
 
     public static deferred<T>() {
         const deferred = this.factory<T>();
-        Promise.resolve(deferred.promise).catch((preventUnhandledWarnings) => {});
+        void Promise.resolve(deferred.promise);
         return deferred;
     }
 

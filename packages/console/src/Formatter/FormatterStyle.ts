@@ -1,6 +1,6 @@
 import {hasOwn} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
-import {ESC, TTYStyle, TTYStyles} from "../TTY";
+import {Cursor, TTYStyle, TTYStyles} from "../TTY";
 
 export class FormatterStyle {
     protected options: Set<TTYStyle>;
@@ -38,9 +38,9 @@ export class FormatterStyle {
         }
 
         return [
-            ESC.style(setCodes),
+            Cursor.style(setCodes),
             text,
-            ESC.style(unsetCodes),
+            Cursor.style(unsetCodes),
         ].join("");
     }
 }

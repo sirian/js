@@ -4,7 +4,7 @@ import {RegExpTokenizer, RegExpTokenizerMatch} from "./RegExpTokenizer";
 
 export class TagTokenizer extends RegExpTokenizer {
     constructor() {
-        const pattern = /<\/([a-z][a-z0-9_-]*)?>|<([a-z][a-z0-9_-]*)>/;
+        const pattern = /<\/([a-z][\d_a-z-]*)?>|<([a-z][\d_a-z-]*)>/;
         super(pattern);
     }
 

@@ -75,9 +75,9 @@ describe("setAlarm", () => {
 
     test("setAlarm(60000ms)", () => {
         const fn = jest.fn();
-        setAlarm(60000, fn);
+        setAlarm(60_000, fn);
 
-        sleep(59000);
+        sleep(59_000);
         expect(fn).toHaveBeenCalledTimes(0);
         moveTime(900);
         expect(fn).toHaveBeenCalledTimes(0);

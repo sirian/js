@@ -4,7 +4,7 @@ import {RegExpTokenizer, RegExpTokenizerMatch} from "./RegExpTokenizer";
 
 export class PlaceholderTokenizer extends RegExpTokenizer {
     constructor() {
-        const pattern = /%(?:\(([^)]+)\))?([^a-zA-Z]*)?([a-zA-Z])/;
+        const pattern = /%(?:\(([^)]+)\))?([^A-Za-z]*)?([A-Za-z])/;
         super(pattern);
     }
 

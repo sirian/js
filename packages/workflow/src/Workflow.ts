@@ -8,7 +8,7 @@ import {MultipleStateMarkingStore} from "./MarkingStore";
 import {Transition} from "./Transition";
 import {TransitionBlockCode, TransitionBlocker} from "./TransitionBlocker";
 import {TransitionBlockerList} from "./TransitionBlockerList";
-import {MarkingStoreInterface} from "./workflow-types";
+import {MarkingStoreInterface} from "./MarkingStoreInterface";
 
 export interface WorkflowInit<S extends string> {
     definition: Definition<S>;

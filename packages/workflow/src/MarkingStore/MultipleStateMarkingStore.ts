@@ -1,5 +1,5 @@
 import {Marking, MarkingPlaces} from "../Marking";
-import {MarkingStoreInterface} from "../workflow-types";
+import {MarkingStoreInterface} from "../MarkingStoreInterface";
 
 export class MultipleStateMarkingStore<K extends string> implements MarkingStoreInterface<any> {
     public readonly property: K;

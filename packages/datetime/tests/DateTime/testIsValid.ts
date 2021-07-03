@@ -1,10 +1,11 @@
+/* eslint-disable unicorn/no-null */
 import {DateTime} from "../../src";
 
 const now = new Date();
 const validData: any[] = [
     undefined,
     null,
-    123456789,
+    123_456_789,
     now,
     now.getTime(),
     now.toISOString(),

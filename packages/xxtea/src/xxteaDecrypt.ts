@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-math-trunc */
 import {ByteInput, toBytes} from "@sirian/common";
 import {DELTA, mx, parseKey, toUint32Array} from "./helper";
 
@@ -21,11 +22,7 @@ export const xxteaDecrypt = (data: ByteInput, key: ByteInput) => {
 
     const m = uint32[lastIndex];
 
-    if ((m < n - 3) || (m > n)) {
-        n = 0;
-    } else {
-        n = m;
-    }
+    n = (m < n - 3) || (m > n) ? 0 : m;
 
     return toBytes(uint32.buffer.slice(0, n));
 };

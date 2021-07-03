@@ -4,7 +4,7 @@ import {RegExpTokenizer, RegExpTokenizerMatch} from "./RegExpTokenizer";
 
 export class MacroTokenizer extends RegExpTokenizer {
     constructor() {
-        const pattern = /{(\w+(?:\.\w+)*)(?:%([^a-zA-Z]*)([a-zA-Z])|\|(\w+)(?::([^}]+))?)?}/;
+        const pattern = /{(\w+(?:\.\w+)*)(?:%([^A-Za-z]*)([A-Za-z])|\|(\w+)(?::([^}]+))?)?}/;
 
         super(pattern);
     }

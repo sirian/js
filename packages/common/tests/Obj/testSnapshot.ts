@@ -1,4 +1,4 @@
-import {URL} from "url";
+import {URL} from "node:url";
 import {objSnapshot} from "../../src";
 
 describe("Obj.snapshot", () => {

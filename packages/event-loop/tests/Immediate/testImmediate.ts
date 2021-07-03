@@ -1,4 +1,4 @@
-import {MessageChannel} from "worker_threads";
+import {MessageChannel} from "node:worker_threads";
 import {setImmediate, sleep, startImmediate} from "../../src";
 
 beforeAll(() => {

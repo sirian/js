@@ -1,7 +1,8 @@
-import * as path from "path";
+/* eslint-disable unicorn/prefer-module */
+import * as path from "node:path";
 
-export class TestUtil {
-    static get resourcePath() {
+export const TestUtil = {
+    get resourcePath() {
         return path.join(__dirname, "/../resources");
-    }
-}
+    },
+};

@@ -5,10 +5,10 @@ import {Argument, InputDefinition, Option} from "../Input";
 import {Table} from "../UI/Table";
 import {StrUtil} from "../Util";
 import {ApplicationDescription} from "./ApplicationDescription";
-import {Descriptor, IDescribeOptions} from "./Descriptor";
+import {Descriptor} from "./Descriptor";
 
 export class TextDescriptor extends Descriptor {
-    public describeArgument(argument: Argument, options: IDescribeOptions = {}) {
+    public describeArgument(argument: Argument) {
         const defaultValue = argument.getDefaultValue();
 
         const desc = [
@@ -22,7 +22,7 @@ export class TextDescriptor extends Descriptor {
         return [`<info>${argument.getName()}</info>`, desc.join("")];
     }
 
-    public describeOption(option: Option, options: IDescribeOptions = {}) {
+    public describeOption(option: Option) {
         const defaultValue = option.getDefault();
 
         const desc = [option.getDescription()];
@@ -36,7 +36,7 @@ export class TextDescriptor extends Descriptor {
         const allowedValues = option.getAllowedValues();
 
         if (allowedValues.length) {
-            const str = allowedValues.map(stringifyVar).join(", ");
+            const str = allowedValues.map((element) => stringifyVar(element)).join(", ");
             desc.push(` (Allowed values: <comment>${str}</comment>)`);
         }
 
@@ -46,7 +46,7 @@ export class TextDescriptor extends Descriptor {
         ];
     }
 
-    public describeInputDefinition(definition: InputDefinition, options: IDescribeOptions = {}) {
+    public describeInputDefinition(definition: InputDefinition) {
         const opts = definition.getOptions();
 
         const args = definition.getArguments();
@@ -56,7 +56,7 @@ export class TextDescriptor extends Descriptor {
 
             const table = this.createTable();
             for (const argument of args) {
-                const row = this.describeArgument(argument, options);
+                const row = this.describeArgument(argument);
                 table.addRow(row);
             }
 
@@ -78,11 +78,11 @@ export class TextDescriptor extends Descriptor {
                     laterOptions.push(option);
                     continue;
                 }
-                const row = this.describeOption(option, options);
+                const row = this.describeOption(option);
                 table.addRow(row);
             }
             for (const option of laterOptions) {
-                const row = this.describeOption(option, options);
+                const row = this.describeOption(option);
                 table.addRow(row);
             }
             table.render();
@@ -145,7 +145,7 @@ export class TextDescriptor extends Descriptor {
             options: application.getInputDefinition().getOptions(),
         });
 
-        this.describeInputDefinition(def, {namespace: describedNamespace});
+        this.describeInputDefinition(def);
 
         this.writeEOL(2);
 

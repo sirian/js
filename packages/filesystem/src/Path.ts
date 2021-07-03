@@ -1,7 +1,7 @@
 import {isArrayBuffer, isArrayBufferView, isNullish, stringifyStr} from "@sirian/common";
-import {PathLike} from "fs";
-import * as pathUtil from "path";
-import * as util from "util";
+import {PathLike} from "node:fs";
+import * as pathUtil from "node:path";
+import * as util from "node:util";
 
 export type PathPart = string | ArrayBufferView | number;
 

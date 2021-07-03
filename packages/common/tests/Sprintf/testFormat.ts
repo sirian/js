@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import {sprintf} from "../../src";
 
 type TestTuple = [expected: string, format: string, ...args: any[]];
@@ -70,7 +71,7 @@ describe("sprintf", () => {
         ["-2.2", "%+f", -2.2],
         ["-2.3", "%+.1f", -2.34],
         ["-0.0", "%+.1f", -0.01],
-        [" -10.235", "%8.3f", -10.23456],
+        [" -10.235", "%8.3f", -10.234_56],
     ]);
 
     testGroup("%g", [
@@ -144,7 +145,7 @@ describe("sprintf", () => {
         ["This is a string", "%v", "This is a string"],
         ["1,2,3", "%v", [1, 2, 3]],
         ["[object Object]", "%v", {foo: "bar"}],
-        [`/<("[^"]*"|'[^']*'|[^'">])*>/`, "%v", /<("[^"]*"|'[^']*'|[^'">])*>/],
+        [`/<("[^"]*"|'[^']*'|[^"'>])*>/`, "%v", /<("[^"]*"|'[^']*'|[^"'>])*>/],
     ]);
 
     testGroup("", [
