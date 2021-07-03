@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [9.3.5](https://github.com/sirian/js/compare/@sirian/common@9.3.4...@sirian/common@9.3.5) (2021-07-03)
+
+
+### Bug Fixes
+
+* tests ([8b1d122](https://github.com/sirian/js/commit/8b1d12223d4d2dc3aeee4d2829c856c6b356e220))
+
+
+
+
+
 ## [9.3.4](https://github.com/sirian/js/compare/@sirian/common@9.3.3...@sirian/common@9.3.4) (2021-07-03)
 
 **Note:** Version bump only for package @sirian/common

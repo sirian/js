@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.8](https://github.com/sirian/js/compare/@sirian/xpromise@3.0.7...@sirian/xpromise@3.0.8) (2021-07-03)
+
+
+### Bug Fixes
+
+* tests ([8b1d122](https://github.com/sirian/js/commit/8b1d12223d4d2dc3aeee4d2829c856c6b356e220))
+
+
+
+
+
 ## [3.0.7](https://github.com/sirian/js/compare/@sirian/xpromise@3.0.6...@sirian/xpromise@3.0.7) (2021-07-03)
 
 **Note:** Version bump only for package @sirian/xpromise
