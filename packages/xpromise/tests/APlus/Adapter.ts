@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/prefer-module */
+import {noop} from "@sirian/common";
 import {IDeferred} from "../../src";
 
 export class Adapter {
@@ -12,7 +13,7 @@ export class Adapter {
 
     public static deferred<T>() {
         const deferred = this.factory<T>();
-        void Promise.resolve(deferred.promise);
+        Promise.resolve(deferred.promise).catch(noop);
         return deferred;
     }
 

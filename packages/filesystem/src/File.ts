@@ -1,5 +1,5 @@
-import * as fs from "node:fs";
-import * as pathUtil from "node:path";
+import * as fs from "fs";
+import * as pathUtil from "path";
 
 export enum FileType {
     UNKNOWN,

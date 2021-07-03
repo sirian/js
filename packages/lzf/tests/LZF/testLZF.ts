@@ -1,5 +1,5 @@
 import {base64Decode} from "@sirian/base64";
-import {ByteInput, makeArray, randomUint16, randomUint32, randomUint8, toBytes, toUTF} from "@sirian/common";
+import {ByteInput, makeArray, toBytes, toUTF} from "@sirian/common";
 import {lzfCompress, lzfDecompress} from "../../src";
 
 const check = (str: ByteInput, compressed?: ByteInput) => {
@@ -43,12 +43,9 @@ describe("LZF", () => {
         }
     });
 
-    test("compresses and decompresses random bytes", () => {
-        for (let i = 0; i < 20; i++) {
-            check(new Uint32Array(makeArray(1000, randomUint32)));
-            check(new Uint16Array(makeArray(1000, randomUint16)));
-            check(new Uint8Array(makeArray(1000, randomUint8)));
-        }
+    test("compresses and decompresses a long string", () => {
+        const str = makeArray(1000, Math.random).join("");
+        check(str);
     });
 
     test("Check predefined long string", () => {

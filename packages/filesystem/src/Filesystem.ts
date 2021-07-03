@@ -1,5 +1,5 @@
-import * as fs from "node:fs";
-import * as util from "node:util";
+import * as fs from "fs";
+import * as util from "util";
 
 import {File, FileType} from "./File";
 import {Path} from "./Path";

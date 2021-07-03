@@ -1,5 +1,5 @@
 import {XPromise} from "@sirian/xpromise";
-import * as readline from "node:readline";
+import * as readline from "readline";
 import {Formatter} from "../Formatter";
 import {IO} from "../IO";
 import {AbstractQuestion} from "./Question";

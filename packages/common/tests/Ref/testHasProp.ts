@@ -9,7 +9,7 @@ describe("hasProp", () => {
         [Object.create({}, {x: {enumerable: false}}), "x", true],
         [Object.create({}, {x: {enumerable: false}}), "y", false],
         [Object.prototype, "hasOwnProperty", true],
-        [Array.from({length: 2}), 1, false],
+        [new Array(2), 1, false],
         [0, "toFixed", true],
         [1, "toFixed", true],
         ["foo", 1, true],

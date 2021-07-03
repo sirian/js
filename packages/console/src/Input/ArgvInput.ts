@@ -25,7 +25,7 @@ export class ArgvInput extends Input {
     }
 
     public getFirstArgument() {
-        return this.tokens.find((token) => token.startsWith("-"));
+        return this.tokens.find((token) => token && !token.startsWith("-"));
     }
 
     public hasParameterOption(values: string | string[], onlyParams = false) {

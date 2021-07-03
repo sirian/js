@@ -1,4 +1,4 @@
-import * as pathUtil from "node:path";
+import * as pathUtil from "path";
 import {Filesystem} from "../../src";
 import {TestUtil} from "../TestUtil";
 

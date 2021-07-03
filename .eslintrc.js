@@ -56,6 +56,8 @@ module.exports = {
         "unicorn/no-null": WARN,
         "unicorn/prefer-array-flat": WARN,
         "unicorn/prefer-string-slice": WARN,
+        "unicorn/prefer-node-protocol": WARN,
+        "unicorn/import-style": WARN,
         "unicorn/no-array-for-each": OFF,
         "unicorn/explicit-length-check": OFF,
         "unicorn/no-this-assignment": OFF,

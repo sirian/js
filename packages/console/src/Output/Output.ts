@@ -1,5 +1,5 @@
 import {castArray, stringifyVar} from "@sirian/common";
-import {Writable} from "node:stream";
+import {Writable} from "stream";
 import {RuntimeError} from "../Error";
 import {Formatter} from "../Formatter";
 import {StrUtil} from "../Util";
