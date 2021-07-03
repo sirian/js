@@ -42,7 +42,7 @@ export class DateTimeParser {
 
         const tz = tzHour ? tzSign + padN(tzHour) + ":" + padN(tzMin) : "Z";
 
-        const msTime = stringifyVar(ms || 0).padEnd(3, "0").substr(0, 3);
+        const msTime = stringifyVar(ms || 0).padEnd(3, "0").slice(0, 3);
 
         return date + "T" + time + "." + msTime + tz;
     }

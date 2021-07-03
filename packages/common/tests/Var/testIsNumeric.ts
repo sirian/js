@@ -1,5 +1,5 @@
-/* eslint-disable unicorn/new-for-builtins,unicorn/no-null */
-import {isNumber, isNumeric, stringifyVar} from "../../src";
+/* eslint-disable unicorn/no-null */
+import {isNumber, isNumeric, stringifyVar, toObject} from "../../src";
 
 describe("", () => {
     const validData = [
@@ -32,7 +32,7 @@ describe("", () => {
         0n,
         1n,
         -1n,
-        Object("42"),
+        toObject("42"),
         "",
         "        ",
         "\t\t",
@@ -48,7 +48,7 @@ describe("", () => {
         Infinity,
         Number.POSITIVE_INFINITY,
         Number.NEGATIVE_INFINITY,
-        Object("Devo"),
+        toObject("Devo"),
         {},
         [],
         [0],

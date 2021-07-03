@@ -36,8 +36,8 @@ const weightedPickIndex = (array: number[]) => {
     const threshold = randomReal(0, total);
 
     let sum = 0;
-    for (let i = 0; i < array.length; i++) {
-        sum += array[i];
+    for (const [i, element] of array.entries()) {
+        sum += element;
         if (sum >= threshold) {
             return i;
         }

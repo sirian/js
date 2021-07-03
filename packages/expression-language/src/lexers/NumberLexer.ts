@@ -3,7 +3,7 @@ import {TokenType, TokenTypes} from "../Token";
 import {TokenStream} from "../TokenStream";
 
 export class NumberLexer extends AbstractRegExpLexer<TokenTypes> {
-    protected regexp = /^[0-9]+(?:\.[0-9]+)?/;
+    protected regexp = /^\d+(?:\.\d+)?/;
 
     protected handleMatch(match: RegExpMatchArray, reader: Reader, stream: TokenStream) {
         const text = match[0];

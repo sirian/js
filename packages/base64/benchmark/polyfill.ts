@@ -1,7 +1,7 @@
 import {IBase64} from "./BufferBase64";
 
 const b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-const b64re = /^(?:[A-Za-z\d+/]{4})*?(?:[A-Za-z\d+/]{2}(?:==)?|[A-Za-z\d+/]{3}=?)?$/;
+const b64re = /^(?:[\d+/A-Za-z]{4})*?(?:[\d+/A-Za-z]{2}(?:==)?|[\d+/A-Za-z]{3}=?)?$/;
 
 export const btoa = (x: string) => {
     x = String(x);
@@ -29,7 +29,7 @@ export const btoa = (x: string) => {
     const rest = len % 3; // To determine the final padding
     // If there's need of padding, replace the last 'A's with equal signs
     return rest
-           ? result.slice(0, rest - 3) + "===".substring(rest)
+           ? result.slice(0, rest - 3) + "===".slice(Math.max(0, rest))
            : result;
 };
 
@@ -66,8 +66,9 @@ export const atob = (x: string) => {
 
 export const Polyfill1: IBase64 = {
     encode: (x) =>
-        btoa(encodeURIComponent(x).replace(/%([0-9A-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
+        btoa(encodeURIComponent(x).replace(/%([\dA-F]{2})/g, (match, hex) => String.fromCharCode(parseInt(hex, 16)))),
     decode: (x) =>
+        // eslint-disable-next-line unicorn/prefer-prototype-methods
         decodeURIComponent([].map.call(atob(x), (c: string) => "%" + "00".concat(c.charCodeAt(0).toString(16)).slice(-2)).join("")),
 };
 export const Polyfill2: IBase64 = {

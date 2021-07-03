@@ -1,4 +1,4 @@
-// tslint:disable:no-eval
+
 
 import {stringifyTagString} from "../src";
 

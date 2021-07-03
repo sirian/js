@@ -37,13 +37,14 @@ export const assign = <T extends any, U extends any[]>(target: T, ...sources: U)
     sources
         .reduce((o, source) => Object.assign(o, source, pick(source, keysOf(o))), target);
 
+// eslint-disable-next-line unicorn/new-for-builtins
 export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 
 export const fromEntries = <E extends Iterable<Entry>>(entries: E) =>
     Object.fromEntries(entries) as FromEntries<E>;
 
 export const objMap = <T, E extends Entry>(obj: T, fn: <K extends keyof T>(k: K, v: T[K]) => E | false) =>
-    fromEntries(entriesOf(obj).map(([k, v]: any) => fn(k, v)).filter(isArray) as E[]);
+    fromEntries(entriesOf(obj).map(([k, v]: any) => fn(k, v)).filter((element) => isArray(element)) as E[]);
 
 export const pickEntries = <T, K extends keyof T>(target: T, keys: Iterable<K>) =>
     [...keys]
@@ -71,8 +72,7 @@ export const objSnapshot = <T>(target: T, options: SnapshotOptions = {}): T => {
     }
 
     const protoKeys = getPrototypes(target, options)
-        .map((x) => ownNames(x).filter((k) => "__proto__" !== k && ownDescriptor(x, k)?.get))
-        .flat() as Array<keyof T>;
+        .flatMap((x) => ownNames(x).filter((k) => "__proto__" !== k && ownDescriptor(x, k)?.get)) as Array<keyof T>;
 
     return pick(target, [...keysOf(target), ...protoKeys] as Array<keyof T>);
 };
@@ -91,7 +91,7 @@ export const objClear = <T extends object>(target: T): Partial<T> => {
 
 export const isEmptyObject = (obj: object) => {
     // noinspection LoopStatementThatDoesntLoopJS
-    for (const key in obj) { // tslint:disable-line:forin
+    for (const key in obj) {
         // noinspection JSUnfilteredForInLoop
         return !hasOwn(obj, key);
     }

@@ -134,8 +134,7 @@ export class IO {
             messages.push(`<error>  ${Formatter.escape(line)}  ${StrUtil.spaces(len - lineLength)}</error>`);
         }
 
-        messages.push(emptyLine);
-        messages.push("");
+        messages.push(emptyLine, "");
 
         if (output.isVerbose() && stack.length) {
             messages.push("<comment>Error trace:</comment>");
@@ -151,8 +150,7 @@ export class IO {
                     Formatter.format(`  %s(%s) at <info>%s</info> <comment>%d:%d</comment>`, fn, args, file, line, col),
                 );
             }
-            messages.push("");
-            messages.push("");
+            messages.push("", "");
         }
 
         output.writeln(messages, {verbosity: OutputVerbosity.QUIET});

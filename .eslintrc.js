@@ -9,6 +9,7 @@ module.exports = {
         "es6": true,
         "node": true,
         "browser": true,
+        "worker": true,
         "jest/globals": true
     },
     "parser": "@typescript-eslint/parser",
@@ -32,6 +33,18 @@ module.exports = {
         "plugin:unicorn/recommended",
         "prettier"
     ],
+    overrides: [
+        {
+            files: ['packages/*/tests/**/test*.ts'],
+            rules: {
+                "unicorn/consistent-function-scoping": OFF,
+                "unicorn/no-null": OFF,
+                "unicorn/no-useless-undefined": OFF,
+                "unicorn/prefer-module": OFF,
+                "unicorn/no-new-array": OFF
+            }
+        }
+    ],
     rules: singleRule ? {} : {
         "unicorn/prevent-abbreviations": OFF,
         "unicorn/filename-case": [WARN, {
@@ -40,11 +53,18 @@ module.exports = {
                 "pascalCase": true
             }
         }],
+        "unicorn/no-null": WARN,
+        "unicorn/prefer-array-flat": WARN,
+        "unicorn/prefer-string-slice": WARN,
         "unicorn/no-array-for-each": OFF,
         "unicorn/explicit-length-check": OFF,
         "unicorn/no-this-assignment": OFF,
         "unicorn/prefer-number-properties": OFF,
         "unicorn/catch-error-name": OFF,
+        "unicorn/prefer-spread": OFF,
+        "unicorn/no-array-reduce": OFF,
+        "unicorn/error-message": WARN,
+        "unicorn/prefer-type-error": WARN,
         "@typescript-eslint/explicit-module-boundary-types": OFF,
         "@typescript-eslint/no-empty-interface": WARN,
         "@typescript-eslint/no-unsafe-member-access": WARN,

@@ -19,7 +19,7 @@ export class ChoiceQuestion<T> extends AbstractQuestion<T, IChoiceQuestionOption
                 autocomplete.push(...keysOf(choices));
             }
 
-            const values = valuesOf(choices).map(stringifyVar);
+            const values = valuesOf(choices).map((element) => stringifyVar(element));
             autocomplete.push(...values);
 
             options.autocomplete = autocomplete;

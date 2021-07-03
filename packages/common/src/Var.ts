@@ -103,7 +103,7 @@ export const compare = (x: any, y: any) => {
         return 0;
     }
 
-    // tslint:disable-next-line:triple-equals
+
     if (!xNaN && !yNaN && isNumberOrBigInt(x) && isNumberOrBigInt(y) && x != y) { // use != to compare number/bigint
         return x < y ? -1 : 1;
     }

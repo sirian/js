@@ -5,6 +5,7 @@ import {ensureMap} from "./XUtils";
 export const getCached = ensureMap.bind(null, new WeakMap()) as (<T>(key: object, fn: () => T) => T);
 
 export const argsToken = <T extends any[]>(...tuple: T): TupleToObject<T> => {
+    // eslint-disable-next-line unicorn/consistent-function-scoping
     const createMaps = () => [new WeakMap<any, any>(), new Map<any, any>()] as const;
     const getMap = (m: Return<typeof createMaps>, value: any) => m[isPrimitive(value) ? 1 : 0];
 

@@ -34,11 +34,9 @@ export class Option<T = any> extends Parameter<T> {
     public static resolveArgs<T>(args: any): IOptionInit<T> {
         const [a1, a2, a3] = args;
         if (isString(a1)) {
-            if (isString(a2)) {
-                return {name: a1, shortcut: a2, ...a3};
-            } else {
-                return {name: a1, ...a2};
-            }
+            return isString(a2)
+                   ? {name: a1, shortcut: a2, ...a3}
+                   : {name: a1, ...a2};
         }
         return {...a1};
     }

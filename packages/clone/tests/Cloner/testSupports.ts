@@ -1,3 +1,4 @@
+import {toObject} from "@sirian/common";
 import {cloner, cloneSymbol} from "../../src";
 
 class Foo {
@@ -18,9 +19,9 @@ const trueData = [
     true,
     null,
     undefined,
-    Object(42),
-    Object("42"),
-    Object(true),
+    toObject(42),
+    toObject("42"),
+    toObject(true),
     new Date(),
     /42/i,
     [1, 2, 3],

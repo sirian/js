@@ -25,14 +25,7 @@ export class ArgvInput extends Input {
     }
 
     public getFirstArgument() {
-        for (const token of this.tokens) {
-            if (token && token.startsWith("-")) {
-                continue;
-            }
-
-            return token;
-        }
-        return undefined;
+        return this.tokens.find((token) => token.startsWith("-"));
     }
 
     public hasParameterOption(values: string | string[], onlyParams = false) {
@@ -80,7 +73,7 @@ export class ArgvInput extends Input {
                 //   For short options, test for '-o' at beginning
                 const leading = value.startsWith("--") ? value + "=" : value;
                 if ("" !== leading && token.startsWith(leading)) {
-                    return token.substr(leading.length);
+                    return token.slice(leading.length);
                 }
             }
         }
@@ -133,19 +126,19 @@ export class ArgvInput extends Input {
     }
 
     private parseShortOption(token: string) {
-        const name = token.substr(1);
+        const name = token.slice(1);
 
         if (name.length > 1) {
             const shortcut = name[0];
             const definition = this.definition;
             if (definition.hasShortcut(shortcut) && definition.getOptionForShortcut(shortcut).acceptValue()) {
                 // an option with a value (with no space)
-                this.addShortOption(shortcut, name.substr(1));
+                this.addShortOption(shortcut, name.slice(1));
             } else {
                 this.parseShortOptionSet(name);
             }
         } else {
-            this.addShortOption(name, undefined);
+            this.addShortOption(name);
         }
     }
 
@@ -163,23 +156,23 @@ export class ArgvInput extends Input {
             const option = definition.getOptionForShortcut(char);
 
             if (option.acceptValue()) {
-                this.addLongOption(option.getName(), i === len - 1 ? undefined : name.substr(i + 1));
+                this.addLongOption(option.getName(), i === len - 1 ? undefined : name.slice(i + 1));
                 break;
             } else {
-                this.addLongOption(option.getName(), undefined);
+                this.addLongOption(option.getName());
             }
         }
     }
 
     private parseLongOption(token: string) {
-        const name = token.substr(2);
+        const name = token.slice(2);
         const pos = name.indexOf("=");
         if (-1 !== pos) {
-            const value = name.substr(pos + 1);
+            const value = name.slice(pos + 1);
 
-            this.addLongOption(name.substr(0, pos), value);
+            this.addLongOption(name.slice(0, Math.max(0, pos)), value);
         } else {
-            this.addLongOption(name, undefined);
+            this.addLongOption(name);
         }
     }
 
@@ -214,7 +207,7 @@ export class ArgvInput extends Input {
         }
     }
 
-    private addShortOption(shortcut: string, value: any) {
+    private addShortOption(shortcut: string, value?: string | undefined) {
         const definition = this.definition;
         if (!definition.hasShortcut(shortcut)) {
             throw new RuntimeError(`The "-${shortcut}" option does not exist.`);
@@ -223,7 +216,7 @@ export class ArgvInput extends Input {
         this.addLongOption(definition.getOptionForShortcut(shortcut).getName(), value);
     }
 
-    private addLongOption(name: string, value: string | undefined) {
+    private addLongOption(name: string, value?: string | undefined) {
         const definition = this.definition;
 
         if (!definition.hasOption(name)) {

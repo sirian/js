@@ -15,7 +15,7 @@ export class DateTimeFormatter {
 
         const tokens: Record<string, string | number> = {
             YYYY: padN(parts.year, 4),
-            YY: padN(parts.year.substr(-2)),
+            YY: padN(parts.year.slice(-2)),
             Y: parts.year,
 
             MMMM: long.month,

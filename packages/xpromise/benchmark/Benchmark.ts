@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/await-thenable */
+/* eslint-disable @typescript-eslint/await-thenable,unicorn/consistent-function-scoping */
 import {XPromise} from "../src";
 
 declare const gc: any;
 declare const process: any;
 
-// tslint:disable:no-console
+
 export class Benchmark {
     protected count: number;
 

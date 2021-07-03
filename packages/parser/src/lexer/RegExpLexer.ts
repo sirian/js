@@ -3,7 +3,7 @@ import {Token, TokenTypes} from "../Token";
 import {TokenStream} from "../TokenStream";
 import {AbstractRegExpLexer} from "./AbstractRegExpLexer";
 
-// tslint:disable-next-line:max-line-length
+
 export class RegExpLexer<T extends TokenTypes = TokenTypes, K extends keyof T = keyof T> extends AbstractRegExpLexer<T> {
     protected regexp: RegExp;
     protected type: K;

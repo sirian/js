@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import {DevToolsFormatter, IDevToolsFormatter} from "./DevToolsFormatter";
 
 export class DevToolsWrapper<T = any, C = any> implements IDevToolsFormatter<T, C> {

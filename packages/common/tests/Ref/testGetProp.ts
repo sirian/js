@@ -13,7 +13,7 @@ describe("getProp", () => {
         [Object.create({}, {x: {enumerable: false, value: 1}}), "y", undefined],
         // eslint-disable-next-line @typescript-eslint/unbound-method
         [Object.prototype, "hasOwnProperty", Object.prototype.hasOwnProperty],
-        [new Array(2), 1, undefined],
+        [Array.from({length: 2}), 1, undefined],
         ["foo", 1, "o"],
         ["foo", "length", 3],
     ];

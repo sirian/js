@@ -1,6 +1,7 @@
 import {AnyKey, ArrayRO, Ensure, Func0, Func1, Get, Newable, Nullish} from "@sirian/ts-extra-types";
 import {noop} from "./Const";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive} from "./Is";
+import {toObject} from "./Obj";
 import {stringifyObj} from "./Stringify";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -29,8 +30,7 @@ export const bind: {
     <R, A extends any[], B extends any[]>(f: (...args: [...A, ...B]) => R, thisArg: any, ...curry: A): (...args: B) => R;
 } = nativeCall.bind(nativeBind);
 
-// eslint-disable-next-line unicorn/new-for-builtins
-export const getPrototype = (target: unknown) => isNullish(target) ? undefined : Object.getPrototypeOf(Object(target));
+export const getPrototype = (target: unknown) => isNullish(target) ? undefined : Object.getPrototypeOf(toObject(target));
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {
     const result = new Set<any>();
@@ -118,8 +118,7 @@ export const construct: {
     isNullish(newTarget) ? new target(...args) : Reflect.construct(target, args, newTarget);
 
 export const hasProp = <T, K extends PropertyKey>(target: T, key: K): target is Ensure<T, K> =>
-    // eslint-disable-next-line unicorn/new-for-builtins
-    isNotNullish(target) && tryCatch(() => key in Object(target), false);
+    isNotNullish(target) && tryCatch(() => key in toObject(target), false);
 
 export const hasAnyProp = <T, K extends PropertyKey>(target: T, keys: ArrayRO<K>): target is K extends any ? Ensure<T, K> : never =>
     keys.some((k) => hasProp(target, k));

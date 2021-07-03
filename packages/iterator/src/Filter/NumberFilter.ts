@@ -5,7 +5,7 @@ export class NumberFilter extends CompareFilter {
     constructor(test: string | number) {
         super();
 
-        const re = /^\s*(==|!=|[<>]=?)?\s*([0-9.]+)\s*(?:([kmg])(i?))?\s*$/;
+        const re = /^\s*(==|!=|[<>]=?)?\s*([\d.]+)\s*(?:([gkm])(i?))?\s*$/;
         const match = re.exec(stringifyVar(test));
 
         if (!match) {

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 import {assign, deleteProp, entriesOf, hasOwn, isPropertyKey, keysOf, valuesOf} from "@sirian/common";
 import {ParameterNotFoundError} from "./Error";
 
@@ -63,11 +64,11 @@ export class ParameterBag<T extends Record<string | number, any>> {
     }
 
     public getAlnum(key: keyof T, defaultValue?: string): string {
-        return this.getString(key, defaultValue).replace(/[^a-z0-9]/gi, "");
+        return this.getString(key, defaultValue).replace(/[^\da-z]/gi, "");
     }
 
     public getDigits(key: keyof T, defaultValue?: string): string {
-        return this.getString(key, defaultValue).replace(/[^0-9]/g, "");
+        return this.getString(key, defaultValue).replace(/\D/g, "");
     }
 
     public getNumber(key: keyof T, defaultValue?: number): number {

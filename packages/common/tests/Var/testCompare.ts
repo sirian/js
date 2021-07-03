@@ -28,8 +28,10 @@ describe("compare", () => {
             const y = array[j];
             const x = array[i];
 
-            data.push([x, y, Object.is(x, y) ? 0 : -1]);
-            data.push([y, x, Object.is(x, y) ? 0 : 1]);
+            data.push(
+                [x, y, Object.is(x, y) ? 0 : -1],
+                [y, x, Object.is(x, y) ? 0 : 1],
+            );
         }
     }
 

@@ -50,7 +50,7 @@ const data: Array<[ArgConstraint<any>, string, boolean]> = [
 ];
 
 test.each(data)("ArgsResolver.testConstraint(%O, %s) === %O", (predicate, argCode, expected) => {
-    const arg = Function(`return (${argCode})`)();
+    const arg = new Function(`return (${argCode})`)();
     const result = ArgResolver.test(arg, predicate);
     expect(result).toBe(expected);
 });

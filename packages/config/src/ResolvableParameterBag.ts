@@ -74,7 +74,7 @@ export class ResolvableParameterBag<T extends Record<string | number, any>> exte
     }
 
     public resolveString(value: string, resolving: string[] = []): string {
-        return value.replace(/%%|%([^%\s]+)%/g, (text, key) => {
+        return value.replace(/%%|%([^\s%]+)%/g, (text, key) => {
             if ("%%" === text) {
                 return "%%";
             }

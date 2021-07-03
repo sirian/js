@@ -13,7 +13,7 @@ export class OperatorLexer extends AbstractRegExpLexer<TokenTypes> {
         const pattern = operators
             .getOperatorNames()
             .sort((a, b) => a.length - b.length)
-            .map(rgxEscape)
+            .map((element) => rgxEscape(element))
             .map((o) => /[a-z]$/i.test(o) ? o + "(?=[\\s(])" : o)
             .join("|");
 

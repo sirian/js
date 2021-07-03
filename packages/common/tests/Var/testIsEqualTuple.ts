@@ -8,13 +8,13 @@ describe("isEqualTuple", () => {
         [[], []],
         [[1], [1]],
         [[3, foo, "bar"], [3, bar, "bar"]],
-        [[undefined], Array(1)],
+        [[undefined], new Array(1)],
         [[-0], [+0]],
         [[NaN], [NaN]],
     ].map((v) => [...v, true] as [any, any, true]);
 
     const falseData = [
-        [Array(3), [null, null, null]],
+        [new Array(3), [null, null, null]],
         [[{x: 1}], [{x: 1}]],
         [[null], []],
     ].map((v) => [...v, false] as [any, any, false]);

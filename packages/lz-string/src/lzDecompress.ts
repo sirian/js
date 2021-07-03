@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 export const lzDecompress = (bytes?: Uint8Array | null) => {
     if (null == bytes) {
         return "";

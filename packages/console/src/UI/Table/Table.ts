@@ -176,8 +176,10 @@ export class Table {
         const parts = [leftChar];
 
         for (let column = 0; column < count; ++column) {
-            parts.push(horizontal.repeat(this.effectiveColumnWidths[column]));
-            parts.push(column === count - 1 ? rightChar : midChar);
+            parts.push(
+                horizontal.repeat(this.effectiveColumnWidths[column]),
+                column === count - 1 ? rightChar : midChar
+            );
         }
 
         const line = sprintf(style.getBorderFormat(), parts.join(""));

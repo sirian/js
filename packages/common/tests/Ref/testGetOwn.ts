@@ -8,7 +8,7 @@ describe("getOwn", () => {
         [{}, "hasOwnProperty", undefined],
         // eslint-disable-next-line @typescript-eslint/unbound-method
         [Object.prototype, "hasOwnProperty", Object.prototype.hasOwnProperty],
-        [new Array(2), 1, undefined],
+        [Array.from({length: 2}), 1, undefined],
         [[1, 2, 3], 1, 2],
         [[1, 2, 3], 4, undefined],
         [[1, 2, 3], "length", 3],

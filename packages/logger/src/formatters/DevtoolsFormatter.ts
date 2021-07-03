@@ -15,7 +15,7 @@
 // }
 //
 // // noinspection CommaExpressionJS
-// const window = (0, eval)("this"); // tslint:disable-line
+// const window = (0, eval)("this");
 //
 // export class DevtoolsFormatter extends ConsoleFormatter implements ChromeDevtoolsFormatter {
 //     protected tagMap: Record<string, JsonMLTag> = {

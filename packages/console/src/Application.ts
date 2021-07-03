@@ -245,18 +245,16 @@ export class Application {
             if (name.includes(":")) {
                 // check if a namespace exists and contains found
                 const pos = name.indexOf(":");
-                this.findNamespace(name.substr(0, pos));
+                this.findNamespace(name.slice(0, Math.max(0, pos)));
             }
 
             let message = `Command "${name}" is not defined.`;
 
             const alternatives = this.findAlternatives(name, commandNames);
             if (alternatives.length) {
-                if (1 === alternatives.length) {
-                    message += "\n\nDid you mean this?\n    ";
-                } else {
-                    message += "\n\nDid you mean one of these?\n    ";
-                }
+                message += 1 === alternatives.length
+                           ? "\n\nDid you mean this?\n    "
+                           : "\n\nDid you mean one of these?\n    ";
                 message += alternatives.join("\n    ");
             }
 

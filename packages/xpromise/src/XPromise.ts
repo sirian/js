@@ -222,6 +222,7 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public catch<R = never>(onRejected?: OnReject<R>) {
+        // eslint-disable-next-line unicorn/no-null
         return this.then(null, onRejected);
     }
 

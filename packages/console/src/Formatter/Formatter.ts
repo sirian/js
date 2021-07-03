@@ -206,7 +206,7 @@ export class Formatter {
             }
         }
 
-        output.push(this.applyCurrentStyle(message.substr(offset)));
+        output.push(this.applyCurrentStyle(message.slice(offset)));
 
         return output.join("").replace(/\\<|\0/g, (text) => {
             switch (text) {

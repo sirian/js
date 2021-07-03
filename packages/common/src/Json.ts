@@ -1,14 +1,16 @@
 import {stringifyStr, stringifyVar} from "./Stringify";
 
+// eslint-disable-next-line unicorn/no-null
 export const jsonStringify = (value: any, ...args: any[]) => JSON.stringify(value ?? null, ...args);
 
 export const jsonParse = (text?: string | null, fn?: (key: any, value: any) => any) => {
     if (null === text) {
+        // eslint-disable-next-line unicorn/no-null
         return null;
     }
 
     if (undefined === text || "" === text || "undefined" === text) {
-        return undefined;
+        return;
     }
 
     return JSON.parse(text, fn);
@@ -33,13 +35,13 @@ export const jsonStripComments = (value: string) => {
         if (!match) {
             break;
         }
-        const left = value.substring(0, match.index);
+        const left = value.slice(0, Math.max(0, match.index));
         const text = match[0];
 
         if (!lineComment && !multiComment) {
-            let tmp = left.substring(pos);
+            let tmp = left.slice(Math.max(0, pos));
             if (!inString) {
-                tmp = tmp.replace(/(\n|\r|\s)*/g, "");
+                tmp = tmp.replace(/(\s)*/g, "");
             }
             result.push(tmp);
         }
@@ -61,12 +63,12 @@ export const jsonStripComments = (value: string) => {
             multiComment = true;
         } else if ((text === "\n" || text === "\r") && !inString && !lineComment && multiComment) {
             multiComment = false;
-        } else if (!lineComment && !multiComment && !(/\n|\r|\s/.test(text))) {
+        } else if (!lineComment && !multiComment && !(/\s/.test(text))) {
             result.push(text);
         }
     }
 
-    result.push(value.substring(pos));
+    result.push(value.slice(Math.max(0, pos)));
 
     return result.join("");
 };

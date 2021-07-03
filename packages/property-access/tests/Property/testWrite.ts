@@ -13,7 +13,7 @@ const data: Array<[any, string | number, any, any]> = [
     [{}, "foo", 1, {foo: 1}],
     [{bar: 3}, "foo", 1, {bar: 3, foo: 1}],
     // eslint-disable-next-line no-sparse-arrays
-    [{}, "foo[2].3", 1, {foo: [/*hole*/, /*hole*/, {3: 1}]}], // tslint:disable-line:no-sparse-arrays
+    [{}, "foo[2].3", 1, {foo: [/*hole*/, /*hole*/, {3: 1}]}],
     [{}, "foo[bar][0]", 1, {foo: Object.assign([], {bar: [1]})}],
 ];
 

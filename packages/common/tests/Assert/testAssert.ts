@@ -1,13 +1,13 @@
-import {assert} from "../../src";
+import {assert, toObject} from "../../src";
 
 describe("error() throws", () => {
-    const falsy = [-0, 0, 0.0, 0n, "", NaN, false, null, undefined] as const;
+    const falsy = [-0, 0, 0, 0n, "", NaN, false, null, undefined] as const;
 
     const truthy = [
         1, -1, -Infinity, Infinity,
         [], [0], [""], [[]],
         {},
-        ...falsy.map(Object),
+        ...falsy.map((element) => toObject(element)),
     ] as const;
 
     test.each(falsy)("error(%o) throws", (value) => {

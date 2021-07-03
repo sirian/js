@@ -14,7 +14,7 @@ const data: Array<[string, boolean[]]> = [
 
 test.each(data)("new PropertyPath(%p) indexes is %o", (path, expected) => {
     const p = parsePropertyPath(path);
-    for (let i = 0; i < expected.length; i++) {
-        expect(p[i][1]).toBe(expected[i]);
+    for (const [i, element] of expected.entries()) {
+        expect(p[i][1]).toBe(element);
     }
 });

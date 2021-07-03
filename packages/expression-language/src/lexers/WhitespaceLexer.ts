@@ -5,7 +5,7 @@ import {TokenStream} from "../TokenStream";
 export class WhitespaceLexer implements ILexer<TokenTypes> {
     public handle(reader: Reader, tokenStream: TokenStream) {
         const c = reader.current;
-        const ws = ["\r", "\n", "\f", "\v", " ", "\u000b"];
+        const ws = ["\r", "\n", "\f", "\v", " ", "\u000B"];
 
         if (-1 !== ws.indexOf(c)) {
             reader.moveForward();

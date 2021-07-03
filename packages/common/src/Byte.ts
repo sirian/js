@@ -43,6 +43,7 @@ let textEncoder: TextEncoder;
 let textDecoder: TextDecoder;
 
 export const toBytes = (source?: ByteInput): Uint8Array => {
+    // eslint-disable-next-line unicorn/no-null
     if ("" === source || null == source) {
         return new Uint8Array();
     }
@@ -74,11 +75,12 @@ export const convertBytes = <T extends TypedArrayConstructor>(from: ArrayBuffer 
 export const concatBytes = <T extends TypedArrayConstructor>(ctor: T, ...sources: Array<Instance<T>>) => {
     let length = sources.reduce((len, source) => len + source.length, 0);
     const result = new ctor(length);
-    sources.reduceRight<any>((tmp, s) => result.set(s, length -= s.length), null);
+    sources.reduceRight<any>((tmp, s) => result.set(s, length -= s.length), 0);
     return result;
 };
 
 export const toUTF = (input?: ByteInput) =>
+    // eslint-disable-next-line unicorn/no-null
     "" === input || null == input || isSymbol(input)
     ? ""
     : (isPrimitive(input) ? stringifyVar(input) : (textDecoder ??= new TextDecoder()).decode(toBytes(input)));

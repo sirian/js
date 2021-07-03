@@ -18,7 +18,7 @@ export class StringInput extends ArgvInput {
         let saveEscape = false;
         const input = this.input;
 
-        const whitespaces = [" ", "\r", "\t", "\n"];
+        const whitespaces = new Set([" ", "\r", "\t", "\n"]);
 
         while (this.pos < input.length) {
             const ch = input[this.pos];
@@ -27,7 +27,7 @@ export class StringInput extends ArgvInput {
             switch (state) {
                 // eat up whitespace between tokens
                 case 0:
-                    if (!whitespaces.includes(ch)) {
+                    if (!whitespaces.has(ch)) {
                         state = 1;
                         token = "";
                         continue;
@@ -43,7 +43,7 @@ export class StringInput extends ArgvInput {
                             state = 2;
                             strch = ch;
                         }
-                    } else if (!escape && whitespaces.includes(ch)) {
+                    } else if (!escape && whitespaces.has(ch)) {
                         // end of token?
                         this.pos++;
                         return token;

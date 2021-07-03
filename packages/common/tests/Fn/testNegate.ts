@@ -13,6 +13,7 @@ describe("not()", () => {
 
     const array = [null, 1, 2, "", false, {x: 1}];
     test.each(data)("not(%o)", (f, expected) => {
+        // eslint-disable-next-line unicorn/no-array-callback-reference
         expect(array.filter(f)).toStrictEqual(expected);
     });
 });

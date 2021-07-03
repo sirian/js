@@ -25,6 +25,7 @@ export const base64Decode = (b64: string): Uint8Array => {
 
     // if there are placeholders, only get up to the last complete 4 chars
     const l = placeHolders > 0 ? length - 4 : length;
+    // eslint-disable-next-line unicorn/no-null
     const rev = revLookup.bind(null, b64);
 
     let i = 0;

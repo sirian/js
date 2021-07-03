@@ -1,4 +1,4 @@
-import {getPrototypes, isObjectOrFunction} from "../../src";
+import {getPrototypes, isObjectOrFunction, toObject} from "../../src";
 
 describe("Ref.getPrototypes", () => {
     class Foo {}
@@ -25,7 +25,7 @@ describe("Ref.getPrototypes", () => {
         [Array, [fnProto, objProto]],
 
         [[], [Array.prototype, objProto]],
-        [Object(null), [objProto]],
+        [toObject(null), [objProto]],
         [{}, [objProto]],
         [new Bar(), [Bar.prototype, Foo.prototype, objProto]],
         [new Baz(), [Baz.prototype, fnProto, objProto]],

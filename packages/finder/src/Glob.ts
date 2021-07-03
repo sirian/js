@@ -73,11 +73,7 @@ export class Glob {
             }
 
             if ("," === c) {
-                if (inGroup) {
-                    reStr += "|";
-                } else {
-                    reStr += "\\" + c;
-                }
+                reStr += inGroup ? "|" : "\\" + c;
                 continue;
             }
 

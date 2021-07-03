@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 export const lzCompress = (input?: string | null) => {
     if (input == null) {
         return new Uint8Array();

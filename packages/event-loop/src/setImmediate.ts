@@ -14,6 +14,7 @@ const handleImmediate = (id: number) => {
 const getImmediateMessageChannel = () => {
     if (!immediateMessageChannel) {
         immediateMessageChannel = new MessageChannel();
+        // eslint-disable-next-line unicorn/prefer-add-event-listener
         immediateMessageChannel.port1.onmessage = (e) => handleImmediate(e.data);
     }
     return immediateMessageChannel;
@@ -25,6 +26,7 @@ export const setImmediate = (fn: TaskCallback) => {
     immediateTasks ??= new Map();
     immediateTimeouts ??= new Map();
     immediateTasks.set(taskId, fn);
+    // eslint-disable-next-line unicorn/require-post-message-target-origin
     getImmediateMessageChannel().port2.postMessage(taskId);
     immediateTimeouts.set(taskId, setTimeout(handleImmediate, 0, taskId));
 };

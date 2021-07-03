@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-// tslint:disable:no-console
+/* eslint-disable @typescript-eslint/no-var-requires,unicorn/prefer-module */
 
 import {toUTF} from "@sirian/common";
 import {base64Decode, base64Encode} from "../src";

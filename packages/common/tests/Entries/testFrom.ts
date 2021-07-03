@@ -13,7 +13,7 @@ describe("Entries.from", () => {
         [{x: undefined}, [["x", undefined]]],
 
         // eslint-disable-next-line no-sparse-arrays
-        [[1, /*hole*/, 3], [[0, 1], [1, undefined], [2, 3]]], // tslint:disable-line:no-sparse-arrays
+        [[1, /*hole*/, 3], [[0, 1], [1, undefined], [2, 3]]],
     ];
 
     test.each(data)("Entries.from(%O) === %O", (value, expected) => {

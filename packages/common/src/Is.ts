@@ -13,7 +13,9 @@ import {
 
 export const isNull = (value: unknown): value is null => null === value;
 export const isUndefined = (value: unknown): value is undefined | void => undefined === value;
+// eslint-disable-next-line unicorn/no-null
 export const isNullish = (value: unknown): value is Nullish => null == value;
+// eslint-disable-next-line unicorn/no-null
 export const isNotNullish = <T>(value: T): value is Exclude<T, Nullish> => null != value;
 export const getType = <T>(value: T) => typeof value as TypeNameOf<T>;
 export const isSome = <U>(value: any, values: U[]): value is U => values.includes(value);

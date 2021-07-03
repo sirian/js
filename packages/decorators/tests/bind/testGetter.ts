@@ -28,7 +28,7 @@ test("", () => {
 
 test("", () => {
     class Foo {
-        // tslint:disable-line
+
         public x = 1;
 
         @bind()

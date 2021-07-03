@@ -3,7 +3,7 @@ import {TokenType, TokenTypes} from "../Token";
 import {TokenStream} from "../TokenStream";
 
 export class NameLexer extends AbstractRegExpLexer<TokenTypes> {
-    protected regexp = /^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/;
+    protected regexp = /^[A-Z_a-z\u007F-\u00FF][\w\u007F-\u00FF]*/;
 
     protected handleMatch(match: RegExpMatchArray, reader: Reader, stream: TokenStream) {
         const text = match[0];

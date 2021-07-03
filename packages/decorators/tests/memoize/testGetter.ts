@@ -1,6 +1,6 @@
 import {memoize} from "../../src";
 
-// tslint:disable:max-classes-per-file
+
 
 test("", () => {
     const x = {};

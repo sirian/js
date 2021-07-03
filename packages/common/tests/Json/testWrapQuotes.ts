@@ -12,8 +12,8 @@ describe("", () => {
         expect(quoteSingle(str)).toBe(`'Hello \\'"\`'`);
         expect(quoteBacktick(str)).toBe("`Hello '\"\\``");
 
-        expect(Function("return " + quoteSingle(str) + ";")()).toBe(str);
-        expect(Function("return " + quoteDouble(str) + ";")()).toBe(str);
-        expect(Function("return " + quoteBacktick(str) + ";")()).toBe(str);
+        expect(new Function("return " + quoteSingle(str) + ";")()).toBe(str);
+        expect(new Function("return " + quoteDouble(str) + ";")()).toBe(str);
+        expect(new Function("return " + quoteBacktick(str) + ";")()).toBe(str);
     });
 });

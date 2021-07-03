@@ -6,7 +6,7 @@ describe("hasOwn", () => {
         [{x: 1}, "x", true],
         [{}, "hasOwnProperty", false],
         [Object.prototype, "hasOwnProperty", true],
-        [new Array(2), 1, false],
+        [Array.from({length: 2}), 1, false],
         [[1, 1, 1], 1, true],
         [[1, 1, 1], 4, false],
         [[1, 1, 1], "length", true],

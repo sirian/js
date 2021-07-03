@@ -1,13 +1,13 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
 import {toArray} from "./Arr";
-import {isNotNullish, isString} from "./Is";
+import {isString} from "./Is";
 import {entriesOf, fromEntries} from "./Obj";
 
 export class Entries<T extends Entry> {
     private readonly _items: T[];
 
     public constructor(entries: Iterable<T | undefined | null> = []) {
-        this._items = toArray(entries).filter(isNotNullish);
+        this._items = toArray(entries).filter((v) => null != v) as T[];
     }
 
     public static from(value: string): Entries<Entry<number, string>>;

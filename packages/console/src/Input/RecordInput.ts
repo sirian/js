@@ -90,9 +90,9 @@ export class RecordInput extends Input {
                 return;
             }
             if (key.startsWith("--")) {
-                this.addLongOption(key.substr(2), value);
+                this.addLongOption(key.slice(2), value);
             } else if (key.startsWith("-")) {
-                this.addShortOption(key.substr(1), value);
+                this.addShortOption(key.slice(1), value);
             } else {
                 this.addArgument(key, value);
             }

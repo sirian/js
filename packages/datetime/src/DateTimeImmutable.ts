@@ -123,11 +123,9 @@ export class DateTimeImmutable implements IDateTime {
             const prevYear = m2.month === 1 ? m2.year - 1 : m2.year;
             const daysInLastFullMonth = DateTimeImmutable.daysInMonth(prevYear, prevMonth);
 
-            if (daysInLastFullMonth < m1.day) { // 31/01 -> 2/03
-                days = daysInLastFullMonth + days + (m1.day - daysInLastFullMonth);
-            } else {
-                days = daysInLastFullMonth + days;
-            }
+            days = daysInLastFullMonth < m1.day
+                   ? daysInLastFullMonth + days + (m1.day - daysInLastFullMonth) // 31/01 -> 2/03
+                   : daysInLastFullMonth + days;
 
             months--;
         }

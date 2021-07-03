@@ -22,7 +22,7 @@ function parse(path: Path): PathElement[] {
     const parts: PathElement[] = [];
 
     while (pos < path.length) {
-        const matches = re.exec(path.substr(pos));
+        const matches = re.exec(path.slice(pos));
 
         if (!matches) {
             break;

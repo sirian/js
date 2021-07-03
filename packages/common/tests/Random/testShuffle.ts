@@ -9,8 +9,7 @@ describe("shuffle", () => {
 
         for (let i = 0; i < N; i++) {
             shuffle(input);
-            for (let j = 0; j < input.length; j++) {
-                const v = input[j];
+            for (const [j, v] of input.entries()) {
                 tmp[j][v] ??= 0;
                 tmp[j][v]++;
             }

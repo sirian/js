@@ -16,7 +16,7 @@ export class Cloner implements ICloner<any> {
 
     public constructor() {
         this.addHandler(Array, {
-            create: (src) => new Array(src.length),
+            create: (src) => Array.from({length: src.length}),
             init: (stub, src, ctx) => src.forEach((value, index) => ctx.cloneProperty(stub, src, index)),
         });
 

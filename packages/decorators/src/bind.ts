@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/consistent-function-scoping */
 import {assert, ensureMap, wrapDescriptor} from "@sirian/common";
 
 export const bind = () =>

@@ -87,7 +87,7 @@ export class Disposer<T extends object> {
         }
 
         children
-            .filter(isObjectOrFunction)
+            .filter((element) => isObjectOrFunction(element))
             .map((c) => this._manager.for(c))
             .filter((d) => !d.isDisposed())
             .forEach((disposer) => {

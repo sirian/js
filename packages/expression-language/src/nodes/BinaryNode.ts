@@ -77,11 +77,11 @@ export class BinaryNode extends Node<{ left: Node, right: Node }, { operator: st
             case "&":
                 return l & r;
             case "==":
-                return l == r; // tslint:disable-line:triple-equals
+                return l == r;
             case "===":
                 return l === r;
             case "!=":
-                return l != r; // tslint:disable-line:triple-equals
+                return l != r;
             case "!==":
                 return l !== r;
             case "<":

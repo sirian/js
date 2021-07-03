@@ -35,7 +35,7 @@ export const pad = (value: unknown, maxLength: number, chars = " ", side: StrSid
     return left + str + right;
 };
 
-export const trim = (value: unknown, mask = " \t\n\r\0\x0B", type: StrSide = StrSide.BOTH) => {
+export const trim = (value: unknown, mask = " \t\n\r\0\u000B", type: StrSide = StrSide.BOTH) => {
     const str = stringifyVar(value);
 
     const strArray = [...str];
@@ -66,8 +66,7 @@ export const strRepeat = (chars: string, maxLength: number) => {
     }
 
     return chars
-        .repeat(Math.ceil(maxLength / chars.length))
-        .substr(0, maxLength);
+        .repeat(Math.ceil(maxLength / chars.length)).slice(0, Math.max(0, maxLength));
 };
 
 export const trimLeft = (value: unknown, mask?: string) => trim(value, mask, StrSide.LEFT);
@@ -89,7 +88,7 @@ export const strReplace = (value: unknown, pairs: Record<string, string | Replac
 
     const keys = keysOf(pairs).sort().reverse();
 
-    const pattern = keys.map(rgxEscape).join("|");
+    const pattern = keys.map((element) => rgxEscape(element)).join("|");
 
     const re = new RegExp(pattern, "g");
 
@@ -99,11 +98,11 @@ export const strReplace = (value: unknown, pairs: Record<string, string | Replac
     });
 };
 
-export const camelCase = (value: unknown) => trim(value).replace(/[-_\s]+(.)?/g, (s, c: string | null) => c?.toUpperCase() ?? "");
+export const camelCase = (value: unknown) => trim(value).replace(/[\s_-]+(.)?/g, (s, c: string | null) => c?.toUpperCase() ?? "");
 
 export const dashCase = (value: unknown) => trim(value)
     .replace(/([A-Z])/g, "-$1")
-    .replace(/[-_\s]+/g, "-")
+    .replace(/[\s_-]+/g, "-")
     .toLowerCase();
 
 export const substrCount = (str: string, substr: string) => {
@@ -145,14 +144,14 @@ export const strSplit = (value: string, re: string | RegExp, limit: number = Num
         res.push(part);
 
         if (res.length >= limit) {
-            res[res.length - 1] = str.substr(lastIndex);
+            res[res.length - 1] = str.slice(lastIndex);
             return res;
         }
 
         lastIndex = index + delimiter.length;
     }
 
-    res.push(str.substr(lastIndex));
+    res.push(str.slice(lastIndex));
 
     return res;
 };

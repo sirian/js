@@ -71,6 +71,7 @@ export const wrapDescriptor: {
 
     const descriptor = extendDescriptor(desc, {
         get(this: T) {
+            // eslint-disable-next-line unicorn/consistent-function-scoping
             const parent = () => readDescriptor(desc, this);
             return getter ? getter(this, parent) : parent();
         },

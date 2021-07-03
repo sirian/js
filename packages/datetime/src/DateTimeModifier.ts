@@ -18,7 +18,7 @@ export class DateTimeModifier {
         pattern = stringifyVar(pattern).trim();
 
         for (let index = 0; index < pattern.length;) {
-            const match = this._parse(pattern.substr(index));
+            const match = this._parse(pattern.slice(index));
 
             assert(match, "Could not parse pattern", {pattern, index});
 

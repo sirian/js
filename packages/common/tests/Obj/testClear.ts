@@ -1,4 +1,4 @@
-import {objClear} from "../../src";
+import {objClear, toObject} from "../../src";
 
 describe("Obj.clear", () => {
     class Foo {
@@ -15,7 +15,7 @@ describe("Obj.clear", () => {
         [[1, 2, 3], []],
         [{x: 1}, {}],
         [new Foo(), Object.create(Foo.prototype)],
-        [Object("foo"), Object("foo")],
+        [toObject("foo"), toObject("foo")],
     ];
 
     test.each(data)("Obj.clear(%o) === %o", (value, expected) => {

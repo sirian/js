@@ -38,7 +38,7 @@ export class FormatContext {
             path = this.argIndex++;
         }
 
-        if (isNumber(path) || /^[0-9]+$/.test(path)) {
+        if (isNumber(path) || /^\d+$/.test(path)) {
             const index = +path;
             this.handledArgs[index] = true;
             return this.args[index];

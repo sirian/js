@@ -18,10 +18,12 @@ export class MessagePortTransport extends AbstractTransport {
         super();
         this.port = port;
 
+        // eslint-disable-next-line unicorn/prefer-add-event-listener
         port.onmessage = (event) => this.dispatch(event.data);
     }
 
     public send(payload: Payload<any, any>) {
+        // eslint-disable-next-line unicorn/require-post-message-target-origin
         this.port.postMessage(payload);
     }
 }

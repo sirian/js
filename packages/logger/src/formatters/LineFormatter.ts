@@ -30,7 +30,7 @@ export class LineFormatter extends LogFormatter {
             P: (value) => LineFormatter.pretty(value),
 
             j: (value) => jsonStringify(value),
-            J: (value, ph) => jsonStringify(value, null, +ph.options || 2),
+            J: (value, ph) => jsonStringify(value, void 0, +ph.options || 2),
 
             date: (value, ph) => DateTime.from(value).format(ph.options),
         });

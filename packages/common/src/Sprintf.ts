@@ -1,5 +1,5 @@
 import {assert} from "./Error";
-import {isFunction, isString} from "./Is";
+import {isFunction, isNullish, isString} from "./Is";
 import {jsonStringify, quoteSingle} from "./Json";
 import {NullMap} from "./NullMap";
 import {parseNumber, toInt, toUint32} from "./Num";
@@ -33,16 +33,17 @@ export class Sprintf {
     private _cache: IMapMini<string, SprintfParsed> = new NullMap();
 
     public constructor(placeholders?: Placeholders) {
-        const substr = (arg: any, ph: Placeholder) => stringifyVar(arg).substr(0, ph.precision || 1 / 0);
+        // eslint-disable-next-line unicorn/consistent-function-scoping
+        const substr = (arg: any, ph: Placeholder) => stringifyVar(arg).slice(0, Math.max(0, ph.precision || 1 / 0));
 
         this._placeholders = {
             b: (v) => toInt(v).toString(2),
             c: (v) => String.fromCharCode(v),
             i: (v) => toInt(v),
             d: (v) => toInt(v),
-            j: (v, ph) => substr(jsonStringify(v, null, ph.width), ph),
+            j: (v, ph) => substr(jsonStringify(v, void 0, ph.width), ph),
             e: (v, ph) => parseNumber(v).toExponential(ph.precision),
-            f: (v, ph) => null == ph.precision ? parseNumber(v) : parseNumber(v).toFixed(ph.precision),
+            f: (v, ph) => isNullish(ph.precision) ? parseNumber(v) : parseNumber(v).toFixed(ph.precision),
             g: (v, ph) => ph.precision ? +v.toPrecision(ph.precision) : parseNumber(v),
             o: (v) => toUint32(v).toString(8),
             s: (v, ph) => substr(v, ph),
@@ -74,7 +75,7 @@ export class Sprintf {
     }
 
     public parse(pattern: string): SprintfParsed {
-        const rgx = /[^%]+|%%|(?:%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d*))?([a-zA-Z]))|(.)/g;
+        const rgx = /[^%]+|%%|(?:%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d*))?([A-Za-z]))|(.)/g;
 
         return ensureMap(this._cache, pattern, () => [...pattern.matchAll(rgx)].map((match) => {
             const index = match.index;
@@ -126,7 +127,7 @@ export class Sprintf {
 
             keys.push(match[1]);
 
-            field = field.substring(match[0].length);
+            field = field.slice(match[0].length);
         }
 
         return keys;

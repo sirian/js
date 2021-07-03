@@ -26,7 +26,7 @@ const data: Array<[string, TypeName]> = [
 ];
 
 test.each(data)("ArgResolver.resolve(%s) to %s", (code, typeName) => {
-    const value = Function(`return (${code})`)();
+    const value = new Function(`return (${code})`)();
 
     const resolver = ArgResolver.switch(value);
 

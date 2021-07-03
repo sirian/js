@@ -14,6 +14,6 @@ void (async () => {
             allResult[key][count] = time.toString().padStart(5, " ");
         }
     }
-    // tslint:disable-next-line:no-console
+
     console.table(allResult);
 })();
