@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/sirian/js/compare/@sirian/console@7.0.12...@sirian/console@7.1.0) (2021-07-03)
+
+
+### Features
+
+* **console:** VTS ([c1a36b2](https://github.com/sirian/js/commit/c1a36b2abcf66b2d5516790dcfdca5706806b31c))
+
+
+
+
+
 ## [7.0.12](https://github.com/sirian/js/compare/@sirian/console@7.0.11...@sirian/console@7.0.12) (2021-07-03)
 
 
