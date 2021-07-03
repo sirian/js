@@ -1,6 +1,6 @@
-import {hasOwn} from "@sirian/common";
+import {hasOwn, sprintf} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
-import {Cursor, TTYStyle, TTYStyles} from "../TTY";
+import {TTYStyle, TTYStyles, VTS} from "../TTY";
 
 export class FormatterStyle {
     protected options: Set<TTYStyle>;
@@ -18,7 +18,7 @@ export class FormatterStyle {
 
     public add(option: TTYStyle) {
         if (!FormatterStyle.isValid(option)) {
-            throw new InvalidArgumentError(`Invalid terminal style "${option}"`);
+            throw new InvalidArgumentError(sprintf("Invalid terminal style '%s'", option));
         }
         this.options.add(option);
     }
@@ -36,11 +36,10 @@ export class FormatterStyle {
         if (0 === setCodes.length) {
             return text;
         }
-
-        return [
-            Cursor.style(setCodes),
-            text,
-            Cursor.style(unsetCodes),
-        ].join("");
+        return new VTS()
+            .style(setCodes)
+            .push(text)
+            .style(unsetCodes)
+            .toString();
     }
 }

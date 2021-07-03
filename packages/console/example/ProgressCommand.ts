@@ -1,3 +1,4 @@
+import {sleep} from "@sirian/common";
 import {Command, CommandDefinition, NumberOption, Option, ProgressBar} from "../src";
 
 export class ProgressCommand extends Command {
@@ -48,7 +49,12 @@ export class ProgressCommand extends Command {
 
         for (let i = 0; i < progress.getMaxSteps(); i++) {
             progress.advance();
-            await new Promise((resolve) => setTimeout(resolve, timeout));
+            await sleep(timeout);
         }
+
+        progress.finish();
+        progress.clear();
+
+        io.success("Finished");
     }
 }

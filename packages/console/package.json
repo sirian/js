@@ -35,7 +35,9 @@
         "@sirian/xpromise": "^3.0.8",
         "error-stack-parser": "^2.0.4"
     },
-    "scripts": {},
+    "scripts": {
+        "example": "ts-node example/index.ts"
+    },
     "publishConfig": {
         "access": "public"
     }

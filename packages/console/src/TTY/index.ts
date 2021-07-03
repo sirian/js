@@ -1,2 +1,2 @@
-export * from "./Cursor";
+export * from "./VTS";
 export * from "./TTYStyles";

@@ -1,7 +1,7 @@
 import {padLeft, sprintf, stringifyVar, substrCount} from "@sirian/common";
 import {LogicError} from "../Error";
 import {Output, OutputVerbosity} from "../Output";
-import {Cursor} from "../TTY";
+import {VTS} from "../TTY";
 import {Perf, StrUtil, Units} from "../Util";
 
 export type ProgressBarPlaceholderFormatter = (bar: ProgressBar) => string | number;
@@ -328,13 +328,15 @@ export class ProgressBar {
     protected doOverwrite(message: string) {
         if (this.overwrite) {
             if (!this.firstRun) {
-                const messages = [Cursor.cr(), Cursor.eraseLine()];
+                const vts = new VTS();
+
+                vts.cr().eraseLine();
 
                 for (let i = 0; i < this.formatLineCount; i++) {
-                    messages.push(Cursor.up(), Cursor.eraseLine());
+                    vts.up().eraseLine();
                 }
 
-                this.output.write(messages);
+                this.output.write(vts.toString());
             }
         } else if (this.step > 0) {
             this.output.newLine();
