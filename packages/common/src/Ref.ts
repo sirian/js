@@ -1,7 +1,6 @@
-import {AnyKey, ArrayRO, Ensure, Func0, Func1, Get, Newable, Nullish} from "@sirian/ts-extra-types";
+import {AnyKey, ArrayRO, Ensure, Func0, Func1, Get, Newable, Nullish, Wrap} from "@sirian/ts-extra-types";
 import {noop} from "./Const";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive} from "./Is";
-import {toObject} from "./Obj";
 import {stringifyObj} from "./Stringify";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
@@ -30,6 +29,8 @@ export const bind: {
     <R, A extends any[], B extends any[]>(f: (...args: [...A, ...B]) => R, thisArg: any, ...curry: A): (...args: B) => R;
 } = nativeCall.bind(nativeBind);
 
+// eslint-disable-next-line unicorn/new-for-builtins
+export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 export const getPrototype = (target: unknown) => isNullish(target) ? undefined : Object.getPrototypeOf(toObject(target));
 
 export const getPrototypes = <T>(target: T, options: ProtoChainOptions = {}): Array<Partial<T>> => {

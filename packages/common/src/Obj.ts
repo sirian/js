@@ -9,7 +9,6 @@ import {
     ObjEntryOf,
     ObjKeyOf,
     ObjValueOf,
-    Wrap,
 } from "@sirian/ts-extra-types";
 import {isArray, isPrimitive} from "./Is";
 import {
@@ -36,9 +35,6 @@ export const entriesOf = <T>(target: T) => Object.entries(target) as Array<ObjEn
 export const assign = <T extends any, U extends any[]>(target: T, ...sources: U): Assign<T, U> =>
     sources
         .reduce((o, source) => Object.assign(o, source, pick(source, keysOf(o))), target);
-
-// eslint-disable-next-line unicorn/new-for-builtins
-export const toObject = <T>(value: T): object & Wrap<T> => Object(value);
 
 export const fromEntries = <E extends Iterable<Entry>>(entries: E) =>
     Object.fromEntries(entries) as FromEntries<E>;
