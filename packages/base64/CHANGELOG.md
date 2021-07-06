@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.5](https://github.com/sirian/js/compare/@sirian/base64@3.1.4...@sirian/base64@3.1.5) (2021-07-06)
+
+**Note:** Version bump only for package @sirian/base64
+
+
+
+
+
 ## [3.1.4](https://github.com/sirian/js/compare/@sirian/base64@3.1.3...@sirian/base64@3.1.4) (2021-07-03)
 
 **Note:** Version bump only for package @sirian/base64
