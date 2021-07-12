@@ -6,5 +6,5 @@ export const base64Test = (value: string) => base64Rgx.test(base64Normalize(valu
 
 export const base64MakeURISafe = (value: string) => value
     .replaceAll("+", "-")
-    .replaceAll("/", "/")
+    .replaceAll("/", "_")
     .replace(/=+$/m, "");
