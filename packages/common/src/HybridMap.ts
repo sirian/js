@@ -1,7 +1,8 @@
 import {Primitive} from "@sirian/ts-extra-types";
+import {parseMapArgs} from "./internal";
 import {isPrimitive} from "./Is";
 import {XMap} from "./XMap";
-import {ensureMap, HybridMapStore, IMapMini, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XUtils";
+import {ensureMap, HybridMapStore, IMapMini, pickMap, XMapInitializer, XMapSource} from "./XUtils";
 import {XWeakMap} from "./XWeakMap";
 
 export class HybridMap<K, V> implements IMapMini<K, V> {
@@ -13,7 +14,7 @@ export class HybridMap<K, V> implements IMapMini<K, V> {
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
 
     constructor(...args: any[]) {
-        const [src, initializer] = parseMapArgs(args);
+        const [src, initializer] = parseMapArgs(...args);
         this._initializer = initializer;
         src.forEach(([key, value]) => this.set(key, value));
     }

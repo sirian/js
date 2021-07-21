@@ -1,4 +1,5 @@
-import {ensureMap, parseMapArgs, pickMap, XMapInitializer, XMapSource} from "./XUtils";
+import {parseMapArgs} from "./internal";
+import {ensureMap, pickMap, XMapInitializer, XMapSource} from "./XUtils";
 
 export class XWeakMap<K extends object, V> extends WeakMap<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;
@@ -7,7 +8,7 @@ export class XWeakMap<K extends object, V> extends WeakMap<K, V> {
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
 
     constructor(...args: any[]) {
-        const [src, initializer] = parseMapArgs(args);
+        const [src, initializer] = parseMapArgs(...args);
 
         super(src);
 
