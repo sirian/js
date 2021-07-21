@@ -1,5 +1,6 @@
 import {Numbers} from "./number";
 import {AnyKey} from "./object";
+import {ArrayRO} from "./tuple";
 import {AnyFunc} from "./types";
 
 export type Cast<T, P, D = never> = T extends P ? T : D;
@@ -10,6 +11,12 @@ export type CastBool<T> =
     T extends 1 | true ? true :
     T extends object | symbol ? true :
     boolean;
+
+export type CastArray<T, NullAsEmpty extends boolean = false> =
+    T extends ArrayRO ? T :
+    T extends null | undefined
+    ? NullAsEmpty extends false ? [T] : [] :
+    [T];
 
 export type KeyToNumber<K extends AnyKey> =
     K extends number | string ? ToNumber<K> : never;
