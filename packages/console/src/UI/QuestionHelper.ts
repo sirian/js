@@ -1,3 +1,4 @@
+import {castError} from "@sirian/common";
 import {XPromise} from "@sirian/xpromise";
 import * as readline from "readline";
 import {Formatter} from "../Formatter";
@@ -80,7 +81,7 @@ export class QuestionHelper {
 
         do {
             if (error) {
-                this.writeError(error);
+                this.writeError(castError(error));
             }
 
             try {
