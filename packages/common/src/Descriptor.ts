@@ -1,6 +1,6 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get, Nullish} from "@sirian/ts-extra-types";
 import {isBoolean, isFunction, isObject, isUndefined} from "./Is";
-import {defineProp, deleteProps, getDescriptor, hasAnyProp} from "./Ref";
+import {defineProp, deleteProps, getDescriptor, hasAnyProp, hasProp} from "./Ref";
 
 export type DescriptorWrapper<T, V> = {
     get?(this: void, object: T, parent: () => V): V;
@@ -9,13 +9,14 @@ export type DescriptorWrapper<T, V> = {
 
 export type DescriptorType = "accessor" | "data" | undefined;
 
-export const getDescriptorType = (d: any): DescriptorType => {
-    const hasAccessor = hasAnyProp(d, ["get", "set"] as const);
+export const getDescriptorType = (d: unknown): DescriptorType => {
+    const hasAccessor = hasAnyProp(d, ["get", "set"]);
+    const hasDataProp = hasAnyProp(d, ["value", "writable"] as const);
 
     const bad = !isObject(d)
-        || hasAccessor && hasAnyProp(d, ["value", "writable"] as const)
-        || hasAccessor && [d.get, d.set].some((v) => !isUndefined(v) && !isFunction(v))
-        || [d.enumerable, d.configurable, d.writable].some((v) => !isUndefined(v) && !isBoolean(v));
+        || hasAccessor && hasDataProp
+        || hasAccessor && (["get", "set"] as const).some((k) => hasProp(d, k) && !isUndefined(d[k]) && !isFunction(d[k]))
+        || (["enumerable", "configurable", "writable"] as const).some((k) => hasProp(d, k) && !isUndefined(d[k]) && !isBoolean(d[k]));
 
     if (!bad) {
         return hasAccessor ? "accessor" : "data";
