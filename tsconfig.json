@@ -37,7 +37,6 @@
         "inlineSourceMap": true,
         "experimentalDecorators": true,
         "noEmit": true
-
     },
     "exclude": ["node_modules"]
 }
