@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/sirian/js/compare/@sirian/disposer@3.0.13...@sirian/disposer@3.1.0) (2021-08-10)
+
+
+### Features
+
+* **disposer:** offDispose, offDisposed ([c6598f2](https://github.com/sirian/js/commit/c6598f23ce63096793bb5b06aa836deee19124a8))
+
+
+
+
+
 ## [3.0.13](https://github.com/sirian/js/compare/@sirian/disposer@3.0.12...@sirian/disposer@3.0.13) (2021-07-06)
 
 **Note:** Version bump only for package @sirian/disposer

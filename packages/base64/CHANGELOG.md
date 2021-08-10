@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.7](https://github.com/sirian/js/compare/@sirian/base64@3.1.6...@sirian/base64@3.1.7) (2021-08-10)
+
+
+### Bug Fixes
+
+* **base64:** tests ([be2a174](https://github.com/sirian/js/commit/be2a17417e54e59774746b94826547d71e59b9ce))
+
+
+
+
+
 ## [3.1.6](https://github.com/sirian/js/compare/@sirian/base64@3.1.5...@sirian/base64@3.1.6) (2021-07-12)
 
 

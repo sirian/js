@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.2.2...@sirian/ts-extra-types@4.3.0) (2021-08-10)
+
+
+### Features
+
+* **ts-extra-types:** CastArray ([920b291](https://github.com/sirian/js/commit/920b2916e6761e3e95508f8edced5ca07ba71a43))
+
+
+
+
+
 ## [4.2.2](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.2.1...@sirian/ts-extra-types@4.2.2) (2021-06-27)
 
 **Note:** Version bump only for package @sirian/ts-extra-types

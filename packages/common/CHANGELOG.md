@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.4.0](https://github.com/sirian/js/compare/@sirian/common@9.3.6...@sirian/common@9.4.0) (2021-08-10)
+
+
+### Features
+
+* **common:** castArray ([08f4892](https://github.com/sirian/js/commit/08f4892e2c30ddf0a7152679a3ede237139a0d49))
+
+
+
+
+
 ## [9.3.6](https://github.com/sirian/js/compare/@sirian/common@9.3.5...@sirian/common@9.3.6) (2021-07-06)
 
 **Note:** Version bump only for package @sirian/common
