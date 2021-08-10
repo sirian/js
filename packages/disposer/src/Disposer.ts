@@ -70,6 +70,11 @@ export class Disposer<T extends object> {
         return this;
     }
 
+    public offDispose(callback: DisposeCallback<T>) {
+        this._before.delete(callback);
+        return this;
+    }
+
     public onDisposed(callback: DisposeCallback<T>) {
         if (this._state >= DisposerState.AFTER_CHILDREN) {
             this._handle(callback);
@@ -77,6 +82,11 @@ export class Disposer<T extends object> {
             this._after.add(callback);
         }
 
+        return this;
+    }
+
+    public offDisposed(callback: DisposeCallback<T>) {
+        this._after.delete(callback);
         return this;
     }
 
