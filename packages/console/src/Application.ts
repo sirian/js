@@ -1,4 +1,4 @@
-import {entriesOf, padRight, rgxEscape, stringifyVar, substrCount, XSet} from "@sirian/common";
+import {castError, entriesOf, padRight, rgxEscape, sprintf, stringifyVar, substrCount, XSet} from "@sirian/common";
 import {Dispatcher, EventDispatcher} from "@sirian/event-dispatcher";
 import {CommandDefinition, HelpCommand, ICommandConstructor, ICommandLoader, ListCommand} from "./Command";
 import {CommandNotFoundError, LogicError, NamespaceNotFoundError} from "./Error";
@@ -68,7 +68,7 @@ export class Application {
             if (eventDispatcher.hasListeners()) {
                 await eventDispatcher.dispatch(new ErrorEvent(e));
             } else {
-                io.renderError(e);
+                io.renderError(castError(e));
             }
         }
     }
@@ -118,10 +118,7 @@ export class Application {
     }
 
     public getLongVersion() {
-        const version = this.getVersion();
-        const name = this.getName();
-
-        return `${name} <info>${version}</info>`;
+        return sprintf(`%s <info>%s</info>`, this.getName(), this.getVersion());
     }
 
     public addCommands(commands: Iterable<ICommandConstructor>) {
@@ -137,7 +134,7 @@ export class Application {
         const name = definition.getName();
 
         if (!name) {
-            throw new LogicError(`The command cannot have an empty name.`);
+            throw new LogicError("The command cannot have an empty name.");
         }
 
         const commands = this.commands;
@@ -156,7 +153,7 @@ export class Application {
             return this.commands.get(name)!;
         }
 
-        if (this.commandLoader && this.commandLoader.has(name)) {
+        if (this.commandLoader?.has(name)) {
             const cmd = await this.commandLoader.get(name)!;
             this.add(cmd);
             return cmd;

@@ -1,9 +1,7 @@
 import {ArrayRO, Nullish} from "@sirian/ts-extra-types";
-import {sort, sortBy, toArray} from "./Arr";
+import {sort, sortBy} from "./Arr";
 import {assert} from "./Error";
 import {isFunction} from "./Is";
-import {entriesOf} from "./Obj";
-import {isPlainObject} from "./Var";
 import {XMap} from "./XMap";
 import {XWeakMap} from "./XWeakMap";
 
@@ -32,18 +30,6 @@ export interface ISetMini<T> {
 
     add(value: T): this;
 }
-
-export const parseMapArgs = (args: any[]): [Array<[any, any]>, XMapInitializer | undefined] => {
-    const [src, initializer] = args;
-
-    if (isFunction(src)) {
-        return [[], src];
-    }
-
-    const entries = (isPlainObject(src) ? entriesOf(src) : toArray(src)) as [any, any];
-
-    return [entries, initializer];
-};
 
 export const setMapEntries = <K, V>(map: Map<K, V>, entries: ArrayRO<readonly [K, V]>) => {
     map.clear();

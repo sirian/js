@@ -1,6 +1,7 @@
+import {parseMapArgs} from "./internal";
 import {fromEntries} from "./Obj";
 import {isEqual} from "./Var";
-import {ensureMap, parseMapArgs, pickMap, sortMap, sortMapBy, XMapInitializer, XMapSource} from "./XUtils";
+import {ensureMap, pickMap, sortMap, sortMapBy, XMapInitializer, XMapSource} from "./XUtils";
 
 export class XMap<K = any, V = any> extends Map<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;
@@ -8,7 +9,7 @@ export class XMap<K = any, V = any> extends Map<K, V> {
     constructor(initializer?: XMapInitializer<K, V>);
     constructor(src: XMapSource<K, V>, initializer?: XMapInitializer<K, V>);
     constructor(...args: any[]) {
-        const [src, initializer] = parseMapArgs(args);
+        const [src, initializer] = parseMapArgs(...args);
         super(src);
 
         this._initializer = initializer;

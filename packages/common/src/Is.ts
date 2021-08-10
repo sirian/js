@@ -1,6 +1,6 @@
 import {
     AnyFunc,
-    ArrayRO,
+    CastArray,
     ExtractByTypeName,
     ExtractByXTypeName,
     Nullish,
@@ -10,6 +10,7 @@ import {
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
+import {hasMethod} from "./Ref";
 
 export const isNull = (value: unknown): value is null => null === value;
 export const isUndefined = (value: unknown): value is undefined | void => undefined === value;
@@ -40,12 +41,18 @@ export const isSymbol = (value: unknown): value is symbol => isType(value, "symb
 export const isObject = <T>(value: T): value is Exclude<Extract<T & object, object>, AnyFunc> => null !== value && isType(value, "object");
 export const isFunction = <T>(value: T): value is Function & Extract<T, AnyFunc> => isType(value, "function");
 
-export const isObjectOrFunction = (value: unknown): value is object => null !== value && (isObject(value) || isFunction(value));
-export const isPrimitive = (value: unknown): value is Primitive => null == value || !isObjectOrFunction(value);
+export const isObjectOrFunction = (value: unknown): value is object => null !== value && isObject(value) || isFunction(value);
+export const isPrimitive = (value: unknown): value is Primitive => !isObjectOrFunction(value);
 export const isPropertyKey = (value: unknown): value is PropertyKey => isString(value) || isNumber(value) || isSymbol(value);
 export const isTruthy = (a: unknown) => !!a;
 export const isFalsy = (a: unknown) => !a;
 
-export const isPromiseLike = (value: any): value is PromiseLike<unknown> => isFunction(value?.then);
-export const castArray = <T>(value: T | ArrayRO<T>) =>
-    [].concat(value as any) as T[];
+export const isPromiseLike = (value: any): value is PromiseLike<unknown> => hasMethod(value, "then");
+
+export const castArray:
+    {
+        <T>(value: T, nullAsEmpty?: false): CastArray<T, false>
+        <T>(value: T, nullAsEmpty: true): CastArray<T, true>
+        // eslint-disable-next-line unicorn/no-null,unicorn/prefer-array-flat
+    } = (value: any, nullAsEmpty = false): any => nullAsEmpty && null == value ? [] : [].concat(value);
+

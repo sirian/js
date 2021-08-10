@@ -58,8 +58,14 @@ export const last = <T extends Iterable<any> | ArrayLike<any>>(value: T) => {
     return res as Last<T>;
 };
 
-export const toArray = <T>(value?: Iterable<T> | ArrayLike<T> | null): T[] =>
-    isArray(value) ? value : Array.from(value ?? []); // eslint-disable-line unicorn/prefer-spread
+export const toArray: {
+    <T>(value: T):
+        T extends null | undefined ? [] :
+        T extends ArrayRO ? T :
+        T extends ArrayLike<infer V> | Iterable<infer V> ? V[] :
+        never;
+} =
+    (value: any): any => isArray(value) ? value : Array.from(value ?? []); // eslint-disable-line unicorn/prefer-spread
 
 export const uniq = <T>(input: Iterable<T>) => [...new Set(input)];
 
