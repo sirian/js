@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.5.0](https://github.com/sirian/js/compare/@sirian/common@9.4.0...@sirian/common@9.5.0) (2021-08-11)
+
+
+### Features
+
+* **common:** arrToken ([93286f3](https://github.com/sirian/js/commit/93286f3cfa0f1cd9ce0cf86d801dd7e3122a6d5d))
+
+
+
+
+
 # [9.4.0](https://github.com/sirian/js/compare/@sirian/common@9.3.6...@sirian/common@9.4.0) (2021-08-10)
 
 

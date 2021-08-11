@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/sirian/js/compare/@sirian/decorators@2.0.14...@sirian/decorators@2.1.0) (2021-08-11)
+
+
+### Features
+
+* **common:** arrToken ([93286f3](https://github.com/sirian/js/commit/93286f3cfa0f1cd9ce0cf86d801dd7e3122a6d5d))
+
+
+
+
+
 ## [2.0.14](https://github.com/sirian/js/compare/@sirian/decorators@2.0.13...@sirian/decorators@2.0.14) (2021-08-10)
 
 **Note:** Version bump only for package @sirian/decorators

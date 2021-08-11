@@ -1,7 +1,7 @@
 {
     "name": "@sirian/lzf",
     "description": "",
-    "version": "2.0.14",
+    "version": "2.0.15",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,6 +21,6 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^9.4.0"
+        "@sirian/common": "^9.5.0"
     }
 }
