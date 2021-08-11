@@ -10,7 +10,6 @@ import {
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
-import {hasMethod} from "./ref";
 
 export const isNull = (value: unknown): value is null => null === value;
 export const isUndefined = (value: unknown): value is undefined | void => undefined === value;
@@ -47,7 +46,7 @@ export const isPropertyKey = (value: unknown): value is PropertyKey => isString(
 export const isTruthy = (a: unknown) => !!a;
 export const isFalsy = (a: unknown) => !a;
 
-export const isPromiseLike = (value: any): value is PromiseLike<unknown> => hasMethod(value, "then");
+export const isPromiseLike = (value: any): value is PromiseLike<unknown> => isFunction(value?.then);
 
 export const castArray:
     {

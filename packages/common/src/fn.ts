@@ -10,9 +10,9 @@ export const callableClass = <T extends object, K extends keyof T>(method: K, ct
     apply: (target: any, thisArg, args) => target[method](...args),
 }) as T & T[K];
 
-export const bindArgs = function <K extends number, F extends Func>(fn: F, bind: { [P in K]: Get<Args<F>, P> }) {
+export const bindArgs = function <K extends number, F extends Func>(fn: F, bind: { [P in K]: Get<Args<F>, P> }): Func<Return<F>, Splice<Args<F>, K>> {
     return function(this: any, ...args: Splice<Args<F>, K>) {
-        const mergedArgs: any[] = Object.assign([], bind);
+        const mergedArgs: unknown[] = Object.assign([], bind);
 
         for (let i = 0; args.length > 0; i++) {
             if (i in mergedArgs) {
