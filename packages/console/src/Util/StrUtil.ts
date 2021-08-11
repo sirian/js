@@ -2,7 +2,7 @@ import {arrChunk, padRight, strGraphemes, stringifyVar} from "@sirian/common";
 
 export class StrUtil {
     public static stripTags(text: string) {
-        return text.replace(/<\/?[^>]+>/g, "");
+        return text.replace(/<[^>]*>/g, "");
     }
 
     public static spaces(length: number) {
