@@ -43,15 +43,6 @@ const prebuild = async () => {
         prebuildType(pkg, name, "cjs", "CommonJS");
         prebuildType(pkg, name, "esm", "ESNext");
     }
-
-    debug("greenkeeper.json");
-    writeJSON(rootDir + `/greenkeeper.json`, {
-        groups: {
-            default: {
-                packages: publicAccess.map((name) => `packages/${name}/package.json`),
-            },
-        },
-    });
 };
 
 const prebuildType = (pkg: any, pkgName: string, type: string, tsModule: "ESNext" | "CommonJS") => {
