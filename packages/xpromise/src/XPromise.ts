@@ -136,6 +136,11 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public static wrap<R>(fn: () => R | PromiseLike<R>): XPromise<R> {
+        try {
+            return XPromise.resolve(fn());
+        } catch (e) {
+            return XPromise.reject(e);
+        }
         return new XPromise<R>((resolve) => resolve(fn()));
     }
 
