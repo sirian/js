@@ -2,7 +2,7 @@
     "private": true,
     "name": "@sirian/rate-limiter",
     "description": "",
-    "version": "2.0.17",
+    "version": "2.0.18",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -21,7 +21,7 @@
         "@sirian/common": "^9.5.2",
         "@sirian/datetime": "^4.0.17",
         "@sirian/ts-extra-types": "^4.3.0",
-        "@sirian/xpromise": "^3.0.9"
+        "@sirian/xpromise": "^3.0.10"
     },
     "scripts": {},
     "publishConfig": {
