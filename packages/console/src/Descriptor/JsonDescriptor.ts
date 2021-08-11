@@ -84,7 +84,7 @@ export class JsonDescriptor extends Descriptor {
             name: argument.getName(),
             is_required: argument.isRequired(),
             is_array: argument.isMultiple(),
-            description: argument.getDescription().replace(/\s*[\n\r]\s*/g, " "),
+            description: argument.getDescription(),
             defaultValue: argument.getDefaultValue(),
         };
     }
@@ -96,7 +96,7 @@ export class JsonDescriptor extends Descriptor {
             accept_value: option.acceptValue(),
             is_value_required: option.isValueRequired(),
             is_multiple: option.isMultiple(),
-            description: option.getDescription().replace(/\s*[\n\r]\s*/g, " "),
+            description: option.getDescription(),
             default: option.getDefault(),
             defaultValue: option.getDefaultValue(),
         };

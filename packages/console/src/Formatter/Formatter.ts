@@ -1,4 +1,4 @@
-import {castArray, entriesOf, isArray, sprintf, stringifyVar} from "@sirian/common";
+import {castArray, entriesOf, isArray, sprintf, stringifyVar, trimRight} from "@sirian/common";
 import {InvalidArgumentError} from "../Error";
 import {TTYStyle} from "../TTY";
 import {StrUtil} from "../Util";
@@ -85,8 +85,8 @@ export class Formatter {
         }
 
         const len = text.length;
-        text = text.replace(/\\+$/, "");
-        text = text.replace(/\0/g, "");
+        text = trimRight(text, '\\')
+        text = text.replaceAll("\0", "");
         text += "\0".repeat(len - text.length);
         return text;
     }
@@ -161,7 +161,7 @@ export class Formatter {
     public decorate(message: string): string {
         message = stringifyVar(message);
         let offset = 0;
-        const output: string[] = [];
+        let output = "";
         const tagRegex = "[a-z][a-z0-9_=,;-]*";
         const r = new RegExp("<((" + tagRegex + ")|/(" + tagRegex + ")?)>", "ig");
 
@@ -181,7 +181,7 @@ export class Formatter {
             }
 
             // add the text up to the next tag
-            output.push(this.applyCurrentStyle(message.substring(offset, pos)));
+            output += this.applyCurrentStyle(message.substring(offset, pos));
 
             offset = pos + text.length;
 
@@ -197,7 +197,7 @@ export class Formatter {
                 const style = this.createStyleFromString(tag);
 
                 if (!style) {
-                    output.push(this.applyCurrentStyle(text));
+                    output += this.applyCurrentStyle(text);
                 } else if (open) {
                     styleStack.push(style);
                 } else {
@@ -206,18 +206,11 @@ export class Formatter {
             }
         }
 
-        output.push(this.applyCurrentStyle(message.slice(offset)));
+        output += this.applyCurrentStyle(message.slice(offset));
 
-        return output.join("").replace(/\\<|\0/g, (text) => {
-            switch (text) {
-                case "\\<":
-                    return "<";
-                case "\0":
-                    return "\\";
-                default:
-                    return "";
-            }
-        });
+        return output
+            .replaceAll("\\<", "<")
+            .replaceAll("\0", "\\")
     }
 
     public getStyles() {
