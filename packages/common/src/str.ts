@@ -4,28 +4,24 @@ import {keysOf} from "./obj";
 import {rgxEscape} from "./rgx";
 import {stringifyVar} from "./stringify";
 
-export const enum StrSide {
-    LEFT = "left",
-    RIGHT = "right",
-    BOTH = "both",
-}
+export type StrSide = "left" | "right" | "both"
 
 export type ReplaceCallback = (substring: string, ...args: unknown[]) => string;
 
-export const padRight = (str: unknown, maxLength: number, chars = " ") => pad(str, maxLength, chars, StrSide.RIGHT);
+export const padRight = (str: unknown, maxLength: number, chars = " ") => pad(str, maxLength, chars, "right");
 
-export const padLeft = (str: unknown, maxLength: number, chars = " ") => pad(str, maxLength, chars, StrSide.LEFT);
+export const padLeft = (str: unknown, maxLength: number, chars = " ") => pad(str, maxLength, chars, "left");
 
-export const pad = (value: unknown, maxLength: number, chars = " ", side: StrSide = StrSide.LEFT) => {
+export const pad = (value: unknown, maxLength: number, chars = " ", side: StrSide = "left") => {
     const str = stringifyVar(value);
     const length = str.length;
     const padLength = maxLength - length;
 
-    if (StrSide.LEFT === side) {
+    if ("left" === side) {
         return strRepeat(chars, padLength) + str;
     }
 
-    if (StrSide.RIGHT === side) {
+    if ("right" === side) {
         return str + strRepeat(chars, padLength);
     }
 
@@ -35,7 +31,7 @@ export const pad = (value: unknown, maxLength: number, chars = " ", side: StrSid
     return left + str + right;
 };
 
-export const trim = (value: unknown, mask = " \t\n\r\0\u000B", type: StrSide = StrSide.BOTH) => {
+export const trim = (value: unknown, mask = " \t\n\r\0\u000B", type: StrSide = "both") => {
     const str = stringifyVar(value);
 
     const strArray = [...str];
@@ -43,13 +39,13 @@ export const trim = (value: unknown, mask = " \t\n\r\0\u000B", type: StrSide = S
     let start = 0;
     let end = length;
 
-    if (StrSide.BOTH === type || StrSide.LEFT === type) {
+    if ("both" === type || "left" === type) {
         while (start < end && -1 !== mask.indexOf(strArray[start])) {
             ++start;
         }
     }
 
-    if (StrSide.BOTH === type || StrSide.RIGHT === type) {
+    if ("both" === type || "right" === type) {
         while (start < end && -1 !== mask.indexOf(strArray[end - 1])) {
             --end;
         }
@@ -69,9 +65,9 @@ export const strRepeat = (chars: string, maxLength: number) => {
         .repeat(Math.ceil(maxLength / chars.length)).slice(0, Math.max(0, maxLength));
 };
 
-export const trimLeft = (value: unknown, mask?: string) => trim(value, mask, StrSide.LEFT);
+export const trimLeft = (value: unknown, mask?: string) => trim(value, mask, "left");
 
-export const trimRight = (value: unknown, mask?: string) => trim(value, mask, StrSide.RIGHT);
+export const trimRight = (value: unknown, mask?: string) => trim(value, mask, "right");
 
 export const lowerFirst = <T extends string>(value: T) =>
     (stringifyVar(value).charAt(0).toLowerCase() + stringifyVar(value).slice(1)) as `${Uncapitalize<ToString<T>>}`;
