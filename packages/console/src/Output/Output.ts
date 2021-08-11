@@ -2,7 +2,6 @@ import {castArray, stringifyVar} from "@sirian/common";
 import {Writable} from "stream";
 import {RuntimeError} from "../Error";
 import {Formatter} from "../Formatter";
-import {StrUtil} from "../Util";
 
 export enum OutputVerbosity {
     QUIET,
@@ -15,7 +14,6 @@ export enum OutputVerbosity {
 export enum OutputType {
     NORMAL,
     RAW,
-    PLAIN,
 }
 
 export interface IOutputOptions {
@@ -132,17 +130,10 @@ export abstract class Output {
         for (let message of messages) {
             message = stringifyVar(message);
 
-            switch (options.type) {
-                case OutputType.PLAIN:
-                    message = StrUtil.stripTags(formatter.decorate(message));
-                    break;
-                case OutputType.RAW:
-                    break;
-                case OutputType.NORMAL:
-                default:
-                    message = formatter.decorate(message);
-                    break;
+            if (OutputType.NORMAL === options.type) {
+                message = formatter.decorate(message);
             }
+
             this.doWrite(message);
 
             this.newLine(options.newline);

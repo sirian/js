@@ -35,7 +35,7 @@ export class TableStyle {
     protected cellBodyFormat = "%s";
     protected cellContentFormat = " %s ";
     protected borderFormat = "%s";
-    protected padType = StrSide.RIGHT;
+    protected padType: StrSide = "right";
 
     constructor() {
         this.setDefaultCrossingChar("+")

@@ -1,10 +1,6 @@
 import {arrChunk, padRight, strGraphemes, stringifyVar} from "@sirian/common";
 
 export class StrUtil {
-    public static stripTags(text: string) {
-        return text.replace(/<[^>]*>/g, "");
-    }
-
     public static spaces(length: number) {
         return length > 0 ? " ".repeat(length) : "";
     }
