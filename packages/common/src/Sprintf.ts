@@ -75,7 +75,7 @@ export class Sprintf {
     }
 
     public parse(pattern: string): SprintfParsed {
-        const rgx = /[^%]+|%%|(?:%(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d*))?([A-Za-z]))|(.)/g;
+        const rgx = /[^%]+|%%|(?:%(?:([1-9]\d*)\$|\(([\w.[\]]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d*))?([A-Za-z]))|(.)/g;
 
         return ensureMap(this._cache, pattern, () => [...pattern.matchAll(rgx)].map((match) => {
             const index = match.index;
