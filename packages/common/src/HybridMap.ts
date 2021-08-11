@@ -2,7 +2,7 @@ import {Primitive} from "@sirian/ts-extra-types";
 import {parseMapArgs} from "./internal";
 import {isPrimitive} from "./Is";
 import {XMap} from "./XMap";
-import {ensureMap, HybridMapStore, IMapMini, pickMap, XMapInitializer, XMapSource} from "./XUtils";
+import {ensureMap, HybridMapStore, IMapMini, pickMap, XMapInitializer, XMapSource} from "./utils";
 import {XWeakMap} from "./XWeakMap";
 
 export class HybridMap<K, V> implements IMapMini<K, V> {

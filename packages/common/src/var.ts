@@ -10,7 +10,7 @@ import {
     isString,
     isSymbol,
 } from "./Is";
-import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./Ref";
+import {getObjectTag, getPrototype, hasMethod, tryCatch} from "./ref";
 
 export const ifSatisfy = <T, P extends Predicate, O>(v: T, condition: P, otherwise?: O) =>
     (condition(v) ? v : otherwise) as

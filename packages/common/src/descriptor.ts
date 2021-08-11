@@ -1,6 +1,6 @@
 import {AccessorPropertyDescriptor, DataPropertyDescriptor, Get, Nullish} from "@sirian/ts-extra-types";
 import {isBoolean, isFunction, isObject, isUndefined} from "./Is";
-import {defineProp, deleteProps, getDescriptor, hasAnyProp, hasProp} from "./Ref";
+import {defineProp, deleteProps, getDescriptor, hasAnyProp, hasProp} from "./ref";
 
 export type DescriptorWrapper<T, V> = {
     get?(this: void, object: T, parent: () => V): V;

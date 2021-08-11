@@ -1,8 +1,8 @@
 import {Primitive} from "@sirian/ts-extra-types";
 import {isNullish} from "./Is";
-import {applyIfFunction} from "./Ref";
-import {stringifyVar} from "./Stringify";
-import {isError} from "./Var";
+import {applyIfFunction} from "./ref";
+import {stringifyVar} from "./stringify";
+import {isError} from "./var";
 
 export type Throwable = Primitive | Error;
 

@@ -10,7 +10,7 @@ import {
     XTypeName,
     XTypeNameOf,
 } from "@sirian/ts-extra-types";
-import {hasMethod} from "./Ref";
+import {hasMethod} from "./ref";
 
 export const isNull = (value: unknown): value is null => null === value;
 export const isUndefined = (value: unknown): value is undefined | void => undefined === value;

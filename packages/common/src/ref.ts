@@ -1,7 +1,7 @@
 import {AnyKey, ArrayRO, Ensure, Func0, Func1, Get, Newable, Nullish, Wrap} from "@sirian/ts-extra-types";
-import {noop} from "./Const";
+import {noop} from "./const";
 import {isFunction, isNotNullish, isNullish, isObjectOrFunction, isPrimitive} from "./Is";
-import {stringifyObj} from "./Stringify";
+import {stringifyObj} from "./stringify";
 
 export type TypedPropertyDescriptorMap<U> = { [P in keyof U]: TypedPropertyDescriptor<U[P]> };
 

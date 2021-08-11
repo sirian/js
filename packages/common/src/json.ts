@@ -1,4 +1,4 @@
-import {stringifyStr, stringifyVar} from "./Stringify";
+import {stringifyStr, stringifyVar} from "./stringify";
 
 // eslint-disable-next-line unicorn/no-null
 export const jsonStringify = (value: any, ...args: any[]) => JSON.stringify(value ?? null, ...args);

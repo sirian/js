@@ -1,8 +1,8 @@
 import {Entry, FromEntries, IterableEntries, ObjEntryOf} from "@sirian/ts-extra-types";
-import {toArray} from "./Arr";
+import {toArray} from "./arr";
 import {isNotNullish, isString} from "./Is";
-import {entriesOf, fromEntries} from "./Obj";
-import {hasMethod} from "./Ref";
+import {entriesOf, fromEntries} from "./obj";
+import {hasMethod} from "./ref";
 
 export class Entries<T extends Entry> {
     private readonly _items: T[];
