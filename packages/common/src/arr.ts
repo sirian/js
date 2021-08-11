@@ -1,6 +1,6 @@
 import {ArrayRO, LastElement, TupleOf} from "@sirian/ts-extra-types";
 import {isArray} from "./Is";
-import {compare, isArrayLike, isEqual, isIterable} from "./Var";
+import {compare, isArrayLike, isEqual, isIterable} from "./var";
 
 export const range = (from: number, to: number, step = 1) => {
     const result = [];

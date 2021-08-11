@@ -1,6 +1,6 @@
-import {swap} from "./Arr";
+import {swap} from "./arr";
 import {assert} from "./Error";
-import {toInt} from "./Num";
+import {toInt} from "./num";
 
 export const randomReal01 = () => Math.random();
 

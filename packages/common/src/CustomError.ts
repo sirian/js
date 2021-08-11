@@ -1,4 +1,4 @@
-import {stringifyVar} from "./Stringify";
+import {stringifyVar} from "./stringify";
 
 export class CustomError extends Error {
     public previous?: Error;

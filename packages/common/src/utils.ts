@@ -1,5 +1,5 @@
 import {ArrayRO, Nullish} from "@sirian/ts-extra-types";
-import {sort, sortBy} from "./Arr";
+import {sort, sortBy} from "./arr";
 import {assert} from "./Error";
 import {isFunction} from "./Is";
 import {XMap} from "./XMap";

@@ -1,5 +1,5 @@
 import {Func, Func0} from "@sirian/ts-extra-types";
-import {applyIfFunction} from "./Ref";
+import {applyIfFunction} from "./ref";
 
 declare function setTimeout(fn: Func, ms: number): void;
 

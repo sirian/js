@@ -1,4 +1,4 @@
-import {argsToken, assert, castArray, isFunction} from "@sirian/common";
+import {arrToken, assert, castArray, isFunction} from "@sirian/common";
 import {Args, Func, Return} from "@sirian/ts-extra-types";
 
 export type Hasher<F extends Func> = (this: any, thisArg: any, ...args: Args<F>) => any;
@@ -15,7 +15,7 @@ export const memoized = <F extends Func>(fn: F, options?: IMemoizerOptions<F>) =
     return new Proxy<F>(fn, {
         apply: (target, thisArg, args: Args<F>) => {
             const hashKey = hasher?.call(thisArg, thisArg, ...args);
-            const token = argsToken(thisArg, ...castArray(hashKey));
+            const token = arrToken(fn, thisArg, ...castArray(hashKey));
 
             if (!map.has(token)) {
                 map.set(token, tmp);

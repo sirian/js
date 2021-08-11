@@ -1,4 +1,4 @@
-import {firstN} from "./Arr";
+import {firstN} from "./arr";
 
 export class LRU<K, V> extends Map<K, V> {
     private readonly _maxSize: number;

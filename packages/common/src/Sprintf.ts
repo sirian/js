@@ -1,12 +1,12 @@
 import {assert} from "./Error";
 import {isFunction, isNullish, isString} from "./Is";
-import {jsonStringify, quoteSingle} from "./Json";
+import {jsonStringify, quoteSingle} from "./json";
 import {NullMap} from "./NullMap";
-import {parseNumber, toInt, toUint32} from "./Num";
-import {getObjectTag} from "./Ref";
-import {stringifyVar} from "./Stringify";
-import {isBetween, toPrimitive} from "./Var";
-import {ensureMap, IMapMini} from "./XUtils";
+import {parseNumber, toInt, toUint32} from "./num";
+import {getObjectTag} from "./ref";
+import {stringifyVar} from "./stringify";
+import {isBetween, toPrimitive} from "./var";
+import {ensureMap, IMapMini} from "./utils";
 
 export type Placeholder = Readonly<{
     text: string,

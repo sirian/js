@@ -1,5 +1,5 @@
 import {isNumber, isString} from "./Is";
-import {ifEqualNaN} from "./Var";
+import {ifEqualNaN} from "./var";
 
 export const INT32_SIZE = 2 ** 31;
 export const INT32_MAX = INT32_SIZE - 1;

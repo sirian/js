@@ -21,7 +21,7 @@ import {
     ownDescriptor,
     ownKeys,
     ownNames,
-} from "./Ref";
+} from "./ref";
 
 export interface SnapshotOptions {
     maxDepth?: number;

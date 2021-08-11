@@ -1,9 +1,9 @@
 import {Instance, Primitive} from "@sirian/ts-extra-types";
-import {toArray} from "./Arr";
+import {toArray} from "./arr";
 import {isPrimitive, isSymbol} from "./Is";
-import {tryCatch} from "./Ref";
-import {stringifyVar} from "./Stringify";
-import {isArrayBufferLike, isArrayBufferView, isInstanceOf} from "./Var";
+import {tryCatch} from "./ref";
+import {stringifyVar} from "./stringify";
+import {isArrayBufferLike, isArrayBufferView, isInstanceOf} from "./var";
 
 declare class TextEncoder {
     public encode(input?: string): Uint8Array;

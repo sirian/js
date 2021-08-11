@@ -1,7 +1,7 @@
 import {parseMapArgs} from "./internal";
-import {fromEntries} from "./Obj";
-import {isEqual} from "./Var";
-import {ensureMap, pickMap, sortMap, sortMapBy, XMapInitializer, XMapSource} from "./XUtils";
+import {fromEntries} from "./obj";
+import {isEqual} from "./var";
+import {ensureMap, pickMap, sortMap, sortMapBy, XMapInitializer, XMapSource} from "./utils";
 
 export class XMap<K = any, V = any> extends Map<K, V> {
     private readonly _initializer?: XMapInitializer<K, V>;

@@ -1,8 +1,8 @@
 import {ToString} from "@sirian/ts-extra-types";
 import {isFunction} from "./Is";
-import {keysOf} from "./Obj";
-import {rgxEscape} from "./Rgx";
-import {stringifyVar} from "./Stringify";
+import {keysOf} from "./obj";
+import {rgxEscape} from "./rgx";
+import {stringifyVar} from "./stringify";
 
 export const enum StrSide {
     LEFT = "left",
