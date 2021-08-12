@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.3.0...@sirian/ts-extra-types@4.4.0) (2021-08-12)
+
+
+### Features
+
+* **tx-extra-types:** MaybePromise, MaybeAsync ([fc5a303](https://github.com/sirian/js/commit/fc5a303628842b8545091131308a4509ab092bcb))
+
+
+
+
+
 # [4.3.0](https://github.com/sirian/js/compare/@sirian/ts-extra-types@4.2.2...@sirian/ts-extra-types@4.3.0) (2021-08-10)
 
 

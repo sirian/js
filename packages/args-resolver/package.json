@@ -2,7 +2,7 @@
     "private": true,
     "name": "@sirian/args-resolver",
     "description": "",
-    "version": "2.2.9",
+    "version": "2.2.10",
     "author": {
         "name": "Vasiliy Khayrulin",
         "email": "sirianru@gmail.com"
@@ -22,7 +22,7 @@
         "access": "public"
     },
     "dependencies": {
-        "@sirian/common": "^9.5.2",
-        "@sirian/ts-extra-types": "^4.3.0"
+        "@sirian/common": "^9.5.3",
+        "@sirian/ts-extra-types": "^4.4.0"
     }
 }
