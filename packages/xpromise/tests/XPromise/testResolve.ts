@@ -53,7 +53,8 @@ test("resolve with inherited class", () => {
     expect(XPromise.resolve(xpromise)).toBe(xpromise);
     expect(XPromise.resolve(foo)).toBe(foo);
     expect(FooPromise.resolve(foo)).toBe(foo);
-    expect(FooPromise.resolve(xpromise)).toBe(xpromise);
+    expect(FooPromise.resolve(xpromise)).not.toBe(xpromise);
+    expect(FooPromise.resolve(xpromise)).toBeInstanceOf(FooPromise);
 });
 
 test(".resolve(pending) and then .reject()", () => {

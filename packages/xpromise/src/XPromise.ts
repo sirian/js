@@ -1,9 +1,9 @@
-import {ArrayRO, Awaited, AwaitedArray, Func, Func1} from "@sirian/ts-extra-types";
+import {ArrayRO, Awaited, AwaitedArray, Func, Func1, MaybePromise} from "@sirian/ts-extra-types";
 
-export type OnFulfill<T, R> = undefined | null | ((value: T) => R | PromiseLike<R>);
-export type OnReject<R> = undefined | null | ((reason: any) => R | PromiseLike<R>);
+export type OnFulfill<T, R> = undefined | null | ((value: T) => MaybePromise<R>);
+export type OnReject<R> = undefined | null | ((reason: any) => MaybePromise<R>);
 export type OnFinally = undefined | null | (() => any);
-export type Resolver<T> = (value?: T | PromiseLike<T>) => void;
+export type Resolver<T> = (value?: MaybePromise<T>) => void;
 export type Rejector = (reason?: any) => void;
 export type PromiseExecutor<T> = (resolve: Resolver<T>, reject: Rejector) => void;
 export type AllSettled<T extends ArrayRO> = {
@@ -22,7 +22,7 @@ export type PromiseReaction<T, R1 = any, R2 = any> = [
     onRejected: OnReject<R2>,
 ];
 
-export type PromiseStatus = "pending" | "fulfilled" | "rejected";
+export type PromiseState = "pending" | "fulfilled" | "rejected";
 
 declare function setTimeout(callback: (...args: any[]) => void, ms: number): unknown;
 
@@ -33,18 +33,18 @@ const isFunction = (x: any): x is Func => "function" === typeof x;
 export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     public readonly promise = this;
 
-    private _status: PromiseStatus = "pending";
+    private _state: PromiseState = "pending";
     private _reactions: Array<PromiseReaction<any>> = [];
     private _resolved = false;
     private _timeoutId?: unknown;
-    private _value?: any;
+    private _value?: unknown;
     private _timedOut = false;
 
     constructor(executor?: PromiseExecutor<T>) {
         if (isFunction(executor)) {
             try {
                 executor(
-                    (value) => this._doResolve(value),
+                    (value) => this.resolve(value),
                     (reason) => this.reject(reason),
                 );
             } catch (e) {
@@ -53,95 +53,84 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    public static any<T>(it: Iterable<T | PromiseLike<T>>) {
-        return new XPromise<T>((resolve, reject) => {
+    public static any<T>(it: Iterable<MaybePromise<T>>) {
+        return new this<T>((resolve, reject) => {
             const promises = [...it];
-
-            const length = promises.length;
-            const errors: any[] = [];
+            const errors: unknown[] = [];
             const rejectAll = () => reject(new AggregateError(errors, "All promises were rejected"));
-
-            if (!length) {
-                return rejectAll();
-            }
-
             let rejectedCount = 0;
 
-            for (let i = 0; i < length; i++) {
-                const promise = promises[i];
+            promises.forEach((promise, i, {length}) => {
+                XPromise
+                    .resolve(promise)
+                    .then(resolve, (error) => {
+                        errors[i] = error;
+                        if (++rejectedCount === length) {
+                            rejectAll();
+                        }
+                    });
+            });
 
-                const onRejected = (error: any) => {
-                    errors[i] = error;
-                    if (++rejectedCount === length) {
-                        rejectAll();
-                    }
-                };
-
-                XPromise.resolve(promise).then(resolve, onRejected);
+            if (!promises.length) {
+                rejectAll();
             }
         });
     }
 
     public static create<T>(executor?: PromiseExecutor<T>) {
-        return new XPromise<T>(executor);
+        return new this<T>(executor);
     }
 
-    public static resolve<T>(value?: T | PromiseLike<T>): XPromise<T> {
-        return value instanceof XPromise
-               ? value
-               : new XPromise((resolve) => resolve(value));
+    public static resolve<T>(value?: MaybePromise<T>) {
+        return value instanceof this ? value : new this<T>((resolve) => resolve(value));
     }
 
-    public static reject<T = never>(reason?: any): XPromise<T> {
-        return new XPromise((resolve, reject) => reject(reason));
+    public static reject<T = never>(reason?: any) {
+        return new this<T>((resolve, reject) => reject(reason));
     }
 
     public static all<T extends ArrayRO>(promises: T) {
-        return new XPromise<AwaitedArray<T>>((resolve, reject) => {
-            const length = promises.length;
-
-            if (!length) {
-                return resolve([] as any);
-            }
-
+        return new this<AwaitedArray<T>>((resolve, reject) => {
             let fulfilledCount = 0;
-
             const results: unknown[] = [];
+            const checkResolve = () => fulfilledCount === promises.length && resolve(results as any);
 
-            for (let i = 0; i < length; i++) {
-                XPromise
-                    .resolve(promises[i])
-                    .then((val) => {
-                        results[i] = val;
-                        if (++fulfilledCount === length) {
-                            resolve(results as any);
-                        }
-                    }, reject);
-            }
+            promises.forEach((promise, i) => {
+                XPromise.resolve(promise).then((val) => {
+                    results[i] = val;
+                    ++fulfilledCount;
+                    checkResolve();
+                }, reject);
+            });
+
+            checkResolve();
         });
     }
 
-    public static allSettled<T extends ArrayRO>(promises: T): XPromise<AllSettled<T>> {
-        return XPromise.all(promises.map((v) => XPromise.resolve(v).then(
-            (value) => ({status: "fulfilled", value}),
-            (reason) => ({status: "rejected", reason}),
-        ))) as any;
+    // public static allSettled<T extends readonly unknown[] | readonly [unknown]>(values: T):
+    //     Promise<{ -readonly [P in keyof T]: PromiseSettledResult<T[P] extends PromiseLike<infer U> ? U : T[P]> }>;
+    // public static allSettled<T>(values: Iterable<T>): Promise<PromiseSettledResult<T extends PromiseLike<infer U> ? U : T>[]>;
+
+    public static allSettled(promises: Iterable<unknown>) {
+        return this.all([...promises].map((v) => XPromise.resolve(v).then(
+            (value): PromiseSettledResult<unknown> => ({status: "fulfilled", value}),
+            (reason): PromiseSettledResult<unknown> => ({status: "rejected", reason}),
+        )));
     }
 
     public static race<T extends ArrayRO>(promises: T): XPromise<Awaited<T[number]>> {
-        return new XPromise<any>((resolve, reject) =>
+        return new this((resolve, reject) =>
             [...promises].forEach((p) => {
                 XPromise.resolve(p).then(resolve, reject);
             }));
     }
 
-    public static wrap<R>(fn: () => R | PromiseLike<R>): XPromise<R> {
+    public static wrap<R>(fn: () => MaybePromise<R>): XPromise<R> {
         try {
-            return XPromise.resolve(fn());
+            return this.resolve<R>(fn());
         } catch (e) {
-            return XPromise.reject(e);
+            return this.reject(e);
         }
-        return new XPromise<R>((resolve) => resolve(fn()));
     }
 
     public setTimeout(ms: number, fn?: Func1<any, this>): this {
@@ -178,23 +167,22 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
     }
 
     public finally(f?: OnFinally) {
-        return !isFunction(f)
-               ? this.then(f, f)
-               : this.then(
-                (value) => XPromise.wrap(f).then(() => value),
-                (err) => XPromise.wrap(f).then(() => { throw err; }));
+        return this.then(
+            isFunction(f) ? (value) => XPromise.wrap(f).then(() => value) : f,
+            isFunction(f) ? (err) => XPromise.wrap(f).then(() => { throw err; }) : f,
+        );
     }
 
     public isPending() {
-        return "pending" === this._status;
+        return "pending" === this._state;
     }
 
     public isFulfilled() {
-        return "fulfilled" === this._status;
+        return "fulfilled" === this._state;
     }
 
     public isRejected() {
-        return "rejected" === this._status;
+        return "rejected" === this._state;
     }
 
     public isSettled() {
@@ -231,14 +219,44 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         return this.then(null, onRejected);
     }
 
-    public resolve(value?: T | PromiseLike<T>) {
-        this._doResolve(value);
+    public resolve(x?: MaybePromise<T>): void
+    public resolve(x?: any) {
+        this._resolved = true;
+        try {
+            if (null === x || ("object" !== typeof x && !isFunction(x))) {
+                this._settle(false, x);
+                return;
+            }
+
+            if (x === this.promise) {
+                this._settle(true, new TypeError("Chaining cycle detected for XPromise"));
+                return;
+            }
+
+            const thenFn = x.then;
+
+            if (!isFunction(thenFn)) {
+                this._settle(false, x);
+                return;
+            }
+
+            let calls = 0;
+
+            const onFulfilled = (value: T) => calls++ || this.resolve(value);
+            const onRejected = (r: any) => calls++ || this._settle(true, r);
+
+            try {
+                thenFn.call(x, onFulfilled, onRejected);
+            } catch (e) {
+                onRejected(e);
+            }
+        } catch (e) {
+            this._settle(true, e);
+        }
     }
 
     public reject(reason?: any) {
-        if (!this._resolved) {
-            this._settleRejected(reason);
-        }
+        !this._resolved && this._settle(true, reason);
     }
 
     protected _react(reaction: PromiseReaction<T>) {
@@ -248,16 +266,16 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         try {
             if (this.isFulfilled()) {
                 if (!isFunction(onFulfilled)) {
-                    promise._settleFulfilled(value);
+                    promise._settle(false, value);
                 } else {
-                    promise._doResolve(onFulfilled(value));
+                    promise.resolve(onFulfilled(value as T));
                 }
             }
             if (this.isRejected()) {
                 if (!isFunction(onRejected)) {
-                    promise._settleRejected(value);
+                    promise._settle(true, value);
                 } else {
-                    promise._doResolve(onRejected(value));
+                    promise.resolve(onRejected(value));
                 }
             }
         } catch (e) {
@@ -265,60 +283,20 @@ export class XPromise<T = any> implements PromiseLike<T>, IDeferred<T> {
         }
     }
 
-    private _settleFulfilled(value?: T | PromiseLike<T>) {
-        this._settle("fulfilled", value);
-    }
-
-    private _settleRejected(reason?: any) {
-        this._settle("rejected", reason);
-    }
-
-    private _doResolve(x: any) {
-        this._resolved = true;
-        try {
-            if (null === x || ("object" !== typeof x && !isFunction(x))) {
-                this._settleFulfilled(x);
-                return;
-            }
-
-            if (x === this.promise) {
-                this._settleRejected(new TypeError("Chaining cycle detected for XPromise"));
-                return;
-            }
-
-            const thenFn = x.then;
-
-            if (!isFunction(thenFn)) {
-                this._settleFulfilled(x);
-                return;
-            }
-
-            let calls = 0;
-
-            const onFulfilled = (value: T) => calls++ || this._doResolve(value);
-            const onRejected = (r: any) => calls++ || this._settleRejected(r);
-
-            try {
-                thenFn.call(x, onFulfilled, onRejected);
-            } catch (e) {
-                onRejected(e);
-            }
-        } catch (e) {
-            this._settleRejected(e);
-        }
-    }
-
-    private _settle(status: "fulfilled" | "rejected", value: unknown) {
+    private _settle(rejected: boolean, value: unknown) {
         if (!this.isPending()) {
             return;
         }
 
         this._resolved = true;
-        this._status = status;
+        this._state = rejected ? "rejected" : "fulfilled";
         this._value = value;
 
-        void this.clearTimeout();
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.clearTimeout(); // eslint-disable-line @typescript-eslint/no-floating-promises
 
         this._reactions.splice(0).forEach((r) => this._react(r));
     }
 }
+

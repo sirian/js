@@ -1,4 +1,4 @@
-import {Func, Func0} from "@sirian/ts-extra-types";
+import {Func, Func0, MaybePromise} from "@sirian/ts-extra-types";
 import {Adapter} from "./Adapter";
 
 export type DoneCallback = Func0;
@@ -38,8 +38,8 @@ export const specify = (name: string, fn: DoneAwareCallback, timeout = 0) => {
 };
 
 export const testFulfilled: {
-    <T>(value: T | PromiseLike<T>, fn: (value: PromiseLike<T>, done: DoneCallback) => void): void;
-    <T>(value: T | PromiseLike<T>, fn: (value: PromiseLike<T>) => any): void
+    <T>(value: MaybePromise<T>, fn: (value: PromiseLike<T>, done: DoneCallback) => void): void;
+    <T>(value: MaybePromise<T>, fn: (value: PromiseLike<T>) => any): void
 } = (value: any, fn: Function) => {
     specify("already-fulfilled", fn.bind(null, Adapter.resolved(value)));
 

@@ -1,3 +1,4 @@
+import {MaybePromise} from "@sirian/ts-extra-types";
 import {IDeferred, OnFinally, OnFulfill, OnReject, Rejector, Resolver} from "./XPromise";
 
 export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
@@ -16,7 +17,7 @@ export class Deferred<T> implements IDeferred<T>, PromiseLike<T> {
         });
     }
 
-    public resolve(v?: T | PromiseLike<T>) {
+    public resolve(v?: MaybePromise<T>) {
         this._resolver(v);
     }
 
