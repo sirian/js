@@ -20,7 +20,7 @@
         "@sirian/common": "^9.5.3",
         "@sirian/datetime": "^4.0.18",
         "@sirian/property-access": "^2.0.18",
-        "pretty-format": "^27.0.2"
+        "pretty-format": "^27.2.2"
     },
     "scripts": {},
     "publishConfig": {
